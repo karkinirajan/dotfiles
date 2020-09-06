@@ -1,6 +1,6 @@
-### Postgres First Setup
+# Postgres First Setup
 
-####Do this first to check everything 
+## Do this first to check everything 
 </br>
 sudo su - postgres
 </br>
@@ -15,7 +15,7 @@ sudo systemctl status postgresql
 </br>
 </br>
 </br>
-### and then do this for autoenabke on reboot
+## and then do this for autoenabke on reboot
 </br>
 
 sudo systemctl enable postgresql
