@@ -15,7 +15,7 @@ sudo systemctl status postgresql
 </br>
 </br>
 </br>
-## and then do this for autoenabke on reboot
+##  And do this to enable on reboot
 </br>
 
 sudo systemctl enable postgresql
