@@ -2,16 +2,16 @@
 
 ## Do this first to check everything 
 </br>
-sudo su - postgres
+$ sudo su - postgres
 </br>
-initdb --locale en_US.UTF-8 -D /var/lib/postgres/data
+$ initdb --locale en_US.UTF-8 -D /var/lib/postgres/data
 </br>
-exit
+$ exit
 </br>
-sudo systemctl start postgresql
+$ sudo systemctl start postgresql
 </br>
-sudo systemctl status postgresql
+$ sudo systemctl status postgresql
 
 ##  And do this to enable on reboot
 </br>
-sudo systemctl enable postgresql
+$ sudo systemctl enable postgresql
