@@ -131,6 +131,9 @@ alias create="npx create-react-app"
 alias a='code .'
 alias c='code .'
 alias code='code .'
+alias a='code-insiders .'
+alias c='code-insiders .'
+alias code='code-insiders .'
 alias ns='npm start'
 alias start='npm start'
 alias nr='npm run'
@@ -176,7 +179,6 @@ _fab_completion() {
 }
 
 complete -F _fab_completion fab
-
 
 
 
