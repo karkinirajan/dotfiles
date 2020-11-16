@@ -100,14 +100,7 @@ alias createsuperuser="python manage.py createsuperuser"
 # React
 alias create="npx create-react-app"
 
-#Apps And npm Aliases
-alias a='code .'
-alias c='code .'
-alias code='code .'
-alias a='code-insiders .'
-alias c='code-insiders .'
-alias code='code-insiders .'
-alias subl='subl3 .'
+
 
 alias ns='npm start'
 alias start='npm start'
