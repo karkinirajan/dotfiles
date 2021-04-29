@@ -1,14 +1,35 @@
+# Use powerline
+USE_POWERLINE="true"
+# Source manjaro-zsh-configuration
+if [[ -e /usr/share/zsh/manjaro-zsh-config ]]; then
+  source /usr/share/zsh/manjaro-zsh-config
+fi
+# Use manjaro zsh prompt
+if [[ -e /usr/share/zsh/manjaro-zsh-prompt ]]; then
+  source /usr/share/zsh/manjaro-zsh-prompt
+fi
+
+#antigen bundle zsh-users/zsh-autosuggestions
+#source ~/.zsh/zsh-autosuggestions/zsh-autosuggestions.zsh
+#
+plugins=(git zsh-syntax-highlighting zsh-autosuggestions)
+
+
+autoload -Uz history-beginning-search-menu
+zle -N history-beginning-search-menu
+bindkey '^X^X' history-beginning-search-menu
+
+alias ll="ls -la"
+alias cl="clear"
 export ZSH="/home/kneeraazon/.oh-my-zsh"
- 
-ZSH_THEME="robbyrussell"
- 
+
 plugins=(
   git
   rake
   web-search
-  
+
 )
- 
+
 # https://github.com/zsh-users/zsh-syntax-highlighting/blob/master/INSTALL.md
 source $ZSH/oh-my-zsh.sh
 ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE="fg=#ff00ff,bg=cyan,bold,underline"
@@ -111,7 +132,6 @@ alias nis='npm i -S'
 # SSH Key
 alias skpb="cat ~/.ssh/id_rsa.pub"
 alias skpv="cat ~/.ssh/id_rsa"
-
 
 
 
