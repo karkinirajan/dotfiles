@@ -1,33 +1,34 @@
 {
+  "python.linting.pylintArgs": [
+    "--disable=django-not-configured",
+    "--django-settings-module=<mainapp>.settings"
+  ],
   "editor.fontSize": 14,
-  "editor.fontWeight": "500",
+  "editor.fontWeight": "600",
   "editor.fontFamily": "Fira Code",
   "debug.console.fontFamily": "Fira Code",
   "debug.console.fontSize": 14,
-  "terminal.integrated.fontSize": 12,
+  "terminal.integrated.fontSize": 14,
   "terminal.integrated.fontWeight": "600",
-  "window.zoomLevel": 1,
-  "python.pythonPath": "/usr/bin/python3",
+  "python.pythonPath": "usr/lib/python3",
   "python.formatting.provider": "black",
   "python.linting.enabled": true,
   "python.linting.pylintEnabled": true,
   "code-runner.executorMap": {
     "python": "$pythonPath -u $fullFileName"
   },
-  "python.linting.pylintArgs": ["--load-plugins=pylint_django"],
   "code-runner.clearPreviousOutput": true,
   "code-runner.showExecutionMessage": false,
   "code-runner.ignoreSelection": true,
   "code-runner.saveFileBeforeRun": true,
   "[plaintext]": {
-    "editor.quickSuggestions": false
+    "editor.quickSuggestions": true
   },
   "editor.quickSuggestionsDelay": 100,
   "zenMode.centerLayout": false,
   "zenMode.fullScreen": false,
   "zenMode.hideLineNumbers": false,
   "zenMode.hideTabs": false,
-  "editor.minimap.enabled": false,
   "workbench.settings.openDefaultSettings": true,
   "workbench.settings.editor": "json",
   "workbench.startupEditor": "newUntitledFile",
@@ -37,12 +38,12 @@
   "explorer.confirmDelete": false,
   "javascript.preferences.quoteStyle": "auto",
   "liveServer.settings.donotShowInfoMsg": true,
-  "kite.showWelcomeNotificationOnStartup": false,
-  "workbench.sideBar.location": "right",
   "[dart]": {
     "editor.formatOnSave": true,
     "editor.formatOnType": true,
-    "editor.rulers": [90],
+    "editor.rulers": [
+      70
+    ],
     "editor.selectionHighlight": false,
     "editor.suggest.snippetsPreventQuickSuggestions": false,
     "editor.suggestSelection": "first",
@@ -52,10 +53,9 @@
   "python.insidersChannel": "off",
   "terminal.integrated.cursorBlinking": true,
   "terminal.integrated.cursorStyle": "line",
-  "workbench.iconTheme": "material-icon-theme",
-  "editor.renameOnType": true,
+  "workbench.iconTheme": "eq-material-theme-icons-light",
+  "editor.linkedEditing": true,
   "editor.suggestSelection": "first",
-  "vsintellicode.modify.editor.suggestSelection": "automaticallyOverrodeDefaultValue",
   "editor.fontLigatures": true,
   "python.languageServer": "Pylance",
   "[javascript]": {
@@ -65,22 +65,38 @@
     "*.js": "javascriptreact"
   },
   "[jsonc]": {
-    "editor.defaultFormatter": "esbenp.prettier-vscode"
+    "editor.defaultFormatter": "vscode.json-language-features"
   },
   "[javascriptreact]": {
     "editor.defaultFormatter": "vscode.typescript-language-features"
   },
   "[json]": {
-    "editor.defaultFormatter": "Wscats.eno"
+    "editor.defaultFormatter": "vscode.html-language-features"
   },
-  "workbench.editorAssociations": [
-    {
-      "viewType": "jupyter.notebook.ipynb",
-      "filenamePattern": "*.ipynb"
-    }
-  ],
+  "workbench.editorAssociations": {
+    "*.ipynb": "jupyter.notebook.ipynb"
+  },
   "window.menuBarVisibility": "toggle",
   "workbench.editor.enablePreview": true,
   "workbench.activityBar.iconClickBehavior": "focus",
-  "scm.countBadge": "focused"
+  "scm.countBadge": "focused",
+  "editor.inlineSuggest.enabled": true,
+  "tabnine.experimentalAutoImports": false,
+  "python.linting.banditEnabled": true,
+  "python.linting.flake8CategorySeverity.W": "Error",
+  "python.linting.mypyCategorySeverity.note": "Error",
+  "python.linting.pydocstylePath": "",
+  "[html]": {
+    "editor.autoIndent": true,
+    "editor.defaultFormatter": "vscode.html-language-features"
+  },
+  "kite.showWelcomeNotificationOnStartup": false,
+  "thunder-client.codeSnippetLanguage": "curl",
+  "[python]": {
+    "editor.defaultFormatter": "ms-python.python"
+  },
+  "files.autoSave": "afterDelay",
+  "editor.minimap.enabled": false,
+  "python.defaultInterpreterPath": "usr/lib/python3",
+  "workbench.productIconTheme": "fluent-icons"
 }
