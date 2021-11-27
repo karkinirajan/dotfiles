@@ -4,7 +4,7 @@
 
 This tutorial assumes that you have already set up your virtual private server (vps) with your operating system of choice (ubuntu will work just fine). If you have not already done so, you can follow this tutorial. Before you begin, make sure your cloud server is properly configured to host Django applications with a database server, web server, and virtualenv already installed. If you have not already done this, please follow steps 1 - 6 about setting up a server for Django.
 
-#### Step One: Update Packages
+#### Update Packages
 
 Before doing anything, it is always good practice to ensure all of your packages managed through apt, or whatever your package manager of choice is, are up to date. You can do this by connecting to your VPS via SSH and running the following commands:
 
@@ -24,14 +24,41 @@ If you completed the prerequisites, this should already be set up and you can sk
 Now we need to set up our virtualenv where our project files and Python packages will live. If you don’t use virtualenv, then simply create the directory where your Django project will live and move to step three.
 
 To create your virtualenv run the following command. Remember to replace the path with the desired path of your project project on the virtual private server:
+first make sure you are at home directory then
 
-virtualenv /opt/myproject
+```
+cd mkdir myproject
+```
+
+```
+python3 -m venv env
+```
+
+make sure venv is installed if not run the following command
+
+```
+sudo apt-get install python3-venv
+```
 
 Now that you have your virtualenv set up, you may activate your virtualenv and install Django and any other Python packages you may need using pip. Below is an example of how to activate your virtualenv and use pip to install Django:
 
-source /opt/myproject/bin/activate
+#### In Linux, Mac
 
+```
+source env/bin/activate
+```
+
+#### In Windows
+
+```
+\env\Scripts\activate.bat
+```
+
+#### Install Django
+
+```
 pip install django
+```
 
 Now we’re ready to create a database for our project!
 Step Three: Create a Database
