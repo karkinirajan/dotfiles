@@ -1,4 +1,4 @@
-## All That you need to Know for Putting Django app to production from scratch
+## All that you need to Know for putting Django app to production from scratch ;)
 
 #### Prerequisites
 
