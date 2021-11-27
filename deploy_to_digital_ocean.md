@@ -1,8 +1,8 @@
 ## All that you need to Know for putting Django app to production from scratch ;)
 
-### Works on any vps based environment with linux
+#### !!  Works on any vps based environment with linux !!
 
-### I mean why would you pick other than Debian/Ubuntu :D
+##### I mean why would you pick other than Debian/Ubuntu :D
 
 #### Prerequisites
 
