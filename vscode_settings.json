@@ -3,14 +3,14 @@
     "--disable=django-not-configured",
     "--django-settings-module=<mainapp>.settings"
   ],
-  "editor.fontSize": 14,
+  "editor.fontSize": 13,
   "editor.fontWeight": "600",
   "editor.fontFamily": "Fira Code",
   "debug.console.fontFamily": "Fira Code",
   "debug.console.fontSize": 14,
   "terminal.integrated.fontSize": 14,
   "terminal.integrated.fontWeight": "600",
-  "python.pythonPath": "usr/lib/python3",
+  "python.pythonPath": "usr/lib/python3.9",
   "python.formatting.provider": "black",
   "python.linting.enabled": true,
   "python.linting.pylintEnabled": true,
@@ -32,7 +32,7 @@
   "workbench.settings.openDefaultSettings": true,
   "workbench.settings.editor": "json",
   "workbench.startupEditor": "newUntitledFile",
-  "workbench.colorTheme": "Dracula",
+  "workbench.colorTheme": "Monokai++",
   "explorer.openEditors.visible": 0,
   "editor.formatOnSave": true,
   "explorer.confirmDelete": false,
@@ -71,7 +71,7 @@
     "editor.defaultFormatter": "vscode.typescript-language-features"
   },
   "[json]": {
-    "editor.defaultFormatter": "vscode.html-language-features"
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
   },
   "workbench.editorAssociations": {
     "*.ipynb": "jupyter.notebook.ipynb"
@@ -98,5 +98,18 @@
   "files.autoSave": "afterDelay",
   "editor.minimap.enabled": false,
   "python.defaultInterpreterPath": "usr/lib/python3",
-  "workbench.productIconTheme": "fluent-icons"
+  "workbench.productIconTheme": "fluent-icons",
+  "quokka.automaticRestart": true,
+  "quokka.compactMessageOutput": true,
+  "quokka.suppressExpirationNotifications": true,
+  "remote.SSH.defaultExtensions": [
+    "gitpod.gitpod-remote-ssh"
+  ],
+  "remote.SSH.configFile": "/tmp/gitpod_ssh_config-85574-EJx54WFPxYyW",
+  "github.copilot.enable": {
+    "*": true,
+    "yaml": false,
+    "plaintext": false,
+    "markdown": true
+  }
 }
