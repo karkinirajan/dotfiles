@@ -3,8 +3,8 @@
     "--disable=django-not-configured",
     "--django-settings-module=<mainapp>.settings"
   ],
-  "editor.fontSize": 13,
-  "editor.fontWeight": "600",
+  "editor.fontSize": 14,
+  "editor.fontWeight": "500",
   "editor.fontFamily": "Fira Code",
   "debug.console.fontFamily": "Fira Code",
   "debug.console.fontSize": 14,
@@ -14,13 +14,6 @@
   "python.formatting.provider": "black",
   "python.linting.enabled": true,
   "python.linting.pylintEnabled": true,
-  "code-runner.executorMap": {
-    "python": "$pythonPath -u $fullFileName"
-  },
-  "code-runner.clearPreviousOutput": true,
-  "code-runner.showExecutionMessage": false,
-  "code-runner.ignoreSelection": true,
-  "code-runner.saveFileBeforeRun": true,
   "[plaintext]": {
     "editor.quickSuggestions": true
   },
@@ -53,7 +46,7 @@
   "python.insidersChannel": "off",
   "terminal.integrated.cursorBlinking": true,
   "terminal.integrated.cursorStyle": "line",
-  "workbench.iconTheme": "eq-material-theme-icons-light",
+  "workbench.iconTheme": "material-icon-theme",
   "editor.linkedEditing": true,
   "editor.suggestSelection": "first",
   "editor.fontLigatures": true,
@@ -87,7 +80,7 @@
   "python.linting.mypyCategorySeverity.note": "Error",
   "python.linting.pydocstylePath": "",
   "[html]": {
-    "editor.autoIndent": true,
+    "editor.autoIndent": "advanced",
     "editor.defaultFormatter": "vscode.html-language-features"
   },
   "kite.showWelcomeNotificationOnStartup": false,
@@ -98,10 +91,6 @@
   "files.autoSave": "afterDelay",
   "editor.minimap.enabled": false,
   "python.defaultInterpreterPath": "usr/lib/python3",
-  "workbench.productIconTheme": "fluent-icons",
-  "quokka.automaticRestart": true,
-  "quokka.compactMessageOutput": true,
-  "quokka.suppressExpirationNotifications": true,
   "remote.SSH.defaultExtensions": [
     "gitpod.gitpod-remote-ssh"
   ],
@@ -111,5 +100,10 @@
     "yaml": false,
     "plaintext": false,
     "markdown": true
-  }
+  },
+  "bookmarks.useWorkaroundForFormatters": true,
+  "prettier.jsxBracketSameLine": true,
+  "vsicons.dontShowNewVersionMessage": true,
+  "workbench.productIconTheme": "fluent-icons",
+  "javascript.updateImportsOnFileMove.enabled": "always",
 }
