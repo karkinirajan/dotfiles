@@ -1,3 +1,10 @@
+# Enable Powerlevel10k instant prompt. Should stay close to the top of ~/.zshrc.
+# Initialization code that may require console input (password prompts, [y/n]
+# confirmations, etc.) must go above this block; everything else may go below.
+if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
+  source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
+fi
+
 # Use powerline
 USE_POWERLINE="true"
 # Source manjaro-zsh-configuration
@@ -118,10 +125,12 @@ alias makemigrations="python manage.py makemigrations"
 alias migrate="python manage.py migrate"
 alias collectstatic="python manage.py collectstatic"
 alias createsuperuser="python manage.py createsuperuser"
+alias createerd="python manage.py graph_models --pydot -a -g -o erd.png"
 # React
+alias upgradepip="pip install --upgrade pip"
 alias create="npx create-react-app"
 
-
+alias createvenv="python3 -m venv venv"
 
 alias ns='npm start'
 alias start='npm start'
@@ -133,18 +142,5 @@ alias nis='npm i -S'
 alias skpb="cat ~/.ssh/id_rsa.pub"
 alias skpv="cat ~/.ssh/id_rsa"
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+# To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
+[[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
