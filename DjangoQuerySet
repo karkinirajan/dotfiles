@@ -1,6 +1,12 @@
 #***(1)Returns all customers from customer table
 customers = Customer.objects.all()
 
+### prints the sql form of the query
+print(customers.query)
+
+### prints limit and time
+print(connection.queries)
+
 #(2)Returns first customer in table
 firstCustomer = Customer.objects.first()
 
@@ -26,6 +32,9 @@ products = Product.objects.filter(category="Out Door")
 #(9)***Order/Sort Objects by id
 leastToGreatest = Product.objects.all().order_by('id') 
 greatestToLeast = Product.objects.all().order_by('-id') 
+
+
+### Making more complex queries using Q objects
 
 
 #(10) Returns all products with tag of "Sports": (Query Many to Many Fields)
@@ -65,3 +74,5 @@ class ChildModel(models.Model):
 parent = ParentModel.objects.first()
 #Returns all child models related to parent
 parent.childmodel_set.all()
+
+
