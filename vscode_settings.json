@@ -1,19 +1,17 @@
 {
-  // Font settings
-  "editor.fontSize": 14,
-  "debug.console.fontSize": 10,
-  "terminal.integrated.fontSize": 13,
-  "window.zoomLevel": 0,
+  "editor.fontSize": 15,
+  "editor.fontWeight": "500",
   "editor.fontFamily": "Fira Code",
-  "editor.fontWeight": "400",
   "debug.console.fontFamily": "Fira Code",
   "debug.console.fontSize": 14,
-  "terminal.integrated.fontFamily": "Fira Code",
   "terminal.integrated.fontSize": 14,
   "terminal.integrated.fontWeight": "600",
-  "terminal.integrated.cursorBlinking": true,
-  "terminal.integrated.cursorStyle": "line",
-  // Python settings
+
+  // !Zen Mode settings
+  "zenMode.centerLayout": false,
+  "zenMode.fullScreen": false,
+  "zenMode.hideLineNumbers": false,
+  // !Python settings
   "[python]": {
     "editor.defaultFormatter": "ms-python.black-formatter",
     "editor.formatOnSave": true,
@@ -21,157 +19,37 @@
       "source.organizeImports": "explicit"
     }
   },
-  // Editor suggestions and formatting
-  "editor.quickSuggestions": {
-    "comments": "on",
-    "strings": "on",
-    "other": "on"
-  },
-  "editor.lightbulb.enabled": "on",
-  "editor.suggestOnTriggerCharacters": true,
-  "editor.parameterHints.enabled": true,
-  "editor.suggest.filterGraceful": true,
-  "editor.hover.enabled": true,
-  "editor.inlineSuggest.enabled": true,
-  "editor.suggest.showKeywords": true,
-  "editor.suggest.showSnippets": true,
-  "editor.suggest.showMethods": true,
-  "editor.suggest.showFunctions": true,
-  "editor.suggest.showVariables": true,
-  "editor.suggest.showClasses": true,
-  "editor.suggest.showConstants": true,
-  "editor.suggest.showProperties": true,
-  "editor.suggest.showFields": true,
-  "editor.suggest.showConstructors": true,
-  "editor.suggest.showModules": true,
-  "editor.suggest.showValues": true,
-  "editor.suggest.showEvents": true,
-  "editor.suggest.showOperators": true,
-  "editor.suggest.showUnits": true,
-  "editor.suggest.showColors": true,
-  "editor.suggest.showFiles": true,
-  "editor.suggest.showReferences": true,
-  "editor.suggest.showCustomcolors": true,
-  "editor.suggest.showFolders": true,
-  "editor.suggest.showTypeParameters": true,
-  "editor.suggest.showIssues": true,
-  "editor.suggest.showUsers": true,
-  "editor.suggest.localityBonus": true,
-  "editor.suggestSelection": "first",
-  "editor.acceptSuggestionOnEnter": "off",
-  "editor.quickSuggestionsDelay": 100,
-  "editor.formatOnSave": true,
-  "editor.defaultFormatter": "esbenp.prettier-vscode",
-  "editor.quickSuggestionsDelay": 100,
-  "editor.minimap.enabled": false,
-  "editor.tabSize": 4,
-  "editor.linkedEditing": true,
-  "editor.fontLigatures": true,
-  // Workbench settings
-  "workbench.iconTheme": "material-icon-theme",
-  "workbench.colorTheme": "Monokai",
-  "workbench.settings.openDefaultSettings": true,
-  "workbench.settings.useSplitJSON": true,
-  "workbench.settings.editor": "json",
-  "workbench.startupEditor": "newUntitledFile",
-  "workbench.productIconTheme": "fluent-icons",
-  "workbench.editorAssociations": {
-    "*.ipynb": "jupyter.notebook.ipynb"
-  },
-  "workbench.editor.enablePreview": true,
-  "workbench.activityBar.iconClickBehavior": "focus",
-  // Zen Mode settings
-  "zenMode.centerLayout": true,
-  "zenMode.fullScreen": true,
-  "zenMode.hideLineNumbers": true,
-  // Code Runner settings
-  "code-runner.clearPreviousOutput": true,
-  "code-runner.showExecutionMessage": true,
-  "code-runner.ignoreSelection": true,
-  "code-runner.saveFileBeforeRun": true,
-  "code-runner.executorMap": {
-    "python": "\"$pythonPath\" -u $fullFileName"
-  },
-  "code-runner.enableAppInsights": true,
-  // Plaintext settings
+  "python.venvPath": "~/venvs",
+  "isort.args": [
+    "--profile",
+    "black"
+  ],
+
+  // !Markdown settings
   "[plaintext]": {
     "editor.quickSuggestions": {
-      "comments": "on",
-      "strings": "on",
-      "other": "on"
+      "comments": "off",
+      "strings": "off",
+      "other": "off"
     }
   },
-  // Shell script settings
+  // !Shell script settings
   "[shellscript]": {
     "editor.defaultFormatter": "foxundermoon.shell-format"
   },
-  // Notebook settings
+  // !Notebook settings
   "notebook.output.scrolling": true,
   "notebook.formatOnSave.enabled": true,
   "notebook.lineNumbers": "on",
   "notebook.scrolling.revealNextCellOnExecute": "none",
-  "notebook.codeActionsOnSave": {
-    "source.organizeImports": true
-  },
-  // SQL Tools settings
+
+  //! SQL Tools settings
   "sqltools.useNodeRuntime": true,
-  "[dotenv]": {
-    "editor.defaultFormatter": "foxundermoon.shell-format"
-  },
-  "[ignore]": {
-    "editor.defaultFormatter": "foxundermoon.shell-format"
-  },
-  // Terminal settings
+  "workbench.colorTheme": "Monokai",
+  "workbench.iconTheme": "material-icon-theme",
+  "workbench.productIconTheme": "fluent-icons",
+  "editor.minimap.enabled": false,
   "terminal.integrated.env.osx": {
     "FIG_NEW_SESSION": "1"
   },
-  // Additional language settings
-  "[dart]": {
-    "editor.formatOnSave": true,
-    "editor.formatOnType": true,
-    "editor.rulers": [
-      70
-    ],
-    "editor.selectionHighlight": true,
-    "editor.suggest.snippetsPreventQuickSuggestions": true,
-    "editor.suggestSelection": "first",
-    "editor.tabCompletion": "onlySnippets",
-    "editor.wordBasedSuggestions": "off"
-  },
-  "[javascript]": {
-    "editor.defaultFormatter": "esbenp.prettier-vscode"
-  },
-  "[jsonc]": {
-    "editor.defaultFormatter": "vscode.json-language-features"
-  },
-  "[javascriptreact]": {
-    "editor.defaultFormatter": "vscode.typescript-language-features"
-  },
-  "[json]": {
-    "editor.defaultFormatter": "esbenp.prettier-vscode"
-  },
-  "[html]": {
-    "editor.autoIndent": "advanced",
-    "editor.defaultFormatter": "vscode.html-language-features"
-  },
-  // Files settings
-  "files.autoSave": "afterDelay",
-  "files.associations": {
-    "*.js": "javascriptreact"
-  },
-  // Miscellaneous settings
-  "explorer.openEditors.visible": 0,
-  "explorer.confirmDelete": true,
-  "javascript.preferences.quoteStyle": "auto",
-  "liveServer.settings.donotShowInfoMsg": true,
-  "window.menuBarVisibility": "toggle",
-  "scm.countBadge": "focused",
-  "prettier.jsxBracketSameLine": true,
-  "redhat.telemetry.enabled": true,
-  "remote.SSH.defaultExtensions": [
-    "gitpod.gitpod-remote-ssh"
-  ],
-  "remote.SSH.configFile": "/tmp/gitpod_ssh_config-85574-EJx54WFPxYyW",
-  "bookmarks.useWorkaroundForFormatters": true,
-  "javascript.updateImportsOnFileMove.enabled": "always"
-}
+  "git.openRepositoryInParentFolders": "never"
