@@ -1,0 +1,48 @@
+{
+  "editor.fontSize": 15,
+  "editor.fontWeight": "500",
+  "editor.fontFamily": "Fira Code",
+  "debug.console.fontFamily": "Fira Code",
+  "debug.console.fontSize": 14,
+  "terminal.integrated.fontSize": 14,
+  "terminal.integrated.fontWeight": "600",
+
+  "zenMode.centerLayout": false,
+  "zenMode.fullScreen": false,
+  "zenMode.hideLineNumbers": false,
+  "[python]": {
+    "editor.defaultFormatter": "ms-python.black-formatter",
+    "editor.formatOnSave": true,
+    "editor.codeActionsOnSave": {
+      "source.organizeImports": "explicit"
+    }
+  },
+  "python.venvPath": "~/venvs",
+  "isort.args": [
+    "--profile",
+    "black"
+  ],
+  "[plaintext]": {
+    "editor.quickSuggestions": {
+      "comments": "off",
+      "strings": "off",
+      "other": "off"
+    }
+  },
+  "[shellscript]": {
+    "editor.defaultFormatter": "foxundermoon.shell-format"
+  },
+  "notebook.output.scrolling": true,
+  "notebook.formatOnSave.enabled": true,
+  "notebook.lineNumbers": "on",
+  "notebook.scrolling.revealNextCellOnExecute": "none",
+  "sqltools.useNodeRuntime": true,
+  "workbench.colorTheme": "Monokai",
+  "workbench.iconTheme": "material-icon-theme",
+  "workbench.productIconTheme": "fluent-icons",
+  "editor.minimap.enabled": false,
+  "terminal.integrated.env.osx": {
+    "FIG_NEW_SESSION": "1"
+  },
+  "git.openRepositoryInParentFolders": "never"
+}
