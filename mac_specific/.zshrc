@@ -9,11 +9,11 @@ export alias python="python3"
 # ==================================
 # Oh-My-Zsh Configuration
 # ==================================
-ZSH_THEME="robbyrussell"
-plugins=(git zsh-autosuggestions)
+export ZSH_THEME="robbyrussell"
+export plugins=(git zsh-autosuggestions)
 source $ZSH/oh-my-zsh.sh
-USE_POWERLINE="true"
-HOST_NAME=kneeraazon
+export USE_POWERLINE="true"
+export HOST_NAME=kneeraazon
 
 # ==================================
 # File Operations
