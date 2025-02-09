@@ -1,8 +1,8 @@
 # ==================================
-# Basic Configuration
+# 🚀 Basic Configuration
 # ==================================
 export ZSH="$HOME/.oh-my-zsh"       # Oh My Zsh installation directory
-ZSH_THEME="agnoster"           # Theme for Oh My Zsh
+ZSH_THEME="robbyrussell"            # Theme for Oh My Zsh
 
 # Display scaling for HiDPI screens
 export QT_AUTO_SCREEN_SCALE_FACTOR=1
@@ -10,17 +10,17 @@ export QT_SCALE_FACTOR=1.5
 export GDK_SCALE=2
 export GDK_DPI_SCALE=0.5
 
-# Terminal sizing alias
-alias tsize="terminator -geometry 2000x1200+0+0"  
+# Terminal alias for better window sizing
+alias tsize="terminator -geometry 2000x1200+0+0"
 
 # ==================================
-# Plugin Configuration
+# 🔌 Plugin Configuration
 # ==================================
 plugins=(
   git
-  sudo          # Adds sudo prefix with ESC+ESC
+  sudo          # Press ESC+ESC to prefix command with sudo
   web-search    # Search web from command line
-  zsh-autosuggestions  # Fish-like suggestions
+  zsh-autosuggestions  # Fish-like autosuggestions
   zsh-syntax-highlighting  # Syntax highlighting
   fzf           # Fuzzy finder
   history       # Better history management
@@ -35,26 +35,28 @@ if [ -f /usr/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh ]; then
 fi
 
 # ==================================
-# Key Bindings
+# ⌨️ Key Bindings & History
 # ==================================
 # Enhanced history search with menu
 autoload -Uz history-beginning-search-menu
 zle -N history-beginning-search-menu
 bindkey '^X^X' history-beginning-search-menu
 
-# Enable case-insensitive tab completion
+# Case-insensitive tab completion
 zstyle ':completion:*' matcher-list 'm:{a-zA-Z}={A-Za-z}'
 
-# Enable better history behavior
-HISTSIZE=5000
-SAVEHIST=10000
+# Optimized history settings
+HISTSIZE=10000
+SAVEHIST=20000
 HISTFILE=~/.zsh_history
-setopt APPEND_HISTORY
-setopt SHARE_HISTORY
-setopt HIST_IGNORE_ALL_DUPS
+setopt APPEND_HISTORY      # Append to history file instead of overwriting
+setopt SHARE_HISTORY       # Share history between terminals
+setopt HIST_IGNORE_ALL_DUPS  # Remove duplicate commands from history
+setopt HIST_VERIFY         # Require confirmation before running a history command
+setopt INC_APPEND_HISTORY  # Write history incrementally
 
 # ==================================
-# System Utilities
+# 🛠️ System Utilities
 # ==================================
 # Package Management (APT)
 alias update='sudo apt update && sudo apt list --upgradable' # Refresh package lists and show upgrades
@@ -72,11 +74,14 @@ alias df='df -h'              # Human-readable disk space
 alias free='free -m'          # Show memory in MB
 alias pstat='systemctl status'  # Service status check
 alias top='htop'              # Use htop if installed
+alias psu='ps aux --sort=-%cpu | head -10'  # Show top 10 CPU processes
+alias psm='ps aux --sort=-%mem | head -10'  # Show top 10 memory processes
+alias inuse='lsof +D . | awk "{print \$2}" | sort -u | xargs ps u'  # Show processes using a directory
 
 # File Operations
 alias cp='cp -iv'            # Interactive copy with verification
 alias mv='mv -iv'            # Interactive move
-alias rm='rm -Iv'            # Interactive remove
+alias rm='rm -Iv'            # Interactive remove (ask before deleting multiple files)
 alias ls='ls --color=auto'   # Colorized listing
 alias ll='ls -alh'           # Detailed list with human sizes
 alias cl='clear'             # Clear screen
@@ -88,7 +93,7 @@ alias ...='cd ../..'
 alias ....='cd ../../..'
 
 # ==================================
-# Development Tools
+# 👨‍💻 Development Tools
 # ==================================
 # Git Aliases
 alias ga='git add'
@@ -126,14 +131,14 @@ alias c='code .'  # VS Code
 alias n='nano'    # Nano editor
 
 # ==================================
-# Network & Security
+# 🌐 Network & Security
 # ==================================
 alias myip='curl ifconfig.me'       # Public IP address
 alias ports='netstat -tulanp'       # Active listening ports
 alias sshconfig='nano ~/.ssh/config'  # SSH configuration
 
 # ==================================
-# Custom Functions
+# 🔧 Custom Functions
 # ==================================
 # Show recent APT history
 apt-history() {
@@ -177,7 +182,7 @@ extract() {
 }
 
 # ==================================
-# Final Initializations
+# ✨ Final Initializations
 # ==================================
 # Enable Starship for a better prompt
 if command -v starship &> /dev/null; then
