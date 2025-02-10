@@ -1,5 +1,5 @@
 
-# A list of my commonly used Git commands_
+# A list of my commonly used Git commands
 
 =========================================
 
