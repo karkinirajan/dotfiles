@@ -1,7 +1,11 @@
+# Commonly Used Git Commands
 
-# A list of my commonly used Git commands
-
-=========================================
+## Table of Contents
+- [Getting & Creating Projects](#getting--creating-projects)
+- [Basic Snapshotting](#basic-snapshotting)
+- [Branching & Merging](#branching--merging)
+- [Sharing & Updating Projects](#sharing--updating-projects)
+- [Inspection & Comparison](#inspection--comparison)
 
 ## Getting & Creating Projects
 
@@ -10,7 +14,7 @@
 | `git init` | Initialize a local Git repository |
 | `git clone ssh://git@github.com/[username]/[repository-name].git` | Create a local copy of a remote repository |
 
-### Basic Snapshotting
+## Basic Snapshotting
 
 | Command | Description |
 | ------- | ----------- |
@@ -21,7 +25,7 @@
 | `git rm -r [file-name.txt]` | Remove a file (or folder) |
 | `git remote -v` | View the remote repository of the currently working file or directory |
 
-### Branching & Merging
+## Branching & Merging
 
 | Command | Description |
 | ------- | ----------- |
@@ -42,7 +46,7 @@
 | `git stash clear` | Remove all stashed entries |
 | `git stash pop` | Apply latest stash to working directory |
 
-### Sharing & Updating Projects
+## Sharing & Updating Projects
 
 | Command | Description |
 | ------- | ----------- |
@@ -55,7 +59,7 @@
 | `git remote add origin ssh://git@github.com/[username]/[repository-name].git` | Add a remote repository |
 | `git remote set-url origin ssh://git@github.com/[username]/[repository-name].git` | Set a repository's origin branch to SSH |
 
-### Inspection & Comparison
+## Inspection & Comparison
 
 | Command | Description |
 | ------- | ----------- |
@@ -63,3 +67,4 @@
 | `git log --summary` | View changes (detailed) |
 | `git log --oneline` | View changes (briefly) |
 | `git diff [source branch] [target branch]` | Preview changes before merging |
+```
