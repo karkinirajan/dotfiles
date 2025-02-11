@@ -1,7 +1,7 @@
 
-# A list of my commonly used Git commands
+# A list of my commonly used git commands
 
-## Getting & Creating Projects
+## Getting & creating projects
 
 | Command | Description |
 | ------- | ----------- |
