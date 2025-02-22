@@ -2,7 +2,7 @@
 # 🚀 Basic Configuration
 # ==================================
 export ZSH="$HOME/.oh-my-zsh"       # Oh My Zsh installation directory
-ZSH_THEME="robbyrussell"            # Theme for Oh My Zsh
+ZSH_THEME="agnoster"            # Theme for Oh My Zsh
 
 # Display scaling for HiDPI screens
 export QT_AUTO_SCREEN_SCALE_FACTOR=1
@@ -188,3 +188,5 @@ extract() {
 if command -v starship &> /dev/null; then
   eval "$(starship init zsh)"
 fi
+
+eval "$(starship init zsh)"
