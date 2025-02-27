@@ -2,16 +2,7 @@
 # 🚀 Basic Configuration
 # ==================================
 export ZSH="$HOME/.oh-my-zsh"       # Oh My Zsh installation directory
-ZSH_THEME="agnoster"            # Theme for Oh My Zsh
-
-# Display scaling for HiDPI screens
-export QT_AUTO_SCREEN_SCALE_FACTOR=1
-export QT_SCALE_FACTOR=1.5
-export GDK_SCALE=2
-export GDK_DPI_SCALE=0.5
-
-# Terminal alias for better window sizing
-alias tsize="terminator -geometry 2000x1200+0+0"
+ZSH_THEME="robbyrussell"            # Theme for Oh My Zsh
 
 # ==================================
 # 🔌 Plugin Configuration
@@ -29,9 +20,9 @@ plugins=(
 source $ZSH/oh-my-zsh.sh            # Initialize Oh My Zsh
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh  # Fuzzy finder integration
 
-# Enable Zsh syntax highlighting
-if [ -f /usr/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh ]; then
-  source /usr/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+# Enable Zsh syntax highlighting (adjusted for Arch/Manjaro path)
+if [ -f /usr/share/zsh/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh ]; then
+  source /usr/share/zsh/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
 fi
 
 # ==================================
@@ -58,16 +49,23 @@ setopt INC_APPEND_HISTORY  # Write history incrementally
 # ==================================
 # 🛠️ System Utilities
 # ==================================
-# Package Management (APT)
-alias update='sudo apt update && sudo apt list --upgradable' # Refresh package lists and show upgrades
-alias upgrade='sudo apt upgrade -y'        # Apply updates
-alias install='sudo apt install -y'        # Install packages
-alias remove='sudo apt remove -y'          # Remove packages
-alias purge='sudo apt purge -y'            # Remove with configs
-alias autoremove='sudo apt autoremove -y'  # Remove unused dependencies
-alias clean='sudo apt clean'               # Clean package cache
-alias search-pkg='apt search'              # Search packages
-alias show-pkg='apt show'                  # Show package details
+# Package Management (Pacman for Arch/Manjaro)
+alias update='sudo pacman -Syu'          # Full system update
+alias upgrade='sudo pacman -Syu'         # Same as update (consistency with previous setup)
+alias install='sudo pacman -S'           # Install packages
+alias remove='sudo pacman -R'            # Remove packages
+alias purge='sudo pacman -Rns'           # Remove with dependencies and configs
+alias autoremove='sudo pacman -Rns $(pacman -Qdtq)'  # Remove orphaned packages
+alias clean='sudo pacman -Sc'            # Clean package cache
+alias search-pkg='pacman -Ss'            # Search packages
+alias show-pkg='pacman -Qi'              # Show installed package details
+
+# Optional: Yay (AUR helper) aliases if installed
+if command -v yay &> /dev/null; then
+  alias aur-update='yay -Syu'            # Update including AUR packages
+  alias aur-install='yay -S'             # Install from AUR or repos
+  alias aur-search='yay -Ss'             # Search AUR and repos
+fi
 
 # System Monitoring
 alias df='df -h'              # Human-readable disk space
@@ -140,19 +138,26 @@ alias sshconfig='nano ~/.ssh/config'  # SSH configuration
 # ==================================
 # 🔧 Custom Functions
 # ==================================
-# Show recent APT history
-apt-history() {
-  case "$1" in
-    install)
-      zgrep 'install ' /var/log/apt/history.log
-      ;;
-    upgrade|remove)
-      zgrep "$1" /var/log/apt/history.log
-      ;;
-    *)
-      echo "Usage: apt-history (install|upgrade|remove)"
-      ;;
-  esac
+# Show recent Pacman history (replacing apt-history)
+pacman-history() {
+  if [ -f /var/log/pacman.log ]; then
+    case "$1" in
+      install)
+        grep "installed" /var/log/pacman.log
+        ;;
+      upgrade)
+        grep "upgraded" /var/log/pacman.log
+        ;;
+      remove)
+        grep "removed" /var/log/pacman.log
+        ;;
+      *)
+        echo "Usage: pacman-history (install|upgrade|remove)"
+        ;;
+    esac
+  else
+    echo "Pacman log not found at /var/log/pacman.log"
+  fi
 }
 
 # Quick search function for the command history
@@ -188,5 +193,3 @@ extract() {
 if command -v starship &> /dev/null; then
   eval "$(starship init zsh)"
 fi
-
-eval "$(starship init zsh)"
