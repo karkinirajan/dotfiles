@@ -1,4 +1,4 @@
-# **Dotfiles: My Development Environment Configuration**
+# My Development Environment Configuration
 
 This repository contains my personal configuration files and setup guides for developing across Linux and macOS systems.
 
