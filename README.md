@@ -1,23 +1,62 @@
-# My Config Files for Linux/Mac and More
+# Dotfiles: My Development Environment Configuration
 
-Welcome to my collection of configuration files for Linux and other environments. This repository contains various settings and configurations that I use to customize my development and working environment.
+This repository contains my personal configuration files and setup guides for developing across Linux and macOS systems.
 
-## Overview
+## Repository Structure
 
-This repository includes:
+```bash
+dotfiles/
+├── backend/           # Backend development configs and guides
+│   ├── deploy-django-production.md
+│   └── django-querysets.md
+├── databases/         # Database setup and configuration
+│   └── postgresql-setup-linux.md
+├── dev/               # General development tools
+├── docs/              # Documentation
+├── frontend/          # Frontend development configs
+├── linux/             # Linux-specific configurations
+│   ├── arch/          # Arch Linux configs
+│   ├── starship.toml  # Terminal prompt customization
+│   └── ubuntu/        # Ubuntu configs
+├── mac/               # macOS-specific configurations
+├── sublime/           # Sublime Text editor settings
+│   ├── anaconda-sublime.json
+│   ├── sublime-repl.json
+│   └── sublime-settings.json
+├── vcsgit/            # Version control guides
+│   └── git-commands.md
+└── vscode/            # Visual Studio Code settings
+    ├── vscode-extensions.json
+    ├── vscode-keybindings.json
+    └── vscode-settings.json
+```
 
-- **Bash Profile**: Customizations for the Bash shell to enhance productivity and streamline workflows.
-- **Editor Settings**: Configuration files for various text editors to optimize coding and editing experiences.
-- **Other Configurations**: Additional settings for tools and applications that I frequently use.
+## Installation
 
-## Usage
+Clone this repository to set up your own environment:
 
-To use these configuration files, you can clone this repository and copy the relevant files to your home directory or the appropriate configuration directories. Make sure to back up your existing configuration files before replacing them with these.
+```bash
+git clone https://github.com/kneeraazon/dotfiles.git
+cd dotfiles
+```
 
-## Contributions
+## Key Components
 
-Feel free to contribute to this repository by submitting pull requests or opening issues. Your contributions are welcome and appreciated.
+- **Backend Tools**: Django deployment guides and query optimization
+- **Editor Configurations**: Settings for VSCode and Sublime Text
+- **Shell Customization**: Terminal prompt with Starship
+- **Version Control**: Git command reference and best practices
+- **Database Setup**: PostgreSQL installation and configuration
+
+## Platform-Specific Setups
+
+- **Linux**: Configurations for Arch and Ubuntu distributions
+- **macOS**: Settings optimized for Apple's development environment
+
+## Contributing
+
+Suggestions and improvements are welcome! Feel free to submit a pull request or open an issue.
 
 ## License
 
-This repository is licensed under the MIT License. See the [LICENSE](LICENSE) file for more details.
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
