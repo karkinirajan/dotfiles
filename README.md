@@ -31,15 +31,6 @@ dotfiles/
     └── vscode-settings.json
 ```
 
-## Installation
-
-Clone this repository to set up your own environment:
-
-```bash
-git clone https://github.com/kneeraazon/dotfiles.git
-cd dotfiles
-```
-
 ## Key Components
 
 - **Backend Tools**: Django deployment guides and query optimization
@@ -47,16 +38,9 @@ cd dotfiles
 - **Shell Customization**: Terminal prompt with Starship
 - **Version Control**: Git command reference and best practices
 - **Database Setup**: PostgreSQL installation and configuration
-
-## Platform-Specific Setups
-
-- **Linux**: Configurations for Arch and Ubuntu distributions
-- **macOS**: Settings optimized for Apple's development environment
-
-## Contributing
-
-Suggestions and improvements are welcome! Feel free to submit a pull request or open an issue.
-
-## License
+- **Linux and macOS Configurations**: Tailored settings for different operating systems
+- **Frontend Development**: Configurations for web development tools
+- **Documentation**: Guides and notes for various setups
+- **General Development Tools**: Miscellaneous tools and configurations
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
