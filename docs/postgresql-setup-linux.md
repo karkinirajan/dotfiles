@@ -1,6 +1,4 @@
-Here's the content formatted as a proper `README.md` file:
 
-```markdown
 # PostgreSQL: The Accelerated Guide to Near-Expertise
 
 A concise, command-centric guide for mastering PostgreSQL on Linux, inspired by `postgresql.org/docs/current/`.
