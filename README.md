@@ -1,4 +1,4 @@
-# My Config Files for Linux/Mac and More => (docs)
+# My Config Files for Linux/Mac and More 
 
 Welcome to my collection of configuration files for Linux and other environments. This repository contains various settings and configurations that I use to customize my development and working environment.
 
