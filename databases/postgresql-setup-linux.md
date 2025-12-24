@@ -58,7 +58,7 @@ sudo -u postgres psql
 pg_lsclusters # List all PostgreSQL clusters, versions, ports, data directories
 ```
 
-Data directory (default): `/var/lib/postgresql/[version]/main/`  
+Data directory (default): `/var/lib/postgresql/[version]/main/`
 Config files (default): `/etc/postgresql/[version]/main/`
 
 ## 4. psql: The Interactive Terminal
@@ -73,7 +73,8 @@ sudo -u postgres psql mydatabase # Connect as 'postgres' to 'mydatabase'
 
 ### 4.1. Essential psql Meta-Commands (run within psql)
 
-```
+```bash
+
 \q: Quit.
 \c dbname [username]: Connect to a new database (optionally as a different user).
 \l or \list: List databases.
