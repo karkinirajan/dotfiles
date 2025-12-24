@@ -1,48 +1,201 @@
 {
-  "editor.fontSize": 15,
-  "editor.fontWeight": "500",
+  "editor.bracketPairColorization.enabled": true,
   "editor.fontFamily": "Fira Code",
+  "editor.fontLigatures": true,
+  "editor.fontSize": 14,
+  "editor.fontWeight": "500",
+  "editor.formatOnType": true,
+  "editor.formatOnPaste": true,
+  "editor.formatOnSaveMode": "file",
+  "editor.codeActionsOnSave": {
+    "source.fixAll": "explicit"
+  },
+  "editor.guides.bracketPairs": true,
+  "editor.minimap.enabled": false,
+  "editor.renderWhitespace": "selection",
+  "editor.wordWrap": "on",
+  "editor.linkedEditing": true,
   "debug.console.fontFamily": "Fira Code",
-  "debug.console.fontSize": 14,
-  "terminal.integrated.fontSize": 14,
-  "terminal.integrated.fontWeight": "600",
-
-  "zenMode.centerLayout": false,
-  "zenMode.fullScreen": false,
-  "zenMode.hideLineNumbers": false,
-  "[python]": {
-    "editor.defaultFormatter": "ms-python.black-formatter",
-    "editor.formatOnSave": true,
-    "editor.codeActionsOnSave": {
-      "source.organizeImports": "explicit"
-    }
+  "debug.console.fontSize": 12,
+  "explorer.confirmDelete": false,
+  "explorer.confirmDragAndDrop": false,
+  "files.autoSave": "afterDelay",
+  "git.enableSmartCommit": true,
+  "git.openRepositoryInParentFolders": "never",
+  "github.copilot.enable": {
+    "*": true,
+    "markdown": true,
+    "plaintext": false,
+    "scminput": false
   },
-  "python.venvPath": "~/venvs",
-  "isort.args": [
-    "--profile",
-    "black"
-  ],
-  "[plaintext]": {
-    "editor.quickSuggestions": {
-      "comments": "off",
-      "strings": "off",
-      "other": "off"
-    }
-  },
-  "[shellscript]": {
-    "editor.defaultFormatter": "foxundermoon.shell-format"
-  },
-  "notebook.output.scrolling": true,
   "notebook.formatOnSave.enabled": true,
   "notebook.lineNumbers": "on",
+  "notebook.output.scrolling": true,
+  "notebook.output.textLineLimit": 50,
   "notebook.scrolling.revealNextCellOnExecute": "none",
-  "sqltools.useNodeRuntime": true,
-  "workbench.colorTheme": "Monokai",
-  "workbench.iconTheme": "material-icon-theme",
-  "workbench.productIconTheme": "fluent-icons",
-  "editor.minimap.enabled": false,
+  "security.workspace.trust.untrustedFiles": "open",
+  "terminal.integrated.cursorBlinking": true,
+  "terminal.integrated.cursorStyle": "line",
   "terminal.integrated.env.osx": {
     "FIG_NEW_SESSION": "1"
   },
-  "git.openRepositoryInParentFolders": "never"
+  "terminal.integrated.fontLigatures.fallbackLigatures": [
+    "<--",
+    "<---",
+    "<<-",
+    "<-",
+    "->",
+    "->>",
+    "-->",
+    "--->",
+    "<==",
+    "<===",
+    "<<=",
+    "<=",
+    "=>",
+    "=>>",
+    "==>",
+    "===>",
+    ">=",
+    ">>=",
+    "<->",
+    "<-->",
+    "<--->",
+    "<---->",
+    "<=>",
+    "<==>",
+    "<===>",
+    "<====>",
+    "::",
+    ":::",
+    "<~~",
+    "</",
+    "</>",
+    "/>",
+    "~~>",
+    "==",
+    "!=",
+    "/=",
+    "~=",
+    "<>",
+    "===",
+    "!==",
+    "!===",
+    "<:",
+    ":=",
+    "*=",
+    "*+",
+    "<*",
+    "<*>",
+    "*>",
+    "<|",
+    "<|>",
+    "|>",
+    "+*",
+    "=*",
+    "=:",
+    ":>",
+    "/*",
+    "*/",
+    "+++",
+    "<!--",
+    "<!---"
+  ],
+  "terminal.integrated.fontSize": 14,
+  "terminal.integrated.fontWeight": "400",
+  "window.confirmSaveUntitledWorkspace": false,
+  "workbench.colorTheme": "Monokai",
+  "workbench.editorAssociations": {
+    "*.copilotmd": "vscode.markdown.preview.editor",
+    "*.docx": "default"
+  },
+  "workbench.startupEditor": "none",
+  "workbench.tree.indent": 20,
+  "zenMode.centerLayout": false,
+  "zenMode.fullScreen": false,
+  "zenMode.hideLineNumbers": false,
+  "[markdown]": {
+    "editor.quickSuggestions": {
+      "comments": "on",
+      "other": "on",
+      "strings": "on"
+    },
+    "editor.wordWrap": "on"
+  },
+  "[plaintext]": {
+    "editor.quickSuggestions": {
+      "comments": "off",
+      "other": "off",
+      "strings": "off"
+    }
+  },
+  "[python]": {
+    "editor.codeActionsOnSave": {
+      "source.organizeImports": "explicit"
+    },
+    "editor.defaultFormatter": "ms-python.black-formatter",
+    "editor.formatOnSave": true,
+    "editor.rulers": []
+  },
+  "screencastMode.fontSize": 30,
+  "git.confirmSync": false,
+  "workbench.preferredHighContrastColorTheme": "Monokai",
+  "git.autofetch": true,
+  "chat.editing.confirmEditRequestRemoval": false,
+  "github.copilot.nextEditSuggestions.enabled": true,
+  "python.languageServer": "Jedi",
+  "python.analysis.typeCheckingMode": "standard",
+  "workbench.colorCustomizations": {},
+  "editor.allowVariableFontsInAccessibilityMode": true,
+  "terminal.integrated.fontLigatures.enabled": true,
+  "workbench.settings.applyToAllProfiles": [
+    "terminal.integrated.fontFamily",
+    "editor.fontFamily"
+  ],
+  "terminal.integrated.fontFamily": "MesloLGS NF",
+  "workbench.experimental.share.enabled": true,
+  "chat.editing.confirmEditRequestRetry": false,
+  "window.newWindowProfile": "Default",
+  "chat.agent.maxRequests": 250,
+  "azureResourceGroups.selectedSubscriptions": [],
+  "diffEditor.renderSideBySide": false,
+  "workbench.iconTheme": "vscode-icons",
+  "workbench.productIconTheme": "fluent-icons",
+  "viraTheme.accent": "",
+  "vsicons.dontShowNewVersionMessage": true,
+  "redhat.telemetry.enabled": true,
+  "vs-kubernetes": {
+    "vscode-kubernetes.helm-path-linux": "/home/kneeraazon/.local/state/vs-kubernetes/tools/helm/linux-amd64/helm",
+    "vscode-kubernetes.kubectl-path-linux": "/home/kneeraazon/.local/state/vs-kubernetes/tools/kubectl/kubectl",
+    "vscode-kubernetes.minikube-path-linux": "/home/kneeraazon/.local/state/vs-kubernetes/tools/minikube/linux-amd64/minikube"
+  },
+  "mssql.connectionGroups": [
+    {
+      "name": "ROOT",
+      "id": "7AB864BB-4CE7-4FAF-98BE-DACD1793D08C"
+    }
+  ],
+  "mdb.mcp.server": "prompt",
+  "gitlens.ai.model": "vscode",
+  "gitlens.ai.vscode.model": "copilot:gpt-4.1",
+  "[dockercompose]": {
+    "editor.insertSpaces": true,
+    "editor.tabSize": 2,
+    "editor.autoIndent": "advanced",
+    "editor.quickSuggestions": {
+      "other": true,
+      "comments": false,
+      "strings": true
+    },
+    "editor.defaultFormatter": "redhat.vscode-yaml"
+  },
+  "[github-actions-workflow]": {
+    "editor.defaultFormatter": "redhat.vscode-yaml"
+  },
+  "projectManager.git.baseFolders": [
+    ""
+  ],
+  "markdown-preview-enhanced.previewTheme": "none.css",
+  "claudeCode.preferredLocation": "panel",
+  "chat.viewSessions.orientation": "stacked"
 }
