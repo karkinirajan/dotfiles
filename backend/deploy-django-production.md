@@ -4,13 +4,28 @@ A comprehensive guide for deploying Django applications to production on Linux-b
 
 ## Table of Contents
 
-- [Prerequisites](#prerequisites)
-- [Initial Server Setup](#initial-server-setup)
-- [Security Configuration](#security-configuration)
-- [Database Setup](#database-setup)
-- [Application Deployment](#application-deployment)
-- [Web Server Configuration](#web-server-configuration)
-- [Domain Configuration](#domain-configuration)
+- [Django Production Deployment Guide](#django-production-deployment-guide)
+  - [Table of Contents](#table-of-contents)
+  - [Prerequisites](#prerequisites)
+  - [Initial Server Setup](#initial-server-setup)
+  - [Security Configuration](#security-configuration)
+    - [Create Deploy User](#create-deploy-user)
+    - [Configure SSH](#configure-ssh)
+    - [Configure Firewall](#configure-firewall)
+  - [Database Setup](#database-setup)
+  - [Application Deployment](#application-deployment)
+    - [Set up Virtual Environment](#set-up-virtual-environment)
+    - [Deploy Application](#deploy-application)
+    - [Initialize Application](#initialize-application)
+  - [Web Server Configuration](#web-server-configuration)
+    - [Configure Gunicorn](#configure-gunicorn)
+    - [Configure Nginx](#configure-nginx)
+    - [Enable and Start Services](#enable-and-start-services)
+  - [Domain Configuration](#domain-configuration)
+  - [Maintenance](#maintenance)
+  - [Security Best Practices](#security-best-practices)
+  - [Contributing](#contributing)
+  - [License](#license)
 
 ## Prerequisites
 
