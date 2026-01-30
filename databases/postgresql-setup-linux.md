@@ -1,4 +1,3 @@
-
 # PostgreSQL: The Accelerated Guide to Near-Expertise
 
 A concise, command-centric guide for mastering PostgreSQL on Linux, inspired by `postgresql.org/docs/current/`.
@@ -442,7 +441,7 @@ USING (column_list): Shorthand for ON t1.col = t2.col AND ... when join columns 
 LATERAL JOIN: Allows right-hand side of join to reference columns from left-hand side (like a correlated
 ```Here's the continuation of the `README.md` file:
 
-```markdown
+````markdown
 subquery).
 
 ```sql
@@ -472,12 +471,13 @@ SELECT e.first_name, e.last_name, m.first_name AS manager_first, m.last_name AS 
 FROM employees e
 LEFT JOIN employees m ON e.manager_id = m.employee_id;
 ```
+````
 
 ### 9.2. Aggregation and Grouping
 
 ```sql
 -- Basic aggregation functions
-SELECT 
+SELECT
     COUNT(*) AS total_employees,
     AVG(salary)::NUMERIC(10,2) AS avg_salary,
     MIN(hire_date) AS first_hire,
@@ -485,7 +485,7 @@ SELECT
 FROM employees;
 
 -- GROUP BY
-SELECT 
+SELECT
     d.name AS department,
     COUNT(*) AS employee_count,
     AVG(salary)::NUMERIC(10,2) AS avg_salary
@@ -495,7 +495,7 @@ GROUP BY d.name
 ORDER BY employee_count DESC;
 
 -- HAVING (filter groups)
-SELECT 
+SELECT
     d.name AS department,
     COUNT(*) AS employee_count
 FROM employees e
@@ -504,7 +504,7 @@ GROUP BY d.name
 HAVING COUNT(*) > 5;
 
 -- GROUPING SETS, CUBE, ROLLUP (advanced grouping)
-SELECT 
+SELECT
     d.name AS department,
     EXTRACT(YEAR FROM hire_date) AS hire_year,
     COUNT(*) AS employee_count
@@ -522,7 +522,7 @@ GROUP BY GROUPING SETS (
 
 ```sql
 -- Basic window functions
-SELECT 
+SELECT
     first_name,
     last_name,
     salary,
@@ -534,14 +534,14 @@ FROM employees;
 
 -- Common table expressions (CTEs) with window functions
 WITH dept_stats AS (
-    SELECT 
+    SELECT
         department_id,
         AVG(salary) AS avg_salary,
         COUNT(*) AS employee_count
     FROM employees
     GROUP BY department_id
 )
-SELECT 
+SELECT
     e.first_name,
     e.last_name,
     e.salary,
@@ -573,15 +573,15 @@ WITH RECURSIVE org_chart AS (
     SELECT employee_id, first_name, last_name, manager_id, 1 AS level
     FROM employees
     WHERE manager_id IS NULL OR manager_id NOT IN (SELECT employee_id FROM employees)
-    
+
     UNION ALL
-    
+
     -- Recursive case: employees who report to someone in the org_chart
     SELECT e.employee_id, e.first_name, e.last_name, e.manager_id, oc.level + 1
     FROM employees e
     JOIN org_chart oc ON e.manager_id = oc.employee_id
 )
-SELECT 
+SELECT
     LPAD('', (level-1)*4, ' ') || first_name || ' ' || last_name AS employee,
     level
 FROM org_chart
@@ -603,21 +603,21 @@ COMMIT;
 BEGIN;
     INSERT INTO orders (customer_id, order_date) VALUES (789, CURRENT_DATE) RETURNING order_id INTO order_id;
     SAVEPOINT order_created;
-    
+
     INSERT INTO order_items (order_id, product_id, quantity)
     VALUES (order_id, 1, 2), (order_id, 5, 1);
-    
+
     -- If this fails, rollback to savepoint
     SAVEPOINT items_added;
-    
-    UPDATE inventory 
-    SET stock = stock - 2 
+
+    UPDATE inventory
+    SET stock = stock - 2
     WHERE product_id = 1 AND stock >= 2;
-    
-    UPDATE inventory 
-    SET stock = stock - 1 
+
+    UPDATE inventory
+    SET stock = stock - 1
     WHERE product_id = 5 AND stock >= 1;
-    
+
     -- If all succeeded
     COMMIT;
 EXCEPTION WHEN OTHERS THEN
@@ -735,8 +735,8 @@ recovery_target_time = '2025-05-15 14:30:00'
 -- Row-level security
 ALTER TABLE documents ENABLE ROW LEVEL SECURITY;
 CREATE POLICY doc_access_policy ON documents
-    USING (owner_id = current_user_id() OR 
-           EXISTS (SELECT 1 FROM document_shares 
+    USING (owner_id = current_user_id() OR
+           EXISTS (SELECT 1 FROM document_shares
                    WHERE document_id = documents.id AND user_id = current_user_id()));
 
 -- Column-level privileges
@@ -771,15 +771,15 @@ SELECT * FROM pg_stat_user_tables;
 SELECT * FROM pg_stat_user_indexes;
 
 -- Locks
-SELECT locktype, relation::regclass, mode, pid 
-FROM pg_locks 
+SELECT locktype, relation::regclass, mode, pid
+FROM pg_locks
 WHERE pid != pg_backend_pid();
 
 -- Database size
 SELECT pg_size_pretty(pg_database_size(current_database()));
 
 -- Table sizes
-SELECT 
+SELECT
     table_name,
     pg_size_pretty(pg_total_relation_size(quote_ident(table_name))) AS size
 FROM information_schema.tables
