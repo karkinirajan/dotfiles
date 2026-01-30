@@ -191,9 +191,9 @@ server {
     server_name example.com www.example.com;
     client_max_body_size 20M;
 
-    location = /favicon.ico { 
-        access_log off; 
-        log_not_found off; 
+    location = /favicon.ico {
+        access_log off;
+        log_not_found off;
     }
 
     location /static/ {

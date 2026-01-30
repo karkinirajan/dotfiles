@@ -192,9 +192,7 @@
   "[github-actions-workflow]": {
     "editor.defaultFormatter": "redhat.vscode-yaml"
   },
-  "projectManager.git.baseFolders": [
-    ""
-  ],
+  "projectManager.git.baseFolders": [""],
   "markdown-preview-enhanced.previewTheme": "none.css",
   "claudeCode.preferredLocation": "panel",
   "chat.viewSessions.orientation": "stacked"
