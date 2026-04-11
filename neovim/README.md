@@ -1,174 +1,147 @@
-# Neovim Full-Stack Development Setup Guide
+# Neovim Full-Stack Development Setup
 
-> A comprehensive guide to configuring Neovim for modern full-stack development with MERN, Python (Django/FastAPI/Flask), SQL/NoSQL databases, and DevOps tooling.
+> A complete guide to configuring Neovim as a production-ready IDE for full-stack
+> development: MERN, Python (Django/FastAPI/Flask), SQL/NoSQL databases, DevOps,
+> and AI-assisted development.
 
-## 📚 Table of Contents
-
-### Core Setup
-
-- [Installation & Prerequisites](./docs/01-installation.md)
-- [Plugin Manager (lazy.nvim)](./docs/02-plugin-manager.md)
-- [LSP Configuration](./docs/03-lsp-setup.md)
-- [Treesitter Configuration](./docs/04-treesitter.md)
-- [Autocompletion Setup](./docs/05-completion.md)
-
-### Language-Specific Configurations
-
-- [MERN Stack Setup](./docs/06-mern-stack.md)
-  - MongoDB, Express, React, Node.js
-- [Python Development](./docs/07-python-setup.md)
-  - Django, FastAPI, Flask
-  - Virtual Environment Management
-- [TypeScript/JavaScript](./docs/08-typescript-javascript.md)
-
-### Database Development
-
-- [SQL Databases](./docs/09-sql-databases.md)
-  - PostgreSQL, MySQL, SQLite
-- [NoSQL Databases](./docs/10-nosql-databases.md)
-  - MongoDB, Redis
-
-### DevOps Tools
-
-- [Docker Integration](./docs/11-docker.md)
-- [Kubernetes Setup](./docs/12-kubernetes.md)
-- [Terraform Configuration](./docs/13-terraform.md)
-- [Git & GitHub Integration](./docs/14-git-integration.md)
-- [CI/CD Tools](./docs/15-cicd-tools.md)
-
-### Advanced Features
-
-- [Debugging (DAP)](./docs/16-debugging.md)
-- [Testing Integration](./docs/17-testing.md)
-- [File Explorer & Navigation](./docs/18-file-navigation.md)
-- [Themes & UI](./docs/19-themes-ui.md)
-- [Performance Optimization](./docs/20-performance.md)
-
-### Complete Configurations
-
-- [Minimal Config (~200 lines)](./configs/minimal-config.lua)
-- [Full-Featured Config](./configs/full-config.lua)
-- [Project-Specific Configs](./configs/)
-
-## 🎯 Quick Start
+## Quick Start
 
 ```bash
 # 1. Install Neovim 0.11+
-brew install neovim  # macOS
-snap install neovim  # Ubuntu
+brew install neovim        # macOS
+sudo pacman -S neovim      # Arch
+sudo snap install nvim --classic  # Ubuntu
 
 # 2. Backup existing config
-mv ~/.config/nvim ~/.config/nvim.backup
+mv ~/.config/nvim ~/.config/nvim.backup.$(date +%Y%m%d)
 
-# 3. Clone minimal config
+# 3. Create config directory
 mkdir -p ~/.config/nvim
-cp configs/minimal-config.lua ~/.config/nvim/init.lua
 
-# 4. Start Neovim (plugins auto-install)
+# 4. Start Neovim — lazy.nvim bootstraps automatically
 nvim
 ```
 
-## 🔧 Tech Stack Covered
+---
 
-### Frontend
+## Table of Contents
 
-- React, Vue, Angular
-- TypeScript, JavaScript
-- HTML, CSS, Tailwind
-- Vite, Webpack
+### Core Setup
 
-### Backend
+| # | Guide | Topics |
+|---|-------|--------|
+| 01 | [Installation & Prerequisites](./docs/01-installation.md) | Neovim, Node.js, Python, Rust, Git, ripgrep, fd, lazygit, clipboard |
+| 02 | [Plugin Manager (lazy.nvim)](./docs/02-plugin-manager.md) | Bootstrap, plugin structure, UI, lockfile, performance flags |
+| 03 | [LSP Configuration](./docs/03-lsp-setup.md) | Mason, nvim-lspconfig, keymaps, diagnostics, conform.nvim, nvim-lint |
+| 04 | [Treesitter](./docs/04-treesitter.md) | Parsers, highlighting, text objects, incremental selection, folding |
+| 05 | [Autocompletion](./docs/05-completion.md) | nvim-cmp, LuaSnip, friendly-snippets, sources, cmdline completion |
 
-- Node.js, Express
-- Python (Django, FastAPI, Flask)
-- REST APIs, GraphQL
+### Language Stacks
+
+| # | Guide | Topics |
+|---|-------|--------|
+| 06 | [MERN Stack](./docs/06-mern-stack.md) | React, Node.js, Express, MongoDB, testing |
+| 07 | [Python Development](./docs/07-python-setup.md) | Django, FastAPI, Flask, venv, pyright, ruff, debugging |
+| 08 | [TypeScript & JavaScript](./docs/08-typescript-javascript.md) | typescript-tools, ESLint, Prettier, inlay hints, imports |
 
 ### Databases
 
-- PostgreSQL, MySQL, SQLite
-- MongoDB, Redis
-- SQL language server
+| # | Guide | Topics |
+|---|-------|--------|
+| 09 | [SQL Databases](./docs/09-sql-databases.md) | vim-dadbod, sqls, PostgreSQL, MySQL, SQLite |
+| 10 | [NoSQL Databases](./docs/10-nosql-databases.md) | MongoDB, Redis |
 
 ### DevOps
 
-- Docker, Docker Compose
-- Kubernetes, Helm
-- Terraform, Ansible
-- GitHub Actions, GitLab CI
+| # | Guide | Topics |
+|---|-------|--------|
+| 11 | [Docker](./docs/11-docker.md) | Dockerfile LSP, docker-compose, container management |
+| 12 | [Kubernetes](./docs/12-kubernetes.md) | kubectl.nvim, YAML LSP, Helm |
+| 13 | [Terraform](./docs/13-terraform.md) | Terraform LSP, formatting, linting |
+| 14 | [Git & GitHub](./docs/14-git-integration.md) | vim-fugitive, gitsigns, lazygit, diffview, worktrees, Octo |
+| 15 | [CI/CD Tools](./docs/15-cicd-tools.md) | GitHub Actions schemas, GitLab CI, bashls, shellcheck, SchemaStore |
 
-## 📋 Prerequisites
+### Advanced Features
 
-- Neovim >= 0.11.0
-- Git
-- Node.js >= 18.x (for LSP servers)
-- Python >= 3.8
-- Rust (for some tools)
-- ripgrep, fd (optional but recommended)
-
-## 🌟 Key Features
-
-### LSP & Completion
-
-- **Mason.nvim**: Install & manage LSP servers
-- **nvim-lspconfig**: Configure language servers
-- **nvim-cmp**: Intelligent autocompletion
-- **Treesitter**: Enhanced syntax highlighting
-
-### Development Tools
-
-- **Telescope**: Fuzzy finder
-- **nvim-dap**: Debug Adapter Protocol
-- **conform.nvim**: Code formatting
-- **nvim-lint**: Linting support
-
-### Database Tools
-
-- **vim-dadbod**: Database interaction
-- **sqls**: SQL language server
-- **dbout.nvim**: Database management UI
-
-### DevOps Integration
-
-- **devops-tools.nvim**: Docker, Kubernetes, Terraform
-- **kubectl.nvim**: Kubernetes management
-- **fugitive**: Git integration
-
-## 📖 Documentation Structure
-
-Each guide includes:
-
-- ✅ Installation instructions
-- ⚙️ Configuration examples
-- 🔑 Key mappings
-- 💡 Usage tips
-- 🐛 Troubleshooting
-
-## 🚀 Philosophy
-
-This setup prioritizes:
-
-1. **Performance**: Fast startup (<100ms)
-2. **Modularity**: Easy to customize
-3. **Standards**: Uses LSP, DAP, Treesitter
-4. **Minimal Dependencies**: Only essential plugins
-5. **Production-Ready**: Battle-tested configurations
-
-## 🤝 Contributing
-
-Found an issue or improvement? Feel free to submit a PR or open an issue.
-
-## 📝 License
-
-MIT License - Feel free to use and modify
-
-## 🔗 Resources
-
-- [Neovim Documentation](https://neovim.io/doc/)
-- [LSP Server List](https://microsoft.github.io/language-server-protocol/implementors/servers/)
-- [Mason Registry](https://mason-registry.dev/)
-- [Treesitter Parsers](https://github.com/nvim-treesitter/nvim-treesitter#supported-languages)
+| # | Guide | Topics |
+|---|-------|--------|
+| 16 | [Debugging (DAP)](./docs/16-debugging.md) | nvim-dap, Python debugger, JS/TS debugger, UI |
+| 17 | [Testing](./docs/17-testing.md) | Neotest (pytest, Jest, Vitest), coverage, debug tests |
+| 18 | [File Navigation](./docs/18-file-navigation.md) | Telescope, Neo-tree, Harpoon, Flash.nvim, Oil.nvim |
+| 19 | [Themes & UI](./docs/19-themes-ui.md) | Catppuccin, lualine, bufferline, dashboard, noice, which-key |
+| 20 | [Performance](./docs/20-performance.md) | Profiling, lazy-loading, large files, LSP tuning, startup < 100ms |
 
 ---
 
-**Last Updated**: January 2025  
-**Neovim Version**: 0.11+
+## Prerequisites
+
+- **Neovim** >= 0.11.0
+- **Git**
+- **Node.js** >= 18.x (for LSP servers)
+- **Python** >= 3.10
+- **Rust** (for some tools)
+- **ripgrep**, **fd** (for Telescope)
+- A **Nerd Font** (for icons — e.g. JetBrainsMono Nerd Font)
+
+---
+
+## Key Features
+
+### Core IDE
+
+- **Mason.nvim** — install and manage 200+ LSP servers, formatters, linters
+- **nvim-lspconfig** — zero-config LSP setup for 90+ languages
+- **nvim-cmp** — intelligent autocompletion with 10+ sources
+- **LuaSnip** + **friendly-snippets** — 2000+ community snippets
+- **Treesitter** — semantic syntax, text objects, incremental selection
+- **conform.nvim** — format on save (Prettier, Black, stylua, shfmt…)
+- **nvim-lint** — async linting (ESLint, Ruff, shellcheck, hadolint…)
+
+### Navigation
+
+- **Telescope** — fuzzy find files, grep, LSP symbols, git
+- **Harpoon** — instant jump between marked files
+- **Flash.nvim** — label-based screen motions
+- **Neo-tree** — sidebar file explorer with git status
+- **Oil.nvim** — edit the filesystem as a buffer
+
+### Development
+
+- **nvim-dap** — Debug Adapter Protocol (breakpoints, watches, REPL)
+- **Neotest** — test runner for pytest, Jest, Vitest, Go, Rust
+- **vim-fugitive** + **gitsigns** + **diffview** — full Git workflow
+- **vim-dadbod** — database client (PostgreSQL, MySQL, SQLite, MongoDB)
+- **typescript-tools** — TypeScript power features (import org, rename file)
+
+### UI
+
+- **Catppuccin** — beautiful, well-integrated color scheme
+- **lualine** — fast, configurable status line
+- **bufferline** — VSCode-style buffer tabs
+- **noice.nvim** — enhanced command-line and notification UI
+- **which-key** — discover keymaps on the fly
+
+---
+
+## Philosophy
+
+1. **Performance** — startup < 100ms with aggressive lazy-loading
+2. **Modularity** — each plugin in its own file, easy to add/remove
+3. **Standards** — LSP, DAP, and Treesitter over custom hacks
+4. **Minimal** — only plugins that provide clear value
+5. **Production-ready** — battle-tested configurations
+
+---
+
+## Resources
+
+- [Neovim Documentation](https://neovim.io/doc/)
+- [Mason Registry](https://mason-registry.dev/)
+- [LSP Server List](https://microsoft.github.io/language-server-protocol/implementors/servers/)
+- [Treesitter Parsers](https://github.com/nvim-treesitter/nvim-treesitter#supported-languages)
+- [lazy.nvim Documentation](https://lazy.folke.io/)
+- [awesome-neovim](https://github.com/rockerBOO/awesome-neovim)
+
+---
+
+**Last Updated**: April 2026 | **Neovim Version**: 0.11+

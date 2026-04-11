@@ -81,3 +81,6 @@ dmypy.json
 cython_debug/
 
 ./.idea
+
+# Local-only update logs (not pushed to remote)
+UPDATES.md
