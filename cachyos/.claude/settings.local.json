@@ -1,0 +1,9 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(git clone *)",
+      "Bash(rm -rf ~/.config/nvim/.git)",
+      "Read(//home/kneeraazon/.config/**)"
+    ]
+  }
+}
