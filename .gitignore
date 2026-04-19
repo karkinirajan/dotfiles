@@ -84,3 +84,6 @@ cython_debug/
 
 # Local-only update logs (not pushed to remote)
 UPDATES.md
+
+# Local-only reference docs (cheatsheets, guides, roadmaps)
+references/
