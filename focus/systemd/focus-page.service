@@ -1,0 +1,13 @@
+[Unit]
+Description=Focus block page server
+After=network.target
+PartOf=focus.service
+
+[Service]
+Type=simple
+ExecStart=/usr/bin/python3 /home/kneeraazon/.focus/scripts/focus-page
+Restart=on-failure
+RestartSec=2
+
+[Install]
+WantedBy=multi-user.target

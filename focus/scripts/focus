@@ -1,0 +1,352 @@
+#!/usr/bin/env zsh
+# focus — system-level distraction blocker
+# Manages DNS + firewall blocking, scheduling, locking, and stats.
+
+ALLOW_FILE="/home/kneeraazon/.focus/allow.list"
+BLOCK_FILE="/home/kneeraazon/.focus/block.list"
+LOCK_FILE="/home/kneeraazon/.focus/lock"
+STATE_FILE="/home/kneeraazon/.focus/state"
+SCHEDULE_FILE="/home/kneeraazon/.focus/schedule.conf"
+LOG_FW="/home/kneeraazon/.focus/logs/firewall.log"
+STATS_DIR="/home/kneeraazon/.focus/stats"
+DNSMASQ_LOG="/var/log/dnsmasq.log"
+
+mkdir -p /home/kneeraazon/.focus/logs /home/kneeraazon/.focus/stats
+
+# Create the list files only if they are missing — do NOT touch existing ones.
+# focus-refresh.path watches these with PathModified, so an unconditional
+# `touch` made every `focus` invocation (even `focus off` or `focus status`)
+# fire focus-refresh.service, which restarted dnsmasq and re-armed the nft
+# sets — silently undoing `focus off` a second after it ran.
+for _f in "$ALLOW_FILE" "$BLOCK_FILE" "$LOG_FW"; do
+  [[ -e "$_f" ]] || : > "$_f" 2>/dev/null || true
+done
+unset _f
+
+cmd="$1"
+
+# ── helpers ────────────────────────────────────────────────────────────────
+_is_locked() { [[ -f "$LOCK_FILE" ]]; }
+
+_lock_guard() {
+  if _is_locked; then
+    local until
+    until=$(cat "$LOCK_FILE" 2>/dev/null)
+    echo "focus is LOCKED until $until. Run: focus unlock"
+    exit 1
+  fi
+}
+
+_parse_duration() {
+  # Accepts: 30m  2h  1h30m  90m  1.5h
+  local raw="$1"
+  local total=0
+  local h m
+  if [[ "$raw" =~ ^([0-9]+)h([0-9]+)m$ ]]; then
+    total=$(( ${match[1]} * 3600 + ${match[2]} * 60 ))
+  elif [[ "$raw" =~ ^([0-9]+)h$ ]]; then
+    total=$(( ${match[1]} * 3600 ))
+  elif [[ "$raw" =~ ^([0-9]+)m$ ]]; then
+    total=$(( ${match[1]} * 60 ))
+  else
+    echo "Invalid duration: $raw  (use 30m, 2h, 1h30m)" >&2
+    return 1
+  fi
+  echo $total
+}
+
+# ── on ────────────────────────────────────────────────────────────────────
+_cmd_on() {
+  echo "[ON] enabling focus mode"
+  print -r -- "on" > "$STATE_FILE"
+  sudo systemctl start dnsmasq
+  sudo systemctl start focus-page
+  sudo chattr -i /etc/resolv.conf 2>/dev/null || true
+  # /etc/resolv.conf must be a real file, not NetworkManager's symlink into
+  # /run (tmpfs): NM regenerates that on every network event and tmpfs has no
+  # immutable flag, so the redirect silently reverted and focus was bypassed
+  # system-wide. NM is configured with dns=none + rc-manager=unmanaged.
+  if [[ -L /etc/resolv.conf ]]; then
+    sudo rm -f /etc/resolv.conf
+  fi
+  echo "nameserver 127.0.0.1" | sudo tee /etc/resolv.conf > /dev/null
+  sudo chattr +i /etc/resolv.conf 2>/dev/null || true
+  /home/kneeraazon/.focus/scripts/focus-refresh | tee -a "$LOG_FW"
+  echo "[ON] focus mode active"
+}
+
+# ── off ───────────────────────────────────────────────────────────────────
+_cmd_off() {
+  _lock_guard
+  echo "[OFF] disabling focus mode"
+  # Write state FIRST so any focus-refresh triggered while we tear down sees
+  # "off" and declines to re-arm.
+  print -r -- "off" > "$STATE_FILE"
+  sudo chattr -i /etc/resolv.conf 2>/dev/null || true
+  sudo systemctl stop dnsmasq
+  sudo systemctl stop focus-page 2>/dev/null || true
+  sudo rm -f /etc/dnsmasq.d/focus-block.conf
+  sudo nft flush set inet filter blocked_ips 2>/dev/null || true
+  sudo nft flush set inet filter allowed_ips 2>/dev/null || true
+  [[ -L /etc/resolv.conf ]] && sudo rm -f /etc/resolv.conf
+  printf 'nameserver 1.1.1.1\nnameserver 9.9.9.9\n' | sudo tee /etc/resolv.conf > /dev/null
+  echo "[OFF] focus mode disabled"
+}
+
+# ── status ────────────────────────────────────────────────────────────────
+_cmd_status() {
+  local dns_state nft_state lock_state page_state
+  systemctl is-active dnsmasq &>/dev/null && dns_state="active" || dns_state="inactive"
+  sudo nft list table inet filter &>/dev/null && nft_state="loaded" || nft_state="missing"
+  systemctl is-active focus-page &>/dev/null && page_state="active" || page_state="inactive"
+  _is_locked && lock_state="LOCKED (until $(cat $LOCK_FILE))" || lock_state="unlocked"
+
+  echo "──── Focus System ────────────────"
+  echo "  dnsmasq:    $dns_state"
+  echo "  nftables:   $nft_state"
+  echo "  block-page: $page_state"
+  echo "  DNS via:    $(grep nameserver /etc/resolv.conf | head -1 | awk '{print $2}')"
+  echo "  lock:       $lock_state"
+  echo "  allowed:    $(wc -l < $ALLOW_FILE) domains"
+  echo "  blocked:    $(wc -l < $BLOCK_FILE) domains"
+  echo "  blocked IPs: $(sudo nft list set inet filter blocked_ips 2>/dev/null | grep -o '[0-9]\+\.[0-9]\+\.[0-9]\+\.[0-9]\+' | wc -l)"
+  echo "  dns blocks: $(wc -l < /etc/dnsmasq.d/focus-block.conf 2>/dev/null || echo 0)"
+
+  if [[ -f "$SCHEDULE_FILE" ]]; then
+    source "$SCHEDULE_FILE"
+    echo "  schedule:   ${SCHEDULE_START:-09:00}–${SCHEDULE_END:-18:00} (Mon–Fri)"
+    local sched_on sched_off
+    systemctl is-enabled focus-schedule-on.timer &>/dev/null && sched_on="enabled" || sched_on="disabled"
+    echo "  auto-on:    $sched_on"
+  fi
+}
+
+# ── refresh ───────────────────────────────────────────────────────────────
+_cmd_refresh() {
+  /home/kneeraazon/.focus/scripts/focus-refresh | tee -a "$LOG_FW"
+}
+
+# ── allow ─────────────────────────────────────────────────────────────────
+_cmd_allow() {
+  shift
+  for d in "$@"; do
+    [[ -z "$d" ]] && continue
+    grep -vx "$d" "$BLOCK_FILE" > /tmp/block.tmp 2>/dev/null && mv /tmp/block.tmp "$BLOCK_FILE"
+    grep -qx "$d" "$ALLOW_FILE" || echo "$d" >> "$ALLOW_FILE"
+    echo "[+] allowed: $d"
+  done
+  /home/kneeraazon/.focus/scripts/focus-refresh >/dev/null 2>&1
+}
+
+# ── block ─────────────────────────────────────────────────────────────────
+_cmd_block() {
+  shift
+  for d in "$@"; do
+    [[ -z "$d" ]] && continue
+    grep -vx "$d" "$ALLOW_FILE" > /tmp/allow.tmp 2>/dev/null && mv /tmp/allow.tmp "$ALLOW_FILE"
+    grep -qx "$d" "$BLOCK_FILE" || echo "$d" >> "$BLOCK_FILE"
+    echo "[-] blocked: $d"
+  done
+  /home/kneeraazon/.focus/scripts/focus-refresh >/dev/null 2>&1
+}
+
+# ── list ──────────────────────────────────────────────────────────────────
+_cmd_list() {
+  echo "──── Allowed ────"
+  cat "$ALLOW_FILE"
+  echo
+  echo "──── Blocked ────"
+  cat "$BLOCK_FILE"
+}
+
+# ── test ──────────────────────────────────────────────────────────────────
+_cmd_test() {
+  local domain="$2"
+  [[ -z "$domain" ]] && echo "Usage: focus test <domain>" && exit 1
+  local ip
+  ip=$(dig +short "$domain" A @127.0.0.1 2>/dev/null | grep -E '^[0-9.]+' | head -n1)
+  echo "  domain: $domain"
+  echo "  DNS →   ${ip:-NXDOMAIN}"
+  if [[ -z "$ip" || "$ip" == "0.0.0.0" || "$ip" == "127.0.0.1" ]]; then
+    echo "  result: BLOCKED (DNS)"
+  elif sudo nft list set inet filter blocked_ips 2>/dev/null | grep -q "$ip"; then
+    echo "  result: BLOCKED (firewall)"
+  elif sudo nft list set inet filter allowed_ips 2>/dev/null | grep -q "$ip"; then
+    echo "  result: ALLOWED (explicit whitelist)"
+  else
+    echo "  result: ALLOWED (default)"
+  fi
+}
+
+# ── lock ──────────────────────────────────────────────────────────────────
+_cmd_lock() {
+  local duration="${2:-1h}"
+  local secs
+  secs=$(_parse_duration "$duration") || exit 1
+  local until
+  until=$(date -d "+${secs} seconds" '+%Y-%m-%d %H:%M:%S' 2>/dev/null \
+       || date -v "+${secs}S" '+%Y-%m-%d %H:%M:%S' 2>/dev/null)
+
+  # Lock the lists so they can't be edited
+  sudo chattr +i "$BLOCK_FILE" "$ALLOW_FILE" 2>/dev/null || true
+  echo "$until" > "$LOCK_FILE"
+
+  # Schedule auto-unlock via systemd transient timer
+  sudo systemd-run --no-ask-password \
+    --on-active="${secs}s" \
+    --unit="focus-unlock" \
+    /home/kneeraazon/.focus/scripts/focus unlock 2>/dev/null \
+  || ( sleep "$secs" && /home/kneeraazon/.focus/scripts/focus unlock ) &
+
+  echo "[LOCK] focus locked for $duration (until $until)"
+  echo "       Blocked sites cannot be removed until then."
+}
+
+# ── unlock ────────────────────────────────────────────────────────────────
+_cmd_unlock() {
+  sudo chattr -i "$BLOCK_FILE" "$ALLOW_FILE" 2>/dev/null || true
+  rm -f "$LOCK_FILE"
+  echo "[UNLOCK] focus mode unlocked"
+}
+
+# ── schedule ──────────────────────────────────────────────────────────────
+_cmd_schedule() {
+  local sub="$2"
+  case "$sub" in
+    set)
+      local start="${3:-09:00}" end="${4:-18:00}"
+      echo "SCHEDULE_START=$start" > "$SCHEDULE_FILE"
+      echo "SCHEDULE_END=$end"    >> "$SCHEDULE_FILE"
+      # Rewrite the timer OnCalendar lines
+      sudo sed -i "s|OnCalendar=.*focus-schedule-on.*|OnCalendar=Mon-Fri *-*-* ${start}:00|" \
+        /etc/systemd/system/focus-schedule-on.timer 2>/dev/null || true
+      sudo sed -i "s|OnCalendar=.*|OnCalendar=Mon-Fri *-*-* ${end}:00|" \
+        /etc/systemd/system/focus-schedule-off.timer 2>/dev/null || true
+      sudo systemctl daemon-reload
+      echo "[schedule] set to ${start}–${end} Mon–Fri"
+      ;;
+    enable)
+      sudo systemctl enable --now focus-schedule-on.timer focus-schedule-off.timer
+      echo "[schedule] enabled — focus on at $(source $SCHEDULE_FILE 2>/dev/null; echo ${SCHEDULE_START:-09:00}), off at $(source $SCHEDULE_FILE 2>/dev/null; echo ${SCHEDULE_END:-18:00})"
+      ;;
+    disable)
+      sudo systemctl disable --now focus-schedule-on.timer focus-schedule-off.timer
+      echo "[schedule] disabled"
+      ;;
+    status)
+      systemctl status focus-schedule-on.timer focus-schedule-off.timer --no-pager 2>/dev/null | grep -E 'Active|Trigger|Next'
+      ;;
+    *)
+      echo "Usage: focus schedule set <HH:MM> <HH:MM>"
+      echo "       focus schedule enable|disable|status"
+      ;;
+  esac
+}
+
+# ── stats ─────────────────────────────────────────────────────────────────
+_cmd_stats() {
+  local period="${2:-today}"
+  local since
+
+  case "$period" in
+    today)   since=$(date '+%b %e') ;;
+    week)    since=$(date -d '7 days ago' '+%b %e' 2>/dev/null || date -v-7d '+%b %e') ;;
+    all)     since="" ;;
+    *)       since="$period" ;;
+  esac
+
+  echo "──── Focus Stats ($period) ────────────────────────"
+
+  if [[ ! -f "$DNSMASQ_LOG" ]]; then
+    echo "  No log yet. Make sure dnsmasq logging is enabled."
+    exit 0
+  fi
+
+  # Extract blocked domain queries from dnsmasq log
+  local log_input
+  if [[ -n "$since" ]]; then
+    log_input=$(grep "$since" "$DNSMASQ_LOG" 2>/dev/null)
+  else
+    log_input=$(cat "$DNSMASQ_LOG")
+  fi
+
+  # Get blocked domains from block.list and count queries
+  local total=0
+  local hit_count domain
+  printf "  %-30s %s\n" "Domain" "Attempts"
+  printf "  %-30s %s\n" "──────────────────────────────" "────────"
+
+  while IFS= read -r domain; do
+    [[ -z "$domain" || "$domain" == \#* ]] && continue
+    hit_count=$(echo "$log_input" | grep -F "$domain" | wc -l | tr -d " ")
+    if (( hit_count > 0 )); then
+      printf "  %-30s %d\n" "$domain" "$hit_count"
+      total=$((total + hit_count))
+    fi
+  done < "$BLOCK_FILE"
+
+  echo "  ──────────────────────────────────────────"
+  echo "  Total blocked attempts: $total"
+
+  # Save snapshot
+  local snapfile="$STATS_DIR/$(date '+%Y-%m-%d').log"
+  echo "=== Stats run @ $(date '+%H:%M:%S') ===" >> "$snapfile"
+  echo "$log_input" | grep -f "$BLOCK_FILE" >> "$snapfile" 2>/dev/null || true
+}
+
+# ── logs ──────────────────────────────────────────────────────────────────
+_cmd_logs() { tail -f "$LOG_FW"; }
+
+# ── help ──────────────────────────────────────────────────────────────────
+_cmd_help() {
+  cat << 'HELP'
+focus — system-level distraction blocker
+
+  Core
+    focus on                   Enable focus mode (DNS + firewall blocking)
+    focus off                  Disable focus mode
+    focus status               Show full system status
+    focus refresh              Re-resolve IPs and update rules
+    focus list                 Show allow/block lists
+    focus test <domain>        Test if a domain is blocked or allowed
+
+  Lists
+    focus allow <domain>       Whitelist a domain
+    focus block <domain>       Blacklist a domain
+
+  Lock  (protect your work session)
+    focus lock [duration]      Lock the block list (e.g. 2h, 90m, 1h30m)
+    focus unlock               Manually unlock before timer expires
+
+  Schedule  (auto on/off)
+    focus schedule set HH:MM HH:MM   Set work hours (default 09:00 18:00)
+    focus schedule enable             Enable daily Mon–Fri schedule
+    focus schedule disable            Disable schedule
+    focus schedule status             Show next trigger times
+
+  Stats
+    focus stats [today|week|all]      Show blocked domain attempts
+
+  Logs
+    focus logs                 Tail the firewall log
+HELP
+}
+
+# ── dispatch ──────────────────────────────────────────────────────────────
+case "$cmd" in
+  on)        _cmd_on ;;
+  off)       _cmd_off ;;
+  status)    _cmd_status ;;
+  refresh)   _cmd_refresh ;;
+  allow)     _cmd_allow "$@" ;;
+  block)     _cmd_block "$@" ;;
+  list)      _cmd_list ;;
+  test)      _cmd_test "$@" ;;
+  lock)      _cmd_lock "$@" ;;
+  unlock)    _cmd_unlock ;;
+  schedule)  _cmd_schedule "$@" ;;
+  stats)     _cmd_stats "$@" ;;
+  logs)      _cmd_logs ;;
+  help|--help|-h|"") _cmd_help ;;
+  *)         echo "Unknown command: $cmd"; _cmd_help ;;
+esac

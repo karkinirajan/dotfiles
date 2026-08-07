@@ -1,0 +1,10 @@
+[Unit]
+Description=Focus mode – turn on at work start
+
+[Timer]
+OnCalendar=Mon-Fri *-*-* 09:00:00
+Persistent=true
+Unit=focus-schedule-on.service
+
+[Install]
+WantedBy=timers.target

@@ -1,0 +1,11 @@
+[Unit]
+Description=Refresh focus block IP sets
+Wants=network-online.target
+After=network-online.target
+
+[Service]
+Type=oneshot
+ExecStart=/home/kneeraazon/.focus/scripts/focus-refresh
+
+[Install]
+WantedBy=multi-user.target

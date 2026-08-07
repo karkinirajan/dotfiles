@@ -1,0 +1,95 @@
+#!/usr/bin/env zsh
+
+ALLOW_FILE="/home/kneeraazon/.focus/allow.list"
+BLOCK_FILE="/home/kneeraazon/.focus/block.list"
+DNSMASQ_BLOCK="/etc/dnsmasq.d/focus-block.conf"
+BLOCK_PAGE_IP="127.0.0.1"
+LOG="/home/kneeraazon/.focus/logs/firewall.log"
+STATS_DIR="/home/kneeraazon/.focus/stats"
+
+mkdir -p "$STATS_DIR"
+
+STATE_FILE="/home/kneeraazon/.focus/state"
+
+# Never re-arm blocking while focus is off. focus-refresh.path fires whenever
+# the lists change, so without this an edit made during a break would restart
+# dnsmasq and repopulate the nft sets behind your back.
+_focus_is_on() {
+  if [[ -f "$STATE_FILE" ]]; then
+    [[ "$(<"$STATE_FILE")" == "on" ]]
+  else
+    # No state file yet — infer from whether the system actually points at us.
+    grep -q '^nameserver 127\.0\.0\.1' /etc/resolv.conf 2>/dev/null
+  fi
+}
+
+if ! _focus_is_on; then
+  echo "[skip] focus is off — leaving DNS/firewall untouched @ $(date '+%H:%M:%S')" \
+    | tee -a "$LOG"
+  exit 0
+fi
+
+DNSMASQ_TMP="$(mktemp /tmp/focus-dnsmasq.XXXXXX)"
+trap 'rm -f "$DNSMASQ_TMP"' EXIT
+
+# Reset nft sets
+sudo nft flush set inet filter blocked_ips 2>/dev/null || true
+sudo nft flush set inet filter allowed_ips 2>/dev/null || true
+
+# Upstream resolver used for IP discovery. MUST bypass the local dnsmasq:
+# during focus mode /etc/resolv.conf points at 127.0.0.1, so resolving a
+# blocked domain through it returns the block-page IP (127.0.0.1) rather than
+# the real addresses — which meant blocked_ips only ever collected 127.0.0.1
+# and the IP-level layer never blocked anything.
+UPSTREAM_DNS="${FOCUS_UPSTREAM_DNS:-1.1.1.1}"
+
+resolve_ips() {
+  local out
+  out=$(dig +short +time=2 +tries=1 "@$UPSTREAM_DNS" "$1" A 2>/dev/null \
+          | grep -E '^[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+$')
+  # Fall back to a second upstream if the first is unreachable
+  if [[ -z "$out" ]]; then
+    out=$(dig +short +time=2 +tries=1 @8.8.8.8 "$1" A 2>/dev/null \
+            | grep -E '^[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+$')
+  fi
+  # Never let the block-page IP end up in a firewall set
+  print -r -- "$out" | grep -vE '^127\.' || true
+}
+
+# Build allow map
+typeset -A ALLOW_MAP
+while IFS= read -r domain; do
+  [[ -z "$domain" || "$domain" == \#* ]] && continue
+  for ip in $(resolve_ips "$domain"); do
+    [[ -n "$ip" ]] && ALLOW_MAP[$ip]=1
+    sudo nft add element inet filter allowed_ips "{ $ip }" 2>/dev/null || true
+  done
+done < "$ALLOW_FILE"
+
+# Generate dnsmasq block config + nft IP block
+> "$DNSMASQ_TMP"
+
+while IFS= read -r domain; do
+  [[ -z "$domain" || "$domain" == \#* ]] && continue
+
+  # DNS block: covers apex AND all subdomains (dnsmasq address=/ covers both)
+  echo "address=/$domain/$BLOCK_PAGE_IP" >> "$DNSMASQ_TMP"
+
+  # IP-level block (belt-and-suspenders for apps that cache DNS)
+  for ip in $(resolve_ips "$domain"); do
+    [[ -z "$ip" ]] && continue
+    if [[ -z "${ALLOW_MAP[$ip]}" ]]; then
+      sudo nft add element inet filter blocked_ips "{ $ip }" 2>/dev/null || true
+    fi
+  done
+
+done < "$BLOCK_FILE"
+
+sort -u "$DNSMASQ_TMP" | sudo tee "$DNSMASQ_BLOCK" > /dev/null
+
+# MUST be restart, not reload. dnsmasq's SIGHUP handler clears the cache and
+# re-reads /etc/hosts, but does NOT re-read /etc/dnsmasq.d/*.conf — so new
+# address=/domain/ entries silently never take effect on a reload.
+sudo systemctl restart dnsmasq 2>/dev/null || true
+
+echo "[✔] firewall + dns updated @ $(date '+%H:%M:%S')" | tee -a "$LOG"

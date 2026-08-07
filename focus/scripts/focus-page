@@ -1,0 +1,63 @@
+#!/usr/bin/env python3
+"""Focus block page server — listens on 127.0.0.1:80"""
+
+import http.server, socketserver, urllib.parse
+from datetime import datetime
+
+# CSS braces doubled to escape Python str.format()
+HTML = """<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1.0">
+  <title>Focus Mode</title>
+  <style>
+    *{{margin:0;padding:0;box-sizing:border-box}}
+    body{{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
+          background:#0f0f0f;color:#e0e0e0;display:flex;
+          align-items:center;justify-content:center;min-height:100vh}}
+    .card{{text-align:center;max-width:480px;padding:3rem 2rem}}
+    .icon{{font-size:4rem;margin-bottom:1.5rem}}
+    h1{{font-size:1.8rem;font-weight:700;margin-bottom:.75rem;color:#fff}}
+    .domain{{font-size:1rem;color:#888;background:#1a1a1a;border:1px solid #333;
+             border-radius:6px;padding:.4rem 1rem;display:inline-block;
+             margin:.75rem 0 1.5rem;font-family:monospace}}
+    p{{color:#666;line-height:1.6;font-size:.95rem}}
+    .time{{margin-top:2rem;font-size:.8rem;color:#444}}
+  </style>
+</head>
+<body>
+  <div class="card">
+    <div class="icon">&#128683;</div>
+    <h1>You're in focus mode</h1>
+    <div class="domain">{host}</div>
+    <p>This site is blocked to help you stay focused.<br>
+       Disable focus mode when you're done working.</p>
+    <div class="time">{time}</div>
+  </div>
+</body>
+</html>"""
+
+class Handler(http.server.BaseHTTPRequestHandler):
+    def do_GET(self):
+        host = self.headers.get('Host', 'this site').split(':')[0]
+        body = HTML.format(
+            host=urllib.parse.quote(host, safe='.-'),
+            time=datetime.now().strftime('%A, %H:%M')
+        ).encode()
+        self.send_response(200)
+        self.send_header('Content-Type', 'text/html; charset=utf-8')
+        self.send_header('Content-Length', len(body))
+        self.end_headers()
+        self.wfile.write(body)
+    def do_HEAD(self):
+        self.send_response(200)
+        self.send_header('Content-Type', 'text/html')
+        self.end_headers()
+    def log_message(self, *a): pass
+
+if __name__ == '__main__':
+    socketserver.TCPServer.allow_reuse_address = True
+    with socketserver.TCPServer(('127.0.0.1', 8080), Handler) as srv:
+        print('[focus-page] listening on 127.0.0.1:80')
+        srv.serve_forever()

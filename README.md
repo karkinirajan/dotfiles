@@ -11,6 +11,12 @@ dotfiles/
 │   ├── cachyos-setup-dev.md        # AMD GPU, ROCm, AI/ML stack, DevOps tooling
 │   └── cachyos_dev_artifact.md     # Comprehensive setup reference
 │
+├── focus/                      # System-wide distraction blocker (dnsmasq + nftables)
+│   ├── scripts/                # focus, focus-refresh, focus-page
+│   ├── systemd/                # services, schedule timers, list watcher
+│   ├── networkmanager/         # resolv.conf ownership (dns=none)
+│   └── block.list, allow.list  # what to block / CDN-IP exemptions
+│
 ├── kitty/                      # Kitty terminal configuration
 │   ├── kitty.conf              # Fonts, keybindings, splits, performance
 │   └── gruvbox-dark-hard.conf  # Colour scheme (matches the zsh palette)
@@ -64,6 +70,14 @@ setup alongside it. Only one prompt is ever active — switch at runtime with
 |------|-------------|--------------|
 | VS Code | `vscode/` (4 files) | Copilot, GitLens, 80+ extensions |
 | Sublime Text | `sublime/` (3 files) | Python/Anaconda, Predawn theme |
+
+### Productivity
+
+| Tool | Config | Key Features |
+|------|--------|--------------|
+| focus | `focus/` | OS-level site blocking via dnsmasq + nftables, schedule timers, lock mode |
+
+See [`focus/README.md`](focus/README.md) for how it works and how to install it.
 
 ### DevOps & AI/ML
 

@@ -1,0 +1,11 @@
+[Unit]
+Description=Focus Firewall System
+After=network.target dnsmasq.service
+
+[Service]
+Type=oneshot
+ExecStart=/home/kneeraazon/.focus/scripts/focus refresh
+RemainAfterExit=true
+
+[Install]
+WantedBy=multi-user.target
