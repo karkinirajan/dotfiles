@@ -11,10 +11,14 @@ dotfiles/
 │   ├── cachyos-setup-dev.md        # AMD GPU, ROCm, AI/ML stack, DevOps tooling
 │   └── cachyos_dev_artifact.md     # Comprehensive setup reference
 │
+├── kitty/                      # Kitty terminal configuration
+│   ├── kitty.conf              # Fonts, keybindings, splits, performance
+│   └── gruvbox-dark-hard.conf  # Colour scheme (matches the zsh palette)
+│
 ├── linux/                      # Linux shell configurations
 │   ├── arch/
 │   │   ├── .bashrc             # Bash config for Arch/Manjaro
-│   │   └── .zshrc              # Zsh config for Arch/Manjaro (p10k + Starship)
+│   │   └── .zshrc              # Zsh config for Arch/Manjaro (OMZ + starship/p10k)
 │   ├── ubuntu/
 │   │   └── .zshrc              # Zsh config for Ubuntu (apt aliases)
 │   └── starship.toml           # Cross-platform terminal prompt configuration
@@ -42,11 +46,17 @@ dotfiles/
 
 | File | Platform | Highlights |
 |------|----------|------------|
-| `linux/arch/.zshrc` | Arch/Manjaro | Powerlevel10k, Zsh plugins, pacman/yay aliases |
+| `kitty/kitty.conf` | All platforms | FiraCode Nerd Font + ligatures, splits, vim-style navigation |
+| `linux/arch/.zshrc` | Arch/Manjaro | Oh My Zsh, starship/p10k toggle, deferred plugin loading |
 | `linux/arch/.bashrc` | Arch/Manjaro | Bash config, git prompt, NVM |
 | `linux/ubuntu/.zshrc` | Ubuntu/Debian | apt aliases, ss networking |
 | `mac/.zshrc` | macOS | Homebrew, macOS utilities, flush-dns |
 | `linux/starship.toml` | All platforms | Battery, Git status, memory, language versions |
+
+The Arch zsh config runs **starship by default** and ships a Powerlevel10k
+setup alongside it. Only one prompt is ever active — switch at runtime with
+`theme-starship` / `theme-p10k`; the choice persists in
+`~/.config/zsh/prompt-framework`.
 
 ### Editors
 
@@ -77,7 +87,15 @@ cp mac/.zshrc ~/.zshrc
 cp linux/starship.toml ~/.config/starship.toml
 ```
 
-### 3. VS Code
+### 3. Kitty terminal
+```bash
+mkdir -p ~/.config/kitty
+cp kitty/kitty.conf kitty/gruvbox-dark-hard.conf ~/.config/kitty/
+```
+Requires a Nerd Font (`ttf-firacode-nerd` on Arch) for prompt glyphs.
+Reload a running kitty with `ctrl+shift+f5`.
+
+### 4. VS Code
 ```bash
 cp vscode/vscode-settings.json ~/Library/Application\ Support/Code/User/settings.json
 bash vscode/extensions.sh   # install all extensions
