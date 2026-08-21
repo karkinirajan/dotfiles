@@ -37,11 +37,15 @@ dotfiles/
 │   ├── sublime-repl.json       # Python REPL configuration
 │   └── sublime-settings.json   # Editor settings (theme, font)
 │
-└── vscode/                     # Visual Studio Code configuration
-    ├── extensions.sh           # Shell script to bulk-install extensions
-    ├── vscode-extensions.json  # Curated extension list (80+)
-    ├── vscode-keybindings.json # Custom keyboard shortcuts
-    └── vscode-settings.json    # Editor settings (font, theme, AI, language rules)
+├── vscode/                     # Visual Studio Code configuration
+│   ├── extensions.sh           # Shell script to bulk-install extensions
+│   ├── vscode-extensions.json  # Curated extension list (80+)
+│   ├── vscode-keybindings.json # Custom keyboard shortcuts
+│   └── vscode-settings.json    # Editor settings (font, theme, AI, language rules)
+│
+└── zed/                        # Zed editor configuration
+    ├── README.md                # Extension list — Zed has no CLI installer, install manually
+    └── zed-settings.json        # Editor + language server + agent/MCP settings
 ```
 
 ---
@@ -69,6 +73,7 @@ setup alongside it. Only one prompt is ever active — switch at runtime with
 | Tool | Config Files | Key Features |
 |------|-------------|--------------|
 | VS Code | `vscode/` (4 files) | Copilot, GitLens, 80+ extensions |
+| Zed | `zed/` (2 files) | Ollama Cloud agent, MCP context servers, per-language LSP config |
 | Sublime Text | `sublime/` (3 files) | Python/Anaconda, Predawn theme |
 
 ### Productivity
