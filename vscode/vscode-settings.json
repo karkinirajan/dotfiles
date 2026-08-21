@@ -2,7 +2,7 @@
   // ═══════════════════════════════════════════════════════════
   // EDITOR — Core Behaviour
   // ═══════════════════════════════════════════════════════════
-  "editor.fontFamily": "Fira Code, 'Cascadia Code', 'JetBrains Mono', Consolas, monospace",
+  "editor.fontFamily": "JetBrains Mono, 'Fira Code', 'Cascadia Code', Consolas, monospace",
   "editor.fontLigatures": true,
   "editor.fontSize": 14,
   "editor.fontWeight": "500",
@@ -26,6 +26,7 @@
   "editor.cursorBlinking": "smooth",
   "editor.cursorStyle": "line",
   "editor.cursorSurroundingLines": 8,
+  "editor.allowVariableFontsInAccessibilityMode": true,
 
   // ═══════════════════════════════════════════════════════════
   // EDITOR — Bracket & Guide Settings
@@ -64,7 +65,7 @@
   "editor.quickSuggestions": {
     "other": "on",
     "comments": "off",
-    "strings": "on"
+    "strings": "on",
   },
   "editor.acceptSuggestionOnEnter": "smart",
 
@@ -77,7 +78,7 @@
   "editor.formatOnPaste": false,
   "editor.codeActionsOnSave": {
     "source.fixAll": "explicit",
-    "source.organizeImports": "never"  // language-specific below
+    "source.organizeImports": "never",
   },
 
   // ═══════════════════════════════════════════════════════════
@@ -92,9 +93,8 @@
   // ═══════════════════════════════════════════════════════════
   // WORKBENCH — Theme & Icons
   // ═══════════════════════════════════════════════════════════
-  "workbench.colorTheme": "Monokai",
   "workbench.preferredHighContrastColorTheme": "Monokai",
-  "workbench.iconTheme": "vscode-icons",
+  "workbench.iconTheme": "material-icon-theme",
   "workbench.productIconTheme": "fluent-icons",
   "workbench.startupEditor": "none",
   "workbench.tree.indent": 20,
@@ -102,11 +102,13 @@
   "workbench.list.smoothScrolling": true,
   "workbench.editorAssociations": {
     "*.copilotmd": "vscode.markdown.preview.editor",
-    "*.docx": "default"
+    "*.docx": "default",
   },
   "workbench.settings.applyToAllProfiles": [
     "terminal.integrated.fontFamily",
-    "editor.fontFamily"
+    "editor.fontFamily",
+    "chat.sessionSync.enabled",
+    "github.copilot.chat.localIndex.enabled",
   ],
   "workbench.experimental.share.enabled": true,
 
@@ -120,7 +122,7 @@
   // ═══════════════════════════════════════════════════════════
   // TERMINAL
   // ═══════════════════════════════════════════════════════════
-  "terminal.integrated.fontFamily": "MesloLGS NF, 'FiraCode Nerd Font', monospace",
+  "terminal.integrated.fontFamily": "JetBrains Mono, 'MesloLGS NF', 'FiraCode Nerd Font', monospace",
   "terminal.integrated.fontSize": 14,
   "terminal.integrated.fontWeight": "400",
   "terminal.integrated.cursorBlinking": true,
@@ -131,17 +133,69 @@
   "terminal.integrated.defaultProfile.osx": "zsh",
   "terminal.integrated.fontLigatures.enabled": true,
   "terminal.integrated.fontLigatures.fallbackLigatures": [
-    "<--", "<---", "<<-", "<-", "->", "->>", "-->", "--->",
-    "<==", "<===", "<<=", "<=", "=>", "=>>", "==>", "===>",
-    ">=", ">>=", "<->", "<-->", "<--->", "<---->", "<=>",
-    "<==>", "<===>", "<====>", "::", ":::", "<~~", "</",
-    "</>", "/>", "~~>", "==", "!=", "/=", "~=", "<>",
-    "===", "!==", "!===", "<:", ":=", "*=", "*+", "<*",
-    "<*>", "*>", "<|", "<|>", "|>", "+*", "=*", "=:", ":>",
-    "/*", "*/", "+++", "<!--", "<!---"
+    "<--",
+    "<---",
+    "<<-",
+    "<-",
+    "->",
+    "->>",
+    "-->",
+    "--->",
+    "<==",
+    "<===",
+    "<<=",
+    "<=",
+    "=>",
+    "=>>",
+    "==>",
+    "===>",
+    ">=",
+    ">>=",
+    "<->",
+    "<-->",
+    "<--->",
+    "<---->",
+    "<=>",
+    "<==>",
+    "<===>",
+    "<====>",
+    "::",
+    ":::",
+    "<~~",
+    "</",
+    "</>",
+    "/>",
+    "~~>",
+    "==",
+    "!=",
+    "/=",
+    "~=",
+    "<>",
+    "===",
+    "!==",
+    "!===",
+    "<:",
+    ":=",
+    "*=",
+    "*+",
+    "<*",
+    "<*>",
+    "*>",
+    "<|",
+    "<|>",
+    "|>",
+    "+*",
+    "=*",
+    "=:",
+    ":>",
+    "/*",
+    "*/",
+    "+++",
+    "<!--",
+    "<!---",
   ],
   "terminal.integrated.env.osx": {
-    "FIG_NEW_SESSION": "1"
+    "FIG_NEW_SESSION": "1",
   },
 
   // ═══════════════════════════════════════════════════════════
@@ -157,19 +211,36 @@
   "diffEditor.ignoreTrimWhitespace": true,
 
   // ═══════════════════════════════════════════════════════════
-  // GITHUB COPILOT
+  // GITHUB COPILOT / CHAT
   // ═══════════════════════════════════════════════════════════
   "github.copilot.enable": {
     "*": true,
     "markdown": true,
     "plaintext": false,
-    "scminput": false
+    "scminput": false,
+    "dotenv": true,
   },
   "github.copilot.nextEditSuggestions.enabled": true,
+  "github.copilot.nextEditSuggestions.eagerness": "high",
+  "github.copilot.chat.localIndex.enabled": false,
   "chat.agent.maxRequests": 250,
   "chat.editing.confirmEditRequestRemoval": false,
   "chat.editing.confirmEditRequestRetry": false,
   "chat.viewSessions.orientation": "stacked",
+  "chat.agent.sandbox.enabled": "on",
+  "chat.agentHost.sdkSandbox.enabled": "on",
+  "chat.mcp.discovery.enabled": {
+    "claude-desktop": true,
+    "windsurf": true,
+    "cursor-workspace": true,
+    "cursor-global": true,
+  },
+  "js/ts.experimental.useTsgo": false,
+
+  // ═══════════════════════════════════════════════════════════
+  // CLAUDE CODE
+  // ═══════════════════════════════════════════════════════════
+  "claudeCode.preferredLocation": "panel",
 
   // ═══════════════════════════════════════════════════════════
   // EXPLORER
@@ -179,14 +250,15 @@
   "explorer.sortOrder": "type",
   "explorer.fileNesting.enabled": true,
   "explorer.fileNesting.patterns": {
-    "*.ts":     "${capture}.js, ${capture}.d.ts, ${capture}.js.map",
-    "*.tsx":    "${capture}.module.css, ${capture}.module.scss",
+    "*.ts": "${capture}.js, ${capture}.d.ts, ${capture}.js.map",
+    "*.tsx": "${capture}.module.css, ${capture}.module.scss",
     "package.json": "package-lock.json, yarn.lock, pnpm-lock.yaml, .npmrc, .nvmrc",
     "tsconfig.json": "tsconfig.*.json",
     ".eslintrc.*": ".eslintignore, .prettierrc*, .stylelintrc*",
     "Dockerfile": "docker-compose*.yml, docker-compose*.yaml, .dockerignore",
-    "*.env":    "*.env.*",
-    "pyproject.toml": "setup.py, setup.cfg, MANIFEST.in, requirements*.txt, .python-version"
+    "*.env": "*.env.*",
+    "pyproject.toml": "setup.py, setup.cfg, MANIFEST.in, requirements*.txt, .python-version",
+    "manifest.json": "manifest.*.json",
   },
 
   // ═══════════════════════════════════════════════════════════
@@ -199,6 +271,10 @@
   "files.trimFinalNewlines": true,
   "files.encoding": "utf8",
   "files.eol": "\n",
+  "files.associations": {
+    "*.jinja": "jinja",
+    "*.j2": "jinja",
+  },
   "files.exclude": {
     "**/.git": true,
     "**/.DS_Store": true,
@@ -207,19 +283,19 @@
     "**/*.pyc": true,
     "**/.venv": false,
     "**/dist": false,
-    "**/.next": false
+    "**/.next": false,
   },
   "files.watcherExclude": {
     "**/.git/objects/**": true,
     "**/node_modules/**": true,
-    "**/.venv/**": true
+    "**/.venv/**": true,
   },
   "search.exclude": {
     "**/node_modules": true,
     "**/.venv": true,
     "**/dist": true,
     "**/.next": true,
-    "**/build": true
+    "**/build": true,
   },
 
   // ═══════════════════════════════════════════════════════════
@@ -237,15 +313,14 @@
   // LANGUAGE-SPECIFIC SETTINGS
   // ═══════════════════════════════════════════════════════════
 
-  // Python
   "[python]": {
     "editor.defaultFormatter": "ms-python.black-formatter",
     "editor.formatOnSave": true,
     "editor.codeActionsOnSave": {
-      "source.organizeImports": "explicit"
+      "source.organizeImports": "explicit",
     },
     "editor.rulers": [88],
-    "editor.tabSize": 4
+    "editor.tabSize": 4,
   },
   "python.languageServer": "Pylance",
   "python.analysis.typeCheckingMode": "standard",
@@ -255,30 +330,29 @@
   "python.analysis.autoImportCompletions": true,
   "python.analysis.indexing": true,
 
-  // JavaScript / TypeScript
   "[javascript]": {
     "editor.defaultFormatter": "esbenp.prettier-vscode",
     "editor.formatOnSave": true,
     "editor.codeActionsOnSave": {
       "source.organizeImports": "explicit",
-      "source.fixAll.eslint": "explicit"
-    }
+      "source.fixAll.eslint": "explicit",
+    },
   },
   "[typescript]": {
     "editor.defaultFormatter": "esbenp.prettier-vscode",
     "editor.formatOnSave": true,
     "editor.codeActionsOnSave": {
       "source.organizeImports": "explicit",
-      "source.fixAll.eslint": "explicit"
-    }
+      "source.fixAll.eslint": "explicit",
+    },
   },
   "[javascriptreact]": {
     "editor.defaultFormatter": "esbenp.prettier-vscode",
-    "editor.formatOnSave": true
+    "editor.formatOnSave": true,
   },
   "[typescriptreact]": {
     "editor.defaultFormatter": "esbenp.prettier-vscode",
-    "editor.formatOnSave": true
+    "editor.formatOnSave": true,
   },
   "typescript.inlayHints.parameterNames.enabled": "literals",
   "typescript.inlayHints.variableTypes.enabled": true,
@@ -287,29 +361,43 @@
   "typescript.suggest.autoImports": true,
   "javascript.suggest.autoImports": true,
 
-  // JSON / JSONC
+  // Tailwind CSS v4 — pick up class-list props in cva()/clsx()/cn() helpers
+  "tailwindCSS.experimental.classRegex": [
+    ["cva\\(([^)]*)\\)", "[\"'`]([^\"'`]*).*?[\"'`]"],
+    ["cn\\(([^)]*)\\)", "[\"'`]([^\"'`]*).*?[\"'`]"],
+    ["clsx\\(([^)]*)\\)", "[\"'`]([^\"'`]*).*?[\"'`]"],
+  ],
+
   "[json]": {
     "editor.defaultFormatter": "esbenp.prettier-vscode",
-    "editor.formatOnSave": true
+    "editor.formatOnSave": true,
   },
   "[jsonc]": {
     "editor.defaultFormatter": "esbenp.prettier-vscode",
-    "editor.formatOnSave": true
+    "editor.formatOnSave": true,
+  },
+  "json.schemaDownload.trustedDomains": {
+    "https://developer.microsoft.com/json-schemas/": true,
+    "https://json-schema.org/": true,
+    "https://json.schemastore.org/": true,
+    "https://openapi.vercel.sh": true,
+    "https://raw.githubusercontent.com/devcontainers/spec/": true,
+    "https://raw.githubusercontent.com/microsoft/vscode/": true,
+    "https://schemastore.azurewebsites.net/": true,
+    "https://www.schemastore.org/": true,
   },
 
-  // Markdown
   "[markdown]": {
-    "editor.defaultFormatter": "esbenp.prettier-vscode",
+    "editor.defaultFormatter": "davidanson.vscode-markdownlint",
     "editor.formatOnSave": false,
     "editor.quickSuggestions": {
       "comments": "on",
       "other": "on",
-      "strings": "on"
+      "strings": "on",
     },
-    "editor.wordWrap": "on"
+    "editor.wordWrap": "on",
   },
 
-  // YAML
   "[yaml]": {
     "editor.defaultFormatter": "redhat.vscode-yaml",
     "editor.formatOnSave": true,
@@ -318,14 +406,12 @@
     "editor.quickSuggestions": {
       "other": true,
       "comments": false,
-      "strings": true
-    }
+      "strings": true,
+    },
   },
   "[github-actions-workflow]": {
-    "editor.defaultFormatter": "redhat.vscode-yaml"
+    "editor.defaultFormatter": "redhat.vscode-yaml",
   },
-
-  // Docker
   "[dockercompose]": {
     "editor.insertSpaces": true,
     "editor.tabSize": 2,
@@ -334,43 +420,39 @@
     "editor.quickSuggestions": {
       "other": true,
       "comments": false,
-      "strings": true
-    }
+      "strings": true,
+    },
   },
-
-  // Plaintext
   "[plaintext]": {
     "editor.quickSuggestions": {
       "comments": "off",
       "other": "off",
-      "strings": "off"
-    }
+      "strings": "off",
+    },
   },
 
   // ═══════════════════════════════════════════════════════════
-  // EXTENSIONS — GitLens
+  // EXTENSIONS — GitLens (AI backend: GitKraken, matches the GitKraken MCP wired up 2026-08-21)
   // ═══════════════════════════════════════════════════════════
-  "gitlens.ai.model": "vscode",
+  "gitlens.ai.model": "gitkraken",
   "gitlens.ai.vscode.model": "copilot:gpt-4.1",
+  "gitlens.ai.gitkraken.model": "openai:gpt-5-mini",
   "gitlens.currentLine.enabled": true,
   "gitlens.hovers.currentLine.over": "line",
-  "gitlens.codeLens.enabled": false,      // disable for performance
+  "gitlens.codeLens.enabled": false,
 
   // ═══════════════════════════════════════════════════════════
   // EXTENSIONS — Kubernetes / Docker
   // ═══════════════════════════════════════════════════════════
   "vs-kubernetes": {
-    "vscode-kubernetes.helm-path-linux":     "/home/kneeraazon/.local/state/vs-kubernetes/tools/helm/linux-amd64/helm",
-    "vscode-kubernetes.kubectl-path-linux":  "/home/kneeraazon/.local/state/vs-kubernetes/tools/kubectl/kubectl",
-    "vscode-kubernetes.minikube-path-linux": "/home/kneeraazon/.local/state/vs-kubernetes/tools/minikube/linux-amd64/minikube"
+    "vscode-kubernetes.helm-path-linux": "/home/kneeraazon/.local/state/vs-kubernetes/tools/helm/linux-amd64/helm",
+    "vscode-kubernetes.kubectl-path-linux": "/home/kneeraazon/.local/state/vs-kubernetes/tools/kubectl/kubectl",
+    "vscode-kubernetes.minikube-path-linux": "/home/kneeraazon/.local/state/vs-kubernetes/tools/minikube/linux-amd64/minikube",
   },
 
   // ═══════════════════════════════════════════════════════════
-  // EXTENSIONS — MSSQL / MongoDB
+  // EXTENSIONS — MongoDB
   // ═══════════════════════════════════════════════════════════
-  "mssql.connectionGroups": [
-    { "name": "ROOT", "id": "7AB864BB-4CE7-4FAF-98BE-DACD1793D08C" }
-  ],
   "mdb.mcp.server": "prompt",
 
   // ═══════════════════════════════════════════════════════════
@@ -383,9 +465,16 @@
   // ═══════════════════════════════════════════════════════════
   "vsicons.dontShowNewVersionMessage": true,
   "redhat.telemetry.enabled": true,
-  "markdown-preview-enhanced.previewTheme": "none.css",
-  "claudeCode.preferredLocation": "panel",
+  "markdown-preview-enhanced.previewTheme": "monokai.css",
   "screencastMode.fontSize": 30,
+  "yaml.disableSchemaDetection": [
+    "**/.github/workflows/*.yml",
+    "**/.github/workflows/*.yaml",
+    "**/.gitea/workflows/*.yml",
+    "**/.gitea/workflows/*.yaml",
+    "**/.forgejo/workflows/*.yml",
+    "**/.forgejo/workflows/*.yaml",
+  ],
 
   // ═══════════════════════════════════════════════════════════
   // SECURITY
@@ -402,7 +491,7 @@
   // ═══════════════════════════════════════════════════════════
   // DEBUG
   // ═══════════════════════════════════════════════════════════
-  "debug.console.fontFamily": "Fira Code",
+  "debug.console.fontFamily": "JetBrains Mono",
   "debug.console.fontSize": 12,
   "debug.inlineValues": "on",
   "debug.showBreakpointsInOverviewRuler": true,
@@ -413,5 +502,5 @@
   "window.confirmSaveUntitledWorkspace": false,
   "window.newWindowProfile": "Default",
   "window.title": "${activeEditorShort}${separator}${rootName}",
-  "window.titleBarStyle": "custom"
+  "window.titleBarStyle": "custom",
 }
