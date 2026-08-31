@@ -11,6 +11,13 @@ dotfiles/
 │   ├── cachyos-setup-dev.md        # AMD GPU, ROCm, AI/ML stack, DevOps tooling
 │   └── cachyos_dev_artifact.md     # Comprehensive setup reference
 │
+├── claude/                     # Claude Code global config (agents, commands, skills, settings)
+│   ├── CLAUDE.md               # Global engineering profile/preferences
+│   ├── settings.json           # Permissions, hooks, enabled plugins
+│   ├── agents/                 # Custom subagents (backend/frontend/db/ai-agent/release/qa/data-ml)
+│   ├── commands/                # Custom slash commands (/discover, /shipcheck)
+│   └── skills/                  # Stack-specific architecture/security skills + claude-brain, visual-qa
+│
 ├── focus/                      # System-wide distraction blocker (dnsmasq + nftables)
 │   ├── scripts/                # focus, focus-refresh, focus-page
 │   ├── systemd/                # services, schedule timers, list watcher

@@ -1,0 +1,16 @@
+---
+name: fastapi-architecture
+description: Use when designing or reviewing a FastAPI application's structure — dependency injection chains, router/app layout at scale, choosing background tasks vs Celery, lifespan events, or streaming responses. Trigger on requests to add a router, wire up a dependency, add a background job, or fix a FastAPI startup/streaming bug.
+---
+
+Non-negotiables and the failure modes behind them.
+
+**Dependency injection.** `Depends()` chains are the primary mechanism for auth, DB sessions, and shared validation — not a place to be clever. A dependency that does `yield` is a context manager: code after `yield` runs on response teardown even if the endpoint raised, so put `session.close()`/`session.rollback()` there, not in the endpoint body. Chained dependencies (`Depends(get_current_user)` depending on `Depends(get_db)`) are cached per-request by default — FastAPI resolves each unique dependency callable once per request, so don't hand-roll caching or worry about the DB session being opened twice. Never call a dependency function directly inside another function outside the DI system — you lose the caching and the teardown ordering; use `Annotated[Type, Depends(fn)]` everywhere for reuse and testability (override with `app.dependency_overrides` in tests, not monkeypatching).
+
+**Router organization.** Past ~10 endpoints, one `main.py` with everything is a rewrite waiting to happen. Split by domain (`routers/users.py`, `routers/orders.py`), each an `APIRouter` with its own `prefix` and `tags`, included in `main.py` via `app.include_router()`. Keep route handlers thin — validate input, call a service function, return; business logic in a service layer, not the route function, or you can't unit-test it without spinning up HTTP.
+
+**Background tasks vs Celery.** `BackgroundTasks` runs in-process, after the response is sent, on the same event loop/worker — fine for a fire-and-forget email or a cache-warm that takes under a second and where losing it on a pod restart is acceptable. It has no retry, no persistence, and blocks that worker's capacity while running. Anything that needs retries, a delay/schedule, cross-process distribution, or must survive a deploy/crash goes to Celery (or RQ) with a real broker — don't reach for `BackgroundTasks` because Celery setup feels heavy; that tradeoff bites in production, not in the demo.
+
+**Lifespan events.** `@app.on_event("startup")`/`"shutdown"` are deprecated and will be removed — use the `lifespan` async context manager (`@asynccontextmanager` on a function taking `app: FastAPI`, code before `yield` is startup, after is shutdown). This is where connection pools (DB, Redis, HTTP clients) get created once and attached to `app.state`, not created per-request or as module-level globals that outlive tests.
+
+**Streaming.** `StreamingResponse` with an async generator does not guarantee bytes hit the wire incrementally — gzip middleware, Nginx `proxy_buffering`, or a sync generator doing blocking I/O will all buffer or block the whole response. Verify with `curl -N` against the actual deployed path, not just local uvicorn. For a sync generator wrapped for streaming, don't do blocking I/O inside it directly in an async route — either make the generator truly async or run it via `run_in_threadpool`.
