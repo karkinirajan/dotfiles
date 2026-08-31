@@ -1,0 +1,233 @@
+config_version = 13
+
+[audio]
+enable_overdrive = true
+
+[bar]
+order = [ "main" ]
+
+    [bar.default]
+    background_opacity = 0.45000000000000001
+    capsule = true
+    capsule_border = "primary"
+    capsule_fill = "surface_variant"
+    capsule_opacity = 0.55000000000000004
+    capsule_padding = 6
+    capsule_radius = 4.0
+    capsule_thickness = 0.59999999999999998
+    center = [ "clock" ]
+    color = "on_surface"
+    end = [
+        "notifications",
+        "clipboard",
+        "network",
+        "volume",
+        "gpu",
+        "cpu",
+        "memory",
+        "tray",
+        "settings",
+        "screen-time-btn",
+        "weather",
+        "session"
+    ]
+    font_scale = 0.94999999999999996
+    hover_highlight = true
+    margin_edge = 0
+    margin_ends = 0
+    padding = 14
+    position = "top"
+    radius = 4
+    radius_bottom_left = 4
+    radius_bottom_right = 4
+    radius_top_left = 4
+    radius_top_right = 4
+    scale = 1.1499999999999999
+    start = [ "workspaces", "active_window", "media" ]
+    thickness = 46
+    widget_spacing = 8
+
+[calendar]
+enabled = true
+
+[control_center.calendar]
+show_events_card = false
+
+[desktop_widgets]
+schema_version = 2
+widget_order = []
+
+    [desktop_widgets.grid]
+    cell_size = 16
+    major_interval = 4
+    visible = true
+
+    [desktop_widgets.widget]
+
+[dock]
+active_monitor_only = true
+layer = "overlay"
+show_dots = true
+
+[location]
+address = "Kathmandu"
+
+[lockscreen_widgets]
+enabled = false
+schema_version = 2
+widget_order = [ "lockscreen-login-box@DP-2" ]
+
+    [lockscreen_widgets.grid]
+    cell_size = 16
+    major_interval = 4
+    visible = true
+
+    [lockscreen_widgets.widget."lockscreen-login-box@DP-2"]
+    box_height = 196.0
+    box_width = 810.0
+    cx = 1280.0
+    cy = 1258.0
+    output = "DP-2"
+    placement_height = 1440.0
+    placement_width = 2560.0
+    rotation = 0.0
+    type = "login_box"
+
+        [lockscreen_widgets.widget."lockscreen-login-box@DP-2".settings]
+        background_color = "surface_variant"
+        background_opacity = 0.88
+        background_radius = 12.0
+        center_password_text = false
+        input_opacity = 1.0
+        input_radius = 6.0
+        layout = "regular"
+        show_caps_lock = true
+        show_keyboard_layout = true
+        show_login_button = true
+        show_media = true
+        show_session_buttons = true
+        show_unlock_hint = true
+        show_weather = true
+
+[nightlight]
+enabled = true
+
+[notification]
+scale = 1.2000000104308128
+
+[plugin_settings."noctalia/notes"]
+panel_open_near_click = true
+panel_placement = "attached"
+
+[plugins]
+auto_update = "official"
+enabled = [ "felipeartur/ai-usagebar", "noctalia/bitwarden", "noctalia/wallpaper_depth", "noctalia/notes" ]
+
+[shell]
+corner_radius_scale = 0.0
+font_family = "JetBrainsMono Nerd Font"
+screen_time_enabled = true
+
+    [shell.animation]
+    speed = 2.2500000335276127
+
+    [shell.launcher]
+    app_grid = true
+    compact = true
+    show_app_actions = true
+
+    [shell.panel]
+    clipboard_position = "auto"
+    floating_layer = "top"
+    list_item_background = true
+    polkit_placement = "attached"
+
+    [shell.shadow]
+    alpha = 0.69999998435378075
+
+[theme]
+builtin = "Rosé Pine"
+community_palette = "Osaka jade"
+custom_palette = "CatppuccinMocha"
+mode = "dark"
+source = "custom"
+wallpaper_scheme = "m3-content"
+
+[wallpaper]
+directory = "/home/kneeraazon/.wallpapers/Edna-RanchoCucamonga"
+directory_dark = "/home/kneeraazon/.wallpapers"
+directory_light = "/home/kneeraazon/.wallpapers/Edna-RanchoCucamonga"
+fill_color = "primary"
+fill_mode = "center"
+
+    [wallpaper.default]
+    path = "/usr/share/noctalia/assets/noctalia-wallpaper.png"
+
+    [wallpaper.last]
+    path = "/usr/share/noctalia/assets/noctalia-wallpaper.png"
+
+    [wallpaper.monitor.DP-2]
+    fill_color = "primary"
+
+[widget.active_window]
+color = "on_surface_variant"
+
+[widget.clipboard]
+icon_color = "secondary"
+
+[widget.clock]
+color = "primary"
+font_scale = 1.0
+format = "{:%a, %d %b | %H:%M:%S}"
+
+[widget.cpu]
+icon_color = "primary"
+stat = "cpu_usage"
+type = "sysmon"
+
+[widget.gpu]
+glyph = "cpu-2"
+icon_color = "tertiary"
+stat = "gpu_usage"
+type = "sysmon"
+
+[widget.media]
+hide_when_no_media = true
+icon_color = "primary"
+
+[widget.memory]
+icon_color = "secondary"
+stat = "ram_used"
+type = "sysmon"
+
+[widget.network]
+icon_color = "secondary"
+show_label = false
+
+[widget.notifications]
+icon_color = "tertiary"
+
+[widget.screen-time-btn]
+type = "custom_button"
+glyph = "hourglass"
+tooltip = "Screen Time"
+icon_color = "secondary"
+
+    [widget.screen-time-btn.actions]
+    left = "panel-open control-center screen-time"
+
+[widget.session]
+capsule_padding = 10
+icon_color = "primary"
+
+[widget.settings]
+icon_color = "secondary"
+
+[widget.volume]
+icon_color = "tertiary"
+show_label = false
+
+[widget.weather]
+icon_color = "secondary"
+show_condition = false
+show_temperature = true

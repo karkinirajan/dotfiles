@@ -17,6 +17,10 @@ dotfiles/
 │   ├── networkmanager/         # resolv.conf ownership (dns=none)
 │   └── block.list, allow.list  # what to block / CDN-IP exemptions
 │
+├── hyprland/                   # Hyprland compositor + Noctalia shell (CachyOS/Arch Wayland)
+│   ├── hypr/                   # hyprland.conf, keybinds/colors/autostart, hyprlock/hypridle/hyprpaper
+│   └── noctalia/                # bar/launcher/clipboard/control-center — replaces Waybar/wofi/mako
+│
 ├── kitty/                      # Kitty terminal configuration
 │   ├── kitty.conf              # Fonts, keybindings, splits, performance
 │   └── gruvbox-dark-hard.conf  # Colour scheme (matches the zsh palette)
