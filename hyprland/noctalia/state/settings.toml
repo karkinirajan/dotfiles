@@ -7,14 +7,14 @@ enable_overdrive = true
 order = [ "main" ]
 
     [bar.default]
-    background_opacity = 0.45000000000000001
+    background_opacity = 0.0
     capsule = true
     capsule_border = "primary"
-    capsule_fill = "surface_variant"
-    capsule_opacity = 0.55000000000000004
+    capsule_fill = "surface"
+    capsule_opacity = 0.75
     capsule_padding = 6
     capsule_radius = 4.0
-    capsule_thickness = 0.59999999999999998
+    capsule_thickness = 0.62729999999999997
     center = [ "clock" ]
     color = "on_surface"
     end = [
@@ -23,18 +23,24 @@ order = [ "main" ]
         "network",
         "volume",
         "gpu",
+        "gpu-temp",
         "cpu",
+        "cpu-freq",
         "memory",
+        "memory-pct",
         "tray",
+        "nightlight",
         "settings",
         "screen-time-btn",
         "weather",
         "session"
     ]
     font_scale = 0.94999999999999996
+    font_weight = 400
     hover_highlight = true
     margin_edge = 0
     margin_ends = 0
+    margin_opposite_edge = 0
     padding = 14
     position = "top"
     radius = 4
@@ -43,15 +49,19 @@ order = [ "main" ]
     radius_top_left = 4
     radius_top_right = 4
     scale = 1.1499999999999999
+    shadow = false
     start = [ "workspaces", "active_window", "media" ]
-    thickness = 46
+    thickness = 44
     widget_spacing = 8
 
 [calendar]
 enabled = true
 
-[control_center.calendar]
-show_events_card = false
+[control_center]
+width = 730
+
+    [control_center.calendar]
+    show_events_card = false
 
 [desktop_widgets]
 schema_version = 2
@@ -67,6 +77,7 @@ widget_order = []
 [dock]
 active_monitor_only = true
 layer = "overlay"
+reserve_space = false
 show_dots = true
 
 [location]
@@ -110,7 +121,8 @@ widget_order = [ "lockscreen-login-box@DP-2" ]
         show_weather = true
 
 [nightlight]
-enabled = true
+enabled = false
+force = false
 
 [notification]
 scale = 1.2000000104308128
@@ -124,12 +136,13 @@ auto_update = "official"
 enabled = [ "felipeartur/ai-usagebar", "noctalia/bitwarden", "noctalia/wallpaper_depth", "noctalia/notes" ]
 
 [shell]
+button_borders = false
+card_borders = false
 corner_radius_scale = 0.0
-font_family = "JetBrainsMono Nerd Font"
+font_family = "JetBrainsMono Nerd Font Mono"
+input_borders = false
+popup_borders = false
 screen_time_enabled = true
-
-    [shell.animation]
-    speed = 2.2500000335276127
 
     [shell.launcher]
     app_grid = true
@@ -141,33 +154,25 @@ screen_time_enabled = true
     floating_layer = "top"
     list_item_background = true
     polkit_placement = "attached"
-
-    [shell.shadow]
-    alpha = 0.69999998435378075
+    transparency_mode = "glass"
 
 [theme]
-builtin = "Rosé Pine"
-community_palette = "Osaka jade"
+community_palette = "GitHub Dark"
 custom_palette = "CatppuccinMocha"
 mode = "dark"
 source = "custom"
-wallpaper_scheme = "m3-content"
+wallpaper_scheme = "soft"
 
 [wallpaper]
 directory = "/home/kneeraazon/.wallpapers/Edna-RanchoCucamonga"
 directory_dark = "/home/kneeraazon/.wallpapers"
 directory_light = "/home/kneeraazon/.wallpapers/Edna-RanchoCucamonga"
-fill_color = "primary"
-fill_mode = "center"
 
     [wallpaper.default]
     path = "/usr/share/noctalia/assets/noctalia-wallpaper.png"
 
     [wallpaper.last]
     path = "/usr/share/noctalia/assets/noctalia-wallpaper.png"
-
-    [wallpaper.monitor.DP-2]
-    fill_color = "primary"
 
 [widget.active_window]
 color = "on_surface_variant"
@@ -181,8 +186,15 @@ font_scale = 1.0
 format = "{:%a, %d %b | %H:%M:%S}"
 
 [widget.cpu]
+glyph = "cpu"
 icon_color = "primary"
 stat = "cpu_usage"
+type = "sysmon"
+
+[widget.cpu-freq]
+icon_color = "primary"
+show_glyph = false
+stat = "cpu_freq"
 type = "sysmon"
 
 [widget.gpu]
@@ -191,27 +203,49 @@ icon_color = "tertiary"
 stat = "gpu_usage"
 type = "sysmon"
 
+[widget.gpu-temp]
+icon_color = "tertiary"
+show_glyph = false
+stat = "gpu_temp"
+type = "sysmon"
+
 [widget.media]
 hide_when_no_media = true
 icon_color = "primary"
 
 [widget.memory]
+glyph = "device-sd-card"
 icon_color = "secondary"
 stat = "ram_used"
+type = "sysmon"
+
+[widget.memory-pct]
+icon_color = "secondary"
+show_glyph = false
+stat = "ram_pct"
 type = "sysmon"
 
 [widget.network]
 icon_color = "secondary"
 show_label = false
 
+[widget.nightlight]
+glyph = "moon-off"
+icon_color = "tertiary"
+tooltip = "Night Light (on/off)"
+type = "custom_button"
+
+    [widget.nightlight.actions]
+    left = "exec /home/kneeraazon/.config/hypr/scripts/nightlight-toggle.sh"
+
 [widget.notifications]
 icon_color = "tertiary"
 
 [widget.screen-time-btn]
-type = "custom_button"
 glyph = "hourglass"
-tooltip = "Screen Time"
 icon_color = "secondary"
+tooltip = "Screen Time"
+type = "custom_button"
 
     [widget.screen-time-btn.actions]
     left = "panel-open control-center screen-time"
