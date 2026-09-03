@@ -9,6 +9,22 @@ hyprland/
 │                                  # Full keybind cheat sheet, regenerated from the
 │                                  #   actual keybinds.conf below whenever it drifts —
 │                                  #   don't hand-edit it out of sync with that file.
+├── KDE-REMOVAL.md                 # How the full KDE/Plasma desktop environment
+│                                  #   was removed from this originally dual-DE
+│                                  #   CachyOS install — landmines hit (a hard
+│                                  #   Dolphin dependency, an active login manager),
+│                                  #   the SDDM switchover, and why a blind orphan
+│                                  #   sweep at the end would have broken things
+│                                  #   this setup actually depends on. Read before
+│                                  #   ever running `pacman -Rns $(pacman -Qtdq)`
+│                                  #   on this machine.
+├── sddm/
+│   └── hyprland.conf              → /etc/sddm.conf.d/hyprland.conf
+│                                  # Only needed if starting from a Plasma-default
+│                                  #   login manager — see KDE-REMOVAL.md. Presets
+│                                  #   the Hyprland (uwsm-managed) session and a
+│                                  #   Wayland-native greeter; does NOT enable
+│                                  #   passwordless autologin (no `User=` set).
 ├── hypr/                          → ~/.config/hypr/
 │   ├── hyprland.conf              # entry point, sources everything below
 │   ├── hyprlock.conf, hypridle.conf, hyprpaper.conf
