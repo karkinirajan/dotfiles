@@ -38,7 +38,7 @@ if is_on:
     os.remove(state_file)
 else:
     log = open("/tmp/hyprsunset.log", "w")
-    subprocess.Popen(["hyprsunset", "-t", "4500"], stdout=log, stderr=subprocess.STDOUT, start_new_session=True)
+    subprocess.Popen(["hyprsunset", "-t", "2500"], stdout=log, stderr=subprocess.STDOUT, start_new_session=True)
     open(state_file, "w").close()
 PYEOF
 
