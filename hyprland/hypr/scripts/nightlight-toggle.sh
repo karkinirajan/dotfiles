@@ -38,8 +38,12 @@ if is_on:
     os.remove(state_file)
 else:
     log = open("/tmp/hyprsunset.log", "w")
-    subprocess.Popen(["hyprsunset", "-t", "4000"], stdout=log, stderr=subprocess.STDOUT, start_new_session=True)
+    subprocess.Popen(["hyprsunset", "-t", "4500"], stdout=log, stderr=subprocess.STDOUT, start_new_session=True)
     open(state_file, "w").close()
 PYEOF
 
 noctalia msg config-reload
+
+# Follow the same on/off switch across terminal + editor color temperature
+# (see ~/.config/hypr/scripts/nightlight-theme-sync.sh for what/why).
+~/.config/hypr/scripts/nightlight-theme-sync.sh
