@@ -4,7 +4,7 @@ After=network.target dnsmasq.service
 
 [Service]
 Type=oneshot
-ExecStart=/home/kneeraazon/.focus/scripts/focus refresh
+ExecStart=/home/kneeraazon/focus/scripts/focus refresh
 RemainAfterExit=true
 
 [Install]

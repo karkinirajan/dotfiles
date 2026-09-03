@@ -5,7 +5,7 @@ PartOf=focus.service
 
 [Service]
 Type=simple
-ExecStart=/usr/bin/python3 /home/kneeraazon/.focus/scripts/focus-page
+ExecStart=/usr/bin/python3 /home/kneeraazon/focus/scripts/focus-page
 Restart=on-failure
 RestartSec=2
 

@@ -1,15 +1,15 @@
 #!/usr/bin/env zsh
 
-ALLOW_FILE="/home/kneeraazon/.focus/allow.list"
-BLOCK_FILE="/home/kneeraazon/.focus/block.list"
+ALLOW_FILE="/home/kneeraazon/focus/allow.list"
+BLOCK_FILE="/home/kneeraazon/focus/block.list"
 DNSMASQ_BLOCK="/etc/dnsmasq.d/focus-block.conf"
 BLOCK_PAGE_IP="127.0.0.1"
-LOG="/home/kneeraazon/.focus/logs/firewall.log"
-STATS_DIR="/home/kneeraazon/.focus/stats"
+LOG="/home/kneeraazon/focus/logs/firewall.log"
+STATS_DIR="/home/kneeraazon/focus/stats"
 
 mkdir -p "$STATS_DIR"
 
-STATE_FILE="/home/kneeraazon/.focus/state"
+STATE_FILE="/home/kneeraazon/focus/state"
 
 # Never re-arm blocking while focus is off. focus-refresh.path fires whenever
 # the lists change, so without this an edit made during a break would restart

@@ -27,8 +27,8 @@ apps ─▶│ /etc/resolv │──▶ 127.0.0.1 ──▶ dnsmasq ──▶ ad
 ## Install
 
 ```bash
-cp -r scripts ~/.focus/
-cp allow.list block.list schedule.conf ~/.focus/
+cp -r scripts ~/focus/
+cp allow.list block.list schedule.conf ~/focus/
 sudo cp systemd/*  /etc/systemd/system/
 sudo cp networkmanager/90-focus-default-dns.conf /etc/NetworkManager/conf.d/
 sudo cp dnsmasq/dnsmasq.conf /etc/dnsmasq.conf
@@ -70,3 +70,19 @@ never consults dnsmasq, bypassing the DNS layer entirely. The nftables
 `blocked_ips` set is the backstop, but CDN IPs rotate frequently so it is
 best-effort. To close this properly, disable DoH in the browser
 (`network.trr.mode = 5` in Firefox) or block the DoH endpoints.
+
+## Changelog
+
+- **2026-09-04** — Moved the live install from `~/.focus` (hidden) to
+  `~/focus`. Updated every hardcoded path: both scripts, all 8 systemd
+  units, and `ollama.service`'s `PATH=` environment line (it had picked up
+  `~/.focus/scripts` for the `focus` CLI's global availability). Also fixed
+  a pre-existing bug in `focus status`'s "dns blocks" line: zsh prints a
+  redirection-setup failure (`<file` on a missing file) straight to the
+  real stderr regardless of a `2>/dev/null` on the same simple command —
+  it's a shell-level failure, not the invoked command's own error, so the
+  suppression never worked. Fixed by piping through `cat` instead, whose
+  own (redirectable) error is what actually gets suppressed. Verified with
+  a full `focus on` → `focus test` → `focus off` cycle (blocking, allowlist,
+  and the `focus-refresh.path` watcher all confirmed working from the new
+  location) before restoring the original off state.

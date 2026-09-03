@@ -5,7 +5,7 @@ After=network-online.target
 
 [Service]
 Type=oneshot
-ExecStart=/home/kneeraazon/.focus/scripts/focus-refresh
+ExecStart=/home/kneeraazon/focus/scripts/focus-refresh
 
 [Install]
 WantedBy=multi-user.target

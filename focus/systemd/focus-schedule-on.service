@@ -4,4 +4,4 @@ After=network.target
 
 [Service]
 Type=oneshot
-ExecStart=/home/kneeraazon/.focus/scripts/focus on
+ExecStart=/home/kneeraazon/focus/scripts/focus on

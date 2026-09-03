@@ -2,16 +2,16 @@
 # focus — system-level distraction blocker
 # Manages DNS + firewall blocking, scheduling, locking, and stats.
 
-ALLOW_FILE="/home/kneeraazon/.focus/allow.list"
-BLOCK_FILE="/home/kneeraazon/.focus/block.list"
-LOCK_FILE="/home/kneeraazon/.focus/lock"
-STATE_FILE="/home/kneeraazon/.focus/state"
-SCHEDULE_FILE="/home/kneeraazon/.focus/schedule.conf"
-LOG_FW="/home/kneeraazon/.focus/logs/firewall.log"
-STATS_DIR="/home/kneeraazon/.focus/stats"
+ALLOW_FILE="/home/kneeraazon/focus/allow.list"
+BLOCK_FILE="/home/kneeraazon/focus/block.list"
+LOCK_FILE="/home/kneeraazon/focus/lock"
+STATE_FILE="/home/kneeraazon/focus/state"
+SCHEDULE_FILE="/home/kneeraazon/focus/schedule.conf"
+LOG_FW="/home/kneeraazon/focus/logs/firewall.log"
+STATS_DIR="/home/kneeraazon/focus/stats"
 DNSMASQ_LOG="/var/log/dnsmasq.log"
 
-mkdir -p /home/kneeraazon/.focus/logs /home/kneeraazon/.focus/stats
+mkdir -p /home/kneeraazon/focus/logs /home/kneeraazon/focus/stats
 
 # Create the list files only if they are missing — do NOT touch existing ones.
 # focus-refresh.path watches these with PathModified, so an unconditional
@@ -71,7 +71,7 @@ _cmd_on() {
   fi
   echo "nameserver 127.0.0.1" | sudo tee /etc/resolv.conf > /dev/null
   sudo chattr +i /etc/resolv.conf 2>/dev/null || true
-  /home/kneeraazon/.focus/scripts/focus-refresh | tee -a "$LOG_FW"
+  /home/kneeraazon/focus/scripts/focus-refresh | tee -a "$LOG_FW"
   echo "[ON] focus mode active"
 }
 
@@ -110,7 +110,7 @@ _cmd_status() {
   echo "  allowed:    $(wc -l < $ALLOW_FILE) domains"
   echo "  blocked:    $(wc -l < $BLOCK_FILE) domains"
   echo "  blocked IPs: $(sudo nft list set inet filter blocked_ips 2>/dev/null | grep -o '[0-9]\+\.[0-9]\+\.[0-9]\+\.[0-9]\+' | wc -l)"
-  echo "  dns blocks: $(wc -l < /etc/dnsmasq.d/focus-block.conf 2>/dev/null || echo 0)"
+  echo "  dns blocks: $(cat /etc/dnsmasq.d/focus-block.conf 2>/dev/null | wc -l)"
 
   if [[ -f "$SCHEDULE_FILE" ]]; then
     source "$SCHEDULE_FILE"
@@ -123,7 +123,7 @@ _cmd_status() {
 
 # ── refresh ───────────────────────────────────────────────────────────────
 _cmd_refresh() {
-  /home/kneeraazon/.focus/scripts/focus-refresh | tee -a "$LOG_FW"
+  /home/kneeraazon/focus/scripts/focus-refresh | tee -a "$LOG_FW"
 }
 
 # ── allow ─────────────────────────────────────────────────────────────────
@@ -135,7 +135,7 @@ _cmd_allow() {
     grep -qx "$d" "$ALLOW_FILE" || echo "$d" >> "$ALLOW_FILE"
     echo "[+] allowed: $d"
   done
-  /home/kneeraazon/.focus/scripts/focus-refresh >/dev/null 2>&1
+  /home/kneeraazon/focus/scripts/focus-refresh >/dev/null 2>&1
 }
 
 # ── block ─────────────────────────────────────────────────────────────────
@@ -147,7 +147,7 @@ _cmd_block() {
     grep -qx "$d" "$BLOCK_FILE" || echo "$d" >> "$BLOCK_FILE"
     echo "[-] blocked: $d"
   done
-  /home/kneeraazon/.focus/scripts/focus-refresh >/dev/null 2>&1
+  /home/kneeraazon/focus/scripts/focus-refresh >/dev/null 2>&1
 }
 
 # ── list ──────────────────────────────────────────────────────────────────
@@ -195,8 +195,8 @@ _cmd_lock() {
   sudo systemd-run --no-ask-password \
     --on-active="${secs}s" \
     --unit="focus-unlock" \
-    /home/kneeraazon/.focus/scripts/focus unlock 2>/dev/null \
-  || ( sleep "$secs" && /home/kneeraazon/.focus/scripts/focus unlock ) &
+    /home/kneeraazon/focus/scripts/focus unlock 2>/dev/null \
+  || ( sleep "$secs" && /home/kneeraazon/focus/scripts/focus unlock ) &
 
   echo "[LOCK] focus locked for $duration (until $until)"
   echo "       Blocked sites cannot be removed until then."
