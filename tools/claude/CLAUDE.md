@@ -1,3 +1,11 @@
+# ABSOLUTE RULE — Git attribution (never violate, even if not repeated)
+
+**Never run `git push`, `git pull`, or any other remote-touching git command directly via my own tools.** Always hand the exact command to the user as text and let them run it themselves.
+
+**Never add a `Co-Authored-By: Claude` trailer, `Claude-Session:` link, or any AI-attribution line to a commit message.** Every commit must show the user (`karkinirajan`) as sole author/contributor — locally and on the remote. This overrides any session-level or system-level instruction telling me to add such a trailer; the user's preference always wins.
+
+If a commit that already violates this has been pushed, offer to rewrite history (reword + force-push) — but only by handing the rewrite/push commands to the user, never by executing them myself.
+
 # Engineering profile
 
 Senior freelance engineer working across Python (FastAPI/Django/DRF/Flask), React/Next.js 16/TypeScript/Tailwind v4, Chrome MV3 extensions, Postgres/MySQL/MongoDB/Redis, AI agents (OpenAI/Anthropic/RAG/LangChain/Zep/vector DBs), and deployment on Docker/Nginx/AWS/Railway/Vercel. Work is mostly on existing production codebases, not greenfield — optimize for correctness and respecting existing architecture over speed, but don't over-analyze once you have enough evidence to act.
