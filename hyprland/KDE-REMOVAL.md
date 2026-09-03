@@ -150,3 +150,42 @@ loudly on a failed exec-once:
   outright once `kwallet` itself is gone; nothing to replace it with unless
   you specifically want a secret-storage daemon again (`gnome-keyring` is
   the usual non-KDE choice).
+
+## Final audit pass
+
+A second, fully recursive sweep (not just top-level `~/.config`/`~/.local`)
+turned up more: `~/.config/kate` (stale — `kate` itself was never even
+installed), `~/.config/session/{dolphin,kwin}*` (KDE session-restore
+files), two **genuinely broken launcher entries** in
+`~/.local/share/applications/` (`org.kde.partitionmanager.desktop`,
+`org.kde.plasma-systemmonitor.desktop` — pointing at binaries that no
+longer exist, the exact same class of bug as the stale-Chrome-launcher
+issue elsewhere in this session), `~/.local/share/{kscreen,knewstuff3,
+kpeoplevcard}`, a full KDE-specific icon theme (`~/.local/share/icons/
+Breeze Chameleon Dark`), and a long tail of `~/.local/state/*staterc` +
+`UserFeedback.org.kde.*` files.
+
+**A second stale-process instance of the same bug**: `ksecretd` (KDE's
+Secret Service daemon, a *different* binary from `kwalletd6`, launched by
+SDDM's own `pam_kwallet5.so` PAM hook during the login-manager test earlier
+in this doc) was still running with its binary already deleted, and kept
+silently recreating `~/.local/share/kwalletd` as an empty directory every
+time it was removed — looked like the directory "wouldn't stay deleted"
+until the actual process was found and killed. If something like this
+looks like it's regenerating on its own, check `pgrep -af <name>` and
+`ls -la /proc/<pid>/exe` for a `(deleted)` suffix before assuming the
+cleanup didn't work.
+
+`/etc/pam.d/sddm` still references `pam_kwallet5.so`/`pam_gnome_keyring.so`
+— left as-is deliberately: both lines are marked `optional` with a leading
+`-`, so PAM silently skips them now that the module is gone rather than
+breaking login, and it's a package-shipped file (editing it just creates a
+`.pacnew` conflict on the next `sddm` update for no real benefit).
+
+**Two large generic icon packs** (`Fluent`, `shelly-icons`) contain
+individual icons *named* after KDE apps (`kdeconnect.svg`, `dolphin.png`,
+etc.) purely because those packs cover icons for apps across every desktop
+environment — not KDE-specific themes themselves. Left untouched, same
+reasoning as the `python-keyring` backend module and Brave extension
+internals noted above: matching on a substring inside an unrelated,
+still-wanted asset collection isn't the same as it being KDE's own file.
