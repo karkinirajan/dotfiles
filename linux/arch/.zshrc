@@ -1,20 +1,8 @@
 # =============================================================================
 #  ~/.zshrc — kneeraazon
 #  CachyOS · KDE Plasma 6 · Wayland · Gruvbox Dark Hard
-#  Prompt: starship (default) | p10k — toggle with theme-starship / theme-p10k
+#  Prompt: starship
 # =============================================================================
-
-# ─── Prompt framework selector ────────────────────────────────────────────────
-# Persisted in ~/.config/zsh/prompt-framework ("starship" or "p10k")
-PROMPT_FRAMEWORK="starship"
-[[ -f ~/.config/zsh/prompt-framework ]] && PROMPT_FRAMEWORK="$(<~/.config/zsh/prompt-framework)"
-
-# ─── p10k instant-prompt (must be near top; only active when p10k chosen) ────
-if [[ "$PROMPT_FRAMEWORK" == "p10k" ]]; then
-  if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
-    source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
-  fi
-fi
 
 # ─── XDG base directories ────────────────────────────────────────────────────
 export XDG_CONFIG_HOME="${XDG_CONFIG_HOME:-$HOME/.config}"
@@ -60,8 +48,8 @@ path=(
 [[ -f "$XDG_CONFIG_HOME/zsh/private.zsh" ]] && source "$XDG_CONFIG_HOME/zsh/private.zsh"
 
 # ─── Oh My Zsh ────────────────────────────────────────────────────────────────
-# Theme: p10k or empty (starship takes over when empty)
-[[ "$PROMPT_FRAMEWORK" == "p10k" ]] && ZSH_THEME="powerlevel10k/powerlevel10k" || ZSH_THEME=""
+# No OMZ theme — starship owns the prompt.
+ZSH_THEME=""
 DISABLE_AUTO_UPDATE=true
 ZSH_AUTOSUGGEST_USE_ASYNC=true
 
@@ -100,9 +88,6 @@ plugins=(
 source "$ZSH/oh-my-zsh.sh"
 [[ -f "$HOME/.fzf.zsh" ]] && source "$HOME/.fzf.zsh"
 
-# ── p10k config (only when p10k is the active framework) ──────────────────────
-[[ "$PROMPT_FRAMEWORK" == "p10k" ]] && [[ -f ~/.p10k.zsh ]] && source ~/.p10k.zsh
-
 # ── history-substring-search keybindings (after OMZ, avoids override) ─────────
 bindkey '^[[A' history-substring-search-up
 bindkey '^[[B' history-substring-search-down
@@ -120,7 +105,7 @@ command -v atuin >/dev/null 2>&1 && zsh-defer eval "$(atuin init zsh --disable-u
 # ─── fzf-tab configuration ────────────────────────────────────────────────────
 if [[ -d "${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/plugins/fzf-tab" ]]; then
   zstyle ':fzf-tab:complete:cd:*'          fzf-preview 'eza --tree --color=always --icons --level=2 $realpath'
-  zstyle ':fzf-tab:complete:*:*'           fzf-preview 'bat --style=numbers,changes --color=always --line-range :80 $realpath 2>/dev/null || eza --tree --color=always --icons --level=2 $realpath 2>/dev/null'
+  zstyle ':fzf-tab:complete:*:*'           fzf-preview '~/.config/fzf/preview.sh $realpath'
   zstyle ':fzf-tab:*' switch-group '<' '>'
   zstyle ':completion:*' menu no
 fi
@@ -145,7 +130,7 @@ if command -v fd >/dev/null 2>&1; then
 fi
 
 export FZF_CTRL_T_OPTS="
-  --preview 'bat --style=numbers,changes,header-filename,header-filesize --color=always --line-range :300 {} 2>/dev/null || eza --tree --color=always --icons --level=2 {} 2>/dev/null'
+  --preview '~/.config/fzf/preview.sh {}'
   --preview-window='right:60%:border-left:wrap'
   --bind 'ctrl-/:toggle-preview'
   --bind 'alt-p:toggle-preview'
@@ -640,8 +625,40 @@ command -v dust       >/dev/null 2>&1 && alias du='dust'
 command -v procs      >/dev/null 2>&1 && alias ps='procs'
 command -v lazygit    >/dev/null 2>&1 && alias lg='lazygit'
 command -v lazydocker >/dev/null 2>&1 && alias ld='lazydocker'
+command -v btop       >/dev/null 2>&1 && alias top='btop'
+command -v pgcli      >/dev/null 2>&1 && alias pg='pgcli'
+command -v http       >/dev/null 2>&1 && alias rest='http'
+command -v yazi       >/dev/null 2>&1 && alias fm='yazi'
+command -v just       >/dev/null 2>&1 && alias j='just'
+command -v dive       >/dev/null 2>&1 && alias dv='dive'
+
+# pgexplain <connstring-or-dbname> <query> — EXPLAIN (ANALYZE, BUFFERS) via
+# pgcli's own formatting, without opening an interactive session.
+pgexplain() {
+  if [ $# -lt 2 ]; then
+    echo "usage: pgexplain <dbname-or-connstring> \"<query>\"" >&2
+    return 1
+  fi
+  local target="$1"; shift
+  pgcli "$target" -e "EXPLAIN (ANALYZE, BUFFERS) $*"
+}
 
 # ─── Tool integrations ────────────────────────────────────────────────────────
+
+# zoxide — smarter cd, ranks by frecency (z <partial>, zi for interactive)
+if command -v zoxide >/dev/null 2>&1; then
+  eval "$(zoxide init zsh)"
+  alias cd='z'
+fi
+
+# direnv — per-project env vars from .envrc
+command -v direnv >/dev/null 2>&1 && eval "$(direnv hook zsh)"
+
+# mise — polyglot runtime version manager (node/python/etc via .mise.toml)
+command -v mise >/dev/null 2>&1 && eval "$(mise activate zsh)"
+
+# tealdeer — tldr pages, community-maintained cheatsheets
+command -v tldr >/dev/null 2>&1 && alias help='tldr'
 
 
 # Item 4: carapace — universal completion engine (500+ commands)
@@ -704,7 +721,7 @@ dsh() {
 fe() {
   local file
   file=$(fd --type f --hidden --follow --exclude .git --exclude node_modules 2>/dev/null |
-    fzf --preview 'bat --style=numbers --color=always --line-range :100 {} 2>/dev/null || cat {}')
+    fzf --preview '~/.config/fzf/preview.sh {}')
   [[ -n "$file" ]] && ${EDITOR:-nvim} "$file"
 }
 
@@ -757,6 +774,26 @@ alias wget='wget -c'           # resume by default
 alias rsync='rsync -avz --progress'
 alias clip='xclip -selection clipboard'
 alias open='xdg-open'
+# wallpaper           interactive WallRizz picker over ~/.wallpapers
+# wallpaper <name>     preview (kitty graphics protocol, if available) and
+#                      apply a specific wallpaper by filename or path
+wallpaper() {
+  local dir="$HOME/.wallpapers"
+  if [ $# -eq 0 ]; then
+    wallrizz -d "$dir"
+    return
+  fi
+  local target="$1"
+  [ -f "$target" ] || target="$dir/$1"
+  if [ ! -f "$target" ]; then
+    echo "wallpaper: not found: $1 (looked in $dir)" >&2
+    return 1
+  fi
+  if [ -n "$KITTY_WINDOW_ID" ] && command -v kitten >/dev/null 2>&1; then
+    kitten icat "$target"
+  fi
+  ~/.config/hypr/scripts/wallpaper.sh "$target"
+}
 
 # quick git aliases not already defined by OMZ git plugin
 alias gundo='git reset HEAD~1 --mixed'
@@ -765,29 +802,8 @@ alias gcfix='git commit --fixup'
 alias gtag='git tag'
 alias gstash='git stash'
 
-# ─── Theme toggle functions ───────────────────────────────────────────────────
-# Switch between starship (default) and powerlevel10k — persists across sessions
-theme-starship() {
-  mkdir -p ~/.config/zsh
-  print 'starship' > ~/.config/zsh/prompt-framework
-  _ok "Switched to Starship — restarting shell…"
-  exec zsh
-}
-theme-p10k() {
-  mkdir -p ~/.config/zsh
-  print 'p10k' > ~/.config/zsh/prompt-framework
-  _ok "Switched to Powerlevel10k — restarting shell…"
-  _info "Run: p10k configure  — to re-run the wizard"
-  exec zsh
-}
-theme-current() {
-  _info "Active prompt framework: ${PROMPT_FRAMEWORK}"
-}
-
 # ─── Prompt initialisation ────────────────────────────────────────────────────
-if [[ "$PROMPT_FRAMEWORK" != "p10k" ]]; then
-  eval "$(starship init zsh)"
-fi
+eval "$(starship init zsh)"
 
 export NVM_DIR="$HOME/.config/nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
