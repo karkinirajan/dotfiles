@@ -1,4 +1,3 @@
-export PATH="/home/kneeraazon/.config/nvm/versions/node/v24.18.0/bin:$PATH"
 # =============================================================================
 #  ~/.zshrc — kneeraazon
 #  CachyOS · KDE Plasma 6 · Wayland · Gruvbox Dark Hard
@@ -363,8 +362,10 @@ autoremove() {
 alias df='df -h'
 alias free='free -mh'
 alias pstat='systemctl status'
-alias psu='ps aux --sort=-%cpu | head -10'
-alias psm='ps aux --sort=-%mem | head -10'
+# `command` bypasses the ps->procs alias defined further down; without it zsh
+# expands these into `procs aux --sort=-%cpu`, which procs cannot parse.
+alias psu='command ps aux --sort=-%cpu | head -10'
+alias psm='command ps aux --sort=-%mem | head -10'
 command -v btop       >/dev/null 2>&1 && alias top='btop'
 command -v amdgpu_top >/dev/null 2>&1 && alias gpumon='amdgpu_top'
 

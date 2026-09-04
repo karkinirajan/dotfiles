@@ -48,7 +48,7 @@ bind '"\e[B": history-search-forward'
 # ==================================
 # NVM — Node Version Manager
 # ==================================
-export NVM_DIR="$HOME/.nvm"
+export NVM_DIR="$HOME/.config/nvm"   # must match .zshrc; nvm lives under XDG config
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
 [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"
 
@@ -156,7 +156,7 @@ alias ni='npm install'
 alias nis='npm i -S'
 alias nid='npm i -D'
 alias create='npx create-react-app'
-alias gd='gatsby develop'
+alias gdev='gatsby develop'   # renamed from gd: it shadowed `gd='git diff'` above
 
 # ==================================
 # Network & Security
