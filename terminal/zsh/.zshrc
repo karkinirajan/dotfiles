@@ -370,6 +370,22 @@ command -v btop       >/dev/null 2>&1 && alias top='btop'
 command -v amdgpu_top >/dev/null 2>&1 && alias gpumon='amdgpu_top'
 
 # ─── Git ──────────────────────────────────────────────────────────────────────
+# ── Git ──────────────────────────────────────────────────────────────────────
+# These load after oh-my-zsh, so they deliberately override the git plugin.
+# Seven differ from the plugin's meaning — kept on purpose, listed here so the
+# divergence is intentional rather than accidental:
+#
+#   gl    log graph      (omz: git pull)          <- biggest divergence
+#   gcm   commit -m      (omz: checkout main)     <- biggest divergence
+#   grs   restore --staged (omz: restore)         ours only unstages; omz's
+#                                                 discards working-tree edits
+#   gaa   add .          (omz: add --all)         ours is scoped to cwd
+#   gss   status -s      (omz: status --short)    same thing, different flag
+#   gcl   clone          (omz: clone --recurse-submodules)
+#   glog  log graph      (omz: simpler log graph)
+#
+# Worth knowing on a machine without this file: there, `gl` pulls and `gcm`
+# switches branch.
 alias g='git'
 alias ga='git add'
 alias gaa='git add .'
