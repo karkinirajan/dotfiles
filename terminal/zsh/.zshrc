@@ -36,7 +36,7 @@ export PNPM_HOME="$HOME/.local/share/pnpm"
 typeset -U path PATH
 path=(
   "$HOME/.local/bin"
-  "$HOME/.focus/scripts"
+  "$HOME/focus/scripts"
   "$PNPM_HOME"
   "/usr/lib/ccache/bin"
   $path
