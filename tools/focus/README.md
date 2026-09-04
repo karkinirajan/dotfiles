@@ -33,6 +33,11 @@ sudo cp systemd/*  /etc/systemd/system/
 sudo cp networkmanager/90-focus-default-dns.conf /etc/NetworkManager/conf.d/
 sudo cp dnsmasq/dnsmasq.conf /etc/dnsmasq.conf
 
+# Make `focus` a real global command — resolvable from any shell, systemd
+# unit, GUI launcher, or non-interactive context, not just an interactive
+# zsh session with ~/.zshrc sourced.
+sudo ln -sf ~/focus/scripts/focus /usr/local/bin/focus
+
 sudo systemctl daemon-reload
 sudo systemctl reload NetworkManager
 sudo systemctl enable --now focus.service focus-refresh.path
@@ -72,6 +77,22 @@ best-effort. To close this properly, disable DoH in the browser
 (`network.trr.mode = 5` in Firefox) or block the DoH endpoints.
 
 ## Changelog
+
+- **2026-09-04 (follow-up)** — `focus` still resolved as "command not
+  found" outside an interactive zsh session after the `~/.focus` -> `~/focus`
+  rename below. Root cause was a *separate, older* stale symlink at
+  `/usr/local/bin/focus -> /.focus/scripts/focus` — pointing at the
+  original pre-2026-08-08 filesystem-root location, predating even the
+  `~/.focus` move, and never fixed across either relocation. It was masked
+  in interactive shells because `~/.zshrc`'s PATH entry for
+  `~/focus/scripts` resolves first, so only non-interactive contexts
+  (systemd, scripts, GUI launchers, `env -i` shells) actually hit the dead
+  symlink. Fixed by repointing it at `/home/kneeraazon/focus/scripts/focus`
+  and adding the symlink step to Install below — this is what actually
+  makes `focus` a global command, independent of any shell config being
+  sourced. Verified `focus status`/`list`/`test`/`schedule status` all work
+  from a fully clean `env -i PATH=/usr/local/sbin:/usr/local/bin:/usr/bin:
+  /sbin:/bin` environment with zero shell config loaded.
 
 - **2026-09-04** — Moved the live install from `~/.focus` (hidden) to
   `~/focus`. Updated every hardcoded path: both scripts, all 8 systemd
