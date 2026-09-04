@@ -1,3 +1,4 @@
+export PATH="/home/kneeraazon/.config/nvm/versions/node/v24.18.0/bin:$PATH"
 # =============================================================================
 #  ~/.zshrc — kneeraazon
 #  CachyOS · KDE Plasma 6 · Wayland · Gruvbox Dark Hard
