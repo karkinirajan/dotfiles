@@ -12,7 +12,7 @@ order = [ "kneeraazon" ]
     capsule_opacity = 0.0
     capsule_padding = 6
     capsule_radius = 4
-    capsule_thickness = 0.81
+    capsule_thickness = 0.857
     contact_shadow = true
     end = [
         "tmelik/system-monitor:summary",
@@ -26,8 +26,7 @@ order = [ "kneeraazon" ]
         "battery",
         "nightlight",
         "control-center",
-        "session",
-        "active_window"
+        "session"
     ]
     font_family = "JetBrains Mono"
     font_scale = 0.92999998666346073
@@ -40,7 +39,7 @@ order = [ "kneeraazon" ]
     padding = 4
     radius = 0
     scale = 1.1500000096857548
-    start = [ "launcher", "wallpaper", "workspaces", "media" ]
+    start = [ "workspaces", "active_window", "media" ]
     thickness = 42
     widget_spacing = 16
 
