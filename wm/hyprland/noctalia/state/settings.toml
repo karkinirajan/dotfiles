@@ -20,12 +20,15 @@ order = [ "kneeraazon" ]
         "clipboard",
         "volume",
         "network",
-        "tray",
+        "dnd-btn",
+        "weather",
+        "screen-time-btn",
         "bluetooth",
         "brightness",
         "battery",
         "nightlight",
         "control-center",
+        "tray",
         "session"
     ]
     font_family = "JetBrains Mono"
@@ -43,8 +46,29 @@ order = [ "kneeraazon" ]
     thickness = 42
     widget_spacing = 16
 
-[control_center.calendar]
-show_events_card = false
+[control_center]
+width = 900
+
+    [control_center.calendar]
+    show_events_card = false
+
+    [[control_center.shortcuts]]
+    type = "wifi"
+
+    [[control_center.shortcuts]]
+    type = "caffeine"
+
+    [[control_center.shortcuts]]
+    type = "bluetooth"
+
+    [[control_center.shortcuts]]
+    type = "notification"
+
+    [[control_center.shortcuts]]
+    type = "nightlight"
+
+    [[control_center.shortcuts]]
+    type = "power_profile"
 
 [desktop_widgets]
 schema_version = 2
@@ -267,13 +291,13 @@ transition_on_startup = true
     order = "alphabetical"
 
     [wallpaper.default]
-    path = "/home/kneeraazon/.wallpapers/Wallpaper22.png"
+    path = "/home/kneeraazon/.wallpapers/wall.jpg"
 
     [wallpaper.last]
-    path = "/home/kneeraazon/.wallpapers/Wallpaper22.png"
+    path = "/home/kneeraazon/.wallpapers/wall.jpg"
 
     [wallpaper.monitors.DP-2]
-    path = "/home/kneeraazon/.wallpapers/Wallpaper22.png"
+    path = "/home/kneeraazon/.wallpapers/wall.jpg"
 
     [[wallpaper.favorite]]
     builtin_palette = "Catppuccin"
@@ -359,6 +383,15 @@ format = "{:%a, %d %b | %H:%M:%S}"
 capsule = true
 font_weight = 700
 icon_color = "#03FD8B"
+
+[widget.dnd-btn]
+glyph = "bell-off"
+icon_color = "#F66409"
+tooltip = "Do Not Disturb"
+type = "custom_button"
+
+    [widget.dnd-btn.actions]
+    left = "notification-dnd-toggle"
 
 [widget.launcher]
 capsule = true
