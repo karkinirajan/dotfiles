@@ -12,7 +12,7 @@ order = [ "kneeraazon" ]
     capsule_opacity = 0.0
     capsule_padding = 6
     capsule_radius = 4
-    capsule_thickness = 0.762
+    capsule_thickness = 0.72
     contact_shadow = true
     end = [
         "tmelik/system-monitor:summary",
@@ -441,7 +441,7 @@ show_temperature = true
 
 [widget.workspaces]
 capsule = true
-capsule_padding = 0
+capsule_padding = 2
 color = "surface"
 empty_color = "primary"
 focused_color = "#06C1F9"
