@@ -1,62 +1,46 @@
 config_version = 14
 
-[audio]
-enable_overdrive = true
-
 [bar]
-order = [ "main" ]
+order = [ "kneeraazon" ]
 
-    [bar.default]
-    background_opacity = 0.0
+    [bar.kneeraazon]
+    border = "#cba6f715"
+    border_width = 1.0
     capsule = true
-    capsule_border = "primary"
-    capsule_fill = "surface"
-    capsule_opacity = 0.75
+    capsule_border = "#cba6f715"
     capsule_padding = 6
-    capsule_radius = 4.0
-    capsule_thickness = 0.62729999999999997
-    center = [ "clock" ]
-    color = "on_surface"
+    capsule_thickness = 0.71999998763203621
+    contact_shadow = true
     end = [
+        "tray",
         "notifications",
         "clipboard",
         "network",
+        "bluetooth",
         "volume",
-        "system-monitor-btn",
-        "tray",
-        "nightlight",
-        "settings",
-        "screen-time-btn",
-        "weather",
-        "session"
+        "brightness",
+        "battery",
+        "tmelik/system-monitor:summary",
+        "gustav0ar/drive-health:summary",
+        "control-center",
+        "session",
+        "active_window"
     ]
-    font_scale = 0.94999999999999996
-    font_weight = 400
-    hover_highlight = true
-    margin_edge = 0
+    font_family = "JetBrains Mono"
+    font_scale = 0.92999998666346073
+    font_weight = 600
+    hover_highlight = false
+    icon_color = "surface"
     margin_ends = 0
-    margin_opposite_edge = 0
-    padding = 14
-    position = "top"
-    radius = 4
-    radius_bottom_left = 4
-    radius_bottom_right = 4
-    radius_top_left = 4
-    radius_top_right = 4
-    scale = 1.1499999999999999
-    shadow = false
-    start = [ "workspaces", "active_window", "media" ]
-    thickness = 44
-    widget_spacing = 8
+    padding = 8
+    radius = 0
+    scale = 1.1500000096857548
+    start = [ "launcher", "wallpaper", "workspaces", "media" ]
+    thickness = 42
+    widget_spacing = 16
 
-[calendar]
-enabled = true
-
-[control_center]
-width = 730
-
-    [control_center.calendar]
-    show_events_card = false
+[control_center.calendar]
+show_events_card = false
 
 [desktop_widgets]
 schema_version = 2
@@ -69,14 +53,8 @@ widget_order = []
 
     [desktop_widgets.widget]
 
-[dock]
-active_monitor_only = true
-layer = "overlay"
-reserve_space = false
-show_dots = true
-
 [location]
-address = "Kathmandu"
+address = "Kathmandu, Nepal"
 
 [lockscreen_widgets]
 enabled = false
@@ -143,24 +121,115 @@ widget_order = [ "lockscreen-login-box@FALLBACK", "lockscreen-login-box@DP-2" ]
         show_weather = true
 
 [nightlight]
-enabled = false
-force = false
+enabled = true
 
-[notification]
-scale = 1.2000000104308128
+[plugin_settings."noctalia/bitwarden"]
+unlock_placement = "attached"
 
 [plugin_settings."noctalia/notes"]
 panel_open_near_click = true
 panel_placement = "attached"
 
 [plugins]
-auto_update = "official"
-enabled = [ "felipeartur/ai-usagebar", "noctalia/bitwarden", "noctalia/wallpaper_depth", "noctalia/notes" ]
+auto_update = "none"
+enabled = [
+    "felipeartur/ai-usagebar",
+    "noctalia/bitwarden",
+    "noctalia/wallpaper_depth",
+    "noctalia/notes",
+    "cleboost/zed-provider",
+    "gustav0ar/wireview-pro-ii",
+    "umedbazarov/webapp-maker",
+    "notfinaldev/web-search",
+    "yocraft/web-launcher",
+    "kavya-nama/wallpaper-switcher",
+    "noctalia/wallhaven",
+    "noctalia/mpvpaper",
+    "neuro/upbeat",
+    "noctalia/umbriel-companion",
+    "aristides/udiskie",
+    "noctalia/translator",
+    "nightwatch75/topgrade-wrapper",
+    "noctalia/timer",
+    "tordex/system-updater",
+    "jamesfeeder/special-workspaces",
+    "tmelik/system-monitor",
+    "arrifat346afs/systempulse",
+    "redxtech/super-productivity",
+    "cleboost/ssh-launcher",
+    "notfinaldev/spotify",
+    "joshuaslate/shelly",
+    "alexander/screen-toolkit",
+    "whyoolw/sharednd",
+    "weinguyen/shell-command",
+    "nilsonlinux/rss-notifier",
+    "rylos/remmina",
+    "yocraft/qrcode",
+    "harveywuk/pulsar-mouse",
+    "weinguyen/procmon",
+    "radimous/prismlauncher-instances",
+    "rxtsel/portctl",
+    "thepunkoff/pomodoro",
+    "decksters-lab/palette-creator",
+    "davemhammer/obsidian",
+    "emrtnn/pass",
+    "icefish/phone-connect",
+    "icefish/phone-operate",
+    "davemhammer/opnsense",
+    "wy3z/opencodex-bar",
+    "weinguyen/opencode-companion",
+    "teagar/omniroute-quota",
+    "fel/ocr",
+    "neyfua/obs-integration",
+    "tordex/nvtop",
+    "goodroot/noctwhspr",
+    "weinguyen/9router-control",
+    "yuuto/arch-updater",
+    "0lucasmatheus/awwwall",
+    "blackbartblues/audio-switcher",
+    "yugaaank/better-clock",
+    "nirvam/bitdjinn",
+    "noctalia/bongocat",
+    "dunarand/bookmarks",
+    "dragged/cider",
+    "dotnetrob/cat",
+    "kjvdven/case-convert",
+    "yuuto/calculator",
+    "lowcache/claude-companion",
+    "levi/warp",
+    "salemsayed/codexbar-meter",
+    "oldirtty/color_picker",
+    "yocraft/desktop-launcher",
+    "raycursive/discord-voice",
+    "gustav0ar/drive-health",
+    "nightwatch75/dns-switcher",
+    "liamwh/emoji-picker",
+    "apex077/eyecare",
+    "nightwatch75/file-search",
+    "tphilippot/git_companion",
+    "alexmnrs/github-activity",
+    "raycursive/github-prs",
+    "maddingo/hypr-layout-switcher",
+    "pozzoo/hassio",
+    "noctalia/world_clock",
+    "noctalia/screen_recorder",
+    "noctalia/kaomoji"
+]
+
+    [[plugins.source]]
+    kind = "git"
+    location = "https://github.com/noctalia-dev/official-plugins"
+    name = "official"
+
+    [[plugins.source]]
+    kind = "git"
+    location = "https://github.com/noctalia-dev/community-plugins"
+    name = "community"
 
 [shell]
-corner_radius_scale = 0.0
-font_family = "JetBrains Mono SemiBold"
-screen_time_enabled = true
+corner_radius_scale = 0.5000000074505806
+font_family = "DejaVu Sans"
+panel_anchor_bar = "kneeraazon"
 
     [shell.launcher]
     app_grid = true
@@ -168,51 +237,105 @@ screen_time_enabled = true
     show_app_actions = true
 
     [shell.panel]
-    clipboard_position = "auto"
+    clipboard_placement = "attached"
     floating_layer = "top"
-    list_item_background = true
+    launcher_position = "top_left"
     polkit_placement = "attached"
     transparency_mode = "glass"
 
 [theme]
 builtin = "Catppuccin"
-community_palette = "Ayu Green"
+community_palette = "Breeze"
 custom_palette = "CatppuccinMocha"
 mode = "dark"
-source = "custom"
-wallpaper_scheme = "soft"
+shell_mode = "dark"
+source = "community"
+
+    [theme.templates]
+    builtin_ids = [ "hyprland" ]
 
 [wallpaper]
-directory = "/home/kneeraazon/.wallpapers/Edna-RanchoCucamonga"
-directory_dark = "/home/kneeraazon/.wallpapers"
-directory_light = "/home/kneeraazon/.wallpapers/Edna-RanchoCucamonga"
+transition_on_startup = true
+
+    [wallpaper.automation]
+    interval_seconds = 1794
+    order = "alphabetical"
 
     [wallpaper.default]
-    path = "/home/kneeraazon/.wallpapers/wally.jpg"
+    path = "/home/kneeraazon/Pictures/Screenshots/Razer-Sensa-THS-Green_Wallpaper_3840x2400.jpg"
 
     [wallpaper.last]
-    path = "/home/kneeraazon/.wallpapers/wally.jpg"
+    path = "/home/kneeraazon/Pictures/Screenshots/Razer-Sensa-THS-Green_Wallpaper_3840x2400.jpg"
 
     [wallpaper.monitors.DP-2]
-    path = "/home/kneeraazon/.wallpapers/wally.jpg"
+    path = "/home/kneeraazon/Pictures/Screenshots/Razer-Sensa-THS-Green_Wallpaper_3840x2400.jpg"
+
+    [[wallpaper.favorite]]
+    builtin_palette = "Catppuccin"
+    palette_source = "builtin"
+    path = "color:#6913D1"
+    theme_mode = "dark"
 
 [widget.active_window]
 color = "on_surface_variant"
+enabled = false
+
+[widget.battery]
+enabled = false
+
+[widget.brightness]
+enabled = false
 
 [widget.clipboard]
-icon_color = "secondary"
+capsule = true
+capsule_radius = 4
+icon_color = "#FFFFFF"
 
 [widget.clock]
-color = "primary"
+capsule = true
+capsule_fill = "surface"
+capsule_padding = 12
+capsule_radius = 4
+font_family = "JetBrains Mono ExtraBold"
 font_scale = 1.0
+font_weight = 700
 format = "{:%a, %d %b | %H:%M:%S}"
 
+[widget.control-center]
+capsule = true
+capsule_radius = 4
+font_weight = 700
+icon_color = "#03FD8B"
+
+[widget.launcher]
+capsule = true
+capsule_fill = "primary"
+capsule_opacity = 0.59999999999999998
+capsule_padding = 13
+capsule_radius = 6
+color = "surface"
+enabled = false
+icon_color = "surface"
+
 [widget.media]
+anchor = true
+capsule = true
+capsule_border = "surface"
+capsule_fill = "on_secondary"
+capsule_padding = 7
+capsule_radius = 6
+color = "secondary"
+font_weight = 400
 hide_when_no_media = true
-icon_color = "primary"
+icon_color = "on_surface"
+scale = 1.1000000000000001
+show_progress = true
+title_scroll = "always"
 
 [widget.network]
-icon_color = "secondary"
+capsule = true
+capsule_radius = 4
+icon_color = "#00E5FF"
 show_label = false
 
 [widget.nightlight]
@@ -225,7 +348,9 @@ type = "custom_button"
     left = "exec /home/kneeraazon/.config/hypr/scripts/nightlight-toggle.sh"
 
 [widget.notifications]
-icon_color = "tertiary"
+capsule = true
+capsule_radius = 4
+icon_color = "#F66409"
 
 [widget.screen-time-btn]
 glyph = "hourglass"
@@ -237,26 +362,46 @@ type = "custom_button"
     left = "panel-open control-center screen-time"
 
 [widget.session]
+capsule = true
 capsule_padding = 10
-icon_color = "primary"
+capsule_radius = 4
+icon_color = "#F90540"
 
 [widget.settings]
 icon_color = "secondary"
 
-[widget.system-monitor-btn]
-glyph = "cpu"
-icon_color = "primary"
-tooltip = "CPU / GPU / RAM"
-type = "custom_button"
-
-    [widget.system-monitor-btn.actions]
-    left = "panel-open control-center system"
+[widget.tray]
+capsule = true
+capsule_fill = "surface_variant"
+capsule_radius = 4
 
 [widget.volume]
-icon_color = "tertiary"
+capsule = true
+capsule_radius = 4
+icon_color = "#FF4C00"
 show_label = false
+
+[widget.wallpaper]
+enabled = false
 
 [widget.weather]
 icon_color = "secondary"
 show_condition = false
 show_temperature = true
+
+[widget.workspaces]
+capsule = true
+capsule_fill = "surface"
+capsule_padding = 0
+capsule_radius = 2
+color = "surface"
+empty_color = "primary"
+focused_color = "#06C1F9"
+font_scale = 1.2
+hide_when_empty = true
+icon_color = "surface"
+label_source = "name"
+occupied_color = "#F4910A"
+scale = 1.3
+show_all_outputs = true
+urgent_color = "#F20941"
