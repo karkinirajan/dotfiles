@@ -7,10 +7,11 @@ order = [ "kneeraazon" ]
     border = "primary"
     border_width = 1.0
     capsule = true
-    capsule_border = "primary"
+    capsule_border = "shadow"
     capsule_fill = "primary"
     capsule_opacity = 0.17999999999999999
     capsule_padding = 6
+    capsule_radius = 4
     capsule_thickness = 0.71999998763203621
     contact_shadow = true
     end = [
@@ -19,7 +20,6 @@ order = [ "kneeraazon" ]
         "clipboard",
         "volume",
         "network",
-        "settings",
         "tray",
         "bluetooth",
         "brightness",
@@ -258,6 +258,7 @@ source = "builtin"
     builtin_ids = [ "hyprland" ]
 
 [wallpaper]
+directory = "/home/kneeraazon/.wallpapers"
 transition_on_startup = true
 
     [wallpaper.automation]
@@ -265,13 +266,13 @@ transition_on_startup = true
     order = "alphabetical"
 
     [wallpaper.default]
-    path = "color:#6913D1"
+    path = "/home/kneeraazon/.wallpapers/MkosBigSur_2/contents/images/5041x2160.webp"
 
     [wallpaper.last]
-    path = "color:#6913D1"
+    path = "/home/kneeraazon/.wallpapers/MkosBigSur_2/contents/images/5041x2160.webp"
 
     [wallpaper.monitors.DP-2]
-    path = "color:#6913D1"
+    path = "/home/kneeraazon/.wallpapers/MkosBigSur_2/contents/images/5041x2160.webp"
 
     [[wallpaper.favorite]]
     builtin_palette = "Catppuccin"
@@ -291,13 +292,11 @@ enabled = false
 
 [widget.clipboard]
 capsule = true
-capsule_radius = 4
 icon_color = "#FFFFFF"
 
 [widget.clock]
 capsule = true
 capsule_padding = 12
-capsule_radius = 4
 font_family = "JetBrains Mono ExtraBold"
 font_scale = 1.0
 font_weight = 700
@@ -305,14 +304,12 @@ format = "{:%a, %d %b | %H:%M:%S}"
 
 [widget.control-center]
 capsule = true
-capsule_radius = 4
 font_weight = 700
 icon_color = "#03FD8B"
 
 [widget.launcher]
 capsule = true
 capsule_padding = 13
-capsule_radius = 6
 color = "surface"
 enabled = false
 icon_color = "surface"
@@ -321,7 +318,6 @@ icon_color = "surface"
 anchor = true
 capsule = true
 capsule_padding = 7
-capsule_radius = 6
 color = "secondary"
 font_weight = 400
 hide_when_no_media = true
@@ -332,7 +328,6 @@ title_scroll = "always"
 
 [widget.network]
 capsule = true
-capsule_radius = 4
 icon_color = "#00E5FF"
 show_label = false
 
@@ -347,7 +342,6 @@ type = "custom_button"
 
 [widget.notifications]
 capsule = true
-capsule_radius = 4
 icon_color = "#F66409"
 
 [widget.screen-time-btn]
@@ -362,7 +356,6 @@ type = "custom_button"
 [widget.session]
 capsule = true
 capsule_padding = 10
-capsule_radius = 4
 icon_color = "#F90540"
 
 [widget.settings]
@@ -382,11 +375,9 @@ show_upload = true
 
 [widget.tray]
 capsule = true
-capsule_radius = 4
 
 [widget.volume]
 capsule = true
-capsule_radius = 4
 icon_color = "#FF4C00"
 show_label = false
 
@@ -401,7 +392,6 @@ show_temperature = true
 [widget.workspaces]
 capsule = true
 capsule_padding = 0
-capsule_radius = 2
 color = "surface"
 empty_color = "primary"
 focused_color = "#06C1F9"
