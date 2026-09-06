@@ -23,6 +23,8 @@ order = [ "kneeraazon" ]
         "weather",
         "caffeine",
         "screenshot",
+        "nightwatch75/todo:todo",
+        "noctalia/notes:notes",
         "screen-time-btn",
         "bluetooth",
         "brightness",
@@ -242,7 +244,8 @@ enabled = [
     "pozzoo/hassio",
     "noctalia/world_clock",
     "noctalia/screen_recorder",
-    "noctalia/kaomoji"
+    "noctalia/kaomoji",
+    "nightwatch75/todo"
 ]
 
     [[plugins.source]]
@@ -423,9 +426,6 @@ icon_color = "tertiary"
 capsule = true
 icon_color = "#F66409"
 
-[widget.screenshot]
-icon_color = "#8AE234"
-
 [widget.screen-time-btn]
 glyph = "hourglass"
 icon_color = "secondary"
@@ -434,6 +434,18 @@ type = "custom_button"
 
     [widget.screen-time-btn.actions]
     left = "panel-open control-center screen-time"
+
+[widget."nightwatch75/todo:todo"]
+icon_color = "#00E5FF"
+
+[widget."noctalia/notes:notes"]
+icon_color = "#F4910A"
+
+    [widget."noctalia/notes:notes".actions]
+    left = "panel-toggle noctalia/notes:panel"
+
+[widget.screenshot]
+icon_color = "#8AE234"
 
 [widget.session]
 capsule = true
