@@ -12,7 +12,7 @@ order = [ "kneeraazon" ]
     capsule_opacity = 0.0
     capsule_padding = 6
     capsule_radius = 4
-    capsule_thickness = 0.72
+    capsule_thickness = 0.667
     contact_shadow = true
     end = [
         "tmelik/system-monitor:summary",
