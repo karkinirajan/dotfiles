@@ -21,6 +21,8 @@ order = [ "kneeraazon" ]
         "volume",
         "network",
         "weather",
+        "caffeine",
+        "screenshot",
         "screen-time-btn",
         "bluetooth",
         "brightness",
@@ -367,6 +369,9 @@ enabled = true
 [widget.brightness]
 enabled = true
 
+[widget.caffeine]
+icon_color = "#FFD166"
+
 [widget.clipboard]
 capsule = true
 icon_color = "#FFFFFF"
@@ -417,6 +422,9 @@ icon_color = "tertiary"
 [widget.notifications]
 capsule = true
 icon_color = "#F66409"
+
+[widget.screenshot]
+icon_color = "#8AE234"
 
 [widget.screen-time-btn]
 glyph = "hourglass"
