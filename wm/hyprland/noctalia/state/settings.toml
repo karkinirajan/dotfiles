@@ -1,4 +1,4 @@
-config_version = 13
+config_version = 14
 
 [audio]
 enable_overdrive = true
@@ -176,9 +176,10 @@ screen_time_enabled = true
 
 [theme]
 builtin = "Catppuccin"
-community_palette = "Breeze"
+community_palette = "Ayu Green"
 custom_palette = "CatppuccinMocha"
 mode = "dark"
+source = "custom"
 wallpaper_scheme = "soft"
 
 [wallpaper]
@@ -187,13 +188,13 @@ directory_dark = "/home/kneeraazon/.wallpapers"
 directory_light = "/home/kneeraazon/.wallpapers/Edna-RanchoCucamonga"
 
     [wallpaper.default]
-    path = "/home/kneeraazon/.wallpapers/1356859.png"
+    path = "/home/kneeraazon/.wallpapers/wally.jpg"
 
     [wallpaper.last]
-    path = "/home/kneeraazon/.wallpapers/1356859.png"
+    path = "/home/kneeraazon/.wallpapers/wally.jpg"
 
     [wallpaper.monitors.DP-2]
-    path = "/home/kneeraazon/.wallpapers/1356859.png"
+    path = "/home/kneeraazon/.wallpapers/wally.jpg"
 
 [widget.active_window]
 color = "on_surface_variant"
