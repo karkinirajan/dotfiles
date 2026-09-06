@@ -33,9 +33,9 @@ order = [ "kneeraazon" ]
     font_weight = 600
     hover_highlight = false
     icon_color = "surface"
-    margin_edge = 2
+    margin_edge = 4
     margin_ends = 0
-    margin_opposite_edge = 2
+    margin_opposite_edge = 0
     padding = 8
     radius = 0
     scale = 1.1500000096857548
@@ -266,13 +266,13 @@ transition_on_startup = true
     order = "alphabetical"
 
     [wallpaper.default]
-    path = "/home/kneeraazon/.wallpapers/MkosBigSur_2/contents/images/5041x2160.webp"
+    path = "/home/kneeraazon/.wallpapers/wp8149239.jpg"
 
     [wallpaper.last]
-    path = "/home/kneeraazon/.wallpapers/MkosBigSur_2/contents/images/5041x2160.webp"
+    path = "/home/kneeraazon/.wallpapers/wp8149239.jpg"
 
     [wallpaper.monitors.DP-2]
-    path = "/home/kneeraazon/.wallpapers/MkosBigSur_2/contents/images/5041x2160.webp"
+    path = "/home/kneeraazon/.wallpapers/wp8149239.jpg"
 
     [[wallpaper.favorite]]
     builtin_palette = "Catppuccin"
