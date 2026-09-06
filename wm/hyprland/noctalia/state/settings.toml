@@ -12,7 +12,7 @@ order = [ "kneeraazon" ]
     capsule_opacity = 0.0
     capsule_padding = 6
     capsule_radius = 4
-    capsule_thickness = 0.5
+    capsule_thickness = 0.81
     contact_shadow = true
     end = [
         "tmelik/system-monitor:summary",
@@ -62,7 +62,7 @@ widget_order = []
 address = "Kathmandu, Nepal"
 
 [lockscreen_widgets]
-enabled = false
+enabled = true
 schema_version = 2
 widget_order = [ "lockscreen-login-box@FALLBACK", "lockscreen-login-box@DP-2" ]
 
@@ -336,13 +336,13 @@ transition_on_startup = true
 
 [widget.active_window]
 color = "on_surface_variant"
-enabled = false
+enabled = true
 
 [widget.battery]
-enabled = false
+enabled = true
 
 [widget.brightness]
-enabled = false
+enabled = true
 
 [widget.clipboard]
 capsule = true
@@ -365,7 +365,7 @@ icon_color = "#03FD8B"
 capsule = true
 capsule_padding = 13
 color = "surface"
-enabled = false
+enabled = true
 icon_color = "surface"
 
 [widget.media]
@@ -387,6 +387,9 @@ show_label = false
 
 [widget.nightlight]
 icon_color = "tertiary"
+
+    [widget.nightlight.actions]
+    left = "nightlight-force-toggle"
 
 [widget.notifications]
 capsule = true
@@ -430,7 +433,7 @@ icon_color = "#FF4C00"
 show_label = false
 
 [widget.wallpaper]
-enabled = false
+enabled = true
 
 [widget.weather]
 icon_color = "secondary"
