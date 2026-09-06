@@ -1,0 +1,51 @@
+# Hyprland + Noctalia desktop packages
+#
+# The compositor, the shell, and the helpers the configs in wm/hyprland call
+# out to by name. Installing these plus the fonts list reproduces the desktop;
+# everything else in this repo is configuration on top of it.
+#
+#   sudo pacman -S --needed $(grep -v '^#' os/cachyos/packages/desktop.txt | awk '{print $1}')
+#   paru        -S --needed $(grep    '(AUR)' os/cachyos/packages/desktop.txt | awk '{print $1}')
+#
+# Referenced directly by config:
+#   hyprland hyprlock hypridle hyprpolkitagent   wm/hyprland/hypr/*.conf
+#   noctalia noctalia-qs                         the bar/launcher/notifications
+#   hyprsunset                                   scripts/nightlight-toggle.sh
+#   cliphist wl-clipboard                        autostart.conf + keybinds
+#   grim slurp                                   scripts/screenshot.sh
+#   ai-usagebar-bin  (AUR)                       Noctalia felipeartur/ai-usagebar widget
+#                                                (the widget renders only a glyph
+#                                                without this CLI on PATH)
+#
+# waybar is listed because it is installed, not because it is used — Noctalia
+# replaced it. Safe to omit on a fresh machine.
+# ─────────────────────────────────────────────────────────────────────────────
+ai-usagebar-bin  (AUR)
+bluez
+bluez-utils
+brightnessctl
+cliphist
+grim
+hyprcursor
+hyprgraphics
+hypridle
+hyprland
+hyprlang
+hyprlock
+hyprpolkitagent
+hyprsunset
+hyprutils
+hyprwayland-scanner
+kitty
+networkmanager
+noctalia
+noctalia-qs
+pipewire
+pipewire-pulse
+playerctl
+slurp
+swappy
+waybar
+wireplumber
+wl-clipboard
+xdg-desktop-portal-hyprland

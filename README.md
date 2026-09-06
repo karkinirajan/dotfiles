@@ -1,135 +1,154 @@
-# Development Environment Configuration
+# Dotfiles
 
-Personal configuration files and setup guides for Linux (Arch, Ubuntu) and macOS development environments.
+Personal configuration for a CachyOS (Arch) Wayland workstation: Hyprland +
+Noctalia desktop, kitty/zsh terminal, editors, and the tooling around them.
 
-## Repository Structure
+The repo is the single source of truth. `install.sh` reads `manifest.conf` and
+symlinks each live path back into the repo, so editing either side edits the
+same file and the two cannot drift apart.
 
 ```
 dotfiles/
-├── cachyos/                    # CachyOS (Arch) AI/ML workstation setup
-│   ├── cachyos-complete-setup.md   # Full system setup walkthrough
-│   ├── cachyos-setup-dev.md        # AMD GPU, ROCm, AI/ML stack, DevOps tooling
-│   └── cachyos_dev_artifact.md     # Comprehensive setup reference
+├── install.sh              # link/seed everything; also `status` and `pull`
+├── manifest.conf           # the map: <type> <repo path> <live path>
 │
-├── claude/                     # Claude Code global config (agents, commands, skills, settings)
-│   ├── CLAUDE.md               # Global engineering profile/preferences
-│   ├── settings.json           # Permissions, hooks, enabled plugins
-│   ├── agents/                 # Custom subagents (backend/frontend/db/ai-agent/release/qa/data-ml)
-│   ├── commands/                # Custom slash commands (/discover, /shipcheck)
-│   └── skills/                  # Stack-specific architecture/security skills + claude-brain, visual-qa
+├── wm/hyprland/            # Hyprland compositor + Noctalia shell  → see its README
+│   ├── hypr/               # hyprland.conf, config/, scripts/, hyprlock, hypridle
+│   ├── noctalia/           # bar/shell settings.toml, custom palettes, dbus override
+│   ├── sddm/               # login manager session preset
+│   ├── README.md           # the detailed one — read this for the desktop
+│   ├── KDE-REMOVAL.md      # how Plasma was removed from this dual-DE install
+│   └── hyprland-shortcuts.md
 │
-├── focus/                      # System-wide distraction blocker (dnsmasq + nftables)
-│   ├── scripts/                # focus, focus-refresh, focus-page
-│   ├── systemd/                # services, schedule timers, list watcher
-│   ├── networkmanager/         # resolv.conf ownership (dns=none)
-│   └── block.list, allow.list  # what to block / CDN-IP exemptions
+├── fonts/
+│   └── fontconfig/fonts.conf   → ~/.config/fontconfig/fonts.conf
+│                           # rendering rules only (hintslight, rgb subpixel,
+│                           #   synthetic oblique/embolden). Font FILES are not
+│                           #   tracked — they come from packages, listed in
+│                           #   os/cachyos/packages/fonts.txt.
 │
-├── hyprland/                   # Hyprland compositor + Noctalia shell (CachyOS/Arch Wayland)
-│   ├── hypr/                   # hyprland.conf, keybinds/colors/autostart, hyprlock/hypridle/hyprpaper
-│   └── noctalia/                # bar/launcher/clipboard/control-center — replaces Waybar/wofi/mako
+├── terminal/
+│   ├── zsh/.zshrc          # Oh My Zsh, starship/p10k toggle, deferred plugins
+│   ├── bash/               # bash equivalents
+│   ├── kitty/              # kitty.conf + catppuccin-mocha / gruvbox-dark-hard
+│   └── starship/starship.toml
 │
-├── kitty/                      # Kitty terminal configuration
-│   ├── kitty.conf              # Fonts, keybindings, splits, performance
-│   └── gruvbox-dark-hard.conf  # Colour scheme (matches the zsh palette)
+├── editors/                # vscode/, zed/, sublime/
 │
-├── linux/                      # Linux shell configurations
-│   ├── arch/
-│   │   ├── .bashrc             # Bash config for Arch/Manjaro
-│   │   └── .zshrc              # Zsh config for Arch/Manjaro (OMZ + starship/p10k)
-│   ├── ubuntu/
-│   │   └── .zshrc              # Zsh config for Ubuntu (apt aliases)
-│   └── starship.toml           # Cross-platform terminal prompt configuration
+├── tools/
+│   ├── claude/             # Claude Code global config (agents, commands, skills)
+│   ├── focus/              # dnsmasq + nftables site blocker  → see focus README
+│   └── mise/
 │
-├── mac/                        # macOS shell configuration
-│   └── .zshrc                  # Zsh config for macOS (Homebrew, macOS utilities)
-│
-├── sublime/                    # Sublime Text configuration
-│   ├── anaconda-sublime.json   # Anaconda (Python) plugin settings
-│   ├── sublime-repl.json       # Python REPL configuration
-│   └── sublime-settings.json   # Editor settings (theme, font)
-│
-├── vscode/                     # Visual Studio Code configuration
-│   ├── extensions.sh           # Shell script to bulk-install extensions
-│   ├── vscode-extensions.json  # Curated extension list (80+)
-│   ├── vscode-keybindings.json # Custom keyboard shortcuts
-│   └── vscode-settings.json    # Editor settings (font, theme, AI, language rules)
-│
-└── zed/                        # Zed editor configuration
-    ├── README.md                # Extension list — Zed has no CLI installer, install manually
-    └── zed-settings.json        # Editor + language server + agent/MCP settings
+└── os/cachyos/
+    ├── setup.md            # full system setup walkthrough
+    └── packages/
+        ├── desktop.txt     # compositor, shell, and the helpers configs call
+        └── fonts.txt       # every font package, with what needs which
 ```
 
 ---
 
-## Categories at a Glance
+## Install
 
-### Shell & Terminal
+```bash
+git clone <this repo> ~/dotfiles && cd ~/dotfiles
 
-| File | Platform | Highlights |
-|------|----------|------------|
-| `kitty/kitty.conf` | All platforms | FiraCode Nerd Font + ligatures, splits, vim-style navigation |
-| `linux/arch/.zshrc` | Arch/Manjaro | Oh My Zsh, starship/p10k toggle, deferred plugin loading |
-| `linux/arch/.bashrc` | Arch/Manjaro | Bash config, git prompt, NVM |
-| `linux/ubuntu/.zshrc` | Ubuntu/Debian | apt aliases, ss networking |
-| `mac/.zshrc` | macOS | Homebrew, macOS utilities, flush-dns |
-| `linux/starship.toml` | All platforms | Battery, Git status, memory, language versions |
+./install.sh --dry-run     # show what would change, touch nothing
+./install.sh               # link/seed everything in manifest.conf
+./install.sh status        # report ok / drift / missing per entry
+```
 
-The Arch zsh config runs **starship by default** and ships a Powerlevel10k
-setup alongside it. Only one prompt is ever active — switch at runtime with
-`theme-starship` / `theme-p10k`; the choice persists in
-`~/.config/zsh/prompt-framework`.
+Any existing real file is backed up to `<path>.bak-<timestamp>` before being
+replaced, so a first run on a machine that already has configs is safe.
+
+For the desktop specifically, install the packages first — the configs name
+fonts and helper binaries and fail quietly without them:
+
+```bash
+sudo pacman -S --needed $(grep -v '^#' os/cachyos/packages/desktop.txt | awk '{print $1}')
+sudo pacman -S --needed $(grep -v '^#' os/cachyos/packages/fonts.txt   | awk '{print $1}')
+paru        -S --needed $(grep    '(AUR)' os/cachyos/packages/*.txt    | awk '{print $1}')
+```
+
+Then follow [`wm/hyprland/README.md`](wm/hyprland/README.md) for the parts the
+manifest does not cover (hyprpm plugins, the D-Bus notification override).
+
+---
+
+## Two kinds of managed file
+
+`manifest.conf` marks every entry `link` or `seed`, and the distinction is the
+thing most likely to bite:
+
+| | `link` | `seed` |
+|---|---|---|
+| What it does | symlinks live → repo | copies repo → live, only if live is missing |
+| Can it drift? | **No** — one file, two names | **Yes** — two separate files |
+| Used for | configs only you edit | files a program rewrites itself |
+
+Seeded files need a deliberate step to get back into git. That is what `pull`
+is for:
+
+```bash
+./install.sh status        # DRIFT on a seeded file = live has moved ahead
+./install.sh pull          # copy live → repo
+git diff                   # review before committing
+```
+
+This matters most for `~/.local/state/noctalia/settings.toml`. Noctalia
+rewrites that file itself — on every settings-GUI change, and on upgrade for
+schema migrations. A symlink there would be destroyed by a replace-style write
+and the repo would silently track nothing. It is also not hypothetical: the
+5.0.1 upgrade reset the whole bar styling block to stock defaults while leaving
+the widget list intact, which is exactly the kind of change that is invisible
+until something compares the two copies.
+
+---
+
+## Categories at a glance
+
+### Desktop
+
+| Path | What |
+|------|------|
+| `wm/hyprland/hypr/` | compositor config — gaps, borders, keybinds, window rules, autostart |
+| `wm/hyprland/noctalia/` | the shell: bar layout and widgets, palettes, theme source |
+| `fonts/fontconfig/` | font rendering rules |
+
+The session deliberately starts on an **empty workspace** — no applications are
+launched at login, from either `exec-once` or XDG autostart.
+
+### Shell & terminal
+
+| Path | Highlights |
+|------|------------|
+| `terminal/kitty/kitty.conf` | FiraCode Nerd Font + ligatures, splits, vim-style navigation |
+| `terminal/zsh/.zshrc` | Oh My Zsh, starship/p10k toggle, deferred plugin loading |
+| `terminal/bash/` | bash config, git prompt, NVM |
+| `terminal/starship/starship.toml` | battery, git status, memory, language versions |
+
+zsh runs **starship by default** with a Powerlevel10k setup alongside it. Only
+one prompt is ever active — switch at runtime with `theme-starship` /
+`theme-p10k`; the choice persists in `~/.config/zsh/prompt-framework`.
 
 ### Editors
 
-| Tool | Config Files | Key Features |
-|------|-------------|--------------|
-| VS Code | `vscode/` (4 files) | Copilot, GitLens, 80+ extensions |
-| Zed | `zed/` (2 files) | Ollama Cloud agent, MCP context servers, per-language LSP config |
-| Sublime Text | `sublime/` (3 files) | Python/Anaconda, Predawn theme |
-
-### Productivity
-
-| Tool | Config | Key Features |
+| Tool | Config | Key features |
 |------|--------|--------------|
-| focus | `focus/` | OS-level site blocking via dnsmasq + nftables, schedule timers, lock mode |
+| VS Code | `editors/vscode/` | Copilot, GitLens, 80+ extensions |
+| Zed | `editors/zed/` | Ollama Cloud agent, MCP context servers, per-language LSP |
+| Sublime Text | `editors/sublime/` | Python/Anaconda, Predawn theme |
 
-See [`focus/README.md`](focus/README.md) for how it works and how to install it.
+### Tooling
 
-### DevOps & AI/ML
+| Path | What |
+|------|------|
+| `tools/claude/` | Claude Code global config — agents, commands, skills, settings |
+| `tools/focus/` | OS-level site blocking (dnsmasq + nftables), schedule timers, lock mode |
+| `os/cachyos/setup.md` | AMD GPU (ROCm), PyTorch/TF, LangChain, Ollama, K8s, Terraform |
 
-| File | Topics |
-|------|--------|
-| `cachyos/cachyos-setup-dev.md` | AMD GPU (ROCm), PyTorch/TF, LangChain, Ollama, K8s, Terraform |
-
----
-
-## Quick Start
-
-### 1. Shell (Arch Linux)
-```bash
-cp linux/arch/.zshrc ~/.zshrc
-cp linux/starship.toml ~/.config/starship.toml
-```
-
-### 2. Shell (macOS)
-```bash
-cp mac/.zshrc ~/.zshrc
-cp linux/starship.toml ~/.config/starship.toml
-```
-
-### 3. Kitty terminal
-```bash
-mkdir -p ~/.config/kitty
-cp kitty/kitty.conf kitty/gruvbox-dark-hard.conf ~/.config/kitty/
-```
-Requires a Nerd Font (`ttf-firacode-nerd` on Arch) for prompt glyphs.
-Reload a running kitty with `ctrl+shift+f5`.
-
-### 4. VS Code
-```bash
-cp vscode/vscode-settings.json ~/Library/Application\ Support/Code/User/settings.json
-bash vscode/extensions.sh   # install all extensions
-```
+See [`tools/focus/README.md`](tools/focus/README.md) for how the blocker works.
 
 ---
 

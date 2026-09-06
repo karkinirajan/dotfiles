@@ -10,10 +10,16 @@
 #    ./install.sh              link everything in manifest.conf
 #    ./install.sh --dry-run    show what would happen, change nothing
 #    ./install.sh status       report ok / drift / missing per entry
+#    ./install.sh pull         copy seeded files back live -> repo (see below)
 #    ./install.sh --force      replace a live symlink pointing somewhere else
 #
 #  Safe to re-run: already-correct links are left untouched. Any existing real
 #  file is backed up to <path>.bak-<timestamp> before being replaced.
+#
+#  `link` entries can never drift — both paths are the same inode. `seed`
+#  entries can: the owning program rewrites the live file and the repo copy
+#  silently goes stale. `status` reports that drift and `pull` resolves it by
+#  copying live -> repo, so the change lands in git as a reviewable diff.
 # =============================================================================
 set -euo pipefail
 
@@ -30,7 +36,8 @@ for arg in "$@"; do
     --dry-run|-n) DRY_RUN=1 ;;
     --force|-f)   FORCE=1 ;;
     status)       MODE="status" ;;
-    -h|--help)    sed -n '2,18p' "${BASH_SOURCE[0]}" | sed 's/^# \{0,1\}//'; exit 0 ;;
+    pull)         MODE="pull" ;;
+    -h|--help)    awk 'NR>2{if (/^# ={10,}/) exit; print}' "${BASH_SOURCE[0]}" | sed 's/^# \{0,1\}//'; exit 0 ;;
     *) echo "unknown argument: $arg (try --help)" >&2; exit 2 ;;
   esac
 done
@@ -38,7 +45,7 @@ done
 [ -f "$MANIFEST" ] || { echo "missing manifest: $MANIFEST" >&2; exit 1; }
 
 # Counters
-n_ok=0; n_linked=0; n_seeded=0; n_backed=0; n_skip=0; n_drift=0; n_missing=0; n_err=0
+n_ok=0; n_linked=0; n_seeded=0; n_backed=0; n_skip=0; n_drift=0; n_missing=0; n_err=0; n_pulled=0
 
 c_ok=$'\033[32m'; c_warn=$'\033[33m'; c_err=$'\033[31m'; c_dim=$'\033[2m'; c_off=$'\033[0m'
 [ -t 1 ] || { c_ok=""; c_warn=""; c_err=""; c_dim=""; c_off=""; }
@@ -50,6 +57,9 @@ resolve() { ( cd "$(dirname "$1")" 2>/dev/null && readlink -f "$(basename "$1")"
 
 do_link() {
   local src="$1" dst="$2"
+
+  # A link entry is one file under two names — there is nothing to pull.
+  if [ "$MODE" = pull ]; then return; fi
 
   if [ ! -e "$src" ]; then
     say MISS "$c_err" "$dst" "repo path missing: $src"; n_err=$((n_err+1)); return
@@ -111,11 +121,30 @@ do_seed() {
     say MISS "$c_err" "$dst" "repo path missing: $src"; n_err=$((n_err+1)); return
   fi
 
+  # Live file exists: repo and live are separate files, so compare them.
   if [ -e "$dst" ]; then
-    [ "$MODE" = status ] && say ok "$c_ok" "$dst" "seeded (machine-owned, not tracked)" || :
-    n_ok=$((n_ok+1)); return
+    if diff -rq "$src" "$dst" >/dev/null 2>&1; then
+      { [ "$MODE" = status ] || [ "$MODE" = pull ]; } && say ok "$c_ok" "$dst" "seeded, in sync" || :
+      n_ok=$((n_ok+1)); return
+    fi
+
+    if [ "$MODE" = pull ]; then
+      if [ "$DRY_RUN" -eq 1 ]; then
+        say PLAN "$c_dim" "$dst" "would pull live -> ${src#$REPO_DIR/}"; n_pulled=$((n_pulled+1)); return
+      fi
+      rm -rf "$src"; cp -a "$dst" "$src"
+      say PULL "$c_ok" "$dst" "-> ${src#$REPO_DIR/} (review with git diff)"
+      n_pulled=$((n_pulled+1)); return
+    fi
+
+    # install/status: never clobber the live file the program owns.
+    say DRIFT "$c_warn" "$dst" "live differs from repo copy (./install.sh pull)"
+    n_drift=$((n_drift+1)); return
   fi
 
+  if [ "$MODE" = pull ]; then
+    say MISS "$c_warn" "$dst" "nothing live to pull"; n_missing=$((n_missing+1)); return
+  fi
   if [ "$MODE" = status ]; then
     say MISS "$c_warn" "$dst" "would be seeded"; n_missing=$((n_missing+1)); return
   fi
@@ -132,6 +161,7 @@ do_seed() {
 # ── Run ──────────────────────────────────────────────────────────────────────
 case "$MODE" in
   status) echo "status — $REPO_DIR" ;;
+  pull)   echo "pull (live -> repo, seeded entries only) — $REPO_DIR" ;;
   *) [ "$DRY_RUN" -eq 1 ] && echo "dry run — nothing will change" || echo "installing — $REPO_DIR" ;;
 esac
 echo
@@ -151,7 +181,10 @@ while read -r type src dst _rest; do
 done < <(grep -vE '^[[:space:]]*(#|$)' "$MANIFEST")
 
 echo
-if [ "$MODE" = status ]; then
+if [ "$MODE" = pull ]; then
+  printf 'pulled %d   already-ok %d   missing %d   error %d\n' "$n_pulled" "$n_ok" "$n_missing" "$n_err"
+  [ "$n_pulled" -gt 0 ] && echo "review the changes with: git diff"
+elif [ "$MODE" = status ]; then
   printf 'ok %d   drift %d   missing %d   error %d\n' "$n_ok" "$n_drift" "$n_missing" "$n_err"
   [ $((n_drift + n_missing + n_err)) -eq 0 ] && echo "everything is linked and in sync." \
                                              || echo "run ./install.sh to reconcile."

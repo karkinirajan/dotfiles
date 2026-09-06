@@ -1,0 +1,52 @@
+# Font packages
+#
+# Font FILES are deliberately not tracked in this repo: they are large, binary,
+# and every one of them is a package away. This list is the reproducible part.
+# Lines marked (AUR) are not in the official repos and need an AUR helper.
+#
+#   repo:  sudo pacman -S --needed $(grep -v '^#' os/cachyos/packages/fonts.txt | awk '{print $1}')
+#   AUR:   paru        -S --needed $(grep    '(AUR)' os/cachyos/packages/fonts.txt | awk '{print $1}')
+#
+# ── Required by the configs in this repo ─────────────────────────────────────
+#   ttf-firacode-nerd     kitty font_family / bold_font, plus the symbol_map
+#                         ranges kitty.conf declares for powerline + devicons.
+#                         Also the Noctalia system-monitor widget.
+#   ttf-jetbrains-mono    Noctalia bar font_family ("JetBrains Mono" and
+#                         "JetBrains Mono Medium").
+#   ttf-jetbrains-maple-mono-xx-xx-ht   (AUR)
+#                         Noctalia clock widget ("JetBrains Maple Mono").
+#   ttf-dejavu            Hyprland misc.font_family, groupbar and splash.
+#   noto-fonts-emoji      emoji in notifications, tooltips and the terminal.
+#   ttf-weather-icons     (AUR) Noctalia weather widget glyphs.
+#
+# Everything else is a desktop/toolkit dependency or a spare face.
+# ─────────────────────────────────────────────────────────────────────────────
+adwaita-fonts
+awesome-terminal-fonts
+cantarell-fonts
+inter-font
+noto-fonts
+noto-fonts-cjk
+noto-fonts-emoji
+opendesktop-fonts
+otf-font-awesome
+otf-fragment-mono  (AUR)
+powerline-fonts
+ttf-bitstream-vera
+ttf-dejavu
+ttf-fantasque-nerd
+ttf-fira-code
+ttf-firacode-nerd
+ttf-fragment-mono  (AUR)
+ttf-jetbrains-maple-mono-nf-xx-xx  (AUR)
+ttf-jetbrains-maple-mono-xx-xx-ht  (AUR)
+ttf-jetbrains-mono
+ttf-jetbrains-mono-nerd
+ttf-liberation
+ttf-meslo-nerd
+ttf-opensans
+ttf-roboto
+ttf-weather-icons  (AUR)
+xorg-fonts-alias-misc
+xorg-fonts-encodings
+xorg-fonts-misc

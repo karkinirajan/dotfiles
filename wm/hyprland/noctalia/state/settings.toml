@@ -4,11 +4,22 @@ config_version = 14
 order = [ "kneeraazon" ]
 
     [bar.kneeraazon]
-    border = "on_primary"
+    widget_spacing = 16
+    margin_opposite_edge = 0
+    margin_edge = 0
+    hover_highlight = false
+    font_scale = 0.92999998666346073
+    contact_shadow = true
+    border = "#cba6f7aa"
+    border_width = 2.0
     capsule = true
-    capsule_fill = "on_primary"
+    capsule_border = "#cba6f799"
+    capsule_fill = "primary"
+    capsule_foreground = "#FFFFFF"
+    capsule_opacity = 0.0
+    capsule_padding = 6
     capsule_radius = 4
-    capsule_thickness = 0.69999998807907104
+    capsule_thickness = 0.66700000000000004
     end = [
         "tmelik/system-monitor:summary",
         "notifications",
@@ -16,30 +27,31 @@ order = [ "kneeraazon" ]
         "volume",
         "network",
         "nightlight",
-        "felipeartur/ai-usagebar:bar",
+        "screen-time-btn",
         "weather",
         "nightwatch75/todo:todo",
-        "screen-time-btn",
         "bluetooth",
         "brightness",
         "battery",
         "tray",
+        "felipeartur/ai-usagebar:bar",
         "session"
     ]
-    font_family = "Noto Sans Mono"
-    font_weight = 400
-    icon_color = "on_primary"
+    font_family = "JetBrains Mono"
+    font_weight = 600
+    icon_color = "surface"
     margin_ends = 0
-    padding = 6
+    padding = 4
     radius = 0
     radius_bottom_left = 0
     radius_bottom_right = 0
     radius_top_left = 0
     radius_top_right = 0
-    scale = 1.1000000089406967
+    scale = 1.1500000096857548
+    shadow = false
     show_on_workspace_switch = false
     start = [ "workspaces", "active_window", "media" ]
-    thickness = 43
+    thickness = 42
 
 [control_center]
 width = 900
@@ -450,7 +462,7 @@ capsule_radius = 4
 compact_network = false
 disk_display_mode = "available"
 font_family = "FiraCode Nerd Font Mono"
-font_scale = 0.92000000000000004
+font_scale = 1.0
 font_weight = 400
 hide_unavailable = true
 highlight_values = false

@@ -29,9 +29,14 @@ hyprland/
 │   ├── hyprland.conf              # entry point, sources everything below
 │   ├── hyprlock.conf, hypridle.conf, hyprpaper.conf
 │   ├── config/
-│   │   ├── autostart.conf         # exec-once list (Noctalia via the watchdog
-│   │   │                          #   script below, hyprpaper, fcitx5, kwallet,
-│   │   │                          #   polkit, theme-border-watch, hyprpm reload...)
+│   │   ├── autostart.conf         # exec-once list — session infrastructure ONLY:
+│   │   │                          #   hyprpm reload, Noctalia via the watchdog
+│   │   │                          #   script below, cliphist, dbus/systemd env
+│   │   │                          #   import, hypridle, theme-border-watch. No
+│   │   │                          #   applications: the session comes up on an
+│   │   │                          #   empty workspace by design. Retired lines
+│   │   │                          #   (hyprpaper, fcitx5, mako, nm-applet, wob)
+│   │   │                          #   are kept commented with the reason.
 │   │   ├── keybinds.conf          # all bindd/bindr/bindm binds
 │   │   ├── colors.conf            # palette variables — kept as Catppuccin-shaped
 │   │   │                          #   names ($mauve, $text, $surface0, ...) but
@@ -40,9 +45,15 @@ hyprland/
 │   │   │                          #   whatever hex is here reflects the palette
 │   │   │                          #   selected in Noctalia at snapshot time, not
 │   │   │                          #   necessarily Catppuccin or Jade specifically.
-│   │   ├── variables.conf         # gaps, borders (col.active_border synced to
-│   │   │                          #   Noctalia's primary/secondary accent, 45deg
-│   │   │                          #   gradient; border_size=1, thin by design)
+│   │   ├── variables.conf         # gaps + borders. border_size=2. Both
+│   │   │                          #   col.active_border (alpha ee) and
+│   │   │                          #   col.inactive_border (alpha aa — visible,
+│   │   │                          #   one step down, NOT invisible) are synced
+│   │   │                          #   to Noctalia's accent as a 45deg gradient.
+│   │   │                          #   gaps_out is 4,0,0,0 (top only): windows
+│   │   │                          #   sit flush to the screen on three sides,
+│   │   │                          #   gaps_in=4 separates them from each other,
+│   │   │                          #   and the top gap clears the bar.
 │   │   ├── windowrules.conf       # window/layer rules incl. blur/xray for Noctalia + wofi
 │   │   ├── plugins.conf           # `plugin:...` config for hyprpm-managed plugins
 │   │   │                          #   (Hyprspace, borders-plus-plus, hyprfocus,
@@ -54,7 +65,7 @@ hyprland/
 │   │   ├── animations.conf, decorations.conf, input.conf,
 │   │   │   monitor.conf, environment.conf
 │   └── scripts/
-│       ├── minimize.sh, restore.sh, wallpaper.sh
+│       ├── minimize.sh, restore.sh, screenshot.sh
 │       ├── noctalia-watchdog.sh       # Runs `noctalia` in a restart-on-crash loop.
 │       │                              #   Deliberately NOT a systemd --user service:
 │       │                              #   apps launched from Noctalia's own launcher
@@ -93,6 +104,8 @@ hyprland/
 │       │                              #   accent into colors.conf + variables.conf,
 │       │                              #   so window borders always match the bar's
 │       │                              #   item border color.
+│       ├── nightlight-theme-sync.sh    # Flips terminal/editor colour schemes to
+│       │                              #   match the night light state.
 │       └── theme-border-watch.sh      # inotify-watches settings.toml's [theme]
 │                                      #   block and re-runs sync-theme-border.sh
 │                                      #   whenever it changes — autostarted, keeps
@@ -107,12 +120,15 @@ hyprland/
     │           [theme].custom_palette says in state/settings.toml below —
     │           check that file rather than assuming from this list.
     ├── state/settings.toml             → ~/.local/state/noctalia/settings.toml
-    │       Bar layout/widgets (incl. paired usage% + absolute-value sysmon
-    │       widgets for CPU/GPU/memory), theme source=custom, keybinds config,
-    │       etc. Noctalia rewrites this file on every run and the bundled
-    │       Settings GUI can too (it's live state, not a static config) —
-    │       treat this copy as a snapshot/reference, not something to symlink
-    │       live.
+    │       Bar layout and widgets, theme source, plugin enable list, keybinds.
+    │       SEEDED, never symlinked: Noctalia rewrites this file itself, both on
+    │       upgrade (schema migrations) and on every change made through its
+    │       settings GUI, so a symlink here would be destroyed by a
+    │       replace-style write and the repo would silently stop tracking it.
+    │       `./install.sh status` compares repo against live and
+    │       `./install.sh pull` brings live changes in as a reviewable diff —
+    │       run pull after tuning the bar, or the change only ever exists on
+    │       this machine. See "Bar styling can be reset by an upgrade" below.
     └── dbus-override/fr.emersion.mako.service   → ~/.local/share/dbus-1/services/
             User-level override so D-Bus service *activation* launches
             Noctalia instead of mako when something requests
@@ -124,16 +140,19 @@ hyprland/
 ## Install
 
 ```sh
-cp hyprland-shortcuts.md ~/
-cp -r hyprland/hypr/* ~/.config/hypr/
-chmod +x ~/.config/hypr/scripts/*.sh
-mkdir -p ~/.config/noctalia/palettes
-cp hyprland/noctalia/palettes/* ~/.config/noctalia/palettes/
-mkdir -p ~/.local/state/noctalia ~/.local/share/dbus-1/services
-cp hyprland/noctalia/state/settings.toml ~/.local/state/noctalia/settings.toml
-cp hyprland/noctalia/dbus-override/fr.emersion.mako.service ~/.local/share/dbus-1/services/
+# 1. Packages (compositor, shell, helpers, fonts) — see os/cachyos/packages/
+sudo pacman -S --needed $(grep -v '^#' ../../os/cachyos/packages/desktop.txt | awk '{print $1}')
+sudo pacman -S --needed $(grep -v '^#' ../../os/cachyos/packages/fonts.txt   | awk '{print $1}')
+paru -S --needed $(grep '(AUR)' ../../os/cachyos/packages/desktop.txt ../../os/cachyos/packages/fonts.txt | awk '{print $1}')
+
+# 2. Config — the repo root installer links hypr/, scripts/, the Noctalia
+#    palettes and fontconfig, and seeds Noctalia's settings.toml.
+cd ../.. && ./install.sh && ./install.sh status
+
+# 3. The two pieces the manifest does not cover:
+mkdir -p ~/.local/share/dbus-1/services
+cp wm/hyprland/noctalia/dbus-override/fr.emersion.mako.service ~/.local/share/dbus-1/services/
 systemctl --user disable --now mako.service noctalia.service 2>/dev/null
-sudo pacman -S --needed hyprsunset  # night light backend, see below
 
 # Plugins — see "Plugins" below for what each one is and why the fork/commit
 hyprpm update
@@ -220,6 +239,20 @@ Restart Hyprland (or reboot) to fix it.
   hyprsunset`) as a plain process instead — on = launch it, off = kill it.
   `[nightlight] enabled = false` is set permanently in settings.toml so
   Noctalia's own schedule can never interfere.
+- **Bar styling can be reset by a Noctalia upgrade, silently.** The 5.0.1
+  upgrade (`config_version` 14) rewrote `settings.toml` and put the whole
+  `[bar.kneeraazon]` block back to stock: the border hex values, `border_width`,
+  `font_family`, `font_weight`, `icon_color`, `widget_spacing`, `scale` and the
+  margins all reverted, while the widget list survived — so the bar still looked
+  broadly right and the regression went unnoticed. `./install.sh status` now
+  reports this as DRIFT on the seeded settings.toml; the fix is to compare
+  against the last known-good copy in git (`git log -p --
+  wm/hyprland/noctalia/state/settings.toml`) rather than re-tuning by eye.
+- **Bar fonts come from packages, not this repo.** `[bar].font_family` is
+  `JetBrains Mono`, the clock widget is `JetBrains Maple Mono` and the
+  system-monitor widget is `FiraCode Nerd Font Mono`. If any of those is
+  missing, Noctalia silently falls back to a default sans and the bar's metrics
+  shift — `os/cachyos/packages/fonts.txt` lists which package supplies each.
 - **Window border color tracks Noctalia's theme automatically.**
   `scripts/theme-border-watch.sh` is autostarted and watches
   `settings.toml`'s `[theme]` block; any change re-runs
