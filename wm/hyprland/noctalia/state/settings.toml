@@ -20,7 +20,6 @@ order = [ "kneeraazon" ]
         "clipboard",
         "volume",
         "network",
-        "dnd-btn",
         "weather",
         "screen-time-btn",
         "bluetooth",
@@ -277,7 +276,8 @@ community_palette = "Catppuccin Frappe Blue"
 custom_palette = "CatppuccinMocha"
 mode = "auto"
 shell_mode = "dark"
-source = "builtin"
+source = "wallpaper"
+wallpaper_scheme = "m3-content"
 
     [theme.templates]
     builtin_ids = []
@@ -291,13 +291,13 @@ transition_on_startup = true
     order = "alphabetical"
 
     [wallpaper.default]
-    path = "/home/kneeraazon/.wallpapers/wall.jpg"
+    path = "/home/kneeraazon/.wallpapers/valorant-game-3840x2160-18167.jpg"
 
     [wallpaper.last]
-    path = "/home/kneeraazon/.wallpapers/wall.jpg"
+    path = "/home/kneeraazon/.wallpapers/valorant-game-3840x2160-18167.jpg"
 
     [wallpaper.monitors.DP-2]
-    path = "/home/kneeraazon/.wallpapers/wall.jpg"
+    path = "/home/kneeraazon/.wallpapers/valorant-game-3840x2160-18167.jpg"
 
     [[wallpaper.favorite]]
     builtin_palette = "Catppuccin"
@@ -383,15 +383,6 @@ format = "{:%a, %d %b | %H:%M:%S}"
 capsule = true
 font_weight = 700
 icon_color = "#03FD8B"
-
-[widget.dnd-btn]
-glyph = "bell-off"
-icon_color = "#F66409"
-tooltip = "Do Not Disturb"
-type = "custom_button"
-
-    [widget.dnd-btn.actions]
-    left = "notification-dnd-toggle"
 
 [widget.launcher]
 capsule = true
