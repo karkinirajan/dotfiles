@@ -4,10 +4,12 @@ config_version = 14
 order = [ "kneeraazon" ]
 
     [bar.kneeraazon]
-    border = "#cba6f726"
+    border = "primary"
     border_width = 1.0
     capsule = true
-    capsule_border = "#cba6f726"
+    capsule_border = "primary"
+    capsule_fill = "primary"
+    capsule_opacity = 0.17999999999999999
     capsule_padding = 6
     capsule_thickness = 0.71999998763203621
     contact_shadow = true
@@ -22,7 +24,6 @@ order = [ "kneeraazon" ]
         "bluetooth",
         "brightness",
         "battery",
-        "gustav0ar/drive-health:summary",
         "control-center",
         "session",
         "active_window"
@@ -204,7 +205,6 @@ enabled = [
     "oldirtty/color_picker",
     "yocraft/desktop-launcher",
     "raycursive/discord-voice",
-    "gustav0ar/drive-health",
     "nightwatch75/dns-switcher",
     "liamwh/emoji-picker",
     "apex077/eyecare",
@@ -248,11 +248,11 @@ panel_anchor_bar = "kneeraazon"
 
 [theme]
 builtin = "Catppuccin"
-community_palette = "Breeze"
+community_palette = "Catppuccin Frappe Blue"
 custom_palette = "CatppuccinMocha"
 mode = "dark"
 shell_mode = "dark"
-source = "community"
+source = "builtin"
 
     [theme.templates]
     builtin_ids = [ "hyprland" ]
@@ -265,13 +265,13 @@ transition_on_startup = true
     order = "alphabetical"
 
     [wallpaper.default]
-    path = "/home/kneeraazon/Pictures/Screenshots/Razer-Sensa-THS-Green_Wallpaper_3840x2400.jpg"
+    path = "color:#6913D1"
 
     [wallpaper.last]
-    path = "/home/kneeraazon/Pictures/Screenshots/Razer-Sensa-THS-Green_Wallpaper_3840x2400.jpg"
+    path = "color:#6913D1"
 
     [wallpaper.monitors.DP-2]
-    path = "/home/kneeraazon/Pictures/Screenshots/Razer-Sensa-THS-Green_Wallpaper_3840x2400.jpg"
+    path = "color:#6913D1"
 
     [[wallpaper.favorite]]
     builtin_palette = "Catppuccin"
@@ -296,7 +296,6 @@ icon_color = "#FFFFFF"
 
 [widget.clock]
 capsule = true
-capsule_fill = "surface"
 capsule_padding = 12
 capsule_radius = 4
 font_family = "JetBrains Mono ExtraBold"
@@ -312,8 +311,6 @@ icon_color = "#03FD8B"
 
 [widget.launcher]
 capsule = true
-capsule_fill = "primary"
-capsule_opacity = 0.59999999999999998
 capsule_padding = 13
 capsule_radius = 6
 color = "surface"
@@ -323,8 +320,6 @@ icon_color = "surface"
 [widget.media]
 anchor = true
 capsule = true
-capsule_border = "surface"
-capsule_fill = "on_secondary"
 capsule_padding = 7
 capsule_radius = 6
 color = "secondary"
@@ -373,23 +368,20 @@ icon_color = "#F90540"
 [widget.settings]
 icon_color = "secondary"
 
-# Network throughput only — CPU/GPU/RAM/disk readouts turned off, so this
-# widget shows just the up/down speeds at the head of the right-hand group.
 [widget."tmelik/system-monitor:summary"]
-show_cpu_usage = false
 show_cpu_temperature = false
-show_gpu_usage = "off"
+show_cpu_usage = false
+show_disk = false
+show_download = true
 show_gpu_temperature = "off"
+show_gpu_usage = "off"
 show_gpu_vram = "off"
 show_ram = false
 show_swap = false
-show_disk = false
-show_download = true
 show_upload = true
 
 [widget.tray]
 capsule = true
-capsule_fill = "surface_variant"
 capsule_radius = 4
 
 [widget.volume]
@@ -408,7 +400,6 @@ show_temperature = true
 
 [widget.workspaces]
 capsule = true
-capsule_fill = "surface"
 capsule_padding = 0
 capsule_radius = 2
 color = "surface"
