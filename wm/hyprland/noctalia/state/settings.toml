@@ -4,15 +4,9 @@ config_version = 14
 order = [ "kneeraazon" ]
 
     [bar.kneeraazon]
-    background_opacity = 0.0
     border = "on_primary"
-    border_width = 20.0
     capsule = true
-    capsule_border = "#cba6f799"
-    capsule_fill = "primary"
-    capsule_foreground = "tertiary"
-    capsule_opacity = 0.0
-    capsule_padding = 8.0
+    capsule_fill = "on_primary"
     capsule_radius = 4
     capsule_thickness = 0.69999998807907104
     end = [
@@ -22,7 +16,7 @@ order = [ "kneeraazon" ]
         "volume",
         "network",
         "nightlight",
-        "control-center",
+        "felipeartur/ai-usagebar:bar",
         "weather",
         "nightwatch75/todo:todo",
         "screen-time-btn",
@@ -33,23 +27,19 @@ order = [ "kneeraazon" ]
         "session"
     ]
     font_family = "Noto Sans Mono"
-    font_scale = 1.1199999824166298
     font_weight = 400
-    icon_color = "surface"
-    layer = "overlay"
+    icon_color = "on_primary"
     margin_ends = 0
-    padding = 4
-    panel_overlap = 3
+    padding = 6
     radius = 0
     radius_bottom_left = 0
     radius_bottom_right = 0
     radius_top_left = 0
     radius_top_right = 0
     scale = 1.1000000089406967
-    shadow = false
     show_on_workspace_switch = false
     start = [ "workspaces", "active_window", "media" ]
-    thickness = 38
+    thickness = 43
 
 [control_center]
 width = 900
@@ -157,6 +147,10 @@ widget_order = [ "lockscreen-login-box@FALLBACK", "lockscreen-login-box@DP-2" ]
 enabled = false
 temperature_night = 5500
 
+[plugin_settings."nightwatch75/todo"]
+panel_open_near_click = false
+panel_placement = "floating"
+
 [plugin_settings."noctalia/bitwarden"]
 unlock_placement = "attached"
 
@@ -167,7 +161,6 @@ panel_placement = "attached"
 [plugins]
 auto_update = "all"
 enabled = [
-    "felipeartur/ai-usagebar",
     "noctalia/bitwarden",
     "noctalia/wallpaper_depth",
     "noctalia/notes",
@@ -217,7 +210,6 @@ enabled = [
     "neyfua/obs-integration",
     "tordex/nvtop",
     "goodroot/noctwhspr",
-    "weinguyen/9router-control",
     "yuuto/arch-updater",
     "0lucasmatheus/awwwall",
     "blackbartblues/audio-switcher",
@@ -247,7 +239,9 @@ enabled = [
     "noctalia/world_clock",
     "noctalia/screen_recorder",
     "noctalia/kaomoji",
-    "nightwatch75/todo"
+    "nightwatch75/todo",
+    "weinguyen/9router-control",
+    "felipeartur/ai-usagebar"
 ]
 
     [[plugins.source]]
@@ -262,7 +256,7 @@ enabled = [
 
 [shell]
 corner_radius_scale = 0.5000000074505806
-font_family = "DejaVu Sans"
+font_family = "JetBrains Mono Medium"
 panel_anchor_bar = "kneeraazon"
 
     [shell.launcher]
@@ -273,15 +267,13 @@ panel_anchor_bar = "kneeraazon"
     [shell.panel]
     clipboard_placement = "attached"
     floating_layer = "top"
-    launcher_position = "top_left"
     polkit_placement = "attached"
     transparency_mode = "glass"
 
 [theme]
-builtin = "Catppuccin"
+builtin = "Ayu"
 community_palette = "Catppuccin Macchiato Green"
 custom_palette = "CatppuccinMocha"
-mode = "auto"
 shell_mode = "dark"
 source = "custom"
 wallpaper_scheme = "m3-content"
@@ -292,10 +284,6 @@ wallpaper_scheme = "m3-content"
 [wallpaper]
 directory = "/home/kneeraazon/.wallpapers"
 transition_on_startup = true
-
-    [wallpaper.automation]
-    interval_seconds = 1794
-    order = "alphabetical"
 
     [wallpaper.default]
     path = "/home/kneeraazon/.wallpapers/wallpaperflare.com_wallpaper.jpg"
@@ -366,8 +354,8 @@ transition_on_startup = true
 
 [widget.active_window]
 capsule = true
-capsule_foreground = "secondary"
 capsule_opacity = 0.0
+color = "#FFFFFF"
 font_weight = 400
 title_scroll = "on_hover"
 
@@ -384,7 +372,8 @@ icon_color = "#FFFFFF"
 [widget.clock]
 capsule = true
 capsule_padding = 12
-font_family = "DejaVu Sans"
+color = "#FFFFFF"
+font_family = "JetBrains Maple Mono"
 font_scale = 1.0
 format = "{:%a, %d %b | %H:%M:%S}"
 
@@ -392,6 +381,9 @@ format = "{:%a, %d %b | %H:%M:%S}"
 capsule = true
 font_weight = 700
 icon_color = "#03FD8B"
+
+[widget."felipeartur/ai-usagebar:bar"]
+vendor = "anthropic"
 
 [widget.launcher]
 capsule = true
