@@ -4,23 +4,24 @@ config_version = 14
 order = [ "kneeraazon" ]
 
     [bar.kneeraazon]
-    border = "#cba6f715"
+    border = "#cba6f726"
     border_width = 1.0
     capsule = true
-    capsule_border = "#cba6f715"
+    capsule_border = "#cba6f726"
     capsule_padding = 6
     capsule_thickness = 0.71999998763203621
     contact_shadow = true
     end = [
-        "tray",
+        "tmelik/system-monitor:summary",
         "notifications",
         "clipboard",
-        "network",
-        "bluetooth",
         "volume",
+        "network",
+        "settings",
+        "tray",
+        "bluetooth",
         "brightness",
         "battery",
-        "tmelik/system-monitor:summary",
         "gustav0ar/drive-health:summary",
         "control-center",
         "session",
@@ -31,7 +32,9 @@ order = [ "kneeraazon" ]
     font_weight = 600
     hover_highlight = false
     icon_color = "surface"
+    margin_edge = 2
     margin_ends = 0
+    margin_opposite_edge = 2
     padding = 8
     radius = 0
     scale = 1.1500000096857548
@@ -369,6 +372,20 @@ icon_color = "#F90540"
 
 [widget.settings]
 icon_color = "secondary"
+
+# Network throughput only — CPU/GPU/RAM/disk readouts turned off, so this
+# widget shows just the up/down speeds at the head of the right-hand group.
+[widget."tmelik/system-monitor:summary"]
+show_cpu_usage = false
+show_cpu_temperature = false
+show_gpu_usage = "off"
+show_gpu_temperature = "off"
+show_gpu_vram = "off"
+show_ram = false
+show_swap = false
+show_disk = false
+show_download = true
+show_upload = true
 
 [widget.tray]
 capsule = true
