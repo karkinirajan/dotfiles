@@ -4,7 +4,7 @@ config_version = 14
 order = [ "kneeraazon" ]
 
     [bar.kneeraazon]
-    border = "primary"
+    border = "#cba6f7aa"
     border_width = 2.0
     capsule = true
     capsule_border = "#cba6f799"
@@ -12,7 +12,7 @@ order = [ "kneeraazon" ]
     capsule_opacity = 0.0
     capsule_padding = 6
     capsule_radius = 4
-    capsule_thickness = 0.667
+    capsule_thickness = 0.66700000000000004
     contact_shadow = true
     end = [
         "tmelik/system-monitor:summary",
@@ -136,7 +136,7 @@ panel_open_near_click = true
 panel_placement = "attached"
 
 [plugins]
-auto_update = "none"
+auto_update = "all"
 enabled = [
     "felipeartur/ai-usagebar",
     "noctalia/bitwarden",
@@ -450,7 +450,7 @@ hide_when_empty = true
 icon_color = "surface"
 label_source = "name"
 occupied_color = "#F4910A"
-pill_scale = 0.92
+pill_scale = 0.92000000000000004
 scale = 1.3
 show_all_outputs = true
 urgent_color = "#F20941"

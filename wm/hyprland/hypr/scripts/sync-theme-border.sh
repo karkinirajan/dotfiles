@@ -75,8 +75,12 @@ variables_path.write_text(var_text)
 # touches capsule_border, so it cannot retrigger its own watcher.
 settings = pathlib.Path(settings_path)
 s_text = settings.read_text()
+# Bar border matches the inactive window border exactly (same aa alpha);
+# capsule outlines sit a step below that at 99.
+new_bar = f'    border = "#{primary.lstrip("#")}aa"'
+s_new = re.sub(r'^    border\s*=\s*".*"$', new_bar, s_text, count=1, flags=re.M)
 new_capsule = f'    capsule_border = "#{primary.lstrip("#")}99"'
-s_new = re.sub(r'^\s*capsule_border\s*=.*$', new_capsule, s_text, count=1, flags=re.M)
+s_new = re.sub(r'^\s*capsule_border\s*=.*$', new_capsule, s_new, count=1, flags=re.M)
 if s_new != s_text:
     settings.write_text(s_new)
 
