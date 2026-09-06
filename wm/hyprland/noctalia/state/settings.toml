@@ -5,11 +5,11 @@ order = [ "kneeraazon" ]
 
     [bar.kneeraazon]
     border = "primary"
-    border_width = 1.0
+    border_width = 2.0
     capsule = true
     capsule_border = "shadow"
     capsule_fill = "primary"
-    capsule_opacity = 0.17999999999999999
+    capsule_opacity = 0.0
     capsule_padding = 6
     capsule_radius = 4
     capsule_thickness = 0.71999998763203621
@@ -33,7 +33,7 @@ order = [ "kneeraazon" ]
     font_weight = 600
     hover_highlight = false
     icon_color = "surface"
-    margin_edge = 4
+    margin_edge = 0
     margin_ends = 0
     margin_opposite_edge = 0
     padding = 8
@@ -255,7 +255,7 @@ shell_mode = "dark"
 source = "builtin"
 
     [theme.templates]
-    builtin_ids = [ "hyprland" ]
+    builtin_ids = []
 
 [wallpaper]
 directory = "/home/kneeraazon/.wallpapers"
