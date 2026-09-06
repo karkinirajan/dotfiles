@@ -63,7 +63,22 @@ var_text = variables_path.read_text()
 end_hex = (secondary or primary).lstrip('#')
 new_border = f"    col.active_border = rgba({primary.lstrip('#')}ee) rgba({end_hex}ee) 45deg"
 var_text = re.sub(r'^\s*col\.active_border\s*=.*$', new_border, var_text, flags=re.M)
+# Inactive: same gradient, one step dimmer (aa) rather than a different color.
+new_inactive = f"    col.inactive_border = rgba({primary.lstrip('#')}aa) rgba({end_hex}aa) 45deg"
+var_text = re.sub(r'^\s*col\.inactive_border\s*=.*$', new_inactive, var_text, flags=re.M)
 variables_path.write_text(var_text)
+
+# The topbar capsule outlines want the same accent as the bar's own border but
+# dimmer, and Noctalia's color *roles* carry no alpha — so the hex has to be
+# written in explicitly. Safe to write settings.toml here: theme-border-watch.sh
+# only re-runs this script when the [theme] block itself changes, and this only
+# touches capsule_border, so it cannot retrigger its own watcher.
+settings = pathlib.Path(settings_path)
+s_text = settings.read_text()
+new_capsule = f'    capsule_border = "#{primary.lstrip("#")}99"'
+s_new = re.sub(r'^\s*capsule_border\s*=.*$', new_capsule, s_text, count=1, flags=re.M)
+if s_new != s_text:
+    settings.write_text(s_new)
 
 print(f"synced: primary={primary} secondary={secondary}")
 PYEOF

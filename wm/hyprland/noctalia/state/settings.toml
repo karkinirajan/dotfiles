@@ -7,12 +7,12 @@ order = [ "kneeraazon" ]
     border = "primary"
     border_width = 2.0
     capsule = true
-    capsule_border = "shadow"
+    capsule_border = "#cba6f799"
     capsule_fill = "primary"
     capsule_opacity = 0.0
     capsule_padding = 6
     capsule_radius = 4
-    capsule_thickness = 0.71999998763203621
+    capsule_thickness = 0.5
     contact_shadow = true
     end = [
         "tmelik/system-monitor:summary",
@@ -24,6 +24,7 @@ order = [ "kneeraazon" ]
         "bluetooth",
         "brightness",
         "battery",
+        "nightlight",
         "control-center",
         "session",
         "active_window"
@@ -36,7 +37,7 @@ order = [ "kneeraazon" ]
     margin_edge = 0
     margin_ends = 0
     margin_opposite_edge = 0
-    padding = 8
+    padding = 4
     radius = 0
     scale = 1.1500000096857548
     start = [ "launcher", "wallpaper", "workspaces", "media" ]
@@ -126,6 +127,7 @@ widget_order = [ "lockscreen-login-box@FALLBACK", "lockscreen-login-box@DP-2" ]
 
 [nightlight]
 enabled = true
+temperature_night = 5500
 
 [plugin_settings."noctalia/bitwarden"]
 unlock_placement = "attached"
@@ -250,7 +252,7 @@ panel_anchor_bar = "kneeraazon"
 builtin = "Catppuccin"
 community_palette = "Catppuccin Frappe Blue"
 custom_palette = "CatppuccinMocha"
-mode = "dark"
+mode = "auto"
 shell_mode = "dark"
 source = "builtin"
 
@@ -266,19 +268,71 @@ transition_on_startup = true
     order = "alphabetical"
 
     [wallpaper.default]
-    path = "/home/kneeraazon/.wallpapers/wp8149239.jpg"
+    path = "/home/kneeraazon/.wallpapers/Wallpaper22.png"
 
     [wallpaper.last]
-    path = "/home/kneeraazon/.wallpapers/wp8149239.jpg"
+    path = "/home/kneeraazon/.wallpapers/Wallpaper22.png"
 
     [wallpaper.monitors.DP-2]
-    path = "/home/kneeraazon/.wallpapers/wp8149239.jpg"
+    path = "/home/kneeraazon/.wallpapers/Wallpaper22.png"
 
     [[wallpaper.favorite]]
     builtin_palette = "Catppuccin"
     palette_source = "builtin"
     path = "color:#6913D1"
     theme_mode = "dark"
+
+    [[wallpaper.favorite]]
+    path = "/home/kneeraazon/.wallpapers/thumb-1920-1356859.png"
+    theme_mode = "auto"
+
+    [[wallpaper.favorite]]
+    path = "/home/kneeraazon/.wallpapers/1356855.png"
+    theme_mode = "auto"
+
+    [[wallpaper.favorite]]
+    path = "/home/kneeraazon/.wallpapers/1360645.jpeg"
+    theme_mode = "auto"
+
+    [[wallpaper.favorite]]
+    path = "/home/kneeraazon/.wallpapers/wally.jpg"
+    theme_mode = "auto"
+
+    [[wallpaper.favorite]]
+    path = "/home/kneeraazon/.wallpapers/wp15585667.jpg"
+    theme_mode = "auto"
+
+    [[wallpaper.favorite]]
+    path = "/home/kneeraazon/.wallpapers/wp8149239.jpg"
+    theme_mode = "auto"
+
+    [[wallpaper.favorite]]
+    path = "/home/kneeraazon/.wallpapers/wp7616371.jpg"
+    theme_mode = "auto"
+
+    [[wallpaper.favorite]]
+    path = "/home/kneeraazon/.wallpapers/25755707.jpg"
+    theme_mode = "auto"
+
+    [[wallpaper.favorite]]
+    path = "/home/kneeraazon/.wallpapers/Wallpaper22.png"
+    theme_mode = "auto"
+
+    [[wallpaper.favorite]]
+    path = "/home/kneeraazon/.wallpapers/city-building-near-water-shot-from-bars-bridge.jpg"
+    theme_mode = "auto"
+
+    [[wallpaper.favorite]]
+    path = "/home/kneeraazon/.wallpapers/gruvbox_dypuzktoewk71.png"
+    theme_mode = "auto"
+
+    [[wallpaper.favorite]]
+    path = "/home/kneeraazon/.wallpapers/gruvbox_fkaz52mvm3l71.png"
+    theme_mode = "auto"
+
+    [[wallpaper.favorite]]
+    path = "/home/kneeraazon/.wallpapers/a_fog_over_water_with_a_black_background.jpg"
+    theme_mode = "auto"
 
 [widget.active_window]
 color = "on_surface_variant"
@@ -332,13 +386,7 @@ icon_color = "#00E5FF"
 show_label = false
 
 [widget.nightlight]
-glyph = "moon-off"
 icon_color = "tertiary"
-tooltip = "Night Light (on/off)"
-type = "custom_button"
-
-    [widget.nightlight.actions]
-    left = "exec /home/kneeraazon/.config/hypr/scripts/nightlight-toggle.sh"
 
 [widget.notifications]
 capsule = true
