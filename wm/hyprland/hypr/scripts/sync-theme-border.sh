@@ -14,7 +14,37 @@ COLORS_CONF="$HOME/.config/hypr/config/colors.conf"
 PALETTES_DIR="$HOME/.config/noctalia/palettes"
 
 python3 - "$SETTINGS" "$COLORS_CONF" "$PALETTES_DIR" <<'PYEOF'
-import sys, re, json, pathlib
+import sys, re, json, pathlib, os, tempfile, tomllib
+
+
+def write_atomic(path, text, validate_toml=False):
+    """Replace `path` in one atomic step: write a sibling temp file, fsync it,
+    then rename over the target.
+
+    A plain `path.write_text()` truncates the file first and fills it in
+    afterwards, leaving a window where anyone reading sees an empty or partial
+    file. Noctalia watches settings.toml and reloads on every write — if it
+    reads inside that window it finds nothing parseable, falls back to built-in
+    defaults, and then SAVES those defaults, destroying the real config. That
+    is not theoretical: it wiped the bar profile, every widget, the plugin list
+    and the shell settings on 2026-09-07 (noctalia.log: "no config files found,
+    using defaults" 1ms after this script's write). os.replace is atomic on the
+    same filesystem, so a reader sees either the old file or the new one.
+    """
+    if validate_toml:
+        tomllib.loads(text)          # never hand Noctalia something unparseable
+
+    path = pathlib.Path(path)
+    fd, tmp = tempfile.mkstemp(dir=str(path.parent), prefix=path.name + ".", suffix=".tmp")
+    try:
+        with os.fdopen(fd, "w") as fh:
+            fh.write(text)
+            fh.flush()
+            os.fsync(fh.fileno())
+        os.replace(tmp, path)
+    except BaseException:
+        pathlib.Path(tmp).unlink(missing_ok=True)
+        raise
 
 settings_path, colors_conf_path, palettes_dir = sys.argv[1], sys.argv[2], sys.argv[3]
 text = pathlib.Path(settings_path).read_text()
@@ -56,7 +86,7 @@ if secondary:
 # active window's synced accent color reads as the clear focal point.
 new_dim = f"$blue_dim  = rgba({primary.lstrip('#')}26)"
 conf_text = re.sub(r'^\$blue_dim\s*=.*$', new_dim, conf_text, flags=re.M)
-colors_conf.write_text(conf_text)
+write_atomic(colors_conf, conf_text)
 
 variables_path = pathlib.Path(colors_conf_path).parent / "variables.conf"
 var_text = variables_path.read_text()
@@ -66,7 +96,7 @@ var_text = re.sub(r'^\s*col\.active_border\s*=.*$', new_border, var_text, flags=
 # Inactive: same gradient, one step dimmer (aa) rather than a different color.
 new_inactive = f"    col.inactive_border = rgba({primary.lstrip('#')}aa) rgba({end_hex}aa) 45deg"
 var_text = re.sub(r'^\s*col\.inactive_border\s*=.*$', new_inactive, var_text, flags=re.M)
-variables_path.write_text(var_text)
+write_atomic(variables_path, var_text)
 
 # The topbar capsule outlines want the same accent as the bar's own border but
 # dimmer, and Noctalia's color *roles* carry no alpha — so the hex has to be
@@ -82,7 +112,7 @@ s_new = re.sub(r'^    border\s*=\s*".*"$', new_bar, s_text, count=1, flags=re.M)
 new_capsule = f'    capsule_border = "#{primary.lstrip("#")}99"'
 s_new = re.sub(r'^\s*capsule_border\s*=.*$', new_capsule, s_new, count=1, flags=re.M)
 if s_new != s_text:
-    settings.write_text(s_new)
+    write_atomic(settings, s_new, validate_toml=True)
 
 print(f"synced: primary={primary} secondary={secondary}")
 PYEOF

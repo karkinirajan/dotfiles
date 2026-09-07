@@ -37,7 +37,7 @@ order = [ "kneeraazon" ]
         "felipeartur/ai-usagebar:bar",
         "session"
     ]
-    font_family = "JetBrains Mono"
+    font_family = "DejaVu Sans"
     font_weight = 600
     icon_color = "surface"
     margin_ends = 0
@@ -268,7 +268,7 @@ enabled = [
 
 [shell]
 corner_radius_scale = 0.5000000074505806
-font_family = "JetBrains Mono Medium"
+font_family = "DejaVu Sans"
 panel_anchor_bar = "kneeraazon"
 
     [shell.launcher]
@@ -385,7 +385,7 @@ icon_color = "#FFFFFF"
 capsule = true
 capsule_padding = 12
 color = "#FFFFFF"
-font_family = "JetBrains Maple Mono"
+font_family = "DejaVu Sans"
 font_scale = 1.0
 format = "{:%a, %d %b | %H:%M:%S}"
 
@@ -461,7 +461,7 @@ capsule_fill = "primary"
 capsule_radius = 4
 compact_network = false
 disk_display_mode = "available"
-font_family = "FiraCode Nerd Font Mono"
+font_family = "DejaVu Sans"
 font_scale = 1.0
 font_weight = 400
 hide_unavailable = true
