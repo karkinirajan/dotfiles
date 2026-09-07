@@ -5,11 +5,8 @@ order = [ "kneeraazon" ]
 
     [bar.kneeraazon]
     widget_spacing = 16
-    margin_opposite_edge = 0
-    margin_edge = 0
-    hover_highlight = false
     font_scale = 0.92999998666346073
-    contact_shadow = true
+    capsule_padding = 6
     border = "#cba6f7aa"
     border_width = 2.0
     capsule = true
@@ -17,9 +14,9 @@ order = [ "kneeraazon" ]
     capsule_fill = "primary"
     capsule_foreground = "#FFFFFF"
     capsule_opacity = 0.0
-    capsule_padding = 6
     capsule_radius = 4
     capsule_thickness = 0.66700000000000004
+    contact_shadow = true
     end = [
         "tmelik/system-monitor:summary",
         "notifications",
@@ -39,8 +36,11 @@ order = [ "kneeraazon" ]
     ]
     font_family = "DejaVu Sans"
     font_weight = 600
+    hover_highlight = false
     icon_color = "surface"
+    margin_edge = 0
     margin_ends = 0
+    margin_opposite_edge = 0
     padding = 4
     radius = 0
     radius_bottom_left = 0
@@ -298,13 +298,13 @@ directory = "/home/kneeraazon/.wallpapers"
 transition_on_startup = true
 
     [wallpaper.default]
-    path = "/home/kneeraazon/.wallpapers/wallpaperflare.com_wallpaper.jpg"
+    path = "/home/kneeraazon/.wallpapers/1356859.png"
 
     [wallpaper.last]
-    path = "/home/kneeraazon/.wallpapers/wallpaperflare.com_wallpaper.jpg"
+    path = "/home/kneeraazon/.wallpapers/1356859.png"
 
     [wallpaper.monitors.DP-2]
-    path = "/home/kneeraazon/.wallpapers/wallpaperflare.com_wallpaper.jpg"
+    path = "/home/kneeraazon/.wallpapers/1356859.png"
 
     [[wallpaper.favorite]]
     builtin_palette = "Catppuccin"
@@ -419,12 +419,12 @@ title_scroll = "always"
 
 [widget.network]
 capsule = true
-icon_color = "#00E5FF"
+icon_color = "#0EE8DA"
 show_label = false
 
 [widget.nightlight]
 glyph = "moon-off"
-icon_color = "tertiary"
+icon_color = "#FF6F00"
 tooltip = "Night Light (on/off)"
 type = "custom_button"
 
@@ -436,11 +436,11 @@ icon_color = "#00E5FF"
 
 [widget.notifications]
 capsule = true
-icon_color = "#F66409"
+icon_color = "#FF4300"
 
 [widget.screen-time-btn]
 glyph = "hourglass"
-icon_color = "secondary"
+icon_color = "#EF00C4"
 tooltip = "Screen Time"
 type = "custom_button"
 
@@ -479,7 +479,7 @@ capsule = true
 
 [widget.volume]
 capsule = true
-icon_color = "#FF4C00"
+icon_color = "#FFFFFF"
 show_label = false
 
 [widget.wallpaper]
@@ -508,3 +508,4 @@ scale = 1.2000000000000002
 scroll_repeat = "steps"
 show_all_outputs = true
 urgent_color = "#731508"
+
