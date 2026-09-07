@@ -11,6 +11,7 @@
 #    ./install.sh --dry-run    show what would happen, change nothing
 #    ./install.sh status       report ok / drift / missing per entry
 #    ./install.sh pull         copy seeded files back live -> repo (see below)
+#    ./install.sh restore      push seeded files repo -> live, overwriting
 #    ./install.sh --force      replace a live symlink pointing somewhere else
 #
 #  Safe to re-run: already-correct links are left untouched. Any existing real
@@ -18,8 +19,22 @@
 #
 #  `link` entries can never drift — both paths are the same inode. `seed`
 #  entries can: the owning program rewrites the live file and the repo copy
-#  silently goes stale. `status` reports that drift and `pull` resolves it by
-#  copying live -> repo, so the change lands in git as a reviewable diff.
+#  silently goes stale. `status` reports that drift, and the two directions are:
+#
+#    pull     live -> repo   capture what you changed, review it as a git diff
+#    restore  repo -> live   put the repo's version back, overwriting live
+#
+#  `restore` is the recovery path when a program resets its own config. It
+#  backs the live file up first. To go back to an OLDER state, check the file
+#  out of git first, restore, then undo the checkout:
+#
+#    git checkout <commit> -- wm/hyprland/noctalia/state/settings.toml
+#    ./install.sh restore
+#    git checkout HEAD -- wm/hyprland/noctalia/state/settings.toml
+#
+#  For Noctalia specifically use wm/hyprland/hypr/scripts/noctalia-restore.sh,
+#  which does the same thing but stops the shell first — restoring underneath a
+#  running Noctalia lets it write its in-memory state back over the file.
 # =============================================================================
 set -euo pipefail
 
@@ -37,6 +52,7 @@ for arg in "$@"; do
     --force|-f)   FORCE=1 ;;
     status)       MODE="status" ;;
     pull)         MODE="pull" ;;
+    restore)      MODE="restore" ;;
     -h|--help)    awk 'NR>2{if (/^# ={10,}/) exit; print}' "${BASH_SOURCE[0]}" | sed 's/^# \{0,1\}//'; exit 0 ;;
     *) echo "unknown argument: $arg (try --help)" >&2; exit 2 ;;
   esac
@@ -45,7 +61,7 @@ done
 [ -f "$MANIFEST" ] || { echo "missing manifest: $MANIFEST" >&2; exit 1; }
 
 # Counters
-n_ok=0; n_linked=0; n_seeded=0; n_backed=0; n_skip=0; n_drift=0; n_missing=0; n_err=0; n_pulled=0
+n_ok=0; n_linked=0; n_seeded=0; n_backed=0; n_skip=0; n_drift=0; n_missing=0; n_err=0; n_pulled=0; n_restored=0
 
 c_ok=$'\033[32m'; c_warn=$'\033[33m'; c_err=$'\033[31m'; c_dim=$'\033[2m'; c_off=$'\033[0m'
 [ -t 1 ] || { c_ok=""; c_warn=""; c_err=""; c_dim=""; c_off=""; }
@@ -58,7 +74,8 @@ resolve() { ( cd "$(dirname "$1")" 2>/dev/null && readlink -f "$(basename "$1")"
 do_link() {
   local src="$1" dst="$2"
 
-  # A link entry is one file under two names — there is nothing to pull.
+  # A link entry is one file under two names — there is nothing to pull, and
+  # nothing to restore either; re-linking is all "restore" can mean here.
   if [ "$MODE" = pull ]; then return; fi
 
   if [ ! -e "$src" ]; then
@@ -137,6 +154,17 @@ do_seed() {
       n_pulled=$((n_pulled+1)); return
     fi
 
+    # restore: the opposite direction — the repo wins, live is overwritten.
+    if [ "$MODE" = restore ]; then
+      if [ "$DRY_RUN" -eq 1 ]; then
+        say PLAN "$c_dim" "$dst" "would restore ${src#$REPO_DIR/} -> live"; n_restored=$((n_restored+1)); return
+      fi
+      mv "$dst" "$dst.bak-$TS"; n_backed=$((n_backed+1))
+      cp -a "$src" "$dst"
+      say RESTORE "$c_ok" "$dst" "<- ${src#$REPO_DIR/} (old saved as .bak-$TS)"
+      n_restored=$((n_restored+1)); return
+    fi
+
     # install/status: never clobber the live file the program owns.
     say DRIFT "$c_warn" "$dst" "live differs from repo copy (./install.sh pull)"
     n_drift=$((n_drift+1)); return
@@ -162,6 +190,7 @@ do_seed() {
 case "$MODE" in
   status) echo "status — $REPO_DIR" ;;
   pull)   echo "pull (live -> repo, seeded entries only) — $REPO_DIR" ;;
+  restore) echo "restore (repo -> live, overwriting) — $REPO_DIR" ;;
   *) [ "$DRY_RUN" -eq 1 ] && echo "dry run — nothing will change" || echo "installing — $REPO_DIR" ;;
 esac
 echo
@@ -184,6 +213,10 @@ echo
 if [ "$MODE" = pull ]; then
   printf 'pulled %d   already-ok %d   missing %d   error %d\n' "$n_pulled" "$n_ok" "$n_missing" "$n_err"
   [ "$n_pulled" -gt 0 ] && echo "review the changes with: git diff"
+elif [ "$MODE" = restore ]; then
+  printf 'restored %d   already-ok %d   linked %d   backed-up %d   error %d\n' \
+    "$n_restored" "$n_ok" "$n_linked" "$n_backed" "$n_err"
+  [ "$n_restored" -gt 0 ] && echo "restart the owning program so it reloads from disk"
 elif [ "$MODE" = status ]; then
   printf 'ok %d   drift %d   missing %d   error %d\n' "$n_ok" "$n_drift" "$n_missing" "$n_err"
   [ $((n_drift + n_missing + n_err)) -eq 0 ] && echo "everything is linked and in sync." \

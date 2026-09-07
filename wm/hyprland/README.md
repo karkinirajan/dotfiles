@@ -106,6 +106,15 @@ hyprland/
 │       │                              #   item border color.
 │       ├── nightlight-theme-sync.sh    # Flips terminal/editor colour schemes to
 │       │                              #   match the night light state.
+│       ├── noctalia-restore.sh         # Puts settings.toml back from the repo,
+│       │                              #   or from any commit/tag. Stops Noctalia
+│       │                              #   first (a restore under a running
+│       │                              #   instance is overwritten from memory),
+│       │                              #   validates the TOML and refuses a config
+│       │                              #   whose panel_anchor_bar names no bar,
+│       │                              #   writes atomically, and restarts via
+│       │                              #   hyprctl so the cgroup stays right.
+│       │                              #   `--list` shows the restore points.
 │       └── theme-border-watch.sh      # inotify-watches settings.toml's [theme]
 │                                      #   block and re-runs sync-theme-border.sh
 │                                      #   whenever it changes — autostarted, keeps
@@ -239,6 +248,11 @@ Restart Hyprland (or reboot) to fix it.
   hyprsunset`) as a plain process instead — on = launch it, off = kill it.
   `[nightlight] enabled = false` is set permanently in settings.toml so
   Noctalia's own schedule can never interfere.
+- **Recovering a reset config is one command:**
+  `~/.config/hypr/scripts/noctalia-restore.sh` (add a commit or tag to go
+  further back, `--list` to see the options). Do not just `cp` the file into
+  place — Noctalia holds the config in memory and writes it back out, so a
+  restore under a running instance is undone within seconds.
 - **Bar styling can be reset by a Noctalia upgrade, silently.** The 5.0.1
   upgrade (`config_version` 14) rewrote `settings.toml` and put the whole
   `[bar.kneeraazon]` block back to stock: the border hex values, `border_width`,

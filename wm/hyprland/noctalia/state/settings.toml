@@ -4,9 +4,6 @@ config_version = 14
 order = [ "kneeraazon" ]
 
     [bar.kneeraazon]
-    widget_spacing = 16
-    font_scale = 0.92999998666346073
-    capsule_padding = 6
     border = "#cba6f7aa"
     border_width = 2.0
     capsule = true
@@ -14,8 +11,9 @@ order = [ "kneeraazon" ]
     capsule_fill = "primary"
     capsule_foreground = "#FFFFFF"
     capsule_opacity = 0.0
-    capsule_radius = 4
-    capsule_thickness = 0.66700000000000004
+    capsule_padding = 8.0
+    capsule_radius = 2
+    capsule_thickness = 0.65999998897314072
     contact_shadow = true
     end = [
         "tmelik/system-monitor:summary",
@@ -35,7 +33,7 @@ order = [ "kneeraazon" ]
         "session"
     ]
     font_family = "DejaVu Sans"
-    font_weight = 600
+    font_weight = 400
     hover_highlight = false
     icon_color = "surface"
     margin_edge = 0
@@ -47,11 +45,10 @@ order = [ "kneeraazon" ]
     radius_bottom_right = 0
     radius_top_left = 0
     radius_top_right = 0
-    scale = 1.1500000096857548
     shadow = false
     show_on_workspace_switch = false
     start = [ "workspaces", "active_window", "media" ]
-    thickness = 42
+    thickness = 46
 
 [control_center]
 width = 900
@@ -270,6 +267,9 @@ enabled = [
 corner_radius_scale = 0.5000000074505806
 font_family = "DejaVu Sans"
 panel_anchor_bar = "kneeraazon"
+
+    [shell.animation]
+    speed = 0.5000000074505806
 
     [shell.launcher]
     app_grid = true
@@ -508,4 +508,3 @@ scale = 1.2000000000000002
 scroll_repeat = "steps"
 show_all_outputs = true
 urgent_color = "#731508"
-

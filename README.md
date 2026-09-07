@@ -87,13 +87,34 @@ thing most likely to bite:
 | Can it drift? | **No** — one file, two names | **Yes** — two separate files |
 | Used for | configs only you edit | files a program rewrites itself |
 
-Seeded files need a deliberate step to get back into git. That is what `pull`
-is for:
+Seeded files move in both directions, and each needs a deliberate step:
 
 ```bash
 ./install.sh status        # DRIFT on a seeded file = live has moved ahead
-./install.sh pull          # copy live → repo
-git diff                   # review before committing
+./install.sh pull          # live → repo: capture what you changed
+git diff                   # review, then commit
+
+./install.sh restore       # repo → live: put the tracked version back
+```
+
+`restore` is the recovery path when a program resets its own config. It backs
+up the live file first. To return to an *older* state, check that version out
+of git, restore it, then drop the checkout:
+
+```bash
+git checkout <commit> -- wm/hyprland/noctalia/state/settings.toml
+./install.sh restore
+git checkout HEAD -- wm/hyprland/noctalia/state/settings.toml
+```
+
+**For Noctalia, use `wm/hyprland/hypr/scripts/noctalia-restore.sh` instead** —
+it does the same job but stops the shell first, because a config restored
+underneath a running Noctalia just gets overwritten from memory:
+
+```bash
+~/.config/hypr/scripts/noctalia-restore.sh              # the tracked version
+~/.config/hypr/scripts/noctalia-restore.sh HEAD~3       # three commits back
+~/.config/hypr/scripts/noctalia-restore.sh --list       # available restore points
 ```
 
 This matters most for `~/.local/state/noctalia/settings.toml`. Noctalia
