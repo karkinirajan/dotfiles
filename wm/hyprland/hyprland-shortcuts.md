@@ -106,7 +106,9 @@ Also installed and loaded, but with no dedicated keybind by design:
 
 | Key | Action |
 |---|---|
-| Volume Up/Down | Adjust volume ±5% |
+| Volume Up/Down | Adjust volume ±5%, and it keeps going past 100% up to 150% |
+| SHIFT + Volume Up | Jump straight to the boosted maximum (150%) |
+| SHIFT + Volume Down | Drop back to a plain 100%, no boost |
 | Mute | Toggle mute |
 | Play/Pause, Next, Prev | Media playback control |
 | Brightness Up/Down | Adjust screen brightness ±5% |
