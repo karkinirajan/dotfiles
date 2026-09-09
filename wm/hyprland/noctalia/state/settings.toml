@@ -1,5 +1,9 @@
 config_version = 14
 
+[audio]
+enable_overdrive = true
+enable_sounds = true
+
 [bar]
 order = [ "kneeraazon" ]
 
@@ -12,11 +16,13 @@ order = [ "kneeraazon" ]
     capsule_foreground = "#FFFFFF"
     capsule_opacity = 0.0
     capsule_padding = 8.0
-    capsule_radius = 2
+    capsule_radius = 0
     capsule_thickness = 0.65999998897314072
+    center = [ "clock", "tmelik/system-monitor:summary" ]
+    color = "primary"
+    concave_edge_corners = false
     contact_shadow = true
     end = [
-        "tmelik/system-monitor:summary",
         "notifications",
         "clipboard",
         "volume",
@@ -34,8 +40,8 @@ order = [ "kneeraazon" ]
     ]
     font_family = "DejaVu Sans"
     font_weight = 400
-    hover_highlight = false
-    icon_color = "surface"
+    icon_color = "secondary"
+    layer = "overlay"
     margin_edge = 0
     margin_ends = 0
     margin_opposite_edge = 0
@@ -45,10 +51,14 @@ order = [ "kneeraazon" ]
     radius_bottom_right = 0
     radius_top_left = 0
     radius_top_right = 0
-    shadow = false
+    scale = 1.1000000089406967
     show_on_workspace_switch = false
     start = [ "workspaces", "active_window", "media" ]
-    thickness = 46
+    thickness = 42
+    widget_spacing = 10
+
+[calendar]
+enabled = true
 
 [control_center]
 width = 900
@@ -88,8 +98,14 @@ widget_order = []
 [location]
 address = "Kathmandu, Nepal"
 
+[lockscreen]
+allow_empty_password = true
+blur_intensity = 0.11999999731779099
+tint_intensity = 0.0
+wallpaper = "/home/kneeraazon/.wallpapers/Wallpaper22.png"
+
 [lockscreen_widgets]
-enabled = false
+enabled = true
 schema_version = 2
 widget_order = [ "lockscreen-login-box@FALLBACK", "lockscreen-login-box@DP-2" ]
 
@@ -156,9 +172,17 @@ widget_order = [ "lockscreen-login-box@FALLBACK", "lockscreen-login-box@DP-2" ]
 enabled = false
 temperature_night = 5500
 
+[notification]
+layer = "overlay"
+max_visible = 3
+offset_x = 30
+offset_y = 10
+position = "top_center"
+scale = 1.6000000163912773
+
 [plugin_settings."nightwatch75/todo"]
 panel_open_near_click = false
-panel_placement = "floating"
+panel_position = "center"
 
 [plugin_settings."noctalia/bitwarden"]
 unlock_placement = "attached"
@@ -218,7 +242,6 @@ enabled = [
     "fel/ocr",
     "neyfua/obs-integration",
     "tordex/nvtop",
-    "goodroot/noctwhspr",
     "yuuto/arch-updater",
     "0lucasmatheus/awwwall",
     "blackbartblues/audio-switcher",
@@ -264,29 +287,53 @@ enabled = [
     name = "community"
 
 [shell]
-corner_radius_scale = 0.5000000074505806
 font_family = "DejaVu Sans"
 panel_anchor_bar = "kneeraazon"
-
-    [shell.animation]
-    speed = 0.5000000074505806
+screen_time_enabled = true
+settings_window_translucent = true
 
     [shell.launcher]
     app_grid = true
     compact = true
+    pinned = [
+        "google-chrome",
+        "Mailspring",
+        "kitty",
+        "spotify",
+        "antigravity",
+        "code",
+        "dev.zed.Zed",
+        "org.manjaro.pamac.manager",
+        "slack",
+        "com.stremio.stremio",
+        "brave-browser",
+        "zen",
+        "firefox-developer-edition",
+        "discord",
+        "io.dbeaver.DBeaver",
+        "chrome-gfgbgjphjkdhefmnmbhogcpckgpapbag-Default",
+        "Zoom",
+        "chrome-hnpfjngllnobngcgfapefoaidbinmjnm-Default",
+        "chrome-fpmplnejjpjicdicamiacldmgafjlkki-Default"
+    ]
     show_app_actions = true
 
     [shell.panel]
-    clipboard_placement = "attached"
+    borders = false
+    clipboard_position = "top_center"
+    control_center_placement = "floating"
+    control_center_position = "top_center"
     floating_layer = "top"
+    list_item_background = true
     polkit_placement = "attached"
-    transparency_mode = "glass"
+
+    [shell.screenshot]
+    directory = "/home/kneeraazon/Pictures/Screenshots"
 
 [theme]
-builtin = "Ayu"
+builtin = "Catppuccin"
 community_palette = "Catppuccin Macchiato Green"
 custom_palette = "CatppuccinMocha"
-shell_mode = "dark"
 source = "custom"
 wallpaper_scheme = "m3-content"
 
@@ -298,13 +345,13 @@ directory = "/home/kneeraazon/.wallpapers"
 transition_on_startup = true
 
     [wallpaper.default]
-    path = "/home/kneeraazon/.wallpapers/1356859.png"
+    path = "/home/kneeraazon/.wallpapers/razer_hud_3840x2160.png"
 
     [wallpaper.last]
-    path = "/home/kneeraazon/.wallpapers/1356859.png"
+    path = "/home/kneeraazon/.wallpapers/gruvbox_cool-robo-station.jpg"
 
     [wallpaper.monitors.DP-2]
-    path = "/home/kneeraazon/.wallpapers/1356859.png"
+    path = "/home/kneeraazon/.wallpapers/gruvbox_cool-robo-station.jpg"
 
     [[wallpaper.favorite]]
     builtin_palette = "Catppuccin"
@@ -364,9 +411,14 @@ transition_on_startup = true
     path = "/home/kneeraazon/.wallpapers/a_fog_over_water_with_a_black_background.jpg"
     theme_mode = "auto"
 
+    [[wallpaper.favorite]]
+    path = "/home/kneeraazon/.wallpapers/wp3286613.jpg"
+    theme_mode = "auto"
+
 [widget.active_window]
 capsule = true
 capsule_opacity = 0.0
+capsule_radius = 2
 color = "#FFFFFF"
 font_weight = 400
 title_scroll = "on_hover"
@@ -379,7 +431,7 @@ enabled = false
 
 [widget.clipboard]
 capsule = true
-icon_color = "#FFFFFF"
+capsule_radius = 0
 
 [widget.clock]
 capsule = true
@@ -419,12 +471,12 @@ title_scroll = "always"
 
 [widget.network]
 capsule = true
-icon_color = "#0EE8DA"
+icon_color = "#28B8AF"
 show_label = false
 
 [widget.nightlight]
 glyph = "moon-off"
-icon_color = "#FF6F00"
+icon_color = "#C14E0B"
 tooltip = "Night Light (on/off)"
 type = "custom_button"
 
@@ -432,15 +484,17 @@ type = "custom_button"
     left = "exec /home/kneeraazon/.config/hypr/scripts/nightlight-toggle.sh"
 
 [widget."nightwatch75/todo:todo"]
+enabled = false
 icon_color = "#00E5FF"
 
 [widget.notifications]
 capsule = true
-icon_color = "#FF4300"
+icon_color = "#F89907"
 
 [widget.screen-time-btn]
-glyph = "hourglass"
-icon_color = "#EF00C4"
+capsule = true
+glyph = "cpu-usage"
+icon_color = "#00B3FF"
 tooltip = "Screen Time"
 type = "custom_button"
 
@@ -450,7 +504,7 @@ type = "custom_button"
 [widget.session]
 capsule = true
 capsule_padding = 10
-icon_color = "#F90540"
+icon_color = "#FF0000"
 
 [widget.settings]
 icon_color = "secondary"
@@ -486,7 +540,7 @@ show_label = false
 enabled = false
 
 [widget.weather]
-icon_color = "secondary"
+icon_color = "primary"
 show_condition = false
 show_temperature = true
 
@@ -502,7 +556,6 @@ font_scale = 1.1200000000000001
 font_weight = 500
 hide_when_empty = true
 inactive_pill_size = 1.2
-label_source = "name"
 occupied_color = "#00F1FF"
 scale = 1.2000000000000002
 scroll_repeat = "steps"
