@@ -124,5 +124,10 @@
       "routine under /home/kneeraazon/nestpane/ prefix: npx, npm, git, and package.json script runs (build, dev, lint, zip) are routine project tooling"
     ]
   },
-  "voiceEnabled": true
+  "voiceEnabled": true,
+  "outputStyle": "Concise",
+  "sandbox": {
+    "enabled": false,
+    "allowUnsandboxedCommands": true
+  }
 }
