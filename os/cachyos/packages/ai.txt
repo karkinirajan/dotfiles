@@ -1,0 +1,20 @@
+# Local LLM inference (Ollama + ROCm)
+#
+# ollama-rocm is the one that matters: plain `ollama` is a CPU-only build,
+# and installing it alone leaves an AMD card completely unused. It pulls the
+# ROCm stack below as dependencies.
+#
+# Do NOT use the upstream install.sh — see tools/ollama/README.md for why
+# (it shadows the packaged binary and ships 7.4GB of CUDA libs useless here).
+#
+#   sudo pacman -S --needed $(grep -v '^#' os/cachyos/packages/ai.txt | awk '{print $1}')
+# ─────────────────────────────────────────────────────────────────────────────
+ollama
+ollama-rocm
+rocm-core
+hip-runtime-amd
+hsa-rocr
+rocblas
+rocsolver
+hipblas
+rocminfo

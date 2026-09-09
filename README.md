@@ -36,6 +36,8 @@ dotfiles/
 ├── editors/                # vscode/, zed/, sublime/
 │
 ├── tools/
+│   ├── ollama/             # local LLM inference — ROCm on an unsupported gfx1031
+│   │                       #   card, benchmark-tuned systemd drop-ins, bench.py
 │   ├── claude/             # Claude Code global config (agents, commands, skills)
 │   ├── focus/              # dnsmasq + nftables site blocker  → see focus README
 │   └── mise/
@@ -44,7 +46,8 @@ dotfiles/
     ├── setup.md            # full system setup walkthrough
     └── packages/
         ├── desktop.txt     # compositor, shell, and the helpers configs call
-        └── fonts.txt       # every font package, with what needs which
+        ├── fonts.txt       # every font package, with what needs which
+        └── ai.txt          # Ollama + the ROCm stack for GPU inference
 ```
 
 ---
@@ -166,6 +169,7 @@ one prompt is ever active — switch at runtime with `theme-starship` /
 | Path | What |
 |------|------|
 | `tools/claude/` | Claude Code global config — agents, commands, skills, settings |
+| `tools/ollama/` | Local LLM inference — GPU-accelerated on an officially unsupported card, tuned by benchmark |
 | `tools/focus/` | OS-level site blocking (dnsmasq + nftables), schedule timers, lock mode |
 | `os/cachyos/setup.md` | AMD GPU (ROCm), PyTorch/TF, LangChain, Ollama, K8s, Terraform |
 
