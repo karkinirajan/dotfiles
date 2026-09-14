@@ -9,18 +9,14 @@ order = [ "kneeraazon" ]
 
     [bar.kneeraazon]
     border = "#cba6f7aa"
-    border_width = 2.0
+    border_width = 1.0
     capsule = true
     capsule_border = "#cba6f799"
     capsule_fill = "primary"
-    capsule_foreground = "#FFFFFF"
     capsule_opacity = 0.0
-    capsule_padding = 8.0
-    capsule_radius = 0
-    capsule_thickness = 0.65999998897314072
-    center = [ "clock", "tmelik/system-monitor:summary" ]
-    color = "primary"
-    concave_edge_corners = false
+    capsule_padding = 10.0
+    capsule_radius = 4
+    capsule_thickness = 0.69999998807907104
     contact_shadow = true
     end = [
         "notifications",
@@ -36,32 +32,28 @@ order = [ "kneeraazon" ]
         "battery",
         "tray",
         "felipeartur/ai-usagebar:bar",
+        "tmelik/system-monitor:summary",
         "session"
     ]
     font_family = "DejaVu Sans"
-    font_weight = 400
-    icon_color = "secondary"
-    layer = "overlay"
-    margin_edge = 0
+    font_weight = 700
     margin_ends = 0
-    margin_opposite_edge = 0
-    padding = 4
+    padding = 8
+    panel_overlap = 0
     radius = 0
     radius_bottom_left = 0
     radius_bottom_right = 0
     radius_top_left = 0
     radius_top_right = 0
-    scale = 1.1000000089406967
-    show_on_workspace_switch = false
     start = [ "workspaces", "active_window", "media" ]
     thickness = 42
-    widget_spacing = 10
+    widget_spacing = 8
 
 [calendar]
 enabled = true
 
 [control_center]
-width = 900
+width = 800
 
     [control_center.calendar]
     show_events_card = false
@@ -172,14 +164,6 @@ widget_order = [ "lockscreen-login-box@FALLBACK", "lockscreen-login-box@DP-2" ]
 enabled = false
 temperature_night = 5500
 
-[notification]
-layer = "overlay"
-max_visible = 3
-offset_x = 30
-offset_y = 10
-position = "top_center"
-scale = 1.6000000163912773
-
 [plugin_settings."nightwatch75/todo"]
 panel_open_near_click = false
 panel_position = "center"
@@ -195,84 +179,9 @@ panel_placement = "attached"
 auto_update = "all"
 enabled = [
     "noctalia/bitwarden",
-    "noctalia/wallpaper_depth",
     "noctalia/notes",
-    "cleboost/zed-provider",
-    "gustav0ar/wireview-pro-ii",
-    "umedbazarov/webapp-maker",
-    "notfinaldev/web-search",
-    "yocraft/web-launcher",
-    "kavya-nama/wallpaper-switcher",
-    "noctalia/wallhaven",
-    "noctalia/mpvpaper",
-    "neuro/upbeat",
-    "noctalia/umbriel-companion",
-    "aristides/udiskie",
-    "noctalia/translator",
-    "nightwatch75/topgrade-wrapper",
-    "noctalia/timer",
-    "tordex/system-updater",
-    "jamesfeeder/special-workspaces",
     "tmelik/system-monitor",
-    "arrifat346afs/systempulse",
-    "redxtech/super-productivity",
-    "cleboost/ssh-launcher",
-    "notfinaldev/spotify",
-    "joshuaslate/shelly",
-    "alexander/screen-toolkit",
-    "whyoolw/sharednd",
-    "weinguyen/shell-command",
-    "nilsonlinux/rss-notifier",
-    "rylos/remmina",
-    "yocraft/qrcode",
-    "harveywuk/pulsar-mouse",
-    "weinguyen/procmon",
-    "radimous/prismlauncher-instances",
-    "rxtsel/portctl",
-    "thepunkoff/pomodoro",
-    "decksters-lab/palette-creator",
-    "davemhammer/obsidian",
-    "emrtnn/pass",
-    "icefish/phone-connect",
-    "icefish/phone-operate",
-    "davemhammer/opnsense",
-    "wy3z/opencodex-bar",
-    "weinguyen/opencode-companion",
-    "teagar/omniroute-quota",
-    "fel/ocr",
-    "neyfua/obs-integration",
-    "tordex/nvtop",
-    "yuuto/arch-updater",
-    "0lucasmatheus/awwwall",
-    "blackbartblues/audio-switcher",
-    "yugaaank/better-clock",
-    "nirvam/bitdjinn",
-    "noctalia/bongocat",
-    "dunarand/bookmarks",
-    "dragged/cider",
-    "dotnetrob/cat",
-    "kjvdven/case-convert",
-    "yuuto/calculator",
-    "lowcache/claude-companion",
-    "levi/warp",
-    "salemsayed/codexbar-meter",
-    "oldirtty/color_picker",
-    "yocraft/desktop-launcher",
-    "raycursive/discord-voice",
-    "nightwatch75/dns-switcher",
-    "liamwh/emoji-picker",
-    "apex077/eyecare",
-    "nightwatch75/file-search",
-    "tphilippot/git_companion",
-    "alexmnrs/github-activity",
-    "raycursive/github-prs",
-    "maddingo/hypr-layout-switcher",
-    "pozzoo/hassio",
-    "noctalia/world_clock",
-    "noctalia/screen_recorder",
-    "noctalia/kaomoji",
     "nightwatch75/todo",
-    "weinguyen/9router-control",
     "felipeartur/ai-usagebar"
 ]
 
@@ -287,6 +196,7 @@ enabled = [
     name = "community"
 
 [shell]
+corner_radius_scale = 0.5000000074505806
 font_family = "DejaVu Sans"
 panel_anchor_bar = "kneeraazon"
 screen_time_enabled = true
@@ -319,39 +229,92 @@ settings_window_translucent = true
     show_app_actions = true
 
     [shell.panel]
-    borders = false
     clipboard_position = "top_center"
-    control_center_placement = "floating"
     control_center_position = "top_center"
     floating_layer = "top"
-    list_item_background = true
+    floating_offset = 0
     polkit_placement = "attached"
+    shadow = false
 
     [shell.screenshot]
     directory = "/home/kneeraazon/Pictures/Screenshots"
 
+    [shell.shadow]
+    alpha = 0.99999997764825821
+
 [theme]
-builtin = "Catppuccin"
+builtin = "Kanagawa"
 community_palette = "Catppuccin Macchiato Green"
 custom_palette = "CatppuccinMocha"
+mode = "auto"
+shell_mode = "dark"
 source = "custom"
 wallpaper_scheme = "m3-content"
 
     [theme.templates]
-    builtin_ids = []
+    builtin_ids = [
+        "alacritty",
+        "btop",
+        "cava",
+        "emacs",
+        "foot",
+        "gtk3",
+        "gtk4",
+        "ghostty",
+        "helix",
+        "hyprland",
+        "kcolorscheme",
+        "kitty",
+        "labwc",
+        "mango",
+        "qt",
+        "scroll",
+        "starship",
+        "sway",
+        "umbriel",
+        "wezterm"
+    ]
+    community_ids = [
+        "antigravity",
+        "claude-code",
+        "opencode",
+        "brave",
+        "zen-browser",
+        "discord",
+        "halloy",
+        "darktable",
+        "neovim",
+        "obsidian",
+        "vscode",
+        "zed",
+        "walker",
+        "fastfetch",
+        "mailspring",
+        "papirus-icons",
+        "fzf",
+        "glow",
+        "konsole",
+        "tmux"
+    ]
 
 [wallpaper]
 directory = "/home/kneeraazon/.wallpapers"
-transition_on_startup = true
+fill_color = "hover"
+
+    [wallpaper.automation]
+    recursive = false
 
     [wallpaper.default]
-    path = "/home/kneeraazon/.wallpapers/razer_hud_3840x2160.png"
+    path = "/home/kneeraazon/.wallpapers/gruvbox_buildings.png"
 
     [wallpaper.last]
-    path = "/home/kneeraazon/.wallpapers/gruvbox_cool-robo-station.jpg"
+    path = "/home/kneeraazon/.wallpapers/gruvbox_buildings.png"
+
+    [wallpaper.monitor.DP-2]
+    fill_color = "primary"
 
     [wallpaper.monitors.DP-2]
-    path = "/home/kneeraazon/.wallpapers/gruvbox_cool-robo-station.jpg"
+    path = "/home/kneeraazon/.wallpapers/gruvbox_buildings.png"
 
     [[wallpaper.favorite]]
     builtin_palette = "Catppuccin"
@@ -414,6 +377,16 @@ transition_on_startup = true
     [[wallpaper.favorite]]
     path = "/home/kneeraazon/.wallpapers/wp3286613.jpg"
     theme_mode = "auto"
+
+    [[wallpaper.favorite]]
+    path = "/home/kneeraazon/.wallpapers/wall.jpg"
+    theme_mode = "auto"
+
+    [[wallpaper.favorite]]
+    palette_source = "wallpaper"
+    path = "/home/kneeraazon/.wallpapers/wallpaperflare.com_wallpaper.jpg"
+    theme_mode = "auto"
+    wallpaper_scheme = "m3-content"
 
 [widget.active_window]
 capsule = true
@@ -488,8 +461,10 @@ enabled = false
 icon_color = "#00E5FF"
 
 [widget.notifications]
+anchor = true
 capsule = true
-icon_color = "#F89907"
+color = "hover"
+icon_color = "on_surface"
 
 [widget.screen-time-btn]
 capsule = true
@@ -515,6 +490,7 @@ capsule_fill = "primary"
 capsule_radius = 4
 compact_network = false
 disk_display_mode = "available"
+enabled = false
 font_family = "DejaVu Sans"
 font_scale = 1.0
 font_weight = 400
