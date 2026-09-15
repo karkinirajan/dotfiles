@@ -1,13 +1,6 @@
 {
   "permissions": {
-    "allow": [
-      "Bash(npx tsc --noEmit *)",
-      "Bash(./node_modules/.bin/tsc --noEmit *)",
-      "Bash(npx vitest run *)",
-      "Bash(npm run typecheck *)",
-      "Bash(npm run lint *)",
-      "Bash(starship print-config *)"
-    ],
+    "allow": [],
     "defaultMode": "auto"
   },
   "model": "opus",
@@ -79,6 +72,11 @@
     "huggingface-skills@claude-plugins-official": true,
     "atomic-agents@claude-plugins-official": true
   },
+  "outputStyle": "Concise",
+  "sandbox": {
+    "enabled": false,
+    "allowUnsandboxedCommands": true
+  },
   "effortLevel": "medium",
   "modelSettings": {
     "claude-sonnet-5": {
@@ -124,10 +122,5 @@
       "routine under /home/kneeraazon/nestpane/ prefix: npx, npm, git, and package.json script runs (build, dev, lint, zip) are routine project tooling"
     ]
   },
-  "voiceEnabled": true,
-  "outputStyle": "Concise",
-  "sandbox": {
-    "enabled": false,
-    "allowUnsandboxedCommands": true
-  }
+  "voiceEnabled": true
 }

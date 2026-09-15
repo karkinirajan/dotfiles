@@ -26,10 +26,6 @@ order = [ "kneeraazon" ]
         "nightlight",
         "screen-time-btn",
         "weather",
-        "nightwatch75/todo:todo",
-        "bluetooth",
-        "brightness",
-        "battery",
         "tray",
         "felipeartur/ai-usagebar:bar",
         "tmelik/system-monitor:summary",
@@ -45,9 +41,21 @@ order = [ "kneeraazon" ]
     radius_bottom_right = 0
     radius_top_left = 0
     radius_top_right = 0
-    start = [ "workspaces", "active_window", "media" ]
+    start = [ "workspaces", "group:g1" ]
     thickness = 42
     widget_spacing = 8
+
+        [[bar.kneeraazon.capsule_group]]
+        accordion = false
+        accordion_direction = "end"
+        border = "#CBA6F799"
+        enabled = true
+        fill = "primary"
+        id = "g1"
+        members = [ "active_window", "media", "audio_visualizer" ]
+        opacity = 0.0
+        padding = 10.0
+        radius = 4.0
 
 [calendar]
 enabled = true
@@ -170,6 +178,7 @@ panel_position = "center"
 
 [plugin_settings."noctalia/bitwarden"]
 unlock_placement = "attached"
+vault_timeout = "never"
 
 [plugin_settings."noctalia/notes"]
 panel_open_near_click = true
@@ -182,7 +191,8 @@ enabled = [
     "noctalia/notes",
     "tmelik/system-monitor",
     "nightwatch75/todo",
-    "felipeartur/ai-usagebar"
+    "felipeartur/ai-usagebar",
+    "gustav0ar/drive-health"
 ]
 
     [[plugins.source]]
@@ -396,12 +406,6 @@ color = "#FFFFFF"
 font_weight = 400
 title_scroll = "on_hover"
 
-[widget.battery]
-enabled = false
-
-[widget.brightness]
-enabled = false
-
 [widget.clipboard]
 capsule = true
 capsule_radius = 0
@@ -448,17 +452,13 @@ icon_color = "#28B8AF"
 show_label = false
 
 [widget.nightlight]
-glyph = "moon-off"
+glyph = "moon-stars"
 icon_color = "#C14E0B"
 tooltip = "Night Light (on/off)"
 type = "custom_button"
 
     [widget.nightlight.actions]
     left = "exec /home/kneeraazon/.config/hypr/scripts/nightlight-toggle.sh"
-
-[widget."nightwatch75/todo:todo"]
-enabled = false
-icon_color = "#00E5FF"
 
 [widget.notifications]
 anchor = true
