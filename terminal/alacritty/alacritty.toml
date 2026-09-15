@@ -1,0 +1,147 @@
+# ═══════════════════════════════════════════════════════════════════════════
+#  Alacritty — CachyOS / Hyprland / zsh + starship
+#
+#  Reference: https://alacritty.org/config-alacritty.html  (schema for 0.17)
+#
+#  COLOURS ARE NOT DEFINED HERE ON PURPOSE.
+#  `alacritty` is one of Noctalia's theme templates (settings.toml ->
+#  theme.templates), so themes/noctalia.toml is REGENERATED whenever the
+#  Noctalia palette changes. Defining any [colors.*] key in this file would
+#  either be overridden or fight that generator. Everything colour-related
+#  belongs in the imported file; everything else belongs here.
+#
+#  Deliberately matched to kitty.conf so the two terminals feel identical:
+#  same font and size, same padding, same beam cursor, same 0.88 opacity,
+#  same 20k scrollback, same Ctrl+Shift+C/V clipboard keys.
+# ═══════════════════════════════════════════════════════════════════════════
+
+[general]
+import = ["~/.config/alacritty/themes/noctalia.toml"]
+live_config_reload = true
+
+[env]
+# Alacritty's own terminfo is installed locally (/usr/share/terminfo/a/alacritty),
+# so the default TERM is correct here. If you SSH somewhere that lacks it and
+# get "unknown terminal type", ship the terminfo across once with
+#   infocmp -x alacritty | ssh HOST -- tic -x -
+# rather than downgrading TERM globally — that would cost you undercurl and
+# truecolor detection locally.
+TERM = "alacritty"
+
+[window]
+padding = { x = 10, y = 10 }
+# Spread leftover pixels evenly instead of leaving them all on one edge.
+dynamic_padding = true
+# Hyprland draws the border and rounding (windowrules.conf), so client-side
+# decorations would double up.
+decorations = "None"
+opacity = 0.88
+blur = true
+dynamic_title = true
+startup_mode = "Windowed"
+# windowrules.conf matches on ^(kitty|Alacritty)$ — keep this spelling.
+class = { instance = "Alacritty", general = "Alacritty" }
+
+[scrolling]
+history = 20000
+multiplier = 3
+
+[font]
+# FiraCode Nerd Font Mono ships no true Italic face (Regular/Medium/Retina/
+# SemiBold/Bold/Light only), so italics are synthesised by the oblique rule in
+# fonts.conf. Intentional, and matches kitty's `italic_font auto`.
+normal      = { family = "FiraCode Nerd Font Mono", style = "Regular" }
+bold        = { family = "FiraCode Nerd Font Mono", style = "SemiBold" }
+italic      = { family = "FiraCode Nerd Font Mono", style = "Regular" }
+bold_italic = { family = "FiraCode Nerd Font Mono", style = "SemiBold" }
+size = 11.5
+builtin_box_drawing = true
+
+[cursor]
+# Beam, no blink — same as kitty (cursor_blink_interval -1).
+style = { shape = "Beam", blinking = "Off" }
+vi_mode_style = { shape = "Block", blinking = "Off" }
+thickness = 0.16
+unfocused_hollow = true
+
+[terminal]
+shell = { program = "/bin/zsh" }
+# CopyPaste lets a remote nvim/tmux over SSH drive the local clipboard via
+# OSC 52. Default is OnlyCopy; paste is the half that actually needs enabling.
+osc52 = "CopyPaste"
+
+[selection]
+save_to_clipboard = false
+
+[mouse]
+hide_when_typing = true
+
+[bell]
+duration = 0
+
+[hints]
+alphabet = "jfkdls;ahgurieowpq"
+
+# Ctrl+Shift+U → label every URL on screen; press a label to open it.
+[[hints.enabled]]
+regex = "(mailto:|https:|http:|file:|git:|ssh:|ftp:)[^\\s\"'`{}<>]+"
+hyperlinks = true
+post_processing = true
+persist = false
+action = "Select"
+binding = { key = "U", mods = "Control|Shift" }
+mouse = { enabled = true, mods = "Control" }
+command = "xdg-open"
+
+# Ctrl+Shift+O → grab file:line from compiler/grep output and open it in nvim
+# at that line. Works with ripgrep, cargo, tsc, eslint and pytest output.
+[[hints.enabled]]
+regex = "[\\w.@/~-]+\\.[a-zA-Z]{1,8}:\\d+"
+post_processing = false
+persist = false
+action = "Select"
+binding = { key = "O", mods = "Control|Shift" }
+command = { program = "sh", args = ["-c", "nvim +${1##*:} ${1%%:*}", "_"] }
+
+# ── Keyboard ────────────────────────────────────────────────────────────────
+# Alacritty has no tabs and no splits by design — that is Hyprland's job (or
+# tmux's, which is installed). These bindings cover everything the terminal
+# itself owns. Anything not listed is the shell's, so zsh/fzf keys are intact.
+
+[keyboard]
+bindings = [
+  # Clipboard — same keys as kitty
+  { key = "C",      mods = "Control|Shift", action = "Copy" },
+  { key = "V",      mods = "Control|Shift", action = "Paste" },
+  { key = "Insert", mods = "Shift",         action = "PasteSelection" },
+
+  # Font size, live
+  { key = "=",      mods = "Control", action = "IncreaseFontSize" },
+  { key = "+",      mods = "Control|Shift", action = "IncreaseFontSize" },
+  { key = "-",      mods = "Control", action = "DecreaseFontSize" },
+  { key = "0",      mods = "Control", action = "ResetFontSize" },
+
+  # New window (Alacritty's only "new terminal" — no tabs exist)
+  { key = "Enter",  mods = "Control|Shift", action = "SpawnNewInstance" },
+  { key = "N",      mods = "Control|Shift", action = "CreateNewWindow" },
+
+  # Scrollback
+  { key = "PageUp",   mods = "Control|Shift", action = "ScrollPageUp" },
+  { key = "PageDown", mods = "Control|Shift", action = "ScrollPageDown" },
+  { key = "Home",     mods = "Control|Shift", action = "ScrollToTop" },
+  { key = "End",      mods = "Control|Shift", action = "ScrollToBottom" },
+  { key = "K",        mods = "Control|Shift", action = "ClearHistory" },
+
+  # Search the scrollback
+  { key = "F",      mods = "Control|Shift", action = "SearchForward" },
+  { key = "B",      mods = "Control|Shift", action = "SearchBackward" },
+
+  # Vi mode — keyboard selection/navigation without a mouse
+  { key = "Space",  mods = "Control|Shift", action = "ToggleViMode" },
+
+  # Window
+  { key = "F11",                            action = "ToggleFullscreen" },
+
+  # Ctrl+L clears the screen but keeps scrollback; this wipes both.
+  { key = "L",      mods = "Control|Shift", action = "ClearLogNotice" },
+]

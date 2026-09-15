@@ -34,6 +34,7 @@ order = [ "kneeraazon" ]
     font_family = "DejaVu Sans"
     font_weight = 700
     margin_ends = 0
+    margin_opposite_edge = 12
     padding = 8
     panel_overlap = 0
     radius = 0
@@ -245,20 +246,23 @@ settings_window_translucent = true
     floating_offset = 0
     polkit_placement = "attached"
     shadow = false
+    transparency_mode = "glass"
 
     [shell.screenshot]
     directory = "/home/kneeraazon/Pictures/Screenshots"
+
+    [shell.session]
+    grid = true
 
     [shell.shadow]
     alpha = 0.99999997764825821
 
 [theme]
-builtin = "Kanagawa"
-community_palette = "Catppuccin Macchiato Green"
+builtin = "Catppuccin"
+community_palette = "Catppuccin Macchiato Sapphire"
 custom_palette = "CatppuccinMocha"
-mode = "auto"
-shell_mode = "dark"
-source = "custom"
+mode = "dark"
+source = "community"
 wallpaper_scheme = "m3-content"
 
     [theme.templates]
@@ -310,21 +314,22 @@ wallpaper_scheme = "m3-content"
 [wallpaper]
 directory = "/home/kneeraazon/.wallpapers"
 fill_color = "hover"
+fill_mode = "span"
 
     [wallpaper.automation]
     recursive = false
 
     [wallpaper.default]
-    path = "/home/kneeraazon/.wallpapers/gruvbox_buildings.png"
+    path = "/home/kneeraazon/.wallpapers/GDWP-1136-4K-No-Logo.jpg"
 
     [wallpaper.last]
-    path = "/home/kneeraazon/.wallpapers/gruvbox_buildings.png"
+    path = "/home/kneeraazon/.wallpapers/GDWP-1136-4K-No-Logo.jpg"
 
     [wallpaper.monitor.DP-2]
     fill_color = "primary"
 
     [wallpaper.monitors.DP-2]
-    path = "/home/kneeraazon/.wallpapers/gruvbox_buildings.png"
+    path = "/home/kneeraazon/.wallpapers/GDWP-1136-4K-No-Logo.jpg"
 
     [[wallpaper.favorite]]
     builtin_palette = "Catppuccin"
@@ -353,20 +358,26 @@ fill_color = "hover"
     theme_mode = "auto"
 
     [[wallpaper.favorite]]
+    community_palette = "Catppuccin Macchiato Sapphire"
+    palette_source = "community"
     path = "/home/kneeraazon/.wallpapers/wp8149239.jpg"
-    theme_mode = "auto"
+    theme_mode = "dark"
 
     [[wallpaper.favorite]]
+    builtin_palette = "Ayu"
+    palette_source = "builtin"
     path = "/home/kneeraazon/.wallpapers/wp7616371.jpg"
-    theme_mode = "auto"
+    theme_mode = "dark"
 
     [[wallpaper.favorite]]
     path = "/home/kneeraazon/.wallpapers/25755707.jpg"
     theme_mode = "auto"
 
     [[wallpaper.favorite]]
+    builtin_palette = "Ayu"
+    palette_source = "builtin"
     path = "/home/kneeraazon/.wallpapers/Wallpaper22.png"
-    theme_mode = "auto"
+    theme_mode = "dark"
 
     [[wallpaper.favorite]]
     path = "/home/kneeraazon/.wallpapers/city-building-near-water-shot-from-bars-bridge.jpg"
@@ -452,7 +463,7 @@ icon_color = "#28B8AF"
 show_label = false
 
 [widget.nightlight]
-glyph = "moon-stars"
+glyph = "moon-off"
 icon_color = "#C14E0B"
 tooltip = "Night Light (on/off)"
 type = "custom_button"
