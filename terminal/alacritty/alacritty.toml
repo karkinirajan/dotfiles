@@ -4,11 +4,17 @@
 #  Reference: https://alacritty.org/config-alacritty.html  (schema for 0.17)
 #
 #  COLOURS ARE NOT DEFINED HERE ON PURPOSE.
-#  `alacritty` is one of Noctalia's theme templates (settings.toml ->
-#  theme.templates), so themes/noctalia.toml is REGENERATED whenever the
-#  Noctalia palette changes. Defining any [colors.*] key in this file would
+#  `alacritty` is a built-in Noctalia theme template (settings.toml ->
+#  theme.templates.builtin_ids), so the imported theme file is REGENERATED
+#  whenever the Noctalia palette changes. Defining any [colors.*] key in this file would
 #  either be overridden or fight that generator. Everything colour-related
 #  belongs in the imported file; everything else belongs here.
+#
+#  Noctalia OWNS the `import` line below: it deletes it when the template is
+#  disabled and re-adds it when enabled, and its cleanup removes ANY line
+#  that contains the theme file's path — which is why no comment here spells
+#  that path out. If colours ever go missing, check builtin_ids in
+#  ~/.local/state/noctalia/settings.toml first.
 #
 #  Deliberately matched to kitty.conf so the two terminals feel identical:
 #  same font and size, same padding, same beam cursor, same 0.88 opacity,
