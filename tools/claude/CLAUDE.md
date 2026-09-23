@@ -56,6 +56,11 @@ A personal second brain (markdown vault) is connected — persistent memory acro
 The user gave these in earlier sessions and has not withdrawn them. Follow them as if they were said
 again now. `claude-brain rules` lists them with their strength; `claude-brain rules --retract <id>` drops one.
 
+- - Never run sudo yourself.
+- - Never export , or globally in , , or anywhere else.
+- Do not narrate polls.
+- - Never invent numbers.
+- Never lower a gate silently.
 - Do not share my personal information
 - Make sure the complete deployment is done and the site is available through the same ip provided use git for cloning repo and such.
 <!-- claude-brain:standing:end -->
