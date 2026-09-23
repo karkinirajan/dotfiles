@@ -1,0 +1,39 @@
+#!/usr/bin/env bash
+# ollama-backend {vulkan|rocm} — swaps the GPU-backend drop-in and restarts
+# ollama. Managed by ~/ollama-setup; part of the Claude-Code-over-Ollama
+# benchmark setup. Must be run as root.
+set -euo pipefail
+DROPIN_DIR="/etc/systemd/system/ollama.service.d"
+BACKEND="${1:-}"
+if [ -z "$BACKEND" ]; then
+    echo "usage: ollama-backend vulkan|rocm" >&2
+    exit 2
+fi
+
+case "$BACKEND" in
+  vulkan)
+    cat > "$DROPIN_DIR/backend.conf" <<'EOF'
+[Service]
+Environment="OLLAMA_LLM_LIBRARY=vulkan"
+EOF
+    ;;
+  rocm)
+    cat > "$DROPIN_DIR/backend.conf" <<'EOF'
+[Service]
+Environment="OLLAMA_VULKAN=0"
+Environment="HSA_OVERRIDE_GFX_VERSION=10.3.0"
+EOF
+    ;;
+  *)
+    echo "unknown backend: $BACKEND (expected vulkan or rocm)" >&2
+    exit 2
+    ;;
+esac
+
+systemctl daemon-reload
+systemctl restart ollama
+sleep 2
+systemctl is-active --quiet ollama && echo "ollama.service active, backend=$BACKEND" || {
+    echo "ollama.service failed to start after switching to $BACKEND — check: journalctl -u ollama -n 50" >&2
+    exit 1
+}

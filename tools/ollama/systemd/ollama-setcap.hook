@@ -1,0 +1,12 @@
+[Trigger]
+Operation = Install
+Operation = Upgrade
+Type = Package
+Target = ollama
+Target = ollama-vulkan
+Target = ollama-rocm
+
+[Action]
+Description = Re-applying cap_perfmon on /usr/bin/ollama after upgrade...
+When = PostTransaction
+Exec = /usr/sbin/setcap cap_perfmon+ep /usr/bin/ollama

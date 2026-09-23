@@ -1,0 +1,84 @@
+=== gemma4:12b ===
+  Model
+    architecture        gemma4    
+    parameters          11.9B     
+    context length      262144    
+    embedding length    3840      
+    quantization        Q4_K_M    
+    requires            0.30.5    
+
+  Capabilities
+    completion     
+    vision         
+    audio          
+    tools          
+    thinking       
+        levels     false, true    
+        default    true           
+
+  Projector
+    architecture        clip      
+    parameters          52.38M    
+    embedding length    3840      
+    dimensions          3840      
+
+  Parameters
+    temperature    1       
+    top_k          64      
+    top_p          0.95    
+
+  License
+    Apache License               
+    Version 2.0, January 2004    
+    ...                          
+
+
+=== qwen3-coder:30b ===
+  Model
+    architecture        qwen3moe    
+    parameters          30.5B       
+    context length      262144      
+    embedding length    2048        
+    quantization        Q4_K_M      
+
+  Capabilities
+    completion    
+    tools         
+
+  Parameters
+    repeat_penalty    1.05               
+    stop              "<|im_start|>"     
+    stop              "<|im_end|>"       
+    stop              "<|endoftext|>"    
+    temperature       0.7                
+    top_k             20                 
+    top_p             0.8                
+
+  License
+    Apache License               
+    Version 2.0, January 2004    
+    ...                          
+
+
+  Model
+    architecture        gptoss    
+    parameters          20.9B     
+    context length      131072    
+    embedding length    2880      
+    quantization        MXFP4     
+
+  Capabilities
+    completion     
+    tools          
+    thinking       
+        levels     low, medium, high    
+        default    medium               
+
+  Parameters
+    temperature    1    
+
+  License
+    Apache License               
+    Version 2.0, January 2004    
+    ...                          
+
