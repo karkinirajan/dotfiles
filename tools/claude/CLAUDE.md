@@ -50,3 +50,12 @@ A personal second brain (markdown vault) is connected — persistent memory acro
 - The index refreshes automatically seconds after any vault change — never run manual reindex steps.
 - Never edit or delete existing vault notes without asking. Adding new notes is always fine.
 <!-- claude-brain:end -->
+
+<!-- claude-brain:standing:begin -->
+# Standing instructions (remembered by claude-brain)
+The user gave these in earlier sessions and has not withdrawn them. Follow them as if they were said
+again now. `claude-brain rules` lists them with their strength; `claude-brain rules --retract <id>` drops one.
+
+- Do not share my personal information
+- Make sure the complete deployment is done and the site is available through the same ip provided use git for cloning repo and such.
+<!-- claude-brain:standing:end -->

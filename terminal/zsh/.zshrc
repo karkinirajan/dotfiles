@@ -488,7 +488,7 @@ alias dmongo='docker run --name mongo-dev -p 27017:27017 -d mongo'
 alias pgconnect='docker exec -it pg-dev psql -U postgres'
 
 # ─── Editors / network ────────────────────────────────────────────────────────
-alias c='code .'
+# alias c='code .'  # VS Code removed 2026-09-23
 alias n='nano'
 alias vim='nvim'
 alias v='nvim'
