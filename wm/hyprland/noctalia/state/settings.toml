@@ -2,47 +2,48 @@ config_version = 14
 
 [audio]
 enable_overdrive = true
-enable_sounds = true
+sound_volume = 0.99999997764825821
 
 [bar]
 order = [ "kneeraazon" ]
 
     [bar.kneeraazon]
     border = "#cba6f7aa"
-    border_width = 1.0
+    border_width = 1.5
     capsule = true
     capsule_border = "#cba6f799"
-    capsule_fill = "primary"
-    capsule_opacity = 0.0
-    capsule_padding = 10.0
-    capsule_radius = 4
-    capsule_thickness = 0.69999998807907104
+    capsule_fill = "on_primary"
+    capsule_padding = 8.0
+    capsule_radius = 2
+    capsule_thickness = 0.71999998763203621
+    center = []
+    concave_edge_corners = false
     contact_shadow = true
     end = [
+        "clock",
+        "summary",
+        "bar",
+        "weather",
         "notifications",
         "clipboard",
         "volume",
-        "network",
         "nightlight",
-        "screen-time-btn",
-        "weather",
+        "network",
+        "bluetooth",
+        "control-center",
         "tray",
-        "felipeartur/ai-usagebar:bar",
-        "tmelik/system-monitor:summary",
         "session"
     ]
-    font_family = "DejaVu Sans"
+    font_family = "JetBrains Mono"
     font_weight = 700
     margin_ends = 0
-    margin_opposite_edge = 12
     padding = 8
-    panel_overlap = 0
     radius = 0
     radius_bottom_left = 0
     radius_bottom_right = 0
     radius_top_left = 0
     radius_top_right = 0
-    start = [ "workspaces", "group:g1" ]
+    start = [ "workspaces", "taskbar", "active_window", "media" ]
     thickness = 42
     widget_spacing = 8
 
@@ -58,6 +59,11 @@ order = [ "kneeraazon" ]
         padding = 10.0
         radius = 4.0
 
+[brightness]
+enable_ddcutil = true
+minimum_brightness = 0.99999997764825821
+sync_all_monitors = true
+
 [calendar]
 enabled = true
 
@@ -66,24 +72,7 @@ width = 800
 
     [control_center.calendar]
     show_events_card = false
-
-    [[control_center.shortcuts]]
-    type = "wifi"
-
-    [[control_center.shortcuts]]
-    type = "caffeine"
-
-    [[control_center.shortcuts]]
-    type = "bluetooth"
-
-    [[control_center.shortcuts]]
-    type = "notification"
-
-    [[control_center.shortcuts]]
-    type = "nightlight"
-
-    [[control_center.shortcuts]]
-    type = "power_profile"
+    show_week_numbers = true
 
 [desktop_widgets]
 schema_version = 2
@@ -99,14 +88,7 @@ widget_order = []
 [location]
 address = "Kathmandu, Nepal"
 
-[lockscreen]
-allow_empty_password = true
-blur_intensity = 0.11999999731779099
-tint_intensity = 0.0
-wallpaper = "/home/kneeraazon/.wallpapers/Wallpaper22.png"
-
 [lockscreen_widgets]
-enabled = true
 schema_version = 2
 widget_order = [ "lockscreen-login-box@FALLBACK", "lockscreen-login-box@DP-2" ]
 
@@ -170,8 +152,10 @@ widget_order = [ "lockscreen-login-box@FALLBACK", "lockscreen-login-box@DP-2" ]
         show_weather = true
 
 [nightlight]
-enabled = false
-temperature_night = 5500
+enabled = true
+force = true
+temperature_day = 10000
+temperature_night = 5000
 
 [plugin_settings."nightwatch75/todo"]
 panel_open_near_click = false
@@ -187,14 +171,7 @@ panel_placement = "attached"
 
 [plugins]
 auto_update = "all"
-enabled = [
-    "noctalia/bitwarden",
-    "noctalia/notes",
-    "tmelik/system-monitor",
-    "nightwatch75/todo",
-    "felipeartur/ai-usagebar",
-    "gustav0ar/drive-health"
-]
+enabled = [ "tmelik/system-monitor", "gustav0ar/drive-health", "felipeartur/ai-usagebar" ]
 
     [[plugins.source]]
     kind = "git"
@@ -207,49 +184,18 @@ enabled = [
     name = "community"
 
 [shell]
-corner_radius_scale = 0.5000000074505806
 font_family = "DejaVu Sans"
-panel_anchor_bar = "kneeraazon"
-screen_time_enabled = true
-settings_window_translucent = true
+popup_shadows = false
+
+    [shell.animation]
+    speed = 0.80000001192092896
 
     [shell.launcher]
     app_grid = true
     compact = true
-    pinned = [
-        "google-chrome",
-        "Mailspring",
-        "kitty",
-        "spotify",
-        "antigravity",
-        "code",
-        "dev.zed.Zed",
-        "org.manjaro.pamac.manager",
-        "slack",
-        "com.stremio.stremio",
-        "brave-browser",
-        "zen",
-        "firefox-developer-edition",
-        "discord",
-        "io.dbeaver.DBeaver",
-        "chrome-gfgbgjphjkdhefmnmbhogcpckgpapbag-Default",
-        "Zoom",
-        "chrome-hnpfjngllnobngcgfapefoaidbinmjnm-Default",
-        "chrome-fpmplnejjpjicdicamiacldmgafjlkki-Default"
-    ]
-    show_app_actions = true
 
     [shell.panel]
-    clipboard_position = "top_center"
-    control_center_position = "top_center"
-    floating_layer = "top"
-    floating_offset = 0
-    polkit_placement = "attached"
-    shadow = false
-    transparency_mode = "glass"
-
-    [shell.screenshot]
-    directory = "/home/kneeraazon/Pictures/Screenshots"
+    clipboard_placement = "attached"
 
     [shell.session]
     grid = true
@@ -257,37 +203,17 @@ settings_window_translucent = true
     [shell.shadow]
     alpha = 0.99999997764825821
 
+    [shell.window_switcher]
+    mru = true
+
 [theme]
-builtin = "Catppuccin"
-community_palette = "Catppuccin Macchiato Sapphire"
+builtin = "Ayu"
 custom_palette = "CatppuccinMocha"
-mode = "dark"
-source = "community"
+source = "custom"
 wallpaper_scheme = "m3-content"
 
     [theme.templates]
-    builtin_ids = [
-        "alacritty",
-        "btop",
-        "cava",
-        "emacs",
-        "foot",
-        "gtk3",
-        "gtk4",
-        "ghostty",
-        "helix",
-        "hyprland",
-        "kcolorscheme",
-        "kitty",
-        "labwc",
-        "mango",
-        "qt",
-        "scroll",
-        "starship",
-        "sway",
-        "umbriel",
-        "wezterm"
-    ]
+    builtin_ids = [ "alacritty", "gtk4", "starship" ]
     community_ids = [
         "antigravity",
         "claude-code",
@@ -311,103 +237,95 @@ wallpaper_scheme = "m3-content"
         "tmux"
     ]
 
-[wallpaper]
-directory = "/home/kneeraazon/.wallpapers"
-fill_color = "hover"
-fill_mode = "span"
+[wallpaper.default]
+path = "/home/kneeraazon/.wallpapers/thumb-1920-1356859.png"
 
-    [wallpaper.automation]
-    recursive = false
+[wallpaper.last]
+path = "/home/kneeraazon/.wallpapers/thumb-1920-1356859.png"
 
-    [wallpaper.default]
-    path = "/home/kneeraazon/.wallpapers/GDWP-1136-4K-No-Logo.jpg"
+[wallpaper.monitors.DP-2]
+path = "/home/kneeraazon/.wallpapers/thumb-1920-1356859.png"
 
-    [wallpaper.last]
-    path = "/home/kneeraazon/.wallpapers/GDWP-1136-4K-No-Logo.jpg"
+[[wallpaper.favorite]]
+builtin_palette = "Catppuccin"
+palette_source = "builtin"
+path = "color:#6913D1"
+theme_mode = "dark"
 
-    [wallpaper.monitor.DP-2]
-    fill_color = "primary"
+[[wallpaper.favorite]]
+path = "/home/kneeraazon/.wallpapers/thumb-1920-1356859.png"
+theme_mode = "auto"
 
-    [wallpaper.monitors.DP-2]
-    path = "/home/kneeraazon/.wallpapers/GDWP-1136-4K-No-Logo.jpg"
+[[wallpaper.favorite]]
+path = "/home/kneeraazon/.wallpapers/1356855.png"
+theme_mode = "auto"
 
-    [[wallpaper.favorite]]
-    builtin_palette = "Catppuccin"
-    palette_source = "builtin"
-    path = "color:#6913D1"
-    theme_mode = "dark"
+[[wallpaper.favorite]]
+path = "/home/kneeraazon/.wallpapers/1360645.jpeg"
+theme_mode = "auto"
 
-    [[wallpaper.favorite]]
-    path = "/home/kneeraazon/.wallpapers/thumb-1920-1356859.png"
-    theme_mode = "auto"
+[[wallpaper.favorite]]
+path = "/home/kneeraazon/.wallpapers/wally.jpg"
+theme_mode = "auto"
 
-    [[wallpaper.favorite]]
-    path = "/home/kneeraazon/.wallpapers/1356855.png"
-    theme_mode = "auto"
+[[wallpaper.favorite]]
+path = "/home/kneeraazon/.wallpapers/wp15585667.jpg"
+theme_mode = "auto"
 
-    [[wallpaper.favorite]]
-    path = "/home/kneeraazon/.wallpapers/1360645.jpeg"
-    theme_mode = "auto"
+[[wallpaper.favorite]]
+community_palette = "Catppuccin Macchiato Sapphire"
+palette_source = "community"
+path = "/home/kneeraazon/.wallpapers/wp8149239.jpg"
+theme_mode = "dark"
 
-    [[wallpaper.favorite]]
-    path = "/home/kneeraazon/.wallpapers/wally.jpg"
-    theme_mode = "auto"
+[[wallpaper.favorite]]
+builtin_palette = "Ayu"
+palette_source = "builtin"
+path = "/home/kneeraazon/.wallpapers/wp7616371.jpg"
+theme_mode = "dark"
 
-    [[wallpaper.favorite]]
-    path = "/home/kneeraazon/.wallpapers/wp15585667.jpg"
-    theme_mode = "auto"
+[[wallpaper.favorite]]
+path = "/home/kneeraazon/.wallpapers/25755707.jpg"
+theme_mode = "auto"
 
-    [[wallpaper.favorite]]
-    community_palette = "Catppuccin Macchiato Sapphire"
-    palette_source = "community"
-    path = "/home/kneeraazon/.wallpapers/wp8149239.jpg"
-    theme_mode = "dark"
+[[wallpaper.favorite]]
+custom_palette = "CatppuccinMocha"
+palette_source = "custom"
+path = "/home/kneeraazon/.wallpapers/Wallpaper22.png"
+theme_mode = "dark"
 
-    [[wallpaper.favorite]]
-    builtin_palette = "Ayu"
-    palette_source = "builtin"
-    path = "/home/kneeraazon/.wallpapers/wp7616371.jpg"
-    theme_mode = "dark"
+[[wallpaper.favorite]]
+path = "/home/kneeraazon/.wallpapers/city-building-near-water-shot-from-bars-bridge.jpg"
+theme_mode = "auto"
 
-    [[wallpaper.favorite]]
-    path = "/home/kneeraazon/.wallpapers/25755707.jpg"
-    theme_mode = "auto"
+[[wallpaper.favorite]]
+path = "/home/kneeraazon/.wallpapers/gruvbox_dypuzktoewk71.png"
+theme_mode = "auto"
 
-    [[wallpaper.favorite]]
-    builtin_palette = "Ayu"
-    palette_source = "builtin"
-    path = "/home/kneeraazon/.wallpapers/Wallpaper22.png"
-    theme_mode = "dark"
+[[wallpaper.favorite]]
+path = "/home/kneeraazon/.wallpapers/gruvbox_fkaz52mvm3l71.png"
+theme_mode = "auto"
 
-    [[wallpaper.favorite]]
-    path = "/home/kneeraazon/.wallpapers/city-building-near-water-shot-from-bars-bridge.jpg"
-    theme_mode = "auto"
+[[wallpaper.favorite]]
+path = "/home/kneeraazon/.wallpapers/a_fog_over_water_with_a_black_background.jpg"
+theme_mode = "auto"
 
-    [[wallpaper.favorite]]
-    path = "/home/kneeraazon/.wallpapers/gruvbox_dypuzktoewk71.png"
-    theme_mode = "auto"
+[[wallpaper.favorite]]
+path = "/home/kneeraazon/.wallpapers/wp3286613.jpg"
+theme_mode = "auto"
 
-    [[wallpaper.favorite]]
-    path = "/home/kneeraazon/.wallpapers/gruvbox_fkaz52mvm3l71.png"
-    theme_mode = "auto"
+[[wallpaper.favorite]]
+path = "/home/kneeraazon/.wallpapers/wall.jpg"
+theme_mode = "auto"
 
-    [[wallpaper.favorite]]
-    path = "/home/kneeraazon/.wallpapers/a_fog_over_water_with_a_black_background.jpg"
-    theme_mode = "auto"
+[[wallpaper.favorite]]
+palette_source = "wallpaper"
+path = "/home/kneeraazon/.wallpapers/wallpaperflare.com_wallpaper.jpg"
+theme_mode = "auto"
+wallpaper_scheme = "m3-content"
 
-    [[wallpaper.favorite]]
-    path = "/home/kneeraazon/.wallpapers/wp3286613.jpg"
-    theme_mode = "auto"
-
-    [[wallpaper.favorite]]
-    path = "/home/kneeraazon/.wallpapers/wall.jpg"
-    theme_mode = "auto"
-
-    [[wallpaper.favorite]]
-    palette_source = "wallpaper"
-    path = "/home/kneeraazon/.wallpapers/wallpaperflare.com_wallpaper.jpg"
-    theme_mode = "auto"
-    wallpaper_scheme = "m3-content"
+[weather]
+unit = "imperial"
 
 [widget.active_window]
 capsule = true
@@ -417,22 +335,25 @@ color = "#FFFFFF"
 font_weight = 400
 title_scroll = "on_hover"
 
+[widget.bar]
+extras = "both"
+font_weight = 800
+type = "felipeartur/ai-usagebar:bar"
+
 [widget.clipboard]
 capsule = true
-capsule_radius = 0
 
 [widget.clock]
 capsule = true
 capsule_padding = 12
-color = "#FFFFFF"
-font_family = "DejaVu Sans"
+font_family = "JetBrains Mono"
 font_scale = 1.0
+font_weight = 700
 format = "{:%a, %d %b | %H:%M:%S}"
 
 [widget.control-center]
 capsule = true
 font_weight = 700
-icon_color = "#03FD8B"
 
 [widget."felipeartur/ai-usagebar:bar"]
 vendor = "anthropic"
@@ -441,7 +362,6 @@ vendor = "anthropic"
 capsule = true
 capsule_padding = 13
 color = "surface"
-enabled = false
 icon_color = "surface"
 
 [widget.media]
@@ -463,7 +383,7 @@ icon_color = "#28B8AF"
 show_label = false
 
 [widget.nightlight]
-glyph = "moon-off"
+glyph = "moon-stars"
 icon_color = "#C14E0B"
 tooltip = "Night Light (on/off)"
 type = "custom_button"
@@ -477,16 +397,6 @@ capsule = true
 color = "hover"
 icon_color = "on_surface"
 
-[widget.screen-time-btn]
-capsule = true
-glyph = "cpu-usage"
-icon_color = "#00B3FF"
-tooltip = "Screen Time"
-type = "custom_button"
-
-    [widget.screen-time-btn.actions]
-    left = "panel-open control-center screen-time"
-
 [widget.session]
 capsule = true
 capsule_padding = 10
@@ -495,22 +405,28 @@ icon_color = "#FF0000"
 [widget.settings]
 icon_color = "secondary"
 
+[widget.summary]
+type = "tmelik/system-monitor:summary"
+
+[widget.sysmon]
+glyph = "cpu"
+visualization = "none"
+
 [widget."tmelik/system-monitor:summary"]
 capsule = true
 capsule_fill = "primary"
 capsule_radius = 4
 compact_network = false
 disk_display_mode = "available"
-enabled = false
 font_family = "DejaVu Sans"
 font_scale = 1.0
 font_weight = 400
 hide_unavailable = true
-highlight_values = false
+show_cpu_details_in_tooltip = true
 show_download = false
 show_gpu_temperature = "on"
 show_gpu_usage = "on"
-show_gpu_vram = "off"
+show_gpu_vram = "on"
 show_swap = false
 show_top_processes = false
 show_upload = false
@@ -522,9 +438,6 @@ capsule = true
 capsule = true
 icon_color = "#FFFFFF"
 show_label = false
-
-[widget.wallpaper]
-enabled = false
 
 [widget.weather]
 icon_color = "primary"

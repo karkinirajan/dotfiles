@@ -98,3 +98,6 @@ terminal/kitty/current-theme.conf
 
 # Local session/plugin state, never shared.
 .remember/
+
+# Claude Desktop's import-memory sync target — regenerated content, not authored
+tools/claude/skills/synced/

@@ -3,7 +3,6 @@
     "allow": [],
     "defaultMode": "auto"
   },
-  "model": "opus",
   "hooks": {
     "SessionStart": [
       {
@@ -37,7 +36,22 @@
           }
         ]
       }
+    ],
+    "PreToolUse": [
+      {
+        "matcher": "Read|Grep|Glob|LS|Bash|NotebookRead",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "claude-brain hook pre-tool 2>/dev/null || true",
+            "timeout": 5
+          }
+        ]
+      }
     ]
+  },
+  "worktree": {
+    "baseRef": "head"
   },
   "enableWorkflows": true,
   "enabledPlugins": {
@@ -83,6 +97,7 @@
       "effortLevel": "medium"
     }
   },
+  "dialogExpiry": "5m",
   "tui": "fullscreen",
   "voice": {
     "enabled": true,
@@ -90,7 +105,11 @@
   },
   "skipDangerousModePermissionPrompt": true,
   "skipWorkflowUsageWarning": true,
-  "theme": "auto",
+  "theme": "dark",
+  "verbose": true,
+  "switchModelsOnFlag": true,
+  "remoteControlAtStartup": false,
+  "crossSessionInbound": "accept",
   "inputNeededNotifEnabled": true,
   "agentPushNotifEnabled": true,
   "skipAutoPermissionPrompt": true,
