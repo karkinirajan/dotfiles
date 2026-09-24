@@ -39,7 +39,8 @@ dotfiles/
 │   ├── ollama/             # local LLM inference — ROCm on an unsupported gfx1031
 │   │                       #   card, benchmark-tuned systemd drop-ins, bench.py
 │   ├── claude/             # Claude Code global config (agents, commands, skills)
-│   └── focus/              # dnsmasq + nftables site blocker  → see focus README
+│   ├── focus/              # dnsmasq + nftables site blocker  → see focus README
+│   └── topgrade/           # update-everything config — disabled steps + why
 │
 └── os/cachyos/
     ├── setup.md            # full system setup walkthrough
@@ -170,6 +171,7 @@ one prompt is ever active — switch at runtime with `theme-starship` /
 | `tools/claude/` | Claude Code global config — agents, commands, skills, settings |
 | `tools/ollama/` | Local LLM inference — GPU-accelerated on an officially unsupported card, tuned by benchmark |
 | `tools/focus/` | OS-level site blocking (dnsmasq + nftables), schedule timers, lock mode |
+| `tools/topgrade/` | Update-everything config — which steps are disabled and why |
 | `os/cachyos/setup.md` | AMD GPU (ROCm), PyTorch/TF, LangChain, Ollama, K8s, Terraform |
 
 See [`tools/focus/README.md`](tools/focus/README.md) for how the blocker works.

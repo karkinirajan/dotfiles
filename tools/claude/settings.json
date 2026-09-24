@@ -109,7 +109,7 @@
   "verbose": true,
   "switchModelsOnFlag": true,
   "remoteControlAtStartup": false,
-  "crossSessionInbound": "reject",
+  "crossSessionInbound": "accept",
   "inputNeededNotifEnabled": true,
   "agentPushNotifEnabled": true,
   "skipAutoPermissionPrompt": true,

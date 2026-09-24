@@ -68,10 +68,9 @@ sync_all_monitors = true
 enabled = true
 
 [control_center]
-width = 800
+width = 930
 
     [control_center.calendar]
-    show_events_card = false
     show_week_numbers = true
 
 [desktop_widgets]
@@ -193,6 +192,7 @@ popup_shadows = false
     [shell.launcher]
     app_grid = true
     compact = true
+    pinned = [ "google-chrome", "code" ]
 
     [shell.panel]
     clipboard_placement = "attached"
@@ -383,7 +383,7 @@ icon_color = "#28B8AF"
 show_label = false
 
 [widget.nightlight]
-glyph = "moon-stars"
+glyph = "moon-off"
 icon_color = "#C14E0B"
 tooltip = "Night Light (on/off)"
 type = "custom_button"

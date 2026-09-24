@@ -38,6 +38,7 @@ path=(
   "$HOME/.local/bin"
   "$HOME/focus/scripts"
   "$PNPM_HOME"
+  "$PNPM_HOME/bin"
   "/usr/lib/ccache/bin"
   $path
 )
@@ -826,3 +827,6 @@ export NVM_DIR="$HOME/.config/nvm"
 
 # kimi-code
 export PATH="/home/kneeraazon/.kimi-code/bin:$PATH"
+
+# OpenClaw Completion
+[ -f '/home/kneeraazon/.openclaw/completions/openclaw.zsh' ] && source '/home/kneeraazon/.openclaw/completions/openclaw.zsh'
