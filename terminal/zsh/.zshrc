@@ -672,9 +672,6 @@ fi
 # direnv — per-project env vars from .envrc
 command -v direnv >/dev/null 2>&1 && eval "$(direnv hook zsh)"
 
-# mise — polyglot runtime version manager (node/python/etc via .mise.toml)
-command -v mise >/dev/null 2>&1 && eval "$(mise activate zsh)"
-
 # tealdeer — tldr pages, community-maintained cheatsheets
 command -v tldr >/dev/null 2>&1 && alias help='tldr'
 

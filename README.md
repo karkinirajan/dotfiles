@@ -39,8 +39,7 @@ dotfiles/
 │   ├── ollama/             # local LLM inference — ROCm on an unsupported gfx1031
 │   │                       #   card, benchmark-tuned systemd drop-ins, bench.py
 │   ├── claude/             # Claude Code global config (agents, commands, skills)
-│   ├── focus/              # dnsmasq + nftables site blocker  → see focus README
-│   └── mise/
+│   └── focus/              # dnsmasq + nftables site blocker  → see focus README
 │
 └── os/cachyos/
     ├── setup.md            # full system setup walkthrough
