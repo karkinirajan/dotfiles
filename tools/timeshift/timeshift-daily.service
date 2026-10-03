@@ -1,0 +1,6 @@
+[Unit]
+Description=Timeshift scheduled snapshot (one rotating daily, see /etc/timeshift/timeshift.json)
+
+[Service]
+Type=oneshot
+ExecStart=/usr/bin/timeshift --check

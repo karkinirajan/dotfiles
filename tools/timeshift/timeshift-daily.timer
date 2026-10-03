@@ -1,0 +1,9 @@
+[Unit]
+Description=Run Timeshift's scheduled check once a day
+
+[Timer]
+OnCalendar=daily
+Persistent=true
+
+[Install]
+WantedBy=timers.target
