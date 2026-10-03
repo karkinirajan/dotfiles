@@ -830,3 +830,7 @@ export PATH="/home/kneeraazon/.kimi-code/bin:$PATH"
 
 # OpenClaw Completion
 [ -f '/home/kneeraazon/.openclaw/completions/openclaw.zsh' ] && source '/home/kneeraazon/.openclaw/completions/openclaw.zsh'
+
+
+# Added by Antigravity CLI installer
+export PATH="/home/kneeraazon/.local/bin:$PATH"
