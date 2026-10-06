@@ -28,11 +28,11 @@
 #  backs the live file up first. To go back to an OLDER state, check the file
 #  out of git first, restore, then undo the checkout:
 #
-#    git checkout <commit> -- wm/hyprland/noctalia/state/settings.toml
+#    git checkout <commit> -- 02-desktop/hyprland/noctalia/state/settings.toml
 #    ./install.sh restore
-#    git checkout HEAD -- wm/hyprland/noctalia/state/settings.toml
+#    git checkout HEAD -- 02-desktop/hyprland/noctalia/state/settings.toml
 #
-#  For Noctalia specifically use wm/hyprland/hypr/scripts/noctalia-restore.sh,
+#  For Noctalia specifically use 02-desktop/hyprland/hypr/scripts/noctalia-restore.sh,
 #  which does the same thing but stops the shell first — restoring underneath a
 #  running Noctalia lets it write its in-memory state back over the file.
 # =============================================================================
