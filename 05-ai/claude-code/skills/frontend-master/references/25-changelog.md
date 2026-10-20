@@ -1,0 +1,8 @@
+## Changelog
+
+- 2026-10-12: Initial version. Verified against Next.js 16.4, React 19.3, Tailwind 4.3, shadcn/ui CLI v4 (Base UI default), Supabase `getClaims` and publishable keys, Prisma 7.
+- 2026-10-12 (rev 2): Appendix A regenerated from a project that was typechecked, linted, formatted, unit-tested, built with `next build`, audited, and browser-tested (Chromium, Playwright, axe, CSP smoke test). Added exact version pins (1.1), TS 6 vs TS 7 (1.1.1), the CSP and Cache Components matrix (SEC-08), pnpm 12 supply-chain settings (SEC-22, A.13), and ESLint 10 config (A.14). Removed unverified-claim notices. Not exercised: the Supabase Docker stack and Redis; their templates are compiled and linted only.
+- 2026-10-17 (rev 3): Added a working sign-in flow (A.20) with an end-to-end proof of the cookie flags, a `connection()` fix in `getSession`, a skip link (A11Y-03), generated Supabase types, CI steps for knip, dependency-cruiser, pgTAP and osv-scanner, and corrected the container shutdown claim (CI-08). Fixed SEC-10 (the Supabase SSR helper's default cookies are not `HttpOnly`; added `hardenCookie`, ADR 0001). Added A.19 operational files that earlier revisions required but did not ship: error boundaries, health and readiness routes, request error reporting, metadata routes, security contact, incident runbook, ADRs, CODEOWNERS, PR template, hooks, Renovate, architecture gates, Dockerfile, and the reference Supabase migration with pgTAP tests. Added the audit and agent kit (A.21); its first run against the scaffold found two MUST rules the scaffold itself broke (DAL-06: no request id in logs; SEC-06: no explicit `bodySizeLimit`), both now fixed. Exercised on a local Supabase stack.
+
+---
+

@@ -226,14 +226,13 @@
   "chat.agent.maxRequests": 250,
   "chat.editing.confirmEditRequestRemoval": false,
   "chat.editing.confirmEditRequestRetry": false,
-  "chat.viewSessions.orientation": "stacked",
   "chat.agent.sandbox.enabled": "on",
   "chat.agentHost.sdkSandbox.enabled": "on",
   "chat.mcp.discovery.enabled": {
     "claude-desktop": true,
     "windsurf": true,
     "cursor-workspace": true,
-    "cursor-global": true,
+    "cursor-global": true
   },
   "js/ts.experimental.useTsgo": false,
 
@@ -447,7 +446,7 @@
   "vs-kubernetes": {
     "vscode-kubernetes.helm-path-linux": "/home/kneeraazon/.local/state/vs-kubernetes/tools/helm/linux-amd64/helm",
     "vscode-kubernetes.kubectl-path-linux": "/home/kneeraazon/.local/state/vs-kubernetes/tools/kubectl/kubectl",
-    "vscode-kubernetes.minikube-path-linux": "/home/kneeraazon/.local/state/vs-kubernetes/tools/minikube/linux-amd64/minikube",
+    "vscode-kubernetes.minikube-path-linux": "/home/kneeraazon/.local/state/vs-kubernetes/tools/minikube/linux-amd64/minikube"
   },
 
   // ═══════════════════════════════════════════════════════════
@@ -467,14 +466,7 @@
   "redhat.telemetry.enabled": true,
   "markdown-preview-enhanced.previewTheme": "monokai.css",
   "screencastMode.fontSize": 30,
-  "yaml.disableSchemaDetection": [
-    "**/.github/workflows/*.yml",
-    "**/.github/workflows/*.yaml",
-    "**/.gitea/workflows/*.yml",
-    "**/.gitea/workflows/*.yaml",
-    "**/.forgejo/workflows/*.yml",
-    "**/.forgejo/workflows/*.yaml",
-  ],
+  "yaml.disableSchemaDetection": [],
 
   // ═══════════════════════════════════════════════════════════
   // SECURITY
@@ -503,4 +495,5 @@
   "window.newWindowProfile": "Default",
   "window.title": "${activeEditorShort}${separator}${rootName}",
   "window.titleBarStyle": "custom",
+  "chat.viewSessions.orientation": "stacked",
 }

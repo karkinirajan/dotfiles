@@ -6,8 +6,8 @@
 
 
 [misc]
-# mise: not installed on this system (removed). antigravity: not used here.
-disable = ["mise", "antigravity", "antigravity_cli", "ollama", "helm", "cursor", "containers"]
+# antigravity: not used here.
+disable = ["antigravity", "antigravity_cli", "ollama", "helm", "cursor", "containers"]
 
 # On Unix systems, Topgrade should not be run as root, it
 # will run commands with sudo or equivalent where needed.
@@ -333,30 +333,6 @@ ask_retry = false
 # Exclude encrypted files from update
 # (default: false)
 # exclude_encrypted = false
-
-[mise]
-# Upgrades to the latest version available, bumping the version in mise.toml
-# (default: false)
-# bump = false
-
-# Number of jobs to run in parallel (mise's default)
-# jobs = 8
-
-# Run interactively
-# (default: false)
-# interactive = false
-
-# Suppress non-error messages
-# (default: false)
-# quiet = false
-
-# Suppress all task output and mise non-error messages
-# (default: false)
-# silent = false
-
-# Show extra output
-# (default: false)
-# verbose = false
 
 
 [go]
