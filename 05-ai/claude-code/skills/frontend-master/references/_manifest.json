@@ -1,0 +1,342 @@
+{
+  "source_sha256": "0f5d71c9cd73a02d32a9f697f3523ac5d7552c1c699f305950a2aca81201ade0",
+  "source_bytes": 240138,
+  "chunks": [
+    {
+      "key": "header",
+      "title": "Header",
+      "file": "00-header.md",
+      "sha256": "7312c31a145ca4a1ab7b9f56e87a2883ab83fcb0cedf93a5bc552937ae354df7",
+      "bytes": 309
+    },
+    {
+      "key": "howto",
+      "title": "How to use this document",
+      "file": "01-how-to-use-this-document.md",
+      "sha256": "8d3d24c58522ec2d8c6105637efa4fd769342fb9355937d62e30a0c226ad3af7",
+      "bytes": 1455
+    },
+    {
+      "key": "0",
+      "title": "0. The rules that matter most",
+      "file": "02-0-the-rules-that-matter-most.md",
+      "sha256": "a653c542d210a3cfce3a19c19b8940d36e8b3162825e27b2d2db6ba25ccbdd4c",
+      "bytes": 3386
+    },
+    {
+      "key": "1",
+      "title": "1. Baseline and version policy",
+      "file": "03-1-baseline-and-version-policy.md",
+      "sha256": "9c33a4e46ea7c03c2d9658a85fe97e201c96c14004f89cb64d561a92b780c1e6",
+      "bytes": 5979
+    },
+    {
+      "key": "2",
+      "title": "2. Architecture principles",
+      "file": "04-2-architecture-principles.md",
+      "sha256": "21ba53817a8ef2235114e54a7f8c73003075c16542389fce6741de3783b908d5",
+      "bytes": 3420
+    },
+    {
+      "key": "3",
+      "title": "3. Project structure",
+      "file": "05-3-project-structure.md",
+      "sha256": "43a6e81d6937b67f6f804a05484f2bd362573971aab623d496c93316b9a82f0a",
+      "bytes": 4353
+    },
+    {
+      "key": "4",
+      "title": "4. TypeScript standards",
+      "file": "06-4-typescript-standards.md",
+      "sha256": "94e0d22d6a11c72c9826d213af611a383def6545e578a05065bea90f6df3813e",
+      "bytes": 2308
+    },
+    {
+      "key": "5",
+      "title": "5. React standards",
+      "file": "07-5-react-standards.md",
+      "sha256": "f7911abdb5dd84f87c982c66ad5c8ed3743eda15b7e96a9cf60addf0253ce557",
+      "bytes": 6759
+    },
+    {
+      "key": "6",
+      "title": "6. Next.js App Router standards",
+      "file": "08-6-next-js-app-router-standards.md",
+      "sha256": "720ae1b86a64691125ff4f1e2228f92096f39746c1d3f4527e9ef5f6b067989a",
+      "bytes": 6927
+    },
+    {
+      "key": "7",
+      "title": "7. Data layer: Supabase, Prisma, and the DAL",
+      "file": "09-7-data-layer-supabase-prisma-and-the-dal.md",
+      "sha256": "45c62d3e970acc15ef3517d0ed7792db174fb85696869d6b72d1d15bd2b0d28b",
+      "bytes": 10831
+    },
+    {
+      "key": "8",
+      "title": "8. Styling, design system, and UI",
+      "file": "10-8-styling-design-system-and-ui.md",
+      "sha256": "3c11a0781f36e12dec76b6dd01c7347343d193723e0f57ac497f062d54c7a6d1",
+      "bytes": 7630
+    },
+    {
+      "key": "9",
+      "title": "9. Security",
+      "file": "11-9-security.md",
+      "sha256": "19bca37baa4b5f403c16ca23425042f16b5f443dbe54c75a5ff507ec6c73c4b2",
+      "bytes": 10884
+    },
+    {
+      "key": "10",
+      "title": "10. Accessibility (WCAG 2.2 AA minimum)",
+      "file": "12-10-accessibility-wcag-2-2-aa-minimum.md",
+      "sha256": "e079d2db8f57e981e201c952248bac370bc701bef114ee4201496b1961ee4105",
+      "bytes": 3428
+    },
+    {
+      "key": "11",
+      "title": "11. Performance",
+      "file": "13-11-performance.md",
+      "sha256": "5a2d40fc289bfcc615467f095bdbf5fa62be88bc9209c8e516faf861fc91af31",
+      "bytes": 3898
+    },
+    {
+      "key": "12",
+      "title": "12. Testing",
+      "file": "14-12-testing.md",
+      "sha256": "244747250904d4b594a19f472a8291fdfad2ced399dda9f044905c232feab987",
+      "bytes": 2881
+    },
+    {
+      "key": "13",
+      "title": "13. Observability and error handling",
+      "file": "15-13-observability-and-error-handling.md",
+      "sha256": "30564cc5e000c69c15ff7cbb36c4df048562a519e31aecb9a27aca12a14eb1be",
+      "bytes": 2316
+    },
+    {
+      "key": "14",
+      "title": "14. Cross-cutting concerns",
+      "file": "16-14-cross-cutting-concerns.md",
+      "sha256": "2571099a51cc73f5d3cb97fa471acd3526cbd4e63c02839ed754b6f4a43e403a",
+      "bytes": 1522
+    },
+    {
+      "key": "15",
+      "title": "15. Tooling and developer experience",
+      "file": "17-15-tooling-and-developer-experience.md",
+      "sha256": "9200d7ea39d612a11d1721b4ee2b95abafe524462486e16edb6043d5abae39a1",
+      "bytes": 3895
+    },
+    {
+      "key": "16",
+      "title": "16. CI/CD and deployment",
+      "file": "18-16-ci-cd-and-deployment.md",
+      "sha256": "f06b440bec3a0302e6b64ced6aace78fbc23593f64a14cf3aaec34499dbcdb83",
+      "bytes": 3610
+    },
+    {
+      "key": "17",
+      "title": "17. Git, review, and delivery",
+      "file": "19-17-git-review-and-delivery.md",
+      "sha256": "0b8493acba873da0e731abcd330974082aa3b0e7afe0c31bd30be2a7bdf2b55b",
+      "bytes": 1633
+    },
+    {
+      "key": "18",
+      "title": "18. Upgrade playbooks",
+      "file": "20-18-upgrade-playbooks.md",
+      "sha256": "694a387c803b66cd57bea6004a896e0fd29b190ef76ff16d6b53e9f7d15a2638",
+      "bytes": 4094
+    },
+    {
+      "key": "19",
+      "title": "19. Governance",
+      "file": "21-19-governance.md",
+      "sha256": "8e1c5b50b376921b0c352f2c9941cf7460e8293e0abf09a2793ef6a758425f23",
+      "bytes": 999
+    },
+    {
+      "key": "20",
+      "title": "20. Definition of Done checklists",
+      "file": "22-20-definition-of-done-checklists.md",
+      "sha256": "acc246dc26fafb9390a5912078c432dbb97e1d7bda14902216811ec07a30c8e5",
+      "bytes": 2959
+    },
+    {
+      "key": "21",
+      "title": "21. Anti-pattern catalog (reject in review)",
+      "file": "23-21-anti-pattern-catalog-reject-in-review.md",
+      "sha256": "f389f1f2aaefd3a10c1f2246d28e3cb22b64d4d0291afae1e1c94a544cc99b06",
+      "bytes": 2782
+    },
+    {
+      "key": "22",
+      "title": "22. References and sources",
+      "file": "24-22-references-and-sources.md",
+      "sha256": "536d9509f870b939a5cba92c4c0eae51f7b1ae5739216c6a7bb17c8ee09737f5",
+      "bytes": 1889
+    },
+    {
+      "key": "changelog",
+      "title": "Changelog",
+      "file": "25-changelog.md",
+      "sha256": "4029cac8c2fa2abb8080c24ee0122fe430bbf813e8c719c6f4caf7ab94fb6f65",
+      "bytes": 1712
+    },
+    {
+      "key": "A",
+      "title": "Appendix A. Production templates",
+      "file": "26-appendix-a-production-templates.md",
+      "sha256": "353d690ed0956658d294c3cab08bc5c90455e6d2a381f46c194c05f042cb35d7",
+      "bytes": 1357
+    },
+    {
+      "key": "A.1",
+      "title": "A.1 `tsconfig.json`",
+      "file": "27-a-1-tsconfig-json.md",
+      "sha256": "c1f56c23936f56000acdda56dcda5c8332033b52bd4bc4fe12683c39ec7fd4fa",
+      "bytes": 1491
+    },
+    {
+      "key": "A.2",
+      "title": "A.2 `next.config.ts`",
+      "file": "28-a-2-next-config-ts.md",
+      "sha256": "cebf5f9683276aa701818b9def93336d855eb588ae1ded167e3d62bfebe7a1a8",
+      "bytes": 2092
+    },
+    {
+      "key": "A.3",
+      "title": "A.3 Validated environment (`lib/env/public.ts` and `lib/env/server.ts`)",
+      "file": "29-a-3-validated-environment-lib-env-public-ts-and.md",
+      "sha256": "7dc22c94c7f8d77f0d3bf5ed773f2b7e2082247f9fd927c4fb91cd34106319f1",
+      "bytes": 1430
+    },
+    {
+      "key": "A.4",
+      "title": "A.4 Supabase clients and session proxy",
+      "file": "30-a-4-supabase-clients-and-session-proxy.md",
+      "sha256": "c5d0462f4246f07b8b3d301d44477a9f9389270ad8b13a25fd1a1c3ab93eb5d7",
+      "bytes": 14210
+    },
+    {
+      "key": "A.5",
+      "title": "A.5 Session and DAL",
+      "file": "31-a-5-session-and-dal.md",
+      "sha256": "dd3b4eeff711a9a984998fad6317de0485d379a3e153b6cb15582bb6bfad9feb",
+      "bytes": 2992
+    },
+    {
+      "key": "A.6",
+      "title": "A.6 Server Action template",
+      "file": "32-a-6-server-action-template.md",
+      "sha256": "27eb804049373b82e9992d88132fac09fb786cc4576486b79581062a80394cb8",
+      "bytes": 2898
+    },
+    {
+      "key": "A.7",
+      "title": "A.7 `globals.css` (Tailwind v4 tokens, shadcn compatible)",
+      "file": "33-a-7-globals-css-tailwind-v4-tokens-shadcn-compat.md",
+      "sha256": "755e9b2102d5a5b5e86ac2ebc9ec0df22ef7b2dd17dcf45fc1c4d10b15d5c56a",
+      "bytes": 5305
+    },
+    {
+      "key": "A.8",
+      "title": "A.8 `components.json` invariants",
+      "file": "34-a-8-components-json-invariants.md",
+      "sha256": "4c4a5a93192fe3169e22592cf9cb38e7828288b66f7f4c0793aee6620fc5debb",
+      "bytes": 849
+    },
+    {
+      "key": "A.9",
+      "title": "A.9 Prisma 7 (only when PRISMA-01 selects option B)",
+      "file": "35-a-9-prisma-7-only-when-prisma-01-selects-option.md",
+      "sha256": "336c4692b7e08ee3a435f27eb35be4f3195b7dd9bf02fb5228526cc7d06a8f54",
+      "bytes": 2096
+    },
+    {
+      "key": "A.10",
+      "title": "A.10 Content Security Policy in `proxy.ts`",
+      "file": "36-a-10-content-security-policy-in-proxy-ts.md",
+      "sha256": "35e31caa2bae36cea80140cded39fbcdeeccdd6cfe1e9f01568d30b8330de856",
+      "bytes": 9356
+    },
+    {
+      "key": "A.11",
+      "title": "A.11 GitHub Actions (`.github/workflows/ci.yml`)",
+      "file": "37-a-11-github-actions-github-workflows-ci-yml.md",
+      "sha256": "ae5a65ad474d9f4f709972d0b2c52c8c9a0c77011c7bc08b612a5ab29aef9d56",
+      "bytes": 6426
+    },
+    {
+      "key": "A.12",
+      "title": "A.12 `AGENTS.md` for AI coding assistants",
+      "file": "38-a-12-agents-md-for-ai-coding-assistants.md",
+      "sha256": "aabe16c2a5c009e3470cfa2f400004d5a2e7407d4603549abc0e66e3301e534b",
+      "bytes": 3300
+    },
+    {
+      "key": "A.13",
+      "title": "A.13 `pnpm-workspace.yaml` (pnpm 12)",
+      "file": "39-a-13-pnpm-workspace-yaml-pnpm-12.md",
+      "sha256": "d0c20811ea90460ddf5ee941843c6a3b5ed84359303253a17eb8f2bcc75bfee8",
+      "bytes": 2819
+    },
+    {
+      "key": "A.14",
+      "title": "A.14 `eslint.config.mjs` (ESLint 10, flat config)",
+      "file": "40-a-14-eslint-config-mjs-eslint-10-flat-config.md",
+      "sha256": "a1b4b16e63502cd9a13cbf5089615777c12b3e8e86a2614b2acd0bcda7298f86",
+      "bytes": 2016
+    },
+    {
+      "key": "A.15",
+      "title": "A.15 Logger and rate limiter",
+      "file": "41-a-15-logger-and-rate-limiter.md",
+      "sha256": "fca77573bcaff7bda9a7a66feacf304115aaf3ec711cbaa6ed9d5e80e196de0d",
+      "bytes": 7586
+    },
+    {
+      "key": "A.16",
+      "title": "A.16 App shell, providers, and reference routes",
+      "file": "42-a-16-app-shell-providers-and-reference-routes.md",
+      "sha256": "cff63c2f5a3095fa9f3c3280c2c68b928753907b959885e3c5177db5dc04ffad",
+      "bytes": 7475
+    },
+    {
+      "key": "A.17",
+      "title": "A.17 Tests",
+      "file": "43-a-17-tests.md",
+      "sha256": "f7d02d515458e98d869babd24d7f8f9ec391a0c1124a77e2dc1abca49020d2be",
+      "bytes": 9538
+    },
+    {
+      "key": "A.18",
+      "title": "A.18 Repository files",
+      "file": "44-a-18-repository-files.md",
+      "sha256": "3e8c3aed4676a5d031cb9d95e42baec682b13d79d7e18bbe241f2f16c72b1a4f",
+      "bytes": 4934
+    },
+    {
+      "key": "A.19",
+      "title": "A.19 Operational files",
+      "file": "45-a-19-operational-files.md",
+      "sha256": "ad393004d7375c89b59f8e30debf55b09640c7d53653891a2bdd9876a4016441",
+      "bytes": 27228
+    },
+    {
+      "key": "A.20",
+      "title": "A.20 Authentication flow",
+      "file": "46-a-20-authentication-flow.md",
+      "sha256": "6802292603dd1545747c99bd94c2974d7bf2df10e9ec25f7ce21856618c36644",
+      "bytes": 20731
+    },
+    {
+      "key": "A.21",
+      "title": "A.21 Audit and agent kit",
+      "file": "47-a-21-audit-and-agent-kit.md",
+      "sha256": "85fd1dd5c0fb4ebc381ee40530e237d13aa1cad551e36102a399d1de95d7d774",
+      "bytes": 2150
+    }
+  ]
+}

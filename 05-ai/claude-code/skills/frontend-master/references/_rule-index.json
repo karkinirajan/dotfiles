@@ -1,0 +1,1050 @@
+{
+  "A11Y-01": {
+    "file": "12-10-accessibility-wcag-2-2-aa-minimum.md",
+    "level": "MUST"
+  },
+  "A11Y-02": {
+    "file": "12-10-accessibility-wcag-2-2-aa-minimum.md",
+    "level": "MUST"
+  },
+  "A11Y-03": {
+    "file": "12-10-accessibility-wcag-2-2-aa-minimum.md",
+    "level": "MUST"
+  },
+  "A11Y-04": {
+    "file": "12-10-accessibility-wcag-2-2-aa-minimum.md",
+    "level": "MUST"
+  },
+  "A11Y-05": {
+    "file": "12-10-accessibility-wcag-2-2-aa-minimum.md",
+    "level": "MUST"
+  },
+  "A11Y-06": {
+    "file": "12-10-accessibility-wcag-2-2-aa-minimum.md",
+    "level": "MUST"
+  },
+  "A11Y-07": {
+    "file": "12-10-accessibility-wcag-2-2-aa-minimum.md",
+    "level": "MUST"
+  },
+  "A11Y-08": {
+    "file": "12-10-accessibility-wcag-2-2-aa-minimum.md",
+    "level": "MUST"
+  },
+  "A11Y-09": {
+    "file": "12-10-accessibility-wcag-2-2-aa-minimum.md",
+    "level": "MUST"
+  },
+  "A11Y-10": {
+    "file": "12-10-accessibility-wcag-2-2-aa-minimum.md",
+    "level": "MUST"
+  },
+  "A11Y-11": {
+    "file": "12-10-accessibility-wcag-2-2-aa-minimum.md",
+    "level": "MUST"
+  },
+  "A11Y-12": {
+    "file": "12-10-accessibility-wcag-2-2-aa-minimum.md",
+    "level": "MUST"
+  },
+  "A11Y-13": {
+    "file": "12-10-accessibility-wcag-2-2-aa-minimum.md",
+    "level": "SHOULD"
+  },
+  "A11Y-14": {
+    "file": "12-10-accessibility-wcag-2-2-aa-minimum.md",
+    "level": "MAY"
+  },
+  "ARCH-01": {
+    "file": "04-2-architecture-principles.md",
+    "level": "MUST"
+  },
+  "ARCH-02": {
+    "file": "04-2-architecture-principles.md",
+    "level": "MUST"
+  },
+  "ARCH-03": {
+    "file": "04-2-architecture-principles.md",
+    "level": "MUST"
+  },
+  "ARCH-04": {
+    "file": "04-2-architecture-principles.md",
+    "level": "MUST"
+  },
+  "ARCH-05": {
+    "file": "04-2-architecture-principles.md",
+    "level": "SHOULD"
+  },
+  "ARCH-06": {
+    "file": "04-2-architecture-principles.md",
+    "level": "SHOULD"
+  },
+  "ARCH-07": {
+    "file": "04-2-architecture-principles.md",
+    "level": "MUST"
+  },
+  "CI-01": {
+    "file": "18-16-ci-cd-and-deployment.md",
+    "level": "MUST"
+  },
+  "CI-02": {
+    "file": "18-16-ci-cd-and-deployment.md",
+    "level": "MUST"
+  },
+  "CI-03": {
+    "file": "18-16-ci-cd-and-deployment.md",
+    "level": "MUST"
+  },
+  "CI-04": {
+    "file": "18-16-ci-cd-and-deployment.md",
+    "level": "MUST"
+  },
+  "CI-05": {
+    "file": "18-16-ci-cd-and-deployment.md",
+    "level": "SHOULD"
+  },
+  "CI-06": {
+    "file": "18-16-ci-cd-and-deployment.md",
+    "level": "MUST"
+  },
+  "CI-08": {
+    "file": "18-16-ci-cd-and-deployment.md",
+    "level": "MUST"
+  },
+  "CI-09": {
+    "file": "18-16-ci-cd-and-deployment.md",
+    "level": "MUST"
+  },
+  "CI-10": {
+    "file": "18-16-ci-cd-and-deployment.md",
+    "level": "SHOULD"
+  },
+  "CODE-01": {
+    "file": "10-8-styling-design-system-and-ui.md",
+    "level": "SHOULD"
+  },
+  "CODE-02": {
+    "file": "10-8-styling-design-system-and-ui.md",
+    "level": "MUST"
+  },
+  "CODE-03": {
+    "file": "10-8-styling-design-system-and-ui.md",
+    "level": "MUST"
+  },
+  "DAL-01": {
+    "file": "09-7-data-layer-supabase-prisma-and-the-dal.md",
+    "level": "MUST"
+  },
+  "DAL-02": {
+    "file": "09-7-data-layer-supabase-prisma-and-the-dal.md",
+    "level": "MUST"
+  },
+  "DAL-03": {
+    "file": "09-7-data-layer-supabase-prisma-and-the-dal.md",
+    "level": "MUST"
+  },
+  "DAL-04": {
+    "file": "09-7-data-layer-supabase-prisma-and-the-dal.md",
+    "level": "MUST"
+  },
+  "DAL-05": {
+    "file": "09-7-data-layer-supabase-prisma-and-the-dal.md",
+    "level": "SHOULD"
+  },
+  "DAL-06": {
+    "file": "09-7-data-layer-supabase-prisma-and-the-dal.md",
+    "level": "MUST"
+  },
+  "DEL-01": {
+    "file": "19-17-git-review-and-delivery.md",
+    "level": "MUST"
+  },
+  "DEL-02": {
+    "file": "19-17-git-review-and-delivery.md",
+    "level": "MUST"
+  },
+  "DEL-03": {
+    "file": "19-17-git-review-and-delivery.md",
+    "level": "SHOULD"
+  },
+  "GIT-01": {
+    "file": "19-17-git-review-and-delivery.md",
+    "level": "MUST"
+  },
+  "GIT-02": {
+    "file": "19-17-git-review-and-delivery.md",
+    "level": "MUST"
+  },
+  "GIT-03": {
+    "file": "19-17-git-review-and-delivery.md",
+    "level": "SHOULD"
+  },
+  "GIT-04": {
+    "file": "19-17-git-review-and-delivery.md",
+    "level": "MUST"
+  },
+  "GOV-01": {
+    "file": "21-19-governance.md",
+    "level": "MUST"
+  },
+  "GOV-02": {
+    "file": "21-19-governance.md",
+    "level": "MUST"
+  },
+  "GOV-03": {
+    "file": "21-19-governance.md",
+    "level": "MUST"
+  },
+  "GOV-04": {
+    "file": "21-19-governance.md",
+    "level": "SHOULD"
+  },
+  "GOV-05": {
+    "file": "21-19-governance.md",
+    "level": "SHOULD"
+  },
+  "I18N-01": {
+    "file": "16-14-cross-cutting-concerns.md",
+    "level": "MUST"
+  },
+  "I18N-02": {
+    "file": "16-14-cross-cutting-concerns.md",
+    "level": "MUST"
+  },
+  "I18N-03": {
+    "file": "16-14-cross-cutting-concerns.md",
+    "level": "SHOULD"
+  },
+  "I18N-04": {
+    "file": "16-14-cross-cutting-concerns.md",
+    "level": "SHOULD"
+  },
+  "NEXT-01": {
+    "file": "08-6-next-js-app-router-standards.md",
+    "level": "MUST"
+  },
+  "NEXT-02": {
+    "file": "08-6-next-js-app-router-standards.md",
+    "level": "MUST"
+  },
+  "NEXT-03": {
+    "file": "08-6-next-js-app-router-standards.md",
+    "level": "MUST"
+  },
+  "NEXT-04": {
+    "file": "08-6-next-js-app-router-standards.md",
+    "level": "MUST"
+  },
+  "NEXT-05": {
+    "file": "08-6-next-js-app-router-standards.md",
+    "level": "MUST"
+  },
+  "NEXT-05a": {
+    "file": "08-6-next-js-app-router-standards.md",
+    "level": "MUST"
+  },
+  "NEXT-06": {
+    "file": "08-6-next-js-app-router-standards.md",
+    "level": "MUST"
+  },
+  "NEXT-07": {
+    "file": "08-6-next-js-app-router-standards.md",
+    "level": "SHOULD"
+  },
+  "NEXT-08": {
+    "file": "08-6-next-js-app-router-standards.md",
+    "level": "MUST"
+  },
+  "NEXT-09": {
+    "file": "08-6-next-js-app-router-standards.md",
+    "level": "MUST"
+  },
+  "NEXT-10": {
+    "file": "08-6-next-js-app-router-standards.md",
+    "level": "MUST"
+  },
+  "NEXT-11": {
+    "file": "08-6-next-js-app-router-standards.md",
+    "level": "MUST"
+  },
+  "NEXT-12": {
+    "file": "08-6-next-js-app-router-standards.md",
+    "level": "MUST"
+  },
+  "NEXT-13": {
+    "file": "08-6-next-js-app-router-standards.md",
+    "level": "MUST"
+  },
+  "NEXT-14": {
+    "file": "08-6-next-js-app-router-standards.md",
+    "level": "MUST"
+  },
+  "NEXT-15": {
+    "file": "08-6-next-js-app-router-standards.md",
+    "level": "MUST"
+  },
+  "NEXT-16": {
+    "file": "08-6-next-js-app-router-standards.md",
+    "level": "SHOULD"
+  },
+  "NEXT-17": {
+    "file": "08-6-next-js-app-router-standards.md",
+    "level": "MUST"
+  },
+  "NEXT-18": {
+    "file": "08-6-next-js-app-router-standards.md",
+    "level": "MUST"
+  },
+  "NEXT-19": {
+    "file": "08-6-next-js-app-router-standards.md",
+    "level": "SHOULD"
+  },
+  "NEXT-20": {
+    "file": "08-6-next-js-app-router-standards.md",
+    "level": "SHOULD"
+  },
+  "NEXT-21": {
+    "file": "08-6-next-js-app-router-standards.md",
+    "level": "SHOULD"
+  },
+  "NEXT-22": {
+    "file": "08-6-next-js-app-router-standards.md",
+    "level": "SHOULD"
+  },
+  "NEXT-25": {
+    "file": "08-6-next-js-app-router-standards.md",
+    "level": "MUST"
+  },
+  "NEXT-26": {
+    "file": "08-6-next-js-app-router-standards.md",
+    "level": "SHOULD"
+  },
+  "OBS-01": {
+    "file": "15-13-observability-and-error-handling.md",
+    "level": "MUST"
+  },
+  "OBS-02": {
+    "file": "15-13-observability-and-error-handling.md",
+    "level": "MUST"
+  },
+  "OBS-03": {
+    "file": "15-13-observability-and-error-handling.md",
+    "level": "SHOULD"
+  },
+  "OBS-04": {
+    "file": "15-13-observability-and-error-handling.md",
+    "level": "MUST"
+  },
+  "OBS-05": {
+    "file": "15-13-observability-and-error-handling.md",
+    "level": "SHOULD"
+  },
+  "OBS-06": {
+    "file": "15-13-observability-and-error-handling.md",
+    "level": "MUST"
+  },
+  "OBS-07": {
+    "file": "15-13-observability-and-error-handling.md",
+    "level": "MUST"
+  },
+  "OBS-08": {
+    "file": "15-13-observability-and-error-handling.md",
+    "level": "MUST"
+  },
+  "OBS-09": {
+    "file": "15-13-observability-and-error-handling.md",
+    "level": "SHOULD"
+  },
+  "OBS-10": {
+    "file": "15-13-observability-and-error-handling.md",
+    "level": "MUST"
+  },
+  "OBS-11": {
+    "file": "15-13-observability-and-error-handling.md",
+    "level": "MUST"
+  },
+  "PERF-01": {
+    "file": "13-11-performance.md",
+    "level": "MUST"
+  },
+  "PERF-02": {
+    "file": "13-11-performance.md",
+    "level": "MUST"
+  },
+  "PERF-03": {
+    "file": "13-11-performance.md",
+    "level": "MUST"
+  },
+  "PERF-04": {
+    "file": "13-11-performance.md",
+    "level": "MUST"
+  },
+  "PERF-05": {
+    "file": "13-11-performance.md",
+    "level": "MUST"
+  },
+  "PERF-06": {
+    "file": "13-11-performance.md",
+    "level": "SHOULD"
+  },
+  "PERF-07": {
+    "file": "13-11-performance.md",
+    "level": "MUST"
+  },
+  "PERF-08": {
+    "file": "13-11-performance.md",
+    "level": "MUST"
+  },
+  "PERF-09": {
+    "file": "13-11-performance.md",
+    "level": "SHOULD"
+  },
+  "PERF-10": {
+    "file": "13-11-performance.md",
+    "level": "MUST"
+  },
+  "PERF-11": {
+    "file": "13-11-performance.md",
+    "level": "MUST"
+  },
+  "PERF-12": {
+    "file": "13-11-performance.md",
+    "level": "MUST"
+  },
+  "PERF-13": {
+    "file": "13-11-performance.md",
+    "level": "SHOULD"
+  },
+  "PERF-14": {
+    "file": "13-11-performance.md",
+    "level": "MUST"
+  },
+  "PERF-15": {
+    "file": "13-11-performance.md",
+    "level": "SHOULD"
+  },
+  "PERF-16": {
+    "file": "13-11-performance.md",
+    "level": "MUST"
+  },
+  "PRISMA-01": {
+    "file": "09-7-data-layer-supabase-prisma-and-the-dal.md",
+    "level": "MUST"
+  },
+  "PRISMA-02": {
+    "file": "09-7-data-layer-supabase-prisma-and-the-dal.md",
+    "level": "MUST"
+  },
+  "PRISMA-03": {
+    "file": "09-7-data-layer-supabase-prisma-and-the-dal.md",
+    "level": "MUST"
+  },
+  "PRISMA-04": {
+    "file": "09-7-data-layer-supabase-prisma-and-the-dal.md",
+    "level": "MUST"
+  },
+  "PRISMA-05": {
+    "file": "09-7-data-layer-supabase-prisma-and-the-dal.md",
+    "level": "MUST"
+  },
+  "PRISMA-06": {
+    "file": "09-7-data-layer-supabase-prisma-and-the-dal.md",
+    "level": "MUST"
+  },
+  "PRISMA-07": {
+    "file": "09-7-data-layer-supabase-prisma-and-the-dal.md",
+    "level": "SHOULD"
+  },
+  "PRISMA-08": {
+    "file": "09-7-data-layer-supabase-prisma-and-the-dal.md",
+    "level": "SHOULD"
+  },
+  "PRISMA-09": {
+    "file": "09-7-data-layer-supabase-prisma-and-the-dal.md",
+    "level": "MAY"
+  },
+  "REACT-01": {
+    "file": "07-5-react-standards.md",
+    "level": "MUST"
+  },
+  "REACT-02": {
+    "file": "07-5-react-standards.md",
+    "level": "MUST"
+  },
+  "REACT-03": {
+    "file": "07-5-react-standards.md",
+    "level": "MUST"
+  },
+  "REACT-04": {
+    "file": "07-5-react-standards.md",
+    "level": "SHOULD"
+  },
+  "REACT-05": {
+    "file": "07-5-react-standards.md",
+    "level": "MUST"
+  },
+  "REACT-07": {
+    "file": "07-5-react-standards.md",
+    "level": "MUST"
+  },
+  "REACT-08": {
+    "file": "07-5-react-standards.md",
+    "level": "SHOULD"
+  },
+  "REACT-09": {
+    "file": "07-5-react-standards.md",
+    "level": "MUST"
+  },
+  "REACT-10": {
+    "file": "07-5-react-standards.md",
+    "level": "MUST"
+  },
+  "REACT-11": {
+    "file": "07-5-react-standards.md",
+    "level": "MUST"
+  },
+  "REACT-12": {
+    "file": "07-5-react-standards.md",
+    "level": "SHOULD"
+  },
+  "REACT-13": {
+    "file": "07-5-react-standards.md",
+    "level": "MUST"
+  },
+  "REACT-14": {
+    "file": "07-5-react-standards.md",
+    "level": "MUST"
+  },
+  "REACT-15": {
+    "file": "07-5-react-standards.md",
+    "level": "SHOULD"
+  },
+  "REACT-16": {
+    "file": "07-5-react-standards.md",
+    "level": "MUST"
+  },
+  "REACT-17": {
+    "file": "07-5-react-standards.md",
+    "level": "MUST"
+  },
+  "REACT-18": {
+    "file": "07-5-react-standards.md",
+    "level": "MUST"
+  },
+  "REACT-19": {
+    "file": "07-5-react-standards.md",
+    "level": "SHOULD"
+  },
+  "REACT-20": {
+    "file": "07-5-react-standards.md",
+    "level": "MUST"
+  },
+  "REACT-21": {
+    "file": "07-5-react-standards.md",
+    "level": "SHOULD"
+  },
+  "REACT-22": {
+    "file": "07-5-react-standards.md",
+    "level": "SHOULD"
+  },
+  "REACT-23": {
+    "file": "07-5-react-standards.md",
+    "level": "MUST"
+  },
+  "REACT-24": {
+    "file": "07-5-react-standards.md",
+    "level": "SHOULD"
+  },
+  "RQ-01": {
+    "file": "07-5-react-standards.md",
+    "level": "MUST"
+  },
+  "RQ-02": {
+    "file": "07-5-react-standards.md",
+    "level": "MUST"
+  },
+  "RQ-03": {
+    "file": "07-5-react-standards.md",
+    "level": "MUST"
+  },
+  "RQ-04": {
+    "file": "07-5-react-standards.md",
+    "level": "MUST"
+  },
+  "RQ-05": {
+    "file": "07-5-react-standards.md",
+    "level": "SHOULD"
+  },
+  "RQ-06": {
+    "file": "07-5-react-standards.md",
+    "level": "MUST"
+  },
+  "RQ-07": {
+    "file": "07-5-react-standards.md",
+    "level": "MUST"
+  },
+  "RQ-08": {
+    "file": "07-5-react-standards.md",
+    "level": "SHOULD"
+  },
+  "SB-01": {
+    "file": "09-7-data-layer-supabase-prisma-and-the-dal.md",
+    "level": "MUST"
+  },
+  "SB-02": {
+    "file": "09-7-data-layer-supabase-prisma-and-the-dal.md",
+    "level": "MUST"
+  },
+  "SB-03": {
+    "file": "09-7-data-layer-supabase-prisma-and-the-dal.md",
+    "level": "MUST"
+  },
+  "SB-04": {
+    "file": "09-7-data-layer-supabase-prisma-and-the-dal.md",
+    "level": "MUST"
+  },
+  "SB-05": {
+    "file": "09-7-data-layer-supabase-prisma-and-the-dal.md",
+    "level": "MUST"
+  },
+  "SB-06": {
+    "file": "09-7-data-layer-supabase-prisma-and-the-dal.md",
+    "level": "MUST"
+  },
+  "SB-07": {
+    "file": "09-7-data-layer-supabase-prisma-and-the-dal.md",
+    "level": "MUST"
+  },
+  "SB-08": {
+    "file": "09-7-data-layer-supabase-prisma-and-the-dal.md",
+    "level": "SHOULD"
+  },
+  "SB-09": {
+    "file": "09-7-data-layer-supabase-prisma-and-the-dal.md",
+    "level": "MUST"
+  },
+  "SB-10": {
+    "file": "09-7-data-layer-supabase-prisma-and-the-dal.md",
+    "level": "MUST"
+  },
+  "SB-11": {
+    "file": "09-7-data-layer-supabase-prisma-and-the-dal.md",
+    "level": "MUST"
+  },
+  "SB-12": {
+    "file": "09-7-data-layer-supabase-prisma-and-the-dal.md",
+    "level": "SHOULD"
+  },
+  "SB-13": {
+    "file": "09-7-data-layer-supabase-prisma-and-the-dal.md",
+    "level": "MUST"
+  },
+  "SEC-01": {
+    "file": "11-9-security.md",
+    "level": "MUST"
+  },
+  "SEC-02": {
+    "file": "11-9-security.md",
+    "level": "MUST"
+  },
+  "SEC-03": {
+    "file": "11-9-security.md",
+    "level": "MUST"
+  },
+  "SEC-04": {
+    "file": "11-9-security.md",
+    "level": "MUST"
+  },
+  "SEC-05": {
+    "file": "11-9-security.md",
+    "level": "MUST"
+  },
+  "SEC-06": {
+    "file": "11-9-security.md",
+    "level": "MUST"
+  },
+  "SEC-07": {
+    "file": "11-9-security.md",
+    "level": "MUST"
+  },
+  "SEC-08": {
+    "file": "11-9-security.md",
+    "level": "MUST"
+  },
+  "SEC-09": {
+    "file": "11-9-security.md",
+    "level": "MUST"
+  },
+  "SEC-10": {
+    "file": "11-9-security.md",
+    "level": "MUST"
+  },
+  "SEC-11": {
+    "file": "11-9-security.md",
+    "level": "MUST"
+  },
+  "SEC-12": {
+    "file": "11-9-security.md",
+    "level": "MUST"
+  },
+  "SEC-13": {
+    "file": "11-9-security.md",
+    "level": "MUST"
+  },
+  "SEC-14": {
+    "file": "11-9-security.md",
+    "level": "MUST"
+  },
+  "SEC-15": {
+    "file": "11-9-security.md",
+    "level": "SHOULD"
+  },
+  "SEC-16": {
+    "file": "11-9-security.md",
+    "level": "SHOULD"
+  },
+  "SEC-17": {
+    "file": "11-9-security.md",
+    "level": "SHOULD"
+  },
+  "SEC-18": {
+    "file": "11-9-security.md",
+    "level": "MUST"
+  },
+  "SEC-19": {
+    "file": "11-9-security.md",
+    "level": "MUST"
+  },
+  "SEC-20": {
+    "file": "11-9-security.md",
+    "level": "MUST"
+  },
+  "SEC-21": {
+    "file": "11-9-security.md",
+    "level": "MUST"
+  },
+  "SEC-22": {
+    "file": "11-9-security.md",
+    "level": "MUST"
+  },
+  "SEC-23": {
+    "file": "11-9-security.md",
+    "level": "MUST"
+  },
+  "SEC-24": {
+    "file": "11-9-security.md",
+    "level": "SHOULD"
+  },
+  "SEC-25": {
+    "file": "11-9-security.md",
+    "level": "SHOULD"
+  },
+  "SEO-01": {
+    "file": "16-14-cross-cutting-concerns.md",
+    "level": "MUST"
+  },
+  "SEO-02": {
+    "file": "16-14-cross-cutting-concerns.md",
+    "level": "SHOULD"
+  },
+  "STR-01": {
+    "file": "05-3-project-structure.md",
+    "level": "MUST"
+  },
+  "STR-02": {
+    "file": "05-3-project-structure.md",
+    "level": "MUST"
+  },
+  "STR-03": {
+    "file": "05-3-project-structure.md",
+    "level": "MUST"
+  },
+  "STR-04": {
+    "file": "05-3-project-structure.md",
+    "level": "SHOULD"
+  },
+  "STR-06": {
+    "file": "05-3-project-structure.md",
+    "level": "MUST"
+  },
+  "STR-07": {
+    "file": "05-3-project-structure.md",
+    "level": "SHOULD"
+  },
+  "STR-08": {
+    "file": "05-3-project-structure.md",
+    "level": "SHOULD"
+  },
+  "STR-09": {
+    "file": "05-3-project-structure.md",
+    "level": "MAY"
+  },
+  "STYLE-01": {
+    "file": "10-8-styling-design-system-and-ui.md",
+    "level": "MUST"
+  },
+  "STYLE-02": {
+    "file": "10-8-styling-design-system-and-ui.md",
+    "level": "MUST"
+  },
+  "STYLE-03": {
+    "file": "10-8-styling-design-system-and-ui.md",
+    "level": "MUST"
+  },
+  "STYLE-04": {
+    "file": "10-8-styling-design-system-and-ui.md",
+    "level": "SHOULD"
+  },
+  "STYLE-06": {
+    "file": "10-8-styling-design-system-and-ui.md",
+    "level": "MUST"
+  },
+  "STYLE-07": {
+    "file": "10-8-styling-design-system-and-ui.md",
+    "level": "SHOULD"
+  },
+  "STYLE-08": {
+    "file": "10-8-styling-design-system-and-ui.md",
+    "level": "MUST"
+  },
+  "STYLE-09": {
+    "file": "10-8-styling-design-system-and-ui.md",
+    "level": "MUST"
+  },
+  "STYLE-10": {
+    "file": "10-8-styling-design-system-and-ui.md",
+    "level": "MUST"
+  },
+  "STYLE-12": {
+    "file": "10-8-styling-design-system-and-ui.md",
+    "level": "SHOULD"
+  },
+  "STYLE-13": {
+    "file": "10-8-styling-design-system-and-ui.md",
+    "level": "SHOULD"
+  },
+  "TEST-01": {
+    "file": "14-12-testing.md",
+    "level": "MUST"
+  },
+  "TEST-02": {
+    "file": "14-12-testing.md",
+    "level": "MUST"
+  },
+  "TEST-03": {
+    "file": "14-12-testing.md",
+    "level": "MUST"
+  },
+  "TEST-04": {
+    "file": "14-12-testing.md",
+    "level": "MUST"
+  },
+  "TEST-05": {
+    "file": "14-12-testing.md",
+    "level": "MUST"
+  },
+  "TEST-06": {
+    "file": "14-12-testing.md",
+    "level": "MUST"
+  },
+  "TEST-07": {
+    "file": "14-12-testing.md",
+    "level": "SHOULD"
+  },
+  "TEST-08": {
+    "file": "14-12-testing.md",
+    "level": "MUST"
+  },
+  "TEST-09": {
+    "file": "14-12-testing.md",
+    "level": "SHOULD"
+  },
+  "TEST-10": {
+    "file": "14-12-testing.md",
+    "level": "SHOULD"
+  },
+  "TEST-11": {
+    "file": "14-12-testing.md",
+    "level": "SHOULD"
+  },
+  "TEST-12": {
+    "file": "14-12-testing.md",
+    "level": "SHOULD"
+  },
+  "TEST-13": {
+    "file": "14-12-testing.md",
+    "level": "MAY"
+  },
+  "TEST-14": {
+    "file": "14-12-testing.md",
+    "level": "SHOULD"
+  },
+  "TOOL-01": {
+    "file": "17-15-tooling-and-developer-experience.md",
+    "level": "MUST"
+  },
+  "TOOL-02": {
+    "file": "17-15-tooling-and-developer-experience.md",
+    "level": "MUST"
+  },
+  "TOOL-03": {
+    "file": "17-15-tooling-and-developer-experience.md",
+    "level": "MUST"
+  },
+  "TOOL-04": {
+    "file": "17-15-tooling-and-developer-experience.md",
+    "level": "MUST"
+  },
+  "TOOL-05": {
+    "file": "17-15-tooling-and-developer-experience.md",
+    "level": "MUST"
+  },
+  "TOOL-06": {
+    "file": "17-15-tooling-and-developer-experience.md",
+    "level": "SHOULD"
+  },
+  "TOOL-07": {
+    "file": "17-15-tooling-and-developer-experience.md",
+    "level": "SHOULD"
+  },
+  "TOOL-08": {
+    "file": "17-15-tooling-and-developer-experience.md",
+    "level": "SHOULD"
+  },
+  "TOOL-09": {
+    "file": "17-15-tooling-and-developer-experience.md",
+    "level": "SHOULD"
+  },
+  "TOOL-10": {
+    "file": "17-15-tooling-and-developer-experience.md",
+    "level": "MUST"
+  },
+  "TS-01": {
+    "file": "06-4-typescript-standards.md",
+    "level": "MUST"
+  },
+  "TS-02": {
+    "file": "06-4-typescript-standards.md",
+    "level": "MAY"
+  },
+  "TS-04": {
+    "file": "06-4-typescript-standards.md",
+    "level": "MUST"
+  },
+  "TS-05": {
+    "file": "06-4-typescript-standards.md",
+    "level": "MUST"
+  },
+  "TS-06": {
+    "file": "06-4-typescript-standards.md",
+    "level": "MUST"
+  },
+  "TS-07": {
+    "file": "06-4-typescript-standards.md",
+    "level": "SHOULD"
+  },
+  "TS-08": {
+    "file": "06-4-typescript-standards.md",
+    "level": "SHOULD"
+  },
+  "TS-09": {
+    "file": "06-4-typescript-standards.md",
+    "level": "MUST"
+  },
+  "TS-10": {
+    "file": "06-4-typescript-standards.md",
+    "level": "SHOULD"
+  },
+  "TS-11": {
+    "file": "06-4-typescript-standards.md",
+    "level": "MUST"
+  },
+  "TS-12": {
+    "file": "06-4-typescript-standards.md",
+    "level": "SHOULD"
+  },
+  "TS-13": {
+    "file": "06-4-typescript-standards.md",
+    "level": "MUST"
+  },
+  "UI-01": {
+    "file": "10-8-styling-design-system-and-ui.md",
+    "level": "MUST"
+  },
+  "UI-02": {
+    "file": "10-8-styling-design-system-and-ui.md",
+    "level": "MUST"
+  },
+  "UI-03": {
+    "file": "10-8-styling-design-system-and-ui.md",
+    "level": "MUST"
+  },
+  "UI-04": {
+    "file": "10-8-styling-design-system-and-ui.md",
+    "level": "MUST"
+  },
+  "UI-05": {
+    "file": "10-8-styling-design-system-and-ui.md",
+    "level": "SHOULD"
+  },
+  "UI-06": {
+    "file": "10-8-styling-design-system-and-ui.md",
+    "level": "MUST"
+  },
+  "UI-07": {
+    "file": "10-8-styling-design-system-and-ui.md",
+    "level": "MUST"
+  },
+  "UI-08": {
+    "file": "10-8-styling-design-system-and-ui.md",
+    "level": "SHOULD"
+  },
+  "UI-09": {
+    "file": "10-8-styling-design-system-and-ui.md",
+    "level": "MUST"
+  },
+  "UI-10": {
+    "file": "10-8-styling-design-system-and-ui.md",
+    "level": "SHOULD"
+  },
+  "UI-11": {
+    "file": "10-8-styling-design-system-and-ui.md",
+    "level": "SHOULD"
+  },
+  "UI-12": {
+    "file": "10-8-styling-design-system-and-ui.md",
+    "level": "SHOULD"
+  },
+  "UI-13": {
+    "file": "10-8-styling-design-system-and-ui.md",
+    "level": "SHOULD"
+  },
+  "UI-14": {
+    "file": "10-8-styling-design-system-and-ui.md",
+    "level": "SHOULD"
+  },
+  "VER-01": {
+    "file": "03-1-baseline-and-version-policy.md",
+    "level": "MUST"
+  },
+  "VER-02": {
+    "file": "03-1-baseline-and-version-policy.md",
+    "level": "MUST"
+  },
+  "VER-03": {
+    "file": "03-1-baseline-and-version-policy.md",
+    "level": "MUST"
+  },
+  "VER-04": {
+    "file": "03-1-baseline-and-version-policy.md",
+    "level": "SHOULD"
+  },
+  "VER-05": {
+    "file": "03-1-baseline-and-version-policy.md",
+    "level": "MUST"
+  },
+  "VER-06": {
+    "file": "03-1-baseline-and-version-policy.md",
+    "level": "SHOULD"
+  }
+}

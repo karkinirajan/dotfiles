@@ -8,7 +8,6 @@ for things that aren't actually usable on this machine:
 
 | Step | Why disabled |
 |---|---|
-| `mise` | Not installed — removed from the system entirely, see 03-terminal/zsh/.zshrc history |
 | `antigravity`, `antigravity_cli` | Not used on this machine |
 | `helm` | Installed but has zero repos configured (`helm repo list` → empty) — nothing to update |
 | `cursor` | Only `cursor-agent` CLI is installed (its own step, `cursor_agent`, stays enabled) — no actual Cursor IDE |

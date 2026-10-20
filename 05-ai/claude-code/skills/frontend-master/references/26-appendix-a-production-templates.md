@@ -1,0 +1,6 @@
+## Appendix A. Production templates
+
+Every file below was extracted from this document into an empty project and exercised on 2026-10-12 with the exact versions in section 1.1: `next typegen && tsc --noEmit` (TypeScript 6.0.3), ESLint 10 with the A.14 config, `prettier --check`, Vitest, `prisma generate`, `next build`, `next start` and `next dev` with Chromium (CSP, hydration, axe at WCAG 2.2 AA in both color schemes, `instant()`), and `pnpm audit --prod` (clean; the full audit's one dev-only finding is explained under A.13). The Supabase CLI flags in A.11 and A.18 were checked against the CLI's own help and argument parser, and the workflow passes `actionlint`. On 2026-10-17 the local Supabase stack was started (Docker): the reference migration and its pgTAP suite (A.19) pass, a deliberately broken policy fails them, `/api/ready` answered 200, then 503 with the auth container stopped, and the cookie behavior in A.4 was confirmed against its auth server. Redis ran locally during the end-to-end suite; the rate-limit rejection path is covered by unit tests only.
+
+Each file is labeled with its path in code font on the line above its fence. Blocks labeled "(mode B)" replace the mode A file of the same path (SEC-08, A.10). Replace `PROJECT_REF` in A.2 with your Supabase project reference. `supabase/config.toml` comes from `supabase init`.
+
