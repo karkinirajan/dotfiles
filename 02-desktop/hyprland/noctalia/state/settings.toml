@@ -231,8 +231,9 @@ settings_window_translucent = true
 builtin = "Ayu"
 community_palette = "Catppuccin Mocha Green"
 custom_palette = "CatppuccinMocha"
+mode = "dark"
 pure_black_dark = true
-source = "community"
+source = "custom"
 wallpaper_scheme = "m3-content"
 
     [theme.templates]
@@ -264,13 +265,13 @@ wallpaper_scheme = "m3-content"
 edge_smoothness = 0.0
 
     [wallpaper.default]
-    path = "/home/kneeraazon/.wallpapers/wp15585667.jpg"
+    path = "/home/kneeraazon/.wallpapers/Wallpaper22.png"
 
     [wallpaper.last]
-    path = "/home/kneeraazon/.wallpapers/wp15585667.jpg"
+    path = "/home/kneeraazon/.wallpapers/Wallpaper22.png"
 
     [wallpaper.monitors.DP-2]
-    path = "/home/kneeraazon/.wallpapers/wp15585667.jpg"
+    path = "/home/kneeraazon/.wallpapers/Wallpaper22.png"
 
     [[wallpaper.favorite]]
     builtin_palette = "Catppuccin"
@@ -287,8 +288,10 @@ edge_smoothness = 0.0
     theme_mode = "auto"
 
     [[wallpaper.favorite]]
+    builtin_palette = "Ayu"
+    palette_source = "builtin"
     path = "/home/kneeraazon/.wallpapers/1360645.jpeg"
-    theme_mode = "auto"
+    theme_mode = "dark"
 
     [[wallpaper.favorite]]
     path = "/home/kneeraazon/.wallpapers/wally.jpg"
