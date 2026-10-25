@@ -22,9 +22,12 @@ hyprland/
 │   └── hyprland.conf              → /etc/sddm.conf.d/hyprland.conf
 │                                  # Only needed if starting from a Plasma-default
 │                                  #   login manager — see KDE-REMOVAL.md. Presets
-│                                  #   the Hyprland (uwsm-managed) session and a
-│                                  #   Wayland-native greeter; does NOT enable
-│                                  #   passwordless autologin (no `User=` set).
+│                                  #   one UWSM-managed Hyprland session and an
+│                                  #   X11 greeter; does NOT enable autologin.
+│   └── sessions/
+│       └── hyprland-uwsm.desktop  → /usr/local/share/wayland-sessions/
+│                                  # SDDM is limited to this session so it cannot
+│                                  # restore the plain, unmanaged Hyprland entry.
 ├── hypr/                          → ~/.config/hypr/
 │   ├── hyprland.conf              # entry point, sources everything below
 │   ├── hyprlock.conf, hypridle.conf, hyprpaper.conf
@@ -148,11 +151,14 @@ hyprland/
 
 ## Install
 
-```sh
+```bash
 # 1. Packages (compositor, shell, helpers, fonts) — see 01-system/cachyos/packages/
-sudo pacman -S --needed $(grep -v '^#' ../../os/cachyos/packages/desktop.txt | awk '{print $1}')
-sudo pacman -S --needed $(grep -v '^#' ../../os/cachyos/packages/fonts.txt   | awk '{print $1}')
-paru -S --needed $(grep '(AUR)' ../../os/cachyos/packages/desktop.txt ../../os/cachyos/packages/fonts.txt | awk '{print $1}')
+mapfile -t repo_packages < <(awk 'NF && $1 !~ /^#/ && $2 != "(AUR)" {print $1}' \
+  ../../01-system/cachyos/packages/desktop.txt ../../01-system/cachyos/packages/fonts.txt)
+mapfile -t aur_packages < <(awk 'NF && $1 !~ /^#/ && $2 == "(AUR)" {print $1}' \
+  ../../01-system/cachyos/packages/desktop.txt ../../01-system/cachyos/packages/fonts.txt)
+sudo pacman -S --needed "${repo_packages[@]}"
+paru -S --needed "${aur_packages[@]}"
 
 # 2. Config — the repo root installer links hypr/, scripts/, the Noctalia
 #    palettes and fontconfig, and seeds Noctalia's settings.toml.
@@ -162,6 +168,11 @@ cd ../.. && ./install.sh && ./install.sh status
 mkdir -p ~/.local/share/dbus-1/services
 cp 02-desktop/hyprland/noctalia/dbus-override/fr.emersion.mako.service ~/.local/share/dbus-1/services/
 systemctl --user disable --now mako.service noctalia.service 2>/dev/null
+
+# 4. SDDM: install the managed session and its session-only config.
+sudo install -Dm644 02-desktop/hyprland/sddm/hyprland.conf /etc/sddm.conf.d/hyprland.conf
+sudo install -Dm644 02-desktop/hyprland/sddm/sessions/hyprland-uwsm.desktop \
+  /usr/local/share/wayland-sessions/hyprland-uwsm.desktop
 
 # Plugins — see "Plugins" below for what each one is and why the fork/commit
 hyprpm update

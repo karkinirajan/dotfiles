@@ -61,7 +61,7 @@ disable = ["antigravity", "antigravity_cli", "ollama", "helm", "cursor", "contai
 # display_time = true
 
 # Don't ask for confirmations (no default value)
-assume_yes = true
+assume_yes = false
 
 # Whether to ask what to do after a step fails (default: true)
 ask_retry = false

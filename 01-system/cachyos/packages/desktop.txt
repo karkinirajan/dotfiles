@@ -9,6 +9,7 @@
 #
 # Referenced directly by config:
 #   hyprland hyprlock hypridle hyprpolkitagent   02-desktop/hyprland/hypr/*.conf
+#   sddm uwsm xorg-server                        UWSM session + X11 SDDM greeter
 #   noctalia noctalia-qs                         the bar/launcher/notifications
 #   hyprsunset                                   scripts/nightlight-toggle.sh
 #   cliphist wl-clipboard                        autostart.conf + keybinds
@@ -43,9 +44,12 @@ noctalia-qs
 pipewire
 pipewire-pulse
 playerctl
+sddm
 slurp
 swappy
 waybar
 wireplumber
 wl-clipboard
+xorg-server
 xdg-desktop-portal-hyprland
+uwsm
