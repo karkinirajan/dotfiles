@@ -2,9 +2,10 @@
 
 One command (`topgrade`) that upgrades every package manager, plugin
 manager, and dev toolchain on this machine in one pass. `topgrade.toml`
-here is the tuned config — `unattended` (`assume_yes = true`,
-`ask_retry = false`, so it never blocks on a prompt) with steps disabled
-for things that aren't actually usable on this machine:
+here is tuned to keep package-manager confirmation prompts enabled
+(`assume_yes = false`), so a conflict cannot silently remove a required
+package. Retry prompts are disabled, and steps are disabled only for things
+that aren't actually usable on this machine:
 
 | Step | Why disabled |
 |---|---|

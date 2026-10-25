@@ -1,0 +1,13 @@
+[Unit]
+Description=Persistent SSH master connection to the ERKE Nepal VPS
+After=network-online.target
+
+[Service]
+# Clear a stale ControlMaster socket before opening a new connection.
+ExecStartPre=/bin/sh -c 'rm -f %h/.ssh/cm/ubuntu@100.48.77.184:22'
+ExecStart=/usr/bin/ssh -N -o ControlMaster=yes -o ControlPersist=no -o ExitOnForwardFailure=yes sheesh-vps
+Restart=always
+RestartSec=30
+
+[Install]
+WantedBy=default.target

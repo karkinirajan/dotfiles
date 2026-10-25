@@ -692,7 +692,10 @@ sudo pacman -S nginx
 sudo systemctl enable --now nginx
 # Config:    /etc/nginx/nginx.conf
 # Test:      sudo nginx -t
-# Reload:    sudo nginx -s reload
+# This host's MIME table needs a larger type hash. Keep the adjustment in a
+# drop-in instead of editing the package-owned nginx.conf:
+sudo install -Dm644 04-networking/nginx/conf.d/00-types-hash.conf /etc/nginx/conf.d/00-types-hash.conf
+sudo nginx -t && sudo systemctl reload nginx
 ```
 
 ---
@@ -1635,6 +1638,18 @@ snapper list   # View snapshots
 GRUB_BTRFS_LIMIT="10"
 GRUB_BTRFS_SUBMENUNAME="CachyOS Snapshots (Recovery)"
 GRUB_BTRFS_IGNORE_PREFIX_PATH=("var/lib/docker" "@var/lib/docker" "var/lib/containers")
+```
+
+The tracked GRUB defaults are in `01-system/cachyos/grub/default`. They keep
+Windows detection and the snapshot recovery submenu, show the menu for three
+seconds, and put installed kernels at the top level without an extra "Advanced
+options" submenu.
+
+Install the tracked defaults and regenerate the menu after changing them:
+
+```bash
+sudo install -Dm644 01-system/cachyos/grub/default /etc/default/grub
+sudo grub-mkconfig -o /boot/grub/grub.cfg
 ```
 
 **Auto-update GRUB after kernel upgrades** — create `/etc/pacman.d/hooks/95-grub-btrfs-update.hook`:

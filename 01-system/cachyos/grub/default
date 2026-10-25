@@ -1,0 +1,22 @@
+# GRUB boot loader configuration for CachyOS.
+GRUB_DEFAULT="0"
+GRUB_TIMEOUT="3"
+GRUB_TIMEOUT_STYLE="menu"
+GRUB_DISTRIBUTOR="CachyOS"
+
+GRUB_CMDLINE_LINUX_DEFAULT="nowatchdog nvme_load=YES zswap.enabled=0 splash loglevel=3 lsm=landlock,lockdown,yama,integrity,bpf"
+GRUB_CMDLINE_LINUX=""
+
+GRUB_DISABLE_SHIM_LOCK="y"
+GRUB_PRELOAD_MODULES="part_gpt part_msdos"
+GRUB_DISABLE_OS_PROBER="false"
+GRUB_DISABLE_BOOTNEXT="true"
+GRUB_TERMINAL_INPUT="console"
+GRUB_TERMINAL_OUTPUT="console"
+
+GRUB_DISABLE_LINUX_UUID="true"
+GRUB_DISABLE_RECOVERY="true"
+GRUB_DISABLE_LINUX_RECOVERY="true"
+GRUB_DISABLE_SUBMENU="true"
+GRUB_EARLY_INITRD_LINUX_STOCK=""
+GRUB_TOP_LEVEL="/boot/vmlinuz-linux-cachyos"

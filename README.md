@@ -29,6 +29,7 @@ own README. Start at Part 00 and go in order, or jump to the part you need.
 |---------|------|
 | How the repo is wired to your home directory | [`manifest.conf`](manifest.conf) — the map: `<type> <repo path> <live path>` |
 | The installer | [`install.sh`](install.sh) — link, seed, status, pull, restore |
+| Fresh CachyOS setup | [`fresh-setup.md`](fresh-setup.md) — AI-agent playbook with owner checkpoints |
 
 ### 01 · System — [`01-system/`](01-system/README.md)
 
@@ -123,9 +124,13 @@ Install the packages before the configs. The configs name fonts and helper
 binaries and fail quietly without them:
 
 ```bash
-sudo pacman -S --needed $(grep -v '^#' 01-system/cachyos/packages/desktop.txt | awk '{print $1}')
-sudo pacman -S --needed $(grep -v '^#' 01-system/cachyos/packages/fonts.txt   | awk '{print $1}')
-paru        -S --needed $(grep    '(AUR)' 01-system/cachyos/packages/*.txt    | awk '{print $1}')
+mapfile -t repo_packages < <(awk 'NF && $1 !~ /^#/ && $2 != "(AUR)" {print $1}' \
+  01-system/cachyos/packages/desktop.txt 01-system/cachyos/packages/fonts.txt)
+mapfile -t aur_packages < <(awk 'NF && $1 !~ /^#/ && $2 == "(AUR)" {print $1}' \
+  01-system/cachyos/packages/desktop.txt 01-system/cachyos/packages/fonts.txt)
+
+sudo pacman -S --needed "${repo_packages[@]}"
+paru -S --needed "${aur_packages[@]}"
 ```
 
 Then follow [`02-desktop/hyprland/README.md`](02-desktop/hyprland/README.md)
