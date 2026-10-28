@@ -1,0 +1,37 @@
+# Interactive shell and developer CLI baseline.
+# All packages are from CachyOS/Arch repositories except topgrade-bin (AUR).
+# paru is the configured AUR updater; yay remains an available fallback.
+# AUR entries are marked with the repository's existing `(AUR)` convention.
+
+atuin
+bat
+btop
+curl
+direnv
+dust
+eza
+fd
+file
+fzf
+git
+inotify-tools
+jq
+just
+lazygit
+less
+neovim
+paru
+procs
+ripgrep
+sccache
+starship
+tealdeer
+tmux
+topgrade-bin (AUR)
+unzip
+uv
+wget
+yazi
+zoxide
+zsh
+7zip

@@ -20,4 +20,4 @@ grep -v "^${addr}	" "$state_file" > "${state_file}.tmp" || true
 mv "${state_file}.tmp" "$state_file"
 printf '%s\t%s\n' "$addr" "$ws" >> "$state_file"
 
-hyprctl dispatch movetoworkspacesilent special:minimized
+hyprctl dispatch "hl.dsp.window.move({ workspace = \"special:minimized\", window = \"address:$addr\" })"

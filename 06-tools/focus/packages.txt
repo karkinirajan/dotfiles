@@ -1,0 +1,5 @@
+# System packages required by focus (DNS filter + nftables rules).
+# Installing packages does not enable the service or change DNS settings.
+bind
+dnsmasq
+nftables

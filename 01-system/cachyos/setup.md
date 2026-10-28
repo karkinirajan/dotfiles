@@ -1,11 +1,21 @@
 # CachyOS Developer Workstation — Complete Setup Guide
 
-**Hardware:** AMD Ryzen 5 5600 · AMD RX 6700 XT (RDNA2, gfx1030) · 32GB RAM · KDE Plasma  
-**Profile:** Senior Python Backend & AI Engineer · Freelancer · Full-Stack when needed  
-**OS:** CachyOS (Arch Linux) · Kernel 6.19 · ROCm 7.2 · uv 0.10.4 · Node v20 LTS  
-**Last updated:** April 2026
+> **Archive.** This is the original, exhaustive first-install narrative and has
+> drifted from the live system in places (e.g. some KDE app mentions). For the
+> current source of truth, use `fresh-setup.md` (root) plus the package lists
+> under `01-system/cachyos/packages/`. Sections here are still useful for the
+> *why* behind a choice, but verify specifics against those before following
+> them on a fresh machine.
 
-> This guide merges both setup files into one authoritative reference. Every section lists what to install, why, and how — including post-install configuration and service enablement. Follow top to bottom for a clean machine; skip sections already done.
+**Hardware profile:** AMD Ryzen 5 5600 · Radeon RX 6700 XT (gfx1031) · 32GB RAM · Btrfs
+
+**Desktop:** CachyOS/Arch Linux · Hyprland + Noctalia
+
+**Profile:** Python backend, AI/ML, and full-stack development
+
+**Last reviewed:** October 2026
+
+> This is the optional application and configuration catalog. Rolling package names and versions change; the tracked package manifests are authoritative for baseline installs. Use [`fresh-setup.md`](../../fresh-setup.md) for the ordered setup and safety checkpoints. Review current package metadata and service behavior before running any example.
 
 ---
 
@@ -79,6 +89,11 @@ compression-algorithm = zstd
 ```
 
 **Why:** Creates an 8GB compressed swap device in RAM using zstd. When RAM fills under heavy AI workloads (Ollama + Docker + VS Code + browser), cold pages compress in RAM (~37ns) instead of hitting SSD (~100µs). Effectively gives you ~36-40GB usable memory.
+
+**Check the live CachyOS configuration first.** The current host already has
+zstd zram swap sized to about 31 GiB. See
+[`dev-stack.md`](dev-stack.md); do not replace it with the 8 GiB example
+without measuring the workload and checking the distribution's configuration.
 
 **Optional SSD swap fallback** for extremely heavy workloads (Btrfs):
 
@@ -678,14 +693,7 @@ sudo pacman -S azure-cli
 az login   # Opens browser for interactive auth
 ```
 
-### 7.3 Google Cloud SDK
-
-```bash
-paru -S google-cloud-cli
-gcloud init   # Authenticate and set default project/region
-```
-
-### 7.4 Nginx
+### 7.3 Nginx
 
 ```bash
 sudo pacman -S nginx
@@ -826,9 +834,6 @@ docker login   # Docker Hub
 # AWS ECR:
 aws ecr get-login-password --region us-east-1 | \
   docker login --username AWS --password-stdin <account_id>.dkr.ecr.us-east-1.amazonaws.com
-
-# GCP Artifact Registry:
-gcloud auth configure-docker us-central1-docker.pkg.dev
 
 # GitHub Container Registry:
 echo $GITHUB_TOKEN | docker login ghcr.io -u USERNAME --password-stdin
@@ -1384,9 +1389,10 @@ Branch naming: `feature/PROJ-123-add-search`, `bugfix/fix-login-crash`, `hotfix/
 ### 16.3 Screenshots & Screen Recording
 
 ```bash
-sudo pacman -S flameshot spectacle obs-studio
-# flameshot gui    — annotation tools, arrows, blur
-# spectacle        — KDE default (PrintScreen key)
+sudo pacman -S grim slurp swash obs-studio
+# grim + slurp     — capture (region/window/screen), wired to the Print key
+#                    via ~/.config/hypr/scripts/screenshot.sh
+# swash            — the only screenshot annotator/editor on this machine
 # obs-studio       — recording and streaming (Wayland via PipeWire)
 ```
 
@@ -1415,9 +1421,12 @@ sudo pacman -S copyq   # Feature-rich clipboard manager
 
 ### 17.2 Upwork App
 
-```bash
-paru -S upwork   # Required for hourly contracts (screenshots + activity tracking)
-```
+Install the bundled-runtime package in [`aur/upwork/`](aur/upwork/). The
+standard AUR recipe depends on Electron 36 and builds Chromium from source.
+Upwork's screenshot/time tracker is not supported in Wayland sessions; see
+[Upwork's Linux troubleshooting guide](https://support.upwork.com/hc/en-us/articles/211064108-How-to-troubleshoot-our-desktop-app-Linux).
+The app can launch in Hyprland, but screenshot-based hourly tracking needs a
+supported Xorg session.
 
 ### 17.3 PDF Viewer
 
@@ -1583,14 +1592,15 @@ sudo pacman -S apparmor
 sudo pacman -S apparmor.d   # Community profiles (complain mode — safe, logs violations)
 ```
 
-Add kernel parameter to `/etc/default/grub`:
+Add the kernel parameter to `KERNEL_CMDLINE[default]` in
+`/etc/default/limine`:
 
 ```
-GRUB_CMDLINE_LINUX_DEFAULT="... lsm=landlock,lockdown,yama,integrity,apparmor,bpf"
+KERNEL_CMDLINE[default]+=" lsm=landlock,lockdown,yama,integrity,apparmor,bpf"
 ```
 
 ```bash
-sudo grub-mkconfig -o /boot/grub/grub.cfg
+sudo limine-update
 sudo systemctl enable apparmor.service
 # Reboot required. Verify: sudo aa-status
 ```
@@ -1620,61 +1630,44 @@ sudo systemctl enable --now syncthing@$USER.service
 
 ## 20. System Maintenance & Monitoring
 
-### 20.1 Btrfs Snapshots — Snapper + grub-btrfs
+### 20.1 Btrfs Snapshots — Snapper + Limine
 
-CachyOS defaults to Btrfs. `snap-pac` auto-creates snapshots on every pacman transaction. `grub-btrfs` adds a recovery submenu to GRUB so you can boot into any snapshot.
+This CachyOS installation uses Limine, not GRUB. `snap-pac` and Snapper create
+and retain filesystem snapshots; `limine-snapper-sync` can additionally expose
+those snapshots as boot-menu entries. Use the installed Limine integration
+instead of installing `grub-btrfs` or regenerating `/boot/grub/grub.cfg`.
 
 ```bash
-sudo pacman -S snapper snap-pac btrfs-assistant grub-btrfs
-sudo snapper -c root create-config /
+sudo pacman -S --needed snapper snap-pac
+if [[ ! -f /etc/snapper/configs/root ]]; then
+  sudo snapper -c root create-config /
+fi
 sudo systemctl enable --now snapper-timeline.timer snapper-cleanup.timer
-snapper list   # View snapshots
-# Restore: boot from GRUB "CachyOS Snapshots (Recovery)" submenu or snapper rollback
+snapper list
 ```
 
-**Limit snapshot display in GRUB** — edit `/etc/default/grub-btrfs/config`:
+The desired menu for this host is **only the primary CachyOS kernel** in
+Limine. Do not add Windows detection, secondary kernels, fallback loaders, or
+snapshot entries to its menu. Snapshots remain available to `snapper`; they
+should not be exposed as boot choices for this profile.
 
-```bash
-GRUB_BTRFS_LIMIT="10"
-GRUB_BTRFS_SUBMENUNAME="CachyOS Snapshots (Recovery)"
-GRUB_BTRFS_IGNORE_PREFIX_PATH=("var/lib/docker" "@var/lib/docker" "var/lib/containers")
-```
+Limine menu entries live in `/boot/limine.conf`; kernel entries are managed by
+`limine-entry-tool`, and `/etc/default/limine` overrides its options. Before
+changing a live menu, back up the config, inspect the exact entry paths with
+`limine-list`, then remove only the unwanted entries using
+`limine-entry-tool --remove-entry`. Disable `limine-snapper-sync.service` if
+snapshot entries must stay absent, and set `FIND_BOOTLOADERS=no` in
+`/etc/default/limine` to stop discovery of fallback EFI loaders. Rebuild with
+`sudo limine-update` and verify `limine-list` shows the single CachyOS entry
+before rebooting. Do not remove the currently booted kernel or its initramfs.
 
-The tracked GRUB defaults are in `01-system/cachyos/grub/default`. They keep
-Windows detection and the snapshot recovery submenu, show the menu for three
-seconds, and put installed kernels at the top level without an extra "Advanced
-options" submenu.
-
-Install the tracked defaults and regenerate the menu after changing them:
-
-```bash
-sudo install -Dm644 01-system/cachyos/grub/default /etc/default/grub
-sudo grub-mkconfig -o /boot/grub/grub.cfg
-```
-
-**Auto-update GRUB after kernel upgrades** — create `/etc/pacman.d/hooks/95-grub-btrfs-update.hook`:
-
-```ini
-[Trigger]
-Operation = Upgrade
-Operation = Install
-Operation = Remove
-Type = Package
-Target = linux-cachyos
-Target = linux-cachyos-lts
-Target = grub
-Target = grub-btrfs
-Target = snapper
-
-[Action]
-Description = Updating GRUB config after kernel/grub/snapshot change...
-When = PostTransaction
-Exec = /usr/bin/grub-mkconfig -o /boot/grub/grub.cfg
-Depends = grub
-Depends = grub-btrfs
-```
-
-> **Secure Boot note:** grub-btrfs snapshot entries appear as a single submenu in GRUB — they do NOT break Secure Boot. The GRUB EFI binary is signed by a custom DB key; snapshot kernels boot through the same GRUB loader without requiring individual signing (lockdown LSM stays in `[none]` mode when no shim is installed).
+On this host, the live cleanup is complete. `limine-list` shows only
+`CachyOS → linux-cachyos`; LTS and real-time kernel packages are removed,
+`limine-snapper-sync.service` is disabled, and `/etc/default/limine` sets
+`BOOT_ORDER="linux-cachyos"` and `FIND_BOOTLOADERS="no"`. Snapper snapshots
+and the EFI fallback files remain on disk, but are not Limine menu entries.
+The generated config defaults directly to `CachyOS/linux-cachyos` and does
+not remember another entry. See `system-summary.md` for the full current state.
 
 ### 20.2 System Monitoring
 
@@ -1772,227 +1765,35 @@ sudo pacman -S ark p7zip unrar
 
 ---
 
-## 22. Bulk Install Commands
+## 22. Baseline package installation
 
-Run these on a fresh machine to install everything in one pass:
+The baseline is managed in these package manifests:
 
-```bash
-# === 1. SYSTEM & GPU ===
-sudo pacman -S --noconfirm cachyos-settings ananicy-cpp cachyos-ananicy-rules \
-  vulkan-radeon lib32-vulkan-radeon vulkan-icd-loader lib32-vulkan-icd-loader lib32-mesa \
-  rocm-hip-sdk rocm-opencl-sdk radeontop rocm-smi-lib
+- `01-system/cachyos/packages/desktop.txt` — Hyprland, Noctalia, and desktop helpers.
+- `01-system/cachyos/packages/system.txt` — CachyOS Snapper support and package-transaction snapshots.
+- `01-system/cachyos/packages/fonts.txt` — fonts referenced by the configs.
+- `01-system/cachyos/packages/cli.txt` — shell, terminal, and developer utilities.
+- `06-tools/focus/packages.txt` — dependencies for the optional focus DNS filter.
+- `01-system/cachyos/packages/ai.txt` — optional Ollama/ROCm packages for the matching AMD GPU.
 
-# === 2. DATABASES ===
-sudo pacman -S --noconfirm postgresql mariadb redis sqlite dbeaver
+Use the interactive installation command in the repository [README](../../README.md#install).
+AUR packages are marked `(AUR)` and must be reviewed and built with an installed
+AUR helper. Installing a package does not initialize databases, expose network
+services, change DNS, enable services, or download AI models.
 
-# === 3. DEVOPS & CLOUD ===
-sudo pacman -S --noconfirm docker docker-compose docker-buildx \
-  kubectl minikube helm k9s \
-  aws-cli-v2 azure-cli terraform opentofu nginx act gitlab-runner
-
-# === 4. TERMINAL & SHELL TOOLS ===
-sudo pacman -S --noconfirm neovim zsh kitty alacritty wezterm starship tmux zellij \
-  fzf ripgrep fd bat eza zoxide procs dust duf tokei hyperfine lazygit \
-  git github-cli nvm
-
-# === 5. EDITORS ===
-sudo pacman -S --noconfirm pycharm-community-edition
-
-# === 6. PRODUCTIVITY & SECURITY ===
-sudo pacman -S --noconfirm bitwarden keepassxc syncthing copyq okular korganizer \
-  thunderbird flameshot spectacle kdeconnect \
-  ufw fail2ban dnscrypt-proxy apparmor apparmor.d \
-  snapper snap-pac btrfs-assistant grub-btrfs pacman-contrib reflector
-
-# === 7. APPS & MEDIA ===
-sudo pacman -S --noconfirm firefox-developer-edition obsidian \
-  discord telegram-desktop vlc mpv \
-  gimp inkscape obs-studio libreoffice-fresh strawberry \
-  btop nvtop mission-center ncdu \
-  ark p7zip unrar dolphin kdegraphics-thumbnailers ffmpegthumbs sqlite
-
-# === 8. AUR PACKAGES ===
-paru -S --noconfirm visual-studio-code-bin cursor-bin zed vscodium-bin \
-  brave-bin librewolf-bin mullvad-browser-bin ungoogled-chromium-bin \
-  notion-app-enhanced logseq-desktop-bin anytype-bin \
-  zoom slack-desktop spotify upwork \
-  mullvad-vpn-bin proton-vpn-gtk-app \
-  lazydocker onlyoffice-bin \
-  ghostty amdgpu_top todoist-appimage \
-  google-cloud-cli mongodb-bin mongodb-compass-bin pgvector
-
-# === 9. POST-INSTALL ESSENTIALS ===
-# GPU & Docker groups
-sudo usermod -aG render,video,docker $USER
-
-# Install uv
-curl -LsSf https://astral.sh/uv/install.sh | sh
-
-# Global Python CLI tools (uv tool install takes ONE package at a time)
-uv tool install ruff
-uv tool install jupyterlab
-uv tool install httpie
-uv tool install pre-commit
-uv tool install mypy
-uv tool install ipython
-uv tool install ansible
-
-# Initialize databases
-sudo -iu postgres initdb --locale=C.UTF-8 -E UTF8 -D /var/lib/postgres/data --data-checksums
-sudo mariadb-install-db --user=mysql --basedir=/usr --datadir=/var/lib/mysql
-
-# Enable all services
-sudo systemctl enable --now \
-  ananicy-cpp docker postgresql mariadb valkey mongodb nginx \
-  ollama fail2ban dnscrypt-proxy apparmor syncthing@$USER \
-  mullvad-daemon ufw paccache.timer reflector.timer \
-  snapper-timeline.timer snapper-cleanup.timer
-
-# Ollama RDNA2 override (RX 6700 XT / RX 6000 series)
-sudo mkdir -p /etc/systemd/system/ollama.service.d/
-echo -e '[Service]\nEnvironment="HSA_OVERRIDE_GFX_VERSION=10.3.0"' | \
-  sudo tee /etc/systemd/system/ollama.service.d/override.conf
-sudo systemctl daemon-reload && sudo systemctl restart ollama
-
-# Default shell
-chsh -s $(which zsh)
-```
+The remainder of this guide is a catalog of optional tools. Select only the
+applications and services needed for this machine; do not combine the catalog
+into a blanket transaction.
 
 ---
 
-## 23. ~/.zshrc Configuration
+## 23. Zsh configuration
 
-Full recommended `~/.zshrc` for this setup:
-
-```bash
-# =========================================================
-#  Oh My Zsh
-# =========================================================
-export ZSH="$HOME/.oh-my-zsh"
-ZSH_THEME="powerlevel10k/powerlevel10k"   # or "robbyrussell" if not using p10k
-
-plugins=(git sudo fzf history zsh-autosuggestions zsh-syntax-highlighting docker kubectl)
-source "$ZSH/oh-my-zsh.sh"
-
-# =========================================================
-#  PATH
-# =========================================================
-export PATH="$HOME/.local/bin:$HOME/.focus/scripts:$PATH"
-
-# =========================================================
-#  uv — Python package manager
-# =========================================================
-eval "$(uv generate-shell-completion zsh)"
-eval "$(uvx --generate-shell-completion zsh)"
-
-# =========================================================
-#  Node.js — NVM (lazy-loaded for fast startup)
-# =========================================================
-export NVM_DIR="$HOME/.nvm"
-nvm() { unset -f nvm; [[ -s "$NVM_DIR/nvm.sh" ]] && source "$NVM_DIR/nvm.sh"; nvm "$@"; }
-node() { unset -f node; [[ -s "$NVM_DIR/nvm.sh" ]] && source "$NVM_DIR/nvm.sh"; node "$@"; }
-
-# pnpm
-export PNPM_HOME="$HOME/.local/share/pnpm"
-[[ ":$PATH:" != *":$PNPM_HOME:"* ]] && export PATH="$PNPM_HOME:$PATH"
-
-# =========================================================
-#  Prompt — Starship (alternative to p10k)
-# =========================================================
-# eval "$(starship init zsh)"   # Uncomment to use Starship
-
-# =========================================================
-#  ROCm / AMD GPU — RDNA2 (RX 6700 XT)
-# =========================================================
-export HSA_OVERRIDE_GFX_VERSION=10.3.0
-# export HSA_OVERRIDE_GFX_VERSION=11.0.0   # RDNA3 (RX 7000 series)
-
-# =========================================================
-#  Ollama
-# =========================================================
-export OLLAMA_HOST="0.0.0.0:11434"
-
-# =========================================================
-#  zoxide — smart cd
-# =========================================================
-eval "$(zoxide init zsh)"
-
-# =========================================================
-#  fzf
-# =========================================================
-source /usr/share/fzf/key-bindings.zsh
-source /usr/share/fzf/completion.zsh
-
-# =========================================================
-#  File listing
-# =========================================================
-alias ls='eza --icons --group-directories-first'
-alias l='eza -lbF --icons --git --group-directories-first'
-alias ll='eza -lahig --time-style=long-iso --color-scale --icons --group-directories-first'
-alias lt='eza --tree --icons --level=2'
-alias cat='bat --style=plain --paging=never'
-
-# =========================================================
-#  Modern CLI replacements
-# =========================================================
-alias grep='rg'
-alias find='fd'
-alias du='dust'
-alias df='duf'
-alias ps='procs'
-
-# =========================================================
-#  TUI tools
-# =========================================================
-alias lg='lazygit'
-alias ld='lazydocker'
-alias gpumon='amdgpu_top'
-alias top='btop'
-
-# =========================================================
-#  Docker / Kubernetes
-# =========================================================
-alias d='docker'
-alias dco='docker compose'
-alias dcup='docker compose up -d'
-alias dcdown='docker compose down'
-alias dclogs='docker compose logs -f'
-alias dps='docker ps --format "table {{.Names}}\t{{.Status}}\t{{.Ports}}"'
-alias k='kubectl'
-alias kgp='kubectl get pods'
-alias kl='kubectl logs'
-
-# =========================================================
-#  Python / uv
-# =========================================================
-alias py='python3'
-alias pyt='uv run pytest'
-alias lint='uv run ruff check . --fix && uv run ruff format .'
-
-# Django
-alias djrun='python manage.py runserver'
-alias djmm='python manage.py makemigrations'
-alias djm='python manage.py migrate'
-
-# =========================================================
-#  Git
-# =========================================================
-alias gs='git status -sb'
-alias ga='git add'
-alias gc='git commit'
-alias gp='git push'
-alias gl='git pull'
-alias glog='git log --oneline --graph --decorate --all'
-alias gacm='git add . && git commit -m'
-
-# =========================================================
-#  System
-# =========================================================
-alias ports='ss -tulnp'
-alias myip='curl -s ifconfig.me && echo'
-alias c='code .'
-alias vim='nvim'
-```
+The canonical shell config is [`03-terminal/zsh/.zshrc`](../../03-terminal/zsh/.zshrc).
+It is linked by `manifest.conf` and should not be copied from a second example
+in this guide. Install the packages in `01-system/cachyos/packages/cli.txt`,
+then follow [`03-terminal/README.md`](../../03-terminal/README.md) for Oh My Zsh
+and its optional plugins.
 
 ---
 
@@ -2097,35 +1898,35 @@ my-ai-project/
 
 ---
 
-## Services Enabled at Boot
+## Services in the full developer profile
 
 ```bash
-# Verify all critical services are running:
-systemctl is-active docker postgresql mariadb valkey mongodb nginx \
-  ollama fail2ban dnscrypt-proxy syncthing@$USER ananicy-cpp ufw mullvad-daemon
+# System services in this profile:
+systemctl is-active postgresql mariadb valkey mongodb ollama ananicy-cpp ufw
+# Docker runs rootless in the user's systemd manager:
+systemctl --user is-active docker
 ```
 
-| Service | Purpose |
-|---|---|
-| `docker` | Container runtime |
-| `postgresql` | Primary database |
-| `mariadb` | MySQL-compatible database |
-| `valkey` | Redis-compatible key-value store |
-| `mongodb` | NoSQL document database |
-| `nginx` | Reverse proxy / web server |
-| `ollama` | Local LLM inference (ROCm GPU) |
-| `fail2ban` | Intrusion prevention |
-| `dnscrypt-proxy` | Encrypted DNS over HTTPS |
-| `syncthing` | Peer-to-peer file sync |
-| `ananicy-cpp` | Process priority management |
-| `ufw` | Firewall |
-| `mullvad-daemon` | VPN daemon |
-| `apparmor` | Mandatory access control (after reboot) |
-| `paccache.timer` | Weekly package cache cleanup |
-| `reflector.timer` | Mirror list refresh |
-| `snapper-*.timer` | Automated Btrfs snapshots |
+| Service | Scope | Purpose |
+|---|---|---|
+| `docker` | User | Rootless container runtime; no system daemon or `docker` group membership |
+| `postgresql` | System | Local PostgreSQL development database |
+| `mariadb` | System | Local MySQL-compatible database, bound to loopback |
+| `valkey` | System | Local Redis-compatible key-value store |
+| `mongodb` | System | Local document database, bound to loopback |
+| `ollama` | System | Local LLM inference on the AMD GPU |
+| `ananicy-cpp` | System | Process priority management |
+| `ufw` | System | Active firewall: deny incoming, allow outgoing, no inbound allow rules |
+| `proton.VPN` | System | VPN client daemon; running with no active VPN tunnel |
+| `openrazer-daemon` | User | Razer peripheral control; requires group membership and a fresh login |
+
+Nginx, DNS filtering, file sync, Mullvad, Fail2ban, and AppArmor enforcement
+remain disabled or unconfirmed until configured for the machine's network and
+use case. The active Proton VPN daemon is not connected. See
+[`dev-stack.md`](dev-stack.md) for local database initialization, toolchain
+setup, and host-specific defaults.
 
 ---
 
-*Built for CachyOS · AMD RX 6700 XT (RDNA2) · ROCm 7.2 · KDE Plasma · 32GB RAM*  
-*Last updated: April 2026*
+*Built for CachyOS · AMD RX 6700 XT (RDNA2) · Hyprland + Noctalia · 32GB RAM*
+*Last updated: October 2026*

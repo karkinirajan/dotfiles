@@ -18,8 +18,9 @@
 
 STATE_FILE="/tmp/noctalia-nightlight-on"
 SETTINGS="$HOME/.local/state/noctalia/settings.toml"
+TEMP_FILE="$HOME/.local/state/hyprsunset/temperature-k"
 
-python3 - "$STATE_FILE" "$SETTINGS" <<'PYEOF'
+python3 - "$STATE_FILE" "$SETTINGS" "$TEMP_FILE" <<'PYEOF'
 import sys, re, subprocess, os
 
 state_file, settings_path = sys.argv[1], sys.argv[2]
@@ -38,7 +39,14 @@ if is_on:
     os.remove(state_file)
 else:
     log = open("/tmp/hyprsunset.log", "w")
-    subprocess.Popen(["hyprsunset", "-t", "5500"], stdout=log, stderr=subprocess.STDOUT, start_new_session=True)
+    try:
+        with open(sys.argv[3]) as temperature_file:
+            temperature = temperature_file.read().strip()
+        if not re.fullmatch(r"[0-9]+", temperature):
+            raise ValueError
+    except (OSError, ValueError):
+        temperature = "5500"
+    subprocess.Popen(["hyprsunset", "-t", temperature], stdout=log, stderr=subprocess.STDOUT, start_new_session=True)
     open(state_file, "w").close()
 PYEOF
 

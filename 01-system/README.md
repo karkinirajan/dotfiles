@@ -6,12 +6,19 @@ and the update routine.
 | Chapter | Path | Purpose |
 |---------|------|---------|
 | Setup walkthrough | [`cachyos/setup.md`](cachyos/setup.md) | Full install narrative: GPU drivers, toolchains, Kubernetes, Terraform |
-| Packages | [`cachyos/packages/`](cachyos/packages/) | `desktop.txt`, `fonts.txt`, `ai.txt` — one package per line, `(AUR)` marks AUR packages |
-| Snapshots | [`timeshift/`](timeshift/README.md) | Daily Timeshift snapshot via a systemd timer |
+| Packages | [`cachyos/packages/`](cachyos/packages/) | Desktop, system, font, CLI, and optional local-AI package lists; `(AUR)` marks AUR packages |
+| Full developer profile | [`cachyos/dev-stack.md`](cachyos/dev-stack.md) | Optional toolchains, local databases, rootless Docker, and host-specific setup |
+| Snapshots | [`timeshift/`](timeshift/README.md) | Optional Timeshift alternative; current CachyOS host uses Snapper |
 | Updates | [`topgrade/`](topgrade/README.md) | `topgrade.toml` — which update steps run, which are disabled and why |
 
 Packages are not installed by `install.sh`, which runs unprivileged. Install
-them with the commands in the root [README](../README.md#install).
+them with the commands in the root [README](../README.md#install). Focus mode
+has its own dependency list at [`../06-tools/focus/packages.txt`](../06-tools/focus/packages.txt);
+installing those packages does not enable DNS filtering.
 
 Keep `01-system/cachyos/packages/` as the single list of what the machine
 needs. If a config names a binary, the package that provides it belongs here.
+The optional full development profile is documented in
+[`cachyos/dev-stack.md`](cachyos/dev-stack.md) and listed in
+[`cachyos/packages/developer.txt`](cachyos/packages/developer.txt); it is not
+part of the base dotfiles package transaction.

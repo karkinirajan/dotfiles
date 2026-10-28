@@ -3,6 +3,10 @@
 CachyOS/Arch Wayland desktop: Hyprland compositor with Noctalia as the shell
 (bar, launcher, clipboard history, control center) — replaces Waybar/wofi/mako.
 
+The manifest installs `hyprland-shortcuts.md` at `~/hyprland-shortcuts.md`.
+Hyprland scripts use the Lua dispatcher API in Hyprland 0.55 and newer; check
+the installed version before copying them to older releases.
+
 ```
 hyprland/
 ├── hyprland-shortcuts.md          → ~/hyprland-shortcuts.md
@@ -30,7 +34,10 @@ hyprland/
 │                                  # restore the plain, unmanaged Hyprland entry.
 ├── hypr/                          → ~/.config/hypr/
 │   ├── hyprland.conf              # entry point, sources everything below
-│   ├── hyprlock.conf, hypridle.conf, hyprpaper.conf
+│   ├── hyprlock.conf, hypridle.conf
+│   │                              # hyprpaper.conf is kept in the repo for
+│   │                              #   reference only — see "hyprpaper and
+│   │                              #   WallRizz" below; it is not linked.
 │   ├── config/
 │   │   ├── autostart.conf         # exec-once list — session infrastructure ONLY:
 │   │   │                          #   hyprpm reload, Noctalia via the watchdog
@@ -59,12 +66,12 @@ hyprland/
 │   │   │                          #   and the top gap clears the bar.
 │   │   ├── windowrules.conf       # window/layer rules incl. blur/xray for Noctalia + wofi
 │   │   ├── plugins.conf           # `plugin:...` config for hyprpm-managed plugins
-│   │   │                          #   (Hyprspace, borders-plus-plus, hyprfocus,
-│   │   │                          #   dynamic-cursors) — see "Plugins" below. The
+│   │   │                          #   (Hyprspace and dynamic-cursors) — see
+│   │   │                          #   "Plugins" below. The
 │   │   │                          #   plugins themselves are NOT installed by
 │   │   │                          #   copying this repo; hyprpm manages those
 │   │   │                          #   separately (see Install).
-│   │   ├── defaults.conf          # $03-terminal/$applauncher/etc variable defaults
+│   │   ├── defaults.conf          # terminal/filemanager/applauncher variable defaults
 │   │   ├── animations.conf, decorations.conf, input.conf,
 │   │   │   monitor.conf, environment.conf
 │   └── scripts/
@@ -140,7 +147,10 @@ hyprland/
     │       `./install.sh status` compares repo against live and
     │       `./install.sh pull` brings live changes in as a reviewable diff —
     │       run pull after tuning the bar, or the change only ever exists on
-    │       this machine. See "Bar styling can be reset by an upgrade" below.
+│       this machine. The Obsidian status widget is configured for the
+│       `~/Documents/kneeraazon` vault (URI name `kneeraazon`), and the AI
+│       usage capsules are pinned in Claude → Antigravity → Codex order.
+│       See "Bar styling can be reset by an upgrade" below.
     └── dbus-override/fr.emersion.mako.service   → ~/.local/share/dbus-1/services/
             User-level override so D-Bus service *activation* launches
             Noctalia instead of mako when something requests
@@ -158,7 +168,14 @@ mapfile -t repo_packages < <(awk 'NF && $1 !~ /^#/ && $2 != "(AUR)" {print $1}' 
 mapfile -t aur_packages < <(awk 'NF && $1 !~ /^#/ && $2 == "(AUR)" {print $1}' \
   ../../01-system/cachyos/packages/desktop.txt ../../01-system/cachyos/packages/fonts.txt)
 sudo pacman -S --needed "${repo_packages[@]}"
-paru -S --needed "${aur_packages[@]}"
+aur_helper="$(command -v paru || command -v yay || true)"
+if ((${#aur_packages[@]})) && [[ -z "$aur_helper" ]]; then
+  echo "Install paru or yay before installing AUR packages" >&2
+  exit 1
+fi
+if ((${#aur_packages[@]})); then
+  "$aur_helper" -S --needed "${aur_packages[@]}"
+fi
 
 # 2. Config — the repo root installer links hypr/, scripts/, the Noctalia
 #    palettes and fontconfig, and seeds Noctalia's settings.toml.
@@ -176,12 +193,9 @@ sudo install -Dm644 02-desktop/hyprland/sddm/sessions/hyprland-uwsm.desktop \
 
 # Plugins — see "Plugins" below for what each one is and why the fork/commit
 hyprpm update
-hyprpm add https://github.com/ImanolBarba/Hyprspace migrate-v2
-hyprpm add https://github.com/hyprwm/hyprland-plugins
-hyprpm add https://github.com/kociap/hy3
+hyprpm add https://github.com/ImanolBarba/Hyprspace 0799be7464fac7ea959b7c6c7809dadd6c21c5aa
 hyprpm add https://github.com/VirtCode/hypr-dynamic-cursors
-hyprpm add https://github.com/Duckonaut/split-monitor-workspaces
-hyprpm enable Hyprspace borders-plus-plus hyprfocus hy3 dynamic-cursors split-monitor-workspaces
+hyprpm enable Hyprspace dynamic-cursors
 ```
 
 ## Plugins
@@ -193,20 +207,14 @@ the matching plugin is actually built and enabled.
 | Plugin | What it does | Keybind |
 |---|---|---|
 | [Hyprspace](https://github.com/KZDKM/Hyprspace) | Workspace overview (GNOME/macOS Mission Control-style) | `Super+H` |
-| [hy3](https://github.com/outfoxxed/hy3) | i3/sway-style manual tiling layout, alternative to `dwindle` | none — opt-in, see below |
-| [split-monitor-workspaces](https://github.com/Duckonaut/split-monitor-workspaces) | Per-monitor independent workspace numbering | none — loaded but inert, see below |
-| [borders-plus-plus](https://github.com/hyprwm/hyprland-plugins) | Extra static outer border accent | n/a (visual only) |
-| [hyprfocus](https://github.com/hyprwm/hyprland-plugins) | Flash animation on keyboard-driven focus changes | n/a (automatic) |
 | [dynamic-cursors](https://github.com/VirtCode/hypr-dynamic-cursors) | Cursor tilts with movement, shake-to-find | n/a (mouse-driven) |
+| [hy3](https://github.com/outfoxxed/hy3) | Optional i3/sway-style manual tiling layout, alternative to `dwindle` | none — not installed |
+| [split-monitor-workspaces](https://github.com/Duckonaut/split-monitor-workspaces) | Optional per-monitor workspace numbering | none — not installed |
 
-**Two upstream repos are broken on Hyprland 0.56.x and had to be installed
-from a fork/PR instead** — both are open, unfixed issues as of this writing:
-- Hyprspace: `KZDKM/Hyprspace` issue #239 (moved header path,
-  `AnimationManager.hpp`) → installed from `ImanolBarba/Hyprspace` branch
-  `migrate-v2` (PR #238) instead.
-- hy3: `outfoxxed/hy3` issue #334 (same class of bug, different header) →
-  installed from `kociap/hy3` instead (linked as the fix in that issue's
-  comments).
+Hyprspace upstream does not build on Hyprland 0.56.x because of a moved
+header. The baseline uses the tested `ImanolBarba/Hyprspace` migration fork,
+pinned to commit `0799be7464fac7ea959b7c6c7809dadd6c21c5aa`. The `hy3` plugin
+is optional and not installed by the baseline.
 
 `hyprexpo` and `hyprgrass` were evaluated and dropped: every hyprexpo
 fork/branch found hits the same broken-header problem with no fix anywhere
@@ -214,21 +222,20 @@ fork/branch found hits the same broken-header problem with no fix anywhere
 hyprgrass (touch gestures) has nothing to do on a machine with no
 touchscreen.
 
-**hy3 and split-monitor-workspaces are installed and loaded but deliberately
-not wired up**, since activating either changes fundamental interaction
+**hy3 and split-monitor-workspaces are optional and not part of the baseline
+plugin set**, since activating either changes fundamental interaction
 behavior:
-- hy3 is a full alternative layout engine — `general:layout` is still
+- hy3 would be a full alternative layout engine — `general:layout` is still
   `dwindle` in `variables.conf`. Set it to `hy3` to try it.
-- split-monitor-workspaces needs every workspace keybind in `keybinds.conf`
+- split-monitor-workspaces would need every workspace keybind in `keybinds.conf`
   (`Super`+`1-9,0`, `Shift`+those, `Ctrl`+those — ~30 binds) rewritten from
   `workspace`/`movetoworkspace(silent)` to this plugin's own
   `split-workspace`/`split-movetoworkspace(silent)` dispatchers to do
   anything at all. Not done here since that's a decision, not a default.
 
-**hyprbars was tried and removed** — title bars on every window clashed with
-the borderless/minimal aesthetic the rest of this setup is built around.
-Disabled via `hyprpm disable hyprbars` rather than fully uninstalled, since
-it ships in the same repo as borders-plus-plus/hyprfocus (which are kept).
+**The hyprland-plugins repository was removed** — hyprbars title bars clashed
+with the minimal aesthetic; borders-plus-plus and hyprfocus are not part of
+the baseline plugin set.
 
 **A stale-binary gotcha worth knowing**: if Hyprland's package gets
 reinstalled/updated without restarting the compositor, the running process's
@@ -239,7 +246,7 @@ Restart Hyprland (or reboot) to fix it.
 
 ## Notes
 
-- Noctalia (`noctalia-qs` + `noctalia` packages) replaces Waybar, wofi, and
+- Noctalia (`noctalia` package) replaces Waybar, wofi, and
   mako entirely — see `hypr/config/autostart.conf`
   (`scripts/noctalia-watchdog.sh`, not a systemd service — see that script's
   own comments for why) and `hypr/config/keybinds.conf` (`noctalia msg ...`
@@ -257,8 +264,11 @@ Restart Hyprland (or reboot) to fix it.
   `custom_button` wired to `scripts/nightlight-toggle.sh`, which drives
   `hyprsunset` (Hyprland's own dedicated blue-light tool, `pacman -S
   hyprsunset`) as a plain process instead — on = launch it, off = kill it.
-  `[nightlight] enabled = false` is set permanently in settings.toml so
-  Noctalia's own schedule can never interfere.
+  `[nightlight] enabled = false` is set in settings.toml so Noctalia's own
+  gamma engine cannot fight it. Click the bar button to toggle; scroll up to
+  warm the display and down to cool it in 250 K steps (2500–6500 K). The
+  selected temperature persists across toggles, and the widget posts the
+  current setting as a short notification.
 - **Recovering a reset config is one command:**
   `~/.config/hypr/scripts/noctalia-restore.sh` (add a commit or tag to go
   further back, `--list` to see the options). Do not just `cp` the file into

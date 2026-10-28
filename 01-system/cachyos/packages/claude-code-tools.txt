@@ -1,0 +1,10 @@
+# Focused Claude Code support tools (install only the repository package names).
+# ccusage is installed per-user with pnpm; see 05-ai/claude-code/README.md.
+ast-grep
+actionlint
+difftastic
+git-delta
+hyperfine
+shellcheck
+shfmt
+watchexec

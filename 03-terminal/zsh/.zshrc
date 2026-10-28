@@ -1,6 +1,6 @@
 # =============================================================================
 #  ~/.zshrc — kneeraazon
-#  CachyOS · KDE Plasma 6 · Wayland · Gruvbox Dark Hard
+#  CachyOS · Hyprland + Noctalia · Wayland
 #  Prompt: starship
 # =============================================================================
 
@@ -14,6 +14,7 @@ export XDG_STATE_HOME="${XDG_STATE_HOME:-$HOME/.local/state}"
 export ZSH="$HOME/.oh-my-zsh"
 export EDITOR="nvim"
 export VISUAL="nvim"
+export BROWSER="brave"
 export PAGER="less"
 export LESS="-R --use-color -Dd+r -Du+b"
 export MANPAGER="nvim +Man!"
@@ -22,7 +23,7 @@ export MANPAGER="nvim +Man!"
 export HSA_OVERRIDE_GFX_VERSION=10.3.0
 
 # Ollama — local LLM inference
-export OLLAMA_HOST="0.0.0.0:11434"
+export OLLAMA_HOST="127.0.0.1:11434"
 export OLLAMA_DEFAULT_MODEL="llama3.2:3b"
 
 # Build caches
@@ -86,7 +87,11 @@ plugins=(
 )
 # zsh-autosuggestions and you-should-use are deferred below (after OMZ source)
 
-source "$ZSH/oh-my-zsh.sh"
+if [[ -r "$ZSH/oh-my-zsh.sh" ]]; then
+  source "$ZSH/oh-my-zsh.sh"
+elif [[ -o interactive ]]; then
+  print -u2 -- "Oh My Zsh is not installed; loading the shell without its plugins. See 03-terminal/README.md."
+fi
 [[ -f "$HOME/.fzf.zsh" ]] && source "$HOME/.fzf.zsh"
 
 # ── history-substring-search keybindings (after OMZ, avoids override) ─────────
@@ -96,17 +101,31 @@ bindkey -M emacs '^P' history-substring-search-up
 bindkey -M emacs '^N' history-substring-search-down
 
 # ── Item 1: deferred plugin loading — prompt appears instantly ─────────────────
-zsh-defer source "${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/plugins/zsh-autosuggestions/zsh-autosuggestions.zsh"
-zsh-defer source "${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/plugins/you-should-use/you-should-use.plugin.zsh"
+_load_zsh_plugin() {
+  local plugin_file="$1"
+  if command -v zsh-defer >/dev/null 2>&1; then
+    zsh-defer source "$plugin_file"
+  elif [[ -r "$plugin_file" ]]; then
+    source "$plugin_file"
+  fi
+}
+_load_zsh_plugin "${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/plugins/zsh-autosuggestions/zsh-autosuggestions.zsh"
+_load_zsh_plugin "${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/plugins/you-should-use/you-should-use.plugin.zsh"
 
 # ── Item 2: atuin — SQLite history with rich Ctrl+R TUI ───────────────────────
 # ↑↓ kept for history-substring-search; atuin owns Ctrl+R
-command -v atuin >/dev/null 2>&1 && zsh-defer eval "$(atuin init zsh --disable-up-arrow)"
+if command -v atuin >/dev/null 2>&1; then
+  if command -v zsh-defer >/dev/null 2>&1; then
+    zsh-defer eval "$(atuin init zsh --disable-up-arrow)"
+  else
+    eval "$(atuin init zsh --disable-up-arrow)"
+  fi
+fi
 
 # ─── fzf-tab configuration ────────────────────────────────────────────────────
 if [[ -d "${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/plugins/fzf-tab" ]]; then
   zstyle ':fzf-tab:complete:cd:*'          fzf-preview 'eza --tree --color=always --icons --level=2 $realpath'
-  zstyle ':fzf-tab:complete:*:*'           fzf-preview '~/.config/fzf/preview.sh $realpath'
+  zstyle ':fzf-tab:complete:*:*'           fzf-preview '~/.config/fzf/preview.sh "$realpath"'
   zstyle ':fzf-tab:*' switch-group '<' '>'
   zstyle ':completion:*' menu no
 fi
@@ -341,14 +360,40 @@ if [[ -o interactive ]] && command -v eza >/dev/null 2>&1; then
 fi
 
 # ─── Package management ───────────────────────────────────────────────────────
-alias install='paru -S --noconfirm'
-alias remove='sudo pacman -Rns --noconfirm'
-alias search-pkg='paru -Ss'
-alias show-pkg='pacman -Qi'
-alias list-installed='pacman -Qe'
-alias clean='paru -Sc --noconfirm'
-alias aur='paru -S'
-alias aurs='paru -Ss'
+_aur() {
+  local helper
+  if command -v paru >/dev/null 2>&1; then
+    helper=paru
+  elif command -v yay >/dev/null 2>&1; then
+    helper=yay
+  else
+    _err "Install paru or yay before using AUR commands"
+    return 127
+  fi
+  "$helper" "$@"
+}
+
+# Some Oh My Zsh plugins define `install` as an alias. Remove it before
+# declaring the package-manager function below; otherwise Zsh expands the
+# alias in the function declaration and fails to parse this section.
+unalias install 2>/dev/null
+install() { _aur -S "$@"; }
+remove() {
+  if (( $# == 0 )); then
+    _err "Usage: remove <package> [package ...]"
+    return 2
+  fi
+  sudo pacman -Rns "$@"
+}
+search-pkg() { _aur -Ss "$@"; }
+show-pkg() { pacman -Qi "$@"; }
+list-installed() { pacman -Qe; }
+clean() { _aur -Sc "$@"; }
+# Oh My Zsh's web-search plugin claims `aur` as a search-engine alias; keep
+# the package-manager helper defined below instead.
+unalias aur 2>/dev/null
+aur() { _aur -S "$@"; }
+aurs() { _aur -Ss "$@"; }
 
 autoremove() {
   local orphans
@@ -356,7 +401,9 @@ autoremove() {
   if [[ -z "$orphans" ]]; then
     _info "No orphaned packages"; return 0
   fi
-  sudo pacman -Rns --noconfirm ${=orphans}
+  _info "Packages marked as orphans (review each before removing):"
+  print -l -- ${(f)orphans}
+  _warn "No packages were removed. Use 'remove <package> ...' for reviewed packages."
 }
 
 # ─── System monitoring ────────────────────────────────────────────────────────
@@ -585,45 +632,47 @@ scaffold() {
 
 # ─── Full system update ───────────────────────────────────────────────────────
 update() {
-  local start=$SECONDS rc=0 flatpak_rc=0 elapsed mins secs orphans
+  local start=$SECONDS rc=0 elapsed mins secs orphans
 
   echo
   printf "  ${CLR[aqua]}╭─────────────────────────────────╮${R}\n"
   printf "  ${CLR[aqua]}│   🚀  System Update Starting    │${R}\n"
   printf "  ${CLR[aqua]}╰─────────────────────────────────╯${R}\n"
 
-  if ! command -v paru >/dev/null 2>&1; then
-    _err "paru not found"; return 1
+  if ! command -v paru >/dev/null 2>&1 && ! command -v yay >/dev/null 2>&1; then
+    _err "Install paru or yay before updating packages"; return 1
   fi
 
   _step "Syncing repositories and upgrading packages"
   _sep
-  paru -Syu --devel --noconfirm --combinedupgrade --sudoloop
+  _aur -Syu --devel
   rc=$?
-  (( rc == 0 )) && _ok "Packages up to date" || _warn "paru exited $rc"
-
-  if command -v flatpak >/dev/null 2>&1; then
-    _step "Updating Flatpak packages"
-    _sep
-    flatpak update --noninteractive
-    flatpak_rc=$?
-    (( flatpak_rc == 0 )) && _ok "Flatpak up to date" || _warn "flatpak exited $flatpak_rc"
-  fi
+  (( rc == 0 )) && _ok "Packages up to date" || _warn "AUR helper exited $rc"
 
   orphans="$(pacman -Qdtq 2>/dev/null)"
   if [[ -n "$orphans" ]]; then
-    _step "Removing orphaned packages"
+    _step "Reviewing orphaned packages"
     _sep
-    sudo pacman -Rns --noconfirm ${=orphans}
-    _ok "Orphans removed"
+    print -l -- ${(f)orphans}
+    _warn "No packages were removed. Review and remove individual packages if appropriate."
   else
     _info "No orphaned packages"
   fi
 
   _step "Cleaning package cache"
   _sep
-  paru -Sc --noconfirm 2>/dev/null
-  _ok "Cache cleaned"
+  # Pacman treats abandoned, empty downloader work directories as package
+  # files during -Sc and reports "Error reading fd". Remove only empty
+  # download-* directories; leave any active or non-empty download untouched.
+  if ! sudo find /var/cache/pacman/pkg -mindepth 1 -maxdepth 1 \
+      -type d -name 'download-*' -empty -delete; then
+    _warn "Could not remove empty pacman download directories"
+  fi
+  if _aur -Sc; then
+    _ok "Cache cleanup complete"
+  else
+    _warn "Cache cleanup was skipped or failed"
+  fi
 
   elapsed=$((SECONDS - start))
   mins=$((elapsed / 60)); secs=$((elapsed % 60))
@@ -692,7 +741,9 @@ fi
 
 # ─── psql in dedicated kitty window ──────────────────────────────────────────
 psql() {
-  kitty --config "$HOME/.config/kitty/psql-mode.conf" -- /usr/bin/psql "$@"
+  local psql_bin
+  psql_bin="$(command -v psql)" || { _err "PostgreSQL client (psql) is not installed"; return 127; }
+  kitty --config "$HOME/.config/kitty/psql-mode.conf" -- "$psql_bin" "$@"
 }
 
 # ─── Power functions ──────────────────────────────────────────────────────────
@@ -819,18 +870,26 @@ alias gtag='git tag'
 alias gstash='git stash'
 
 # ─── Prompt initialisation ────────────────────────────────────────────────────
-eval "$(starship init zsh)"
+if command -v starship >/dev/null 2>&1; then
+  eval "$(starship init zsh)"
+else
+  PROMPT='%n@%m:%~%# '
+fi
 
 export NVM_DIR="$HOME/.config/nvm"
-[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
-[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
+if [[ -s /usr/share/nvm/init-nvm.sh ]]; then
+  source /usr/share/nvm/init-nvm.sh
+elif [[ -s "$NVM_DIR/nvm.sh" ]]; then
+  source "$NVM_DIR/nvm.sh"
+  [[ -s "$NVM_DIR/bash_completion" ]] && source "$NVM_DIR/bash_completion"
+fi
 
 # kimi-code
-export PATH="/home/kneeraazon/.kimi-code/bin:$PATH"
+export PATH="$HOME/.kimi-code/bin:$PATH"
 
 # OpenClaw Completion
-[ -f '/home/kneeraazon/.openclaw/completions/openclaw.zsh' ] && source '/home/kneeraazon/.openclaw/completions/openclaw.zsh'
+[ -f "$HOME/.openclaw/completions/openclaw.zsh" ] && source "$HOME/.openclaw/completions/openclaw.zsh"
 
 
 # Added by Antigravity CLI installer
-export PATH="/home/kneeraazon/.local/bin:$PATH"
+export PATH="$HOME/.local/bin:$PATH"

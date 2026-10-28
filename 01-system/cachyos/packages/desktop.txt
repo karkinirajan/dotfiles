@@ -1,55 +1,97 @@
 # Hyprland + Noctalia desktop packages
 #
-# The compositor, the shell, and the helpers the configs in wm/hyprland call
-# out to by name. Installing these plus the fonts list reproduces the desktop;
-# everything else in this repo is configuration on top of it.
+# Desktop session, host greeter, hardware integration, and the directly
+# installed desktop applications on the primary CachyOS workstation.
 #
-#   sudo pacman -S --needed $(grep -v '^#' 01-system/cachyos/packages/desktop.txt | awk '{print $1}')
-#   paru        -S --needed $(grep    '(AUR)' 01-system/cachyos/packages/desktop.txt | awk '{print $1}')
+# Install the combined baseline package lists using the interactive commands
+# in the root README. That flow supports either paru or yay for AUR packages.
 #
 # Referenced directly by config:
 #   hyprland hyprlock hypridle hyprpolkitagent   02-desktop/hyprland/hypr/*.conf
-#   sddm uwsm xorg-server                        UWSM session + X11 SDDM greeter
-#   noctalia noctalia-qs                         the bar/launcher/notifications
+#   greetd noctalia-greeter uwsm                 active Noctalia greeter + UWSM session
+#   sddm                                          installed, currently inactive fallback
+#   noctalia                                   the bar/launcher/notifications
+#   cachyos-wallpapers                          Noctalia's selected CachyOS Moon wallpaper
 #   hyprsunset                                   scripts/nightlight-toggle.sh
+#   hyprpm                                       plugin reload in autostart.conf
 #   cliphist wl-clipboard                        autostart.conf + keybinds
-#   grim slurp                                   scripts/screenshot.sh
+#   grim slurp swash                             scripts/screenshot.sh
+#   hyprpicker                                   keybinds.conf color picker bind
+#   alacritty                                    defaults.conf $terminal/$filemanager
 #   ai-usagebar-bin  (AUR)                       Noctalia felipeartur/ai-usagebar widget
 #                                                (the widget renders only a glyph
 #                                                without this CLI on PATH)
 #
-# waybar is listed because it is installed, not because it is used — Noctalia
-# replaced it. Safe to omit on a fresh machine.
+# waybar is installed for host parity, though Noctalia replaced it as the
+# active bar. Remove it only if intentionally trimming this workstation set.
+# OpenRazer runs for the connected Viper Mini; add the user to the `openrazer`
+# group and start a fresh login session before enabling its user service.
 # ─────────────────────────────────────────────────────────────────────────────
 ai-usagebar-bin  (AUR)
+alacritty
+ark
+bitwarden
 bluez
 bluez-utils
 brightnessctl
+cachyos-wallpapers
 cliphist
+copyq
+deluge-gtk
+discord
+dolphin
+firefox
+gimp
+gparted
+greetd
 grim
+inkscape
+kdeconnect
+korganizer
+keepassxc
+libreoffice-fresh
+libnotify
 hyprcursor
 hyprgraphics
 hypridle
 hyprland
 hyprlang
 hyprlock
+hyprpicker
 hyprpolkitagent
+hyprpm
 hyprsunset
 hyprutils
 hyprwayland-scanner
 kitty
+mailspring
+mpv
 networkmanager
 noctalia
-noctalia-qs
+noctalia-greeter
+obs-studio
+obsidian
+okular
+openrazer-daemon
+openrazer-driver-dkms
 pipewire
 pipewire-pulse
 playerctl
+signal-desktop
 sddm
 slurp
-swappy
+strawberry
+swash
+telegram-desktop
+thunderbird
 waybar
 wireplumber
+vlc
+vlc-plugins-all
 wl-clipboard
 xorg-server
 xdg-desktop-portal-hyprland
 uwsm
+spotify  (AUR)
+zapzap  (AUR)
+onlyoffice-bin

@@ -11,10 +11,11 @@
 
 MONITOR_INFO=$(hyprctl monitors -j | python3 -c "
 import json,sys
-m = json.load(sys.stdin)[0]
-print(m['width'], m['height'])
+monitors = json.load(sys.stdin)
+m = next((m for m in monitors if m.get('focused')), monitors[0])
+print(round(m['x'] + m['width'] / 2), round(m['y'] + m['height'] / 2))
 ")
 read -r W H <<< "$MONITOR_INFO"
-hyprctl dispatch movecursor $((W / 2)) $((H / 2))
+hyprctl dispatch "hl.dsp.cursor.move({ x = $W, y = $H })"
 
 noctalia msg panel-toggle launcher

@@ -6,31 +6,31 @@
 # error) that was never fully root-caused, so grim/slurp (older, more
 # battle-tested) is used directly instead of as a fallback.
 #
-# Annotate: satty, falling back to swappy if satty fails to launch.
+# Annotate: swash, the only screenshot editor on this system (satty, swappy
+# and flameshot were removed). swash cannot capture by itself, so grim/slurp
+# stay as the capture backend.
 #
-# grimblast (the original binding target, predating both of the above) also
-# isn't installed on this system anymore — all three Print-key bindings were
-# silently no-ops until this was written.
+# The raw capture is saved and copied to the clipboard before swash opens,
+# so closing swash without saving still leaves a usable screenshot.
 
 MODE="$1"
 DIR="$HOME/Pictures/Screenshots"
 FILE="$DIR/screenshot-$(date +%Y%m%d-%H%M%S).png"
-TMP="$(mktemp --suffix=.png)"
-trap 'rm -f "$TMP"' EXIT
 
 mkdir -p "$DIR"
 
 case "$MODE" in
   region)
-    slurp | grim -g - "$TMP"
+    geom=$(slurp) || exit 0
+    grim -g "$geom" "$FILE"
     ;;
   window)
     geom=$(hyprctl activewindow -j | jq -r '"\(.at[0]),\(.at[1]) \(.size[0])x\(.size[1])"')
-    grim -g "$geom" "$TMP"
+    grim -g "$geom" "$FILE"
     ;;
   screen)
     mon=$(hyprctl monitors -j | jq -r '.[] | select(.focused==true) | .name')
-    grim -o "$mon" "$TMP"
+    grim -o "$mon" "$FILE"
     ;;
   *)
     echo "Usage: screenshot.sh {region|window|screen}" >&2
@@ -38,13 +38,13 @@ case "$MODE" in
     ;;
 esac
 
-# Bail out quietly if the capture was cancelled (e.g. Esc during region
-# select) — slurp/grim leave an empty or missing file in that case.
-[ -s "$TMP" ] || exit 0
-
-wl-copy --type image/png < "$TMP"
-
-# Annotate: satty, falling back to swappy on failure.
-if ! satty --filename "$TMP" -o "$FILE" --copy-command wl-copy --early-exit copy; then
-  swappy -f "$TMP" -o "$FILE"
+# Bail out quietly if the capture was cancelled or failed — grim leaves an
+# empty or missing file in that case.
+if [ ! -s "$FILE" ]; then
+  rm -f "$FILE"
+  exit 0
 fi
+
+wl-copy --type image/png < "$FILE"
+
+exec swash "$FILE"
