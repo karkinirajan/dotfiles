@@ -1,5 +1,8 @@
 # STATE
 
+<!-- snapshot: 2026-09-23 -->
+> **Dated record (2026-09-23).** Measured with kernel 7.2.6-1-cachyos, Ollama 0.34.3, Mesa 26.2.3, ROCm 7.2.4 and Claude Code 2.1.280. The primary host now runs kernel 7.3.0-4, Ollama 0.40.11, Mesa 26.2.5 and Claude Code 2.1.311. Package tables, token rates, defaults and "not documented" statements here describe that day; re-measure before relying on them. Known corrections: `CLAUDE_CODE_AUTO_COMPACT_WINDOW` is now documented (valid range 100000 to 1000000, so 65536 is below its minimum), and `OLLAMA_VULKAN` is on by default when the Vulkan backend is installed.
+
 **Spec version:** v2 (pasted 2026-09-23 13:45, supersedes the v1 spec started ~13:28 same day)
 
 ## Key differences from v1 that change already-completed work
