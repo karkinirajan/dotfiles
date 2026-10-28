@@ -172,17 +172,19 @@ def resolve(entries: list[tuple[str, str]]) -> list[dict[str, str]]:
         if name in aur:
             hits.append(aur[name])
         note = ""
+        provided_only = False
         if not hits:
             alt = arch_provides(name)
             if alt:
                 note = "; ".join(h.note for h in alt[:3])
                 hits = alt
+                provided_only = True
         rows.append(
             {
                 "package": name,
                 "declared": declared,
-                "found_in": " | ".join(f"{h.source}:{h.version}@{h.updated}" for h in hits),
-                "status": _status(declared, hits),
+                "found_in": " | ".join(f"{h.source}:{h.version}@{h.updated}" for h in hits[:5]),
+                "status": "NAME-ABSENT-PROVIDED-BY-OTHER" if provided_only else _status(declared, hits),
                 "note": note or "; ".join(h.note for h in hits if h.note and h.source == "aur"),
             }
         )
