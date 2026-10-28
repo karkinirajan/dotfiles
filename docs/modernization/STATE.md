@@ -13,9 +13,9 @@ Resume file. Read this first after any context reset.
 | 0 Discovery | done |
 | 1 Research | done (10 clusters, RESEARCH.md, LEDGER.csv: 823 rows) |
 | 2 Plan | done (PLAN.md, structure option B) |
-| 3 Execute | content done for clusters C1 to C10, setup instructions, tooling and CI, README and index, migration map; remaining: none except Phase 4 fixes |
-| 4 Verify | next: run all checks, re-verify 20% of changed claims, fresh read-only audit against the ledger |
-| 5 Handoff and stop | not started: HANDOFF.md, cold audit, REPORT.md, PR, hard stop |
+| 3 Execute | done |
+| 4 Verify | done (all checks green, 20% re-verification, high-stakes audit applied) |
+| 5 Handoff and stop | HANDOFF.md, REPORT.md written; pull request opened from this branch, not merged; hard stop |
 
 ## Log
 
