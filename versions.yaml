@@ -1097,6 +1097,23 @@ entries:
     target: 3.28.5
     verify: cursor --version
     expect: 3.28.5
+  firefox:
+    name: Firefox
+    package: firefox
+    source: arch
+    arch: 159.0-1
+    cachyos: 159.0-1.1
+    target: '159.0'
+    verify: firefox --version
+    expect: Mozilla Firefox 159.0
+  obsidian:
+    name: Obsidian
+    package: obsidian
+    source: arch
+    arch: 1.14.5-1
+    target: 1.14.5
+    verify: obsidian --version
+    expect: 1.14.5
 constraints:
 - id: hyprland-hold
   text: Hyprland stays on the CachyOS-delivered 0.56.2 until a Lua config is validated; 0.57.0 ignores hyprland.conf

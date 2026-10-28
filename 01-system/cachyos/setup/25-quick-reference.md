@@ -4,8 +4,8 @@ part: "01"
 chapter: "25"
 topic: quick-reference
 versions: []
-last_verified: 2026-10-06
-status: draft
+last_verified: 2026-10-29
+status: current
 sources: []
 ---
 
@@ -27,10 +27,10 @@ sources: []
 | Smart directory jump | `z <partial-path>` | zoxide |
 | Fuzzy file search | `Ctrl+T` | fzf |
 | System snapshot | `snapper list` | Btrfs snapshots |
-| Password manager | `bitwarden` / `keepassxc` | Desktop + browser |
-| VPN | `mullvad connect` | Mullvad VPN |
+| Password manager | `bitwarden` / `keepassxc` | Desktop + browser. Arch `bitwarden` is 2026.3.1 (upstream desktop 2026.10.1); KeePassXC 2.8.0 is current |
+| VPN | `mullvad connect` | Mullvad VPN (`sudo pacman -S mullvad-vpn`, then `systemctl enable --now mullvad-daemon.service`) |
 | Time tracking | Toggl Track | https://track.toggl.com |
-| Note-taking | Obsidian | Desktop app |
+| Note-taking | Obsidian | Desktop app (`sudo pacman -S obsidian`) |
 | Project management | Linear / ClickUp | Browser |
 
 ## Services in the full developer profile
@@ -61,4 +61,6 @@ use case. The active Proton VPN daemon is not connected. See
 [`dev-stack.md`](../dev-stack.md) for local database initialization, toolchain
 setup, and host-specific defaults.
 
----
+## Sources
+
+- Each row links back to its chapter: tools in chapters 03, 04, 08, 13 and 14, apps in 15 to 21, security in 19. Ledger: cluster C10 in [`LEDGER.csv`](../../../docs/modernization/LEDGER.csv)

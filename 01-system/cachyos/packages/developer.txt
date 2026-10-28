@@ -75,12 +75,13 @@ zed
 # AUR packages
 #   stremio-linux-shell: upstream distributes Stremio as a Flatpak (flatpak install com.stremio.Stremio);
 #   the AUR package is a thin community build with one vote.
+#   logseq-og-bin: the file-graph (Markdown) app after the 2026-04 split; logseq-desktop-bin is out of date.
+#   notion-app-enhanced was dropped: it repackages a 2022 Electron 18 build and there is no Linux app; use Notion in the browser.
 anytype-bin  (AUR)
 docker-rootless-extras  (AUR)
-logseq-desktop-bin  (AUR)
+logseq-og-bin  (AUR)
 mongodb-bin  (AUR)
 mongodb-compass-bin  (AUR)
-notion-app-enhanced  (AUR)
 slack-desktop  (AUR)
 stremio-linux-shell  (AUR)
 sublime-text-4  (AUR)
