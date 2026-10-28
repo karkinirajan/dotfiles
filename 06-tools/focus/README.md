@@ -12,7 +12,7 @@ apps ─▶│ /etc/resolv │──▶ 127.0.0.1 ──▶ dnsmasq ──▶ ad
        │    .conf    │                     │
        └─────────────┘                     └──────▶ upstream 1.1.1.1 / 9.9.9.9
                                                     (for everything else)
-              nftables inet filter output chain:
+              nftables inet focus output chain:
                   ip daddr 127.0.0.0/8   accept
                   ip daddr @allowed_ips  accept
                   ip daddr @blocked_ips  reject   ← catches DNS-caching apps
@@ -84,7 +84,7 @@ focus schedule set 09:00 18:00
 
 `/etc/resolv.conf` must be a **real file**, not NetworkManager's symlink into
 `/run` — see the note in `networkmanager/90-focus-default-dns.conf`. Also
-requires `dnsmasq`, `nftables` with the `inet filter` table defined in
+requires `dnsmasq`, `nftables` with the `inet focus` table defined in
 `nftables/focus-filter.nft` (`allowed_ips` / `blocked_ips` / `allowed_ips6` /
 `blocked_ips6` sets), and `dig` (`bind`).
 

@@ -11,3 +11,7 @@ snap-pac
 snapper
 ufw
 ufw-extras
+# Limine/Btrfs integration used by 01-system/cachyos/setup/20-maintenance-monitoring.md
+btrfs-assistant
+limine-mkinitcpio-hook
+limine-snapper-sync
