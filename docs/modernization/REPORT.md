@@ -27,23 +27,23 @@ Branch `modernize/2026-10`, date of record 2026-10-29. Author `karkinirajan`. Ev
 5. **MongoDB `mongodb-bin` 8.3.9 is inside advisory SERVER-131805** (fixed in 8.3.13). Exposure on the loopback single node is low; no fixed AUR binary exists.
 6. **The focus nftables file was not idempotent** (reloading duplicated all six rules). It now uses table `inet focus` and flushes its own chain; reloading was tested in a network namespace.
 7. **Supabase stops exposing new `public` tables to the Data API automatically on 2026-10-30;** the starter migration and its pgTAP test now grant explicitly.
-8. **`docker-rootless-extras` is AUR-only; `mullvad-vpn` and `librewolf` are in repos (the `-bin` names are gone); `notion-app-enhanced` and AND.CO are dead;** the package lists and chapters say so.
+8. **`docker-rootless-extras` is AUR-only; `mullvad-vpn` and `librewolf` are in repos (`librewolf-bin` is gone from the AUR; `mullvad-vpn-bin` conflicts with the repo package); `notion-app-enhanced` and AND.CO are dead;** the package lists and chapters say so.
 9. **ROCm:** Arch ships the legacy 7.2 train (7.2.4). gfx1031 is unofficial. `HSA_OVERRIDE_GFX_VERSION` is needed for PyTorch wheels (use the `rocm7.2` index) but only a fallback for the packaged Ollama.
 
 ## Changes by topic
 
-| Topic | Claims | Changed | Unverified | Where |
-|---|---|---|---|---|
-| OS, boot, security | 79 | 24 | 4 | see `RESEARCH.md` section for the cluster |
-| Desktop (Hyprland, Noctalia) | 77 | 44 | 4 | see `RESEARCH.md` section for the cluster |
-| GPU and local AI | 82 | 35 | 13 | see `RESEARCH.md` section for the cluster |
-| Languages and tooling | 80 | 25 | 2 | see `RESEARCH.md` section for the cluster |
-| DevOps and containers | 59 | 30 | 2 | see `RESEARCH.md` section for the cluster |
-| Databases | 73 | 25 | 15 | see `RESEARCH.md` section for the cluster |
-| Editors, shell, terminal | 109 | 38 | 5 | see `RESEARCH.md` section for the cluster |
-| Claude Code and AI tooling | 78 | 16 | 9 | see `RESEARCH.md` section for the cluster |
-| Frontend skills | 80 | 35 | 4 | see `RESEARCH.md` section for the cluster |
-| Apps and misc | 106 | 35 | 8 | see `RESEARCH.md` section for the cluster |
+| Topic | Claims | Changed | Unverified |
+|---|---|---|---|
+| OS, boot, security | 79 | 24 | 4 |
+| Desktop (Hyprland, Noctalia) | 77 | 44 | 4 |
+| GPU and local AI | 82 | 35 | 13 |
+| Languages and tooling | 80 | 25 | 2 |
+| DevOps and containers | 59 | 30 | 2 |
+| Databases | 73 | 25 | 15 |
+| Editors, shell, terminal | 109 | 38 | 5 |
+| Claude Code and AI tooling | 78 | 16 | 9 |
+| Frontend skills | 80 | 35 | 4 |
+| Apps and misc | 106 | 35 | 8 |
 
 Narrative of the edits, by commit group: structure and migration; versions source of truth; OS and security (chapters 01, 19, 20); GPU and local AI (02, 04, 24, `05-ai/ollama/`); languages (03, 05, 10, 11, 14); DevOps (07, 08, 09); databases (06); desktop (`02-desktop/hyprland/`, new `lua-migration.md`, dual-form dispatch helper and `dpms.sh`); editors, shell, terminal (12, 13, zsh, kitty, alacritty, Zed, VS Code); Claude Code docs, skills and `frontend-master` pins; apps (15 to 18, 21, 25, Upwork recipe); setup runbook (`dev-stack.md`, `system-summary.md`); tooling and CI; README and index; handoff.
 
@@ -92,8 +92,8 @@ The GitHub API and `github.com` advisory and release pages, the Arch wiki and `g
 | `01-system/cachyos/setup/06-databases.md:49` | Arch upgrade procedure and the pgvector caveat; not run |
 | `01-system/cachyos/setup/06-databases.md:86` | AUR service and config names (AUR pages were unreachable) |
 | `01-system/cachyos/setup/06-databases.md:99` | the permission problem and this fix are recorded from this host only |
-| `01-system/cachyos/setup/06-databases.md:163` | A container reaching a Valkey that listens on host loopback is a networking caveat under rootless Docker. |
-| `01-system/cachyos/setup/08-docker-kubernetes.md:49` | - A kernel-module tweak (`options overlay metacopy=off redirect_dir=off`) appeared in an earlier version of th |
+| `01-system/cachyos/setup/06-databases.md:163` | container-to-host-loopback Valkey access under rootless Docker |
+| `01-system/cachyos/setup/08-docker-kubernetes.md:49` | an overlay kernel-module tweak seen in an earlier version of the chapter |
 | `01-system/cachyos/setup/08-docker-kubernetes.md:111` | both image tags |
 | `01-system/cachyos/setup/08-docker-kubernetes.md:112` | the exact map count Elasticsearch needs for one node |
 | `01-system/cachyos/setup/10-data-engineering.md:45` | Redpanda command syntax and the "~512MB RAM, no JVM" claim |
@@ -108,7 +108,7 @@ The GitHub API and `github.com` advisory and release pages, the Arch wiki and `g
 | `01-system/cachyos/setup/18-communication.md:41` | screen sharing in Slack and Zoom on Hyprland |
 | `01-system/cachyos/setup/18-communication.md:57` | KDE Connect autostart under Hyprland |
 | `01-system/cachyos/setup/07-devops-cloud-tools.md:63` | the stock nginx.conf text, because the Arch package source host was not reachable |
-| `01-system/cachyos/setup/19-security-privacy.md:175` | the interaction is inferred, not reproduced |
+| `01-system/cachyos/setup/19-security-privacy.md:175` | the Mullvad and focus `/etc/resolv.conf` interaction is inferred, not reproduced |
 | `01-system/cachyos/setup/02-amd-gpu-rocm.md:42` | both are hypotheses |
 | `01-system/cachyos/setup/02-amd-gpu-rocm.md:71` | native gfx1031 on Ollama 0.40.11 and kernel 7.3 |
 | `01-system/cachyos/aur/upwork/README.md:18` | bundled Electron version of 5.8.0.41; check on the host with `ar x upwork_5.8.0.41_amd64.deb; bsdtar -xf data.tar.xz; strings opt/Upwork/upwork / grep |
@@ -118,13 +118,13 @@ The GitHub API and `github.com` advisory and release pages, the Arch wiki and `g
 | `05-ai/claude-code/README.md:118` | claude-brain hook subcommands and CLI surface |
 | `05-ai/ollama/README.md:111` | native gfx1031 on Ollama 0.40.11 and kernel 7.3 |
 | `fresh-setup.md:118` | exact installer menu label; the wording comes from the release blog |
-| `system-summary.md:53` | / Limine policy / `/etc/default/limine`: `BOOT_ORDER="linux-cachyos"` (ordering only; it is not documented as  |
+| `system-summary.md:53` | whether `BOOT_ORDER` acts as a filter (see chapter 20.1) |
 | `03-terminal/starship/README.md:40` | cause of the missing glyphs |
 | `04-editors/zed/README.md:30` | the replacement model tag |
 | `02-desktop/hyprland/lua-migration.md:36` | converter output quality |
 | `02-desktop/hyprland/lua-migration.md:69` | whether hyprctl eval can address a named rule handle |
-| `02-desktop/hyprland/lua-migration.md:71` | / `scripts/sync-theme-border.sh` / rewrites `colors.conf` and `variables.conf`, then `hyprctl reload` / rewrit |
-| `02-desktop/hyprland/lua-migration.md:72` | medium confidence, source-read |
+| `02-desktop/hyprland/lua-migration.md:71` | the Lua form of the theme-border script's rule updates |
+| `02-desktop/hyprland/lua-migration.md:72` | the source-read mapping for one handler (medium confidence) |
 | `02-desktop/hyprland/README.md:263` | plugin compile results on 0.57.0 (no compositor headers in the research sandbox) |
 | `02-desktop/hyprland/README.md:269` | the claim that every hyprexpo fork is broken |
 | `02-desktop/hyprland/README.md:311` | bug status on 5.4.0 |
