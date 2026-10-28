@@ -194,7 +194,7 @@ pgvector is the default (it lives in the PostgreSQL you already run; see [chapte
 | Qdrant | dedicated server, scale | `docker run -p 127.0.0.1:6333:6333 -p 127.0.0.1:6334:6334 qdrant/qdrant`; `uv add qdrant-client` |
 | ChromaDB 1.5 | prototyping | `uv add chromadb`; production docs lean on Chroma Cloud |
 | Weaviate | production-grade local | pin the tag (docs use `cr.weaviate.io/semitechnologies/weaviate:1.40.2`), publish to `127.0.0.1` only; `uv add weaviate-client` |
-| Milvus Lite | embedded | `uv add "pymilvus[milvus-lite]"`; FLAT index only; Ubuntu and macOS are the listed platforms |
+| Milvus Lite | embedded | `uv add "pymilvus[milvus-lite]"`; FLAT index only per the Milvus documentation (the milvus-lite README lists HNSW and IVF_FLAT as well, so the two sources disagree) <!-- UNVERIFIED: Milvus Lite index types -->; Ubuntu and macOS are the listed platforms |
 | FAISS | in-process library | `uv add faiss-cpu` |
 | Pinecone | managed cloud | `uv add pinecone` |
 

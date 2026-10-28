@@ -35,7 +35,7 @@ Which browsers this machine runs, how to install each, and which extensions stil
 
 Chrome removed every remaining Manifest V2 extension from the Web Store on 2026-08-31, and Chromium 150 removed the MV2 code. On Brave, Ungoogled Chromium and any other Chromium browser, extensions must be MV3, with these exceptions and consequences:
 
-- **uBlock Origin on Brave:** install the Brave-hosted MV2 build from `brave://settings/extensions/v2` (1.75.0 as of 2026-09), not from the Web Store. Brave Shields already blocks ads natively, so you may not need it. Brave hosts only four MV2 extensions.
+- **uBlock Origin on Brave:** install the Brave-hosted MV2 build from `brave://settings/extensions/v2` (AMO's uBlock Origin is 1.75.0 as of 2026-09; the version of Brave's own hosted copy was not checked), not from the Web Store. Brave Shields already blocks ads natively, so you may not need it. Brave hosts only four MV2 extensions.
 - **uBlock Origin on other Chromium browsers:** only uBlock Origin Lite is available (MV3, declarative blocking, no dynamic filtering; custom filters and external list subscriptions were added in June 2026). It is not an automatic replacement.
 - **uBlock Origin on Firefox:** full MV2 build from AMO, unchanged.
 - **ClearURLs:** still on Firefox (1.27.3), built on MV2; its documentation warns Chromium browsers may disable it, and Brave does not host it.

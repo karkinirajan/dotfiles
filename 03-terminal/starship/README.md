@@ -32,7 +32,7 @@ Cross-shell prompt configuration used by Zsh (`eval "$(starship init zsh)"`).
   `config-schema.json`, and `starship 1.27.0` rendered the file with no unknown-key warnings.
 - **Known defect, restore on the host:** the file contains **no** Nerd Font
   glyphs from the Basic Multilingual Plane private-use range (U+E000 to U+F8FF)
-  in any of its five commits, so the OS icon (`Arch`), git branch, python,
+  in any of its six commits, so the OS icon (`Arch`), git branch, python,
   nodejs, rust, golang, docker_context, java, bun, conda, aws, jobs and status
   symbols render blank. The supplementary-plane `md-*` glyphs (lock, timer,
   terraform, memory) survived and exist in Nerd Fonts 3.5.1. The cause is
