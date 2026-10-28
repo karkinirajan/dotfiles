@@ -58,7 +58,7 @@
     ],
     "PreToolUse": [
       {
-        "matcher": "Read|Grep|Glob|LS|Bash|NotebookRead",
+        "matcher": "Read|Grep|Glob|Bash",
         "hooks": [
           {
             "type": "command",
@@ -112,7 +112,7 @@
   },
   "effortLevel": "medium",
   "modelSettings": {
-    "claude-sonnet-5": {
+    "claude-sonnet-5-5": {
       "effortLevel": "medium"
     }
   },

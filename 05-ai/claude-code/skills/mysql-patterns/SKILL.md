@@ -16,7 +16,7 @@ Engineers who default to Postgres carry assumptions into MySQL that are quietly 
 - Don't "fix" this by dropping to `READ COMMITTED` without checking what relies on repeatable-read semantics elsewhere (report generation, multi-step batch jobs) — verify, don't just match Postgres by habit.
 
 ## Replication lag
-- MySQL async/semi-sync replication means a read against a replica right after a write on the primary can return stale data — this is an application-level problem, not a database bug. Common fixes: read-your-writes by routing the immediate post-write read to the primary, or sticky sessions to primary for a short window after a write, or checking replica lag (`SHOW REPLICA STATUS`, `Seconds_Behind_Source`) before trusting a replica read in a critical path.
+- MySQL async/semi-sync replication means a read against a replica right after a write on the primary can return stale data — this is an application-level problem, not a database bug. Common fixes: read-your-writes by routing the immediate post-write read to the primary, or sticky sessions to primary for a short window after a write, or checking replica lag (`SHOW REPLICA STATUS`; the column is `Seconds_Behind_Source` on MySQL 8.0.22+ and `Seconds_Behind_Master` on MariaDB) before trusting a replica read in a critical path.
 - Don't assume Postgres streaming replication is meaningfully different in this regard — the same read-after-write hazard applies there too if you're reading from a replica.
 
 ## Migrating between MySQL and Postgres

@@ -5,6 +5,8 @@ description: Design or debug Redis usage — cache invalidation strategy, Redis 
 
 Redis's biggest failure mode isn't the tool — it's ambiguity about what a given key actually is. Before writing to Redis, decide: is this disposable (cache, safe to lose, needs a TTL and a real source of truth elsewhere) or is this the record (needs the durability thinking of a real database)? Most production Redis bugs come from that line being blurry.
 
+This skill is Redis-generic; the host runs Valkey (a drop-in for these commands: strings, lists, Streams with consumer groups, `XACK`, `XPENDING`, `XCLAIM`, `XAUTOCLAIM`).
+
 ## Cache invalidation
 - TTL-only is the default because it's simple and self-healing, but it means every cache miss window serves stale data for up to the TTL — fine for tolerant data (a public profile), wrong for anything correctness-sensitive right after a write (a user's own just-updated settings).
 - Explicit invalidation (delete/update the key on write) gives correctness but couples every write path to cache-key knowledge, and it's easy to miss an invalidation site when a value is written from more than one code path. Prefer writing through a single service-layer function that owns both the DB write and the cache invalidation, not scattering `redis.delete()` calls at call sites.

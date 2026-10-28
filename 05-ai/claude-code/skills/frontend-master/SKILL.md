@@ -5,8 +5,7 @@ description: Frontend standards for Next.js App Router, React, TypeScript, Tailw
 
 # Frontend Master Standards (router)
 
-This skill is generated from `FRONTEND-MASTER.md`. Do not edit anything under `references/` by hand;
-edit the source document and rebuild the kit with `python3 scripts/build_kit.py`.
+The files under `references/` are the source of truth in this repository. They were originally generated from a `FRONTEND-MASTER.md` source and a build script that are not vendored here, so edit the reference files directly. `references/_manifest.json` records the hashes of the generated state and will no longer match after an edit.
 
 Rule language: MUST is a merge blocker, SHOULD needs a justification in the PR, MAY is taste.
 Cite rule IDs (for example `SEC-01`) in commits, PRs and review comments.
@@ -103,4 +102,4 @@ Appendix A defines 89 files (mode A, dynamic CSP nonce) and 5 mode B replacement
 
 - `pnpm check` must pass before a task is called done.
 - `pnpm test:e2e` runs the browser tests against a production build.
-- `python3 audit/audit.py run --profile ci` must show no FAIL (see `audit/README.md`). `/frontend-audit` runs the full audit.
+- `python3 audit/audit.py run --profile ci` must show no FAIL (see `audit/README.md`). `/frontend-audit` runs the full audit. The `audit/` kit ships separately and is not in this repository, so this step and the `frontend-audit` skill need it copied into the project first.
