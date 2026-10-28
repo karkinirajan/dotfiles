@@ -89,12 +89,13 @@ duration = 0
 alphabet = "jfkdls;ahgurieowpq"
 
 # Ctrl+Shift+U → label every URL on screen; press a label to open it.
+# A hint takes either an `action` or a `command`, not both (alacritty.5): these two
+# set only `command`. Confirm on the host with `alacritty -vv` if a hint does nothing.
 [[hints.enabled]]
 regex = "(mailto:|https:|http:|file:|git:|ssh:|ftp:)[^\\s\"'`{}<>]+"
 hyperlinks = true
 post_processing = true
 persist = false
-action = "Select"
 binding = { key = "U", mods = "Control|Shift" }
 mouse = { enabled = true, mods = "Control" }
 command = "xdg-open"
@@ -105,7 +106,6 @@ command = "xdg-open"
 regex = "[\\w.@/~-]+\\.[a-zA-Z]{1,8}:\\d+"
 post_processing = false
 persist = false
-action = "Select"
 binding = { key = "O", mods = "Control|Shift" }
 command = { program = "sh", args = ["-c", "nvim +${1##*:} ${1%%:*}", "_"] }
 

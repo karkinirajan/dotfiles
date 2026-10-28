@@ -88,7 +88,6 @@
   "editor.columnSelection": false,
   "editor.selectionHighlight": true,
   "editor.occurrencesHighlight": "singleFile",
-  "editor.findMatchHighlightLimit": 300,
 
   // ═══════════════════════════════════════════════════════════
   // WORKBENCH — Theme & Icons
@@ -355,7 +354,7 @@
   },
   "typescript.inlayHints.parameterNames.enabled": "literals",
   "typescript.inlayHints.variableTypes.enabled": true,
-  "typescript.inlayHints.returnTypes.enabled": true,
+  "js/ts.inlayHints.functionLikeReturnTypes.enabled": true,
   "typescript.preferences.importModuleSpecifier": "relative",
   "typescript.suggest.autoImports": true,
   "javascript.suggest.autoImports": true,
