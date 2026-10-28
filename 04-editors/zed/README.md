@@ -27,7 +27,7 @@ The older version of this page said Zed has no CLI extension installer and liste
 
 ## Local models
 
-`agent.default_model` is `deepseek-v4-flash:cloud` on the Ollama provider. Ollama retired that model on 2026-08-27 (its library page says so); the cloud list now shows `deepseek-v4.1-flash` and `deepseek-v4-pro`. Choosing the replacement, cloud or a local model such as `gemma4:12b`, is the owner's decision, so the setting is left unchanged. <!-- UNVERIFIED: the replacement model tag -->
+`agent.default_model` is `deepseek-v4-flash:cloud` on the Ollama provider. Ollama retired that model on 2026-09-25 (its library page says so); the cloud list now shows `deepseek-v4.1-flash` and `deepseek-v4-pro`. Choosing the replacement, cloud or a local model such as `gemma4:12b`, is the owner's decision, so the setting is left unchanged. <!-- UNVERIFIED: the replacement model tag -->
 
 `edit_predictions.provider = "ollama"` is valid in Zed 1.25 but its documented form carries an `edit_predictions.ollama` block (`api_url`, `model`, `prompt_format`); without a model it has nothing to call. The `git.git_fetch` key that used to be in `settings.json` is not a Zed setting and was removed.
 

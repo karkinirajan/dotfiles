@@ -28,7 +28,7 @@ Invoicing, the Upwork desktop app, and the PDF and calendar tools a freelance wo
   ```
 
   Put the key in the compose environment file, then `docker compose up -d`. Label: `machine-only`; the stack was not started in the research environment.
-- **Wave Accounting**: <https://www.waveapps.com/>. The Starter plan is free (invoices, estimates, manual statement upload); bank import, collaborators and late reminders need Pro ($19 a month). Wave supports the US and Canada only; outside them an invoice can be exported as PDF or a link but not sent through Wave.
+- **Wave Accounting**: <https://www.waveapps.com/>. The Starter plan is free (invoices, estimates, manual statement upload); bank import and extra collaborators need Pro ($19 a month). Wave is reported to support the US and Canada only, and outside them an invoice can be exported as PDF or a link but not sent through Wave. <!-- UNVERIFIED: country limits rest on 2020 to 2021 search snippets; Wave's help article returned 403 -->
 - **AND.CO** was shut down: Fiverr Workspace (AND.CO) closed on 2026-03-01 and its data was deleted; `and.co` redirects to `fiverr.com`. The entry was removed.
 
 ## 17.2 Upwork app
