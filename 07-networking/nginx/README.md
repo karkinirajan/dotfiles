@@ -2,7 +2,7 @@
 
 Local reverse-proxy tuning for CachyOS/Arch Linux (`nginx`).
 
-```
+```text
 07-networking/nginx/
 ├── README.md
 └── conf.d/

@@ -10,7 +10,7 @@
 
 ### 2.1 Request flow
 
-```
+```text
 Browser
   | HTML stream + RSC payload
   v

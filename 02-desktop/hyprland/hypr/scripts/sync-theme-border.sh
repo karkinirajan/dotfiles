@@ -1,7 +1,7 @@
 #!/bin/bash
 # Keeps Hyprland's window border color in sync with Noctalia's active theme
 # primary color, so the topbar's item borders and the window borders always
-# match — even after the theme is changed later (custom palette, community
+# match: even after the theme is changed later (custom palette, community
 # palette, or builtin).
 #
 # Resolves the palette the same way Noctalia does: [theme].source picks
@@ -23,7 +23,7 @@ def write_atomic(path, text, validate_toml=False):
 
     A plain `path.write_text()` truncates the file first and fills it in
     afterwards, leaving a window where anyone reading sees an empty or partial
-    file. Noctalia watches settings.toml and reloads on every write — if it
+    file. Noctalia watches settings.toml and reloads on every write - if it
     reads inside that window it finds nothing parseable, falls back to built-in
     defaults, and then SAVES those defaults, destroying the real config. That
     is not theoretical: it wiped the bar profile, every widget, the plugin list
@@ -134,7 +134,7 @@ var_text = re.sub(r'^\s*col\.inactive_border\s*=.*$', new_inactive, var_text, fl
 write_atomic(variables_path, var_text)
 
 # The topbar capsule outlines want the same accent as the bar's own border but
-# dimmer, and Noctalia's color *roles* carry no alpha — so the hex has to be
+# dimmer, and Noctalia's color *roles* carry no alpha: so the hex has to be
 # written in explicitly. Safe to write settings.toml here: theme-border-watch.sh
 # only re-runs this script when the [theme] block itself changes, and this only
 # touches capsule_border, so it cannot retrigger its own watcher.

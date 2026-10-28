@@ -9,7 +9,7 @@ model+stage+size+run_kind+run_index) are skipped, so a crash or timeout
 never loses prior data.
 
 Every number in here comes from a real HTTP call to the local Ollama server
-or a real sysfs read — nothing is estimated or invented. Where a metric
+or a real sysfs read - nothing is estimated or invented. Where a metric
 cannot be obtained (e.g. no power sensor), the field is null and a warning
 is logged, never a guessed value.
 """
@@ -79,7 +79,7 @@ def read_power_microwatts() -> int | None:
 
 def peak_ram_mb() -> float:
     """Peak RSS across all processes named 'ollama' or 'ollama_llama_ser',
-    read once (not a running peak — good enough as a point sample taken
+    read once (not a running peak - good enough as a point sample taken
     right after a call completes, since the model stays loaded)."""
     import subprocess
 

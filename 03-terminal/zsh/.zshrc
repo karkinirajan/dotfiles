@@ -1,5 +1,5 @@
 # =============================================================================
-#  ~/.zshrc — kneeraazon
+#  ~/.zshrc: kneeraazon
 #  CachyOS · Hyprland + Noctalia · Wayland
 #  Prompt: starship
 # =============================================================================
@@ -19,12 +19,12 @@ export PAGER="less"
 export LESS="-R --use-color -Dd+r -Du+b"
 export MANPAGER="nvim +Man!"
 
-# AMD RDNA2 (RX 6700 XT, gfx1031) — ROCm compatibility mode. Required by the PyTorch
+# AMD RDNA2 (RX 6700 XT, gfx1031): ROCm compatibility mode. Required by the PyTorch
 # pip wheels; Ollama's packaged ROCm build runs native gfx1031 without it. Exported
 # globally on purpose (frequent PyTorch work); it makes rocminfo report gfx1030.
 export HSA_OVERRIDE_GFX_VERSION=10.3.0
 
-# Ollama — local LLM inference
+# Ollama: local LLM inference
 export OLLAMA_HOST="127.0.0.1:11434"
 export OLLAMA_DEFAULT_MODEL="llama3.2:3b"
 
@@ -53,7 +53,7 @@ path=(
 [[ -f "$XDG_CONFIG_HOME/zsh/private.zsh" ]] && source "$XDG_CONFIG_HOME/zsh/private.zsh"
 
 # ─── Oh My Zsh ────────────────────────────────────────────────────────────────
-# No OMZ theme — starship owns the prompt.
+# No OMZ theme: starship owns the prompt.
 ZSH_THEME=""
 DISABLE_AUTO_UPDATE=true
 
@@ -71,10 +71,10 @@ plugins=(
   history-substring-search
 
   # ── OMZ built-ins: productivity ──────────────────────────────────────────────
-  aliases            # `als` — lists all defined aliases, searchable
+  aliases            # `als` - lists all defined aliases, searchable
   alias-finder       # suggests shortest alias as you type full commands
   encode64           # encode64 / decode64 / e64 / d64 for base64
-  jsontools          # pp_json, is_json — pretty-print and validate JSON
+  jsontools          # pp_json, is_json - pretty-print and validate JSON
   urltools           # urlencode / urldecode
   safe-paste         # prevents accidental execution of multi-line paste
   systemd            # sc-start, sc-stop, sc-status, sc-restart, etc.
@@ -101,7 +101,7 @@ bindkey '^[[B' history-substring-search-down
 bindkey -M emacs '^P' history-substring-search-up
 bindkey -M emacs '^N' history-substring-search-down
 
-# ── Item 1: deferred plugin loading — prompt appears instantly ─────────────────
+# ── Item 1: deferred plugin loading: prompt appears instantly ─────────────────
 _load_zsh_plugin() {
   local plugin_file="$1"
   if command -v zsh-defer >/dev/null 2>&1; then
@@ -113,7 +113,7 @@ _load_zsh_plugin() {
 _load_zsh_plugin "${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/plugins/zsh-autosuggestions/zsh-autosuggestions.zsh"
 _load_zsh_plugin "${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/plugins/you-should-use/you-should-use.plugin.zsh"
 
-# ── Item 2: atuin — SQLite history with rich Ctrl+R TUI ───────────────────────
+# ── Item 2: atuin: SQLite history with rich Ctrl+R TUI ───────────────────────
 # ↑↓ kept for history-substring-search; atuin owns Ctrl+R
 if command -v atuin >/dev/null 2>&1; then
   if command -v zsh-defer >/dev/null 2>&1; then
@@ -408,7 +408,7 @@ command -v amdgpu_top >/dev/null 2>&1 && alias gpumon='amdgpu_top'
 
 # ─── Git ──────────────────────────────────────────────────────────────────────
 # These load after oh-my-zsh, so they deliberately override the git plugin.
-# Seven differ from the plugin's meaning — kept on purpose, listed here so the
+# Seven differ from the plugin's meaning: kept on purpose, listed here so the
 # divergence is intentional rather than accidental:
 #
 #   gl    log graph      (omz: git pull)          <- biggest divergence
@@ -687,7 +687,7 @@ command -v yazi       >/dev/null 2>&1 && alias fm='yazi'
 command -v just       >/dev/null 2>&1 && alias j='just'
 command -v dive       >/dev/null 2>&1 && alias dv='dive'
 
-# pgexplain <connstring-or-dbname> <query> — EXPLAIN (ANALYZE, BUFFERS) via
+# pgexplain <connstring-or-dbname> <query>: EXPLAIN (ANALYZE, BUFFERS) via
 # pgcli's own formatting, without opening an interactive session.
 pgexplain() {
   if [ $# -lt 2 ]; then
@@ -700,27 +700,27 @@ pgexplain() {
 
 # ─── Tool integrations ────────────────────────────────────────────────────────
 
-# zoxide — smarter cd, ranks by frecency (z <partial>, zi for interactive)
+# zoxide: smarter cd, ranks by frecency (z <partial>, zi for interactive)
 if command -v zoxide >/dev/null 2>&1; then
   eval "$(zoxide init zsh)"
   alias cd='z'
 fi
 
-# direnv — per-project env vars from .envrc
+# direnv: per-project env vars from .envrc
 command -v direnv >/dev/null 2>&1 && eval "$(direnv hook zsh)"
 
-# tealdeer — tldr pages, community-maintained cheatsheets
+# tealdeer: tldr pages, community-maintained cheatsheets
 command -v tldr >/dev/null 2>&1 && alias help='tldr'
 
 
-# Item 4: carapace — universal completion engine (500+ commands)
+# Item 4: carapace: universal completion engine (500+ commands)
 if command -v carapace >/dev/null 2>&1; then
   export CARAPACE_BRIDGES='zsh,fish,bash'
   zstyle ':completion:*' format $'\e[2;38;2;146;131;116mCompleting %d\e[m'
   source <(carapace _carapace zsh)
 fi
 
-# Item 6: navi — interactive cheatsheet TUI (Alt+G to avoid Ctrl+G=lazygit)
+# Item 6: navi: interactive cheatsheet TUI (Alt+G to avoid Ctrl+G=lazygit)
 if command -v navi >/dev/null 2>&1; then
   eval "$(navi widget zsh)"
   bindkey '^[g' _navi_widget   # Alt+G
@@ -754,7 +754,7 @@ gfbr() {
   [[ -n "$branch" ]] && git switch "$branch"
 }
 
-# fzf git log browser — Enter to show full diff
+# fzf git log browser: Enter to show full diff
 gfl() {
   git log --oneline --color=always 2>/dev/null |
     fzf --ansi \

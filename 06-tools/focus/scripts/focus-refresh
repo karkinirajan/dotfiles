@@ -19,13 +19,13 @@ _focus_is_on() {
   if [[ -f "$STATE_FILE" ]]; then
     [[ "$(<"$STATE_FILE")" == "on" ]]
   else
-    # No state file yet — infer from whether the system actually points at us.
+    # No state file yet: infer from whether the system actually points at us.
     grep -q '^nameserver 127\.0\.0\.1' /etc/resolv.conf 2>/dev/null
   fi
 }
 
 if ! _focus_is_on; then
-  echo "[skip] focus is off — leaving DNS/firewall untouched @ $(date '+%H:%M:%S')" \
+  echo "[skip] focus is off - leaving DNS/firewall untouched @ $(date '+%H:%M:%S')" \
     | tee -a "$LOG"
   exit 0
 fi
@@ -49,7 +49,7 @@ sudo nft flush set inet focus allowed_ips6 2>/dev/null || true
 # Upstream resolver used for IP discovery. MUST bypass the local dnsmasq:
 # during focus mode /etc/resolv.conf points at 127.0.0.1, so resolving a
 # blocked domain through it returns the block-page IP (127.0.0.1) rather than
-# the real addresses — which meant blocked_ips only ever collected 127.0.0.1
+# the real addresses: which meant blocked_ips only ever collected 127.0.0.1
 # and the IP-level layer never blocked anything.
 UPSTREAM_DNS="${FOCUS_UPSTREAM_DNS:-1.1.1.1}"
 
@@ -121,7 +121,7 @@ done < "$BLOCK_FILE"
 sort -u "$DNSMASQ_TMP" | sudo tee "$DNSMASQ_BLOCK" > /dev/null
 
 # MUST be restart, not reload. dnsmasq's SIGHUP handler clears the cache and
-# re-reads /etc/hosts, but does NOT re-read /etc/dnsmasq.d/*.conf — so new
+# re-reads /etc/hosts, but does NOT re-read /etc/dnsmasq.d/*.conf: so new
 # address=/domain/ entries silently never take effect on a reload.
 sudo systemctl restart dnsmasq 2>/dev/null || true
 

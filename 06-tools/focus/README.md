@@ -1,12 +1,12 @@
-# 06.1 · focus — system-wide distraction blocker
+# 06.1 · focus: system-wide distraction blocker
 
 DNS + firewall blocking for CachyOS/Arch, with scheduling and a lock mode.
 Blocking is enforced at the OS level (dnsmasq + nftables), so it applies to
-every browser and app — not just one extension.
+every browser and app, not just one extension.
 
 ## How it works
 
-```
+```text
        ┌─────────────┐
 apps ─▶│ /etc/resolv │──▶ 127.0.0.1 ──▶ dnsmasq ──▶ address=/blocked/127.0.0.1 + ::1
        │    .conf    │                     │
@@ -18,10 +18,10 @@ apps ─▶│ /etc/resolv │──▶ 127.0.0.1 ──▶ dnsmasq ──▶ ad
                   ip daddr @blocked_ips  reject   ← catches DNS-caching apps
 ```
 
-- **`block.list`** — domains to block. dnsmasq's `address=/domain/` covers the
+- **`block.list`**: domains to block. dnsmasq's `address=/domain/` covers the
   apex *and* all subdomains (both IPv4 `A` and IPv6 `AAAA`), so `youtube.com`
   also blocks `www.`/`m.youtube.com`.
-- **`allow.list`** — **not** an "only these are allowed" list. It exempts those
+- **`allow.list`**: **not** an "only these are allowed" list. It exempts those
   domains' IPs from *firewall*-level blocking, so a shared CDN address can't
   take down something you need. A domain is only ever blocked by `block.list`.
 
@@ -52,7 +52,7 @@ sudo cp 06-tools/focus/systemd/*  /etc/systemd/system/
 sudo cp 06-tools/focus/networkmanager/90-focus-default-dns.conf /etc/NetworkManager/conf.d/
 sudo cp 06-tools/focus/dnsmasq/dnsmasq.conf /etc/dnsmasq.conf
 
-# Make `focus` a real global command — resolvable from any shell, systemd
+# Make `focus` a real global command: resolvable from any shell, systemd
 # unit, GUI launcher, or non-interactive context, not just an interactive
 # zsh session with ~/.zshrc sourced.
 sudo ln -sf ~/focus/scripts/focus /usr/local/bin/focus
@@ -83,7 +83,7 @@ focus schedule set 09:00 18:00
 ## Requirements
 
 `/etc/resolv.conf` must be a **real file**, not NetworkManager's symlink into
-`/run` — see the note in `networkmanager/90-focus-default-dns.conf`. Also
+`/run`, see the note in `networkmanager/90-focus-default-dns.conf`. Also
 requires `dnsmasq`, `nftables` with the `inet focus` table defined in
 `nftables/focus-filter.nft` (`allowed_ips` / `blocked_ips` / `allowed_ips6` /
 `blocked_ips6` sets), and `dig` (`bind`).
@@ -102,29 +102,29 @@ ignore the canary.
 
 ## Changelog
 
-- **2026-09-04 (follow-up)** — `focus` still resolved as "command not
+- **2026-09-04 (follow-up)**: `focus` still resolved as "command not
   found" outside an interactive zsh session after the `~/.focus` -> `~/focus`
   rename below. Root cause was a *separate, older* stale symlink at
-  `/usr/local/bin/focus -> /.focus/scripts/focus` — pointing at the
+  `/usr/local/bin/focus -> /.focus/scripts/focus`, pointing at the
   original pre-2026-08-08 filesystem-root location, predating even the
   `~/.focus` move, and never fixed across either relocation. It was masked
   in interactive shells because `~/.zshrc`'s PATH entry for
   `~/focus/scripts` resolves first, so only non-interactive contexts
   (systemd, scripts, GUI launchers, `env -i` shells) actually hit the dead
   symlink. Fixed by repointing it at `/home/kneeraazon/focus/scripts/focus`
-  and adding the symlink step to Install below — this is what actually
+  and adding the symlink step to Install below, this is what actually
   makes `focus` a global command, independent of any shell config being
   sourced. Verified `focus status`/`list`/`test`/`schedule status` all work
   from a fully clean `env -i PATH=/usr/local/sbin:/usr/local/bin:/usr/bin:
   /sbin:/bin` environment with zero shell config loaded.
 
-- **2026-09-04** — Moved the live install from `~/.focus` (hidden) to
+- **2026-09-04**: Moved the live install from `~/.focus` (hidden) to
   `~/focus`. Updated every hardcoded path: both scripts, all 8 systemd
   units, and `ollama.service`'s `PATH=` environment line (it had picked up
   `~/.focus/scripts` for the `focus` CLI's global availability). Also fixed
   a pre-existing bug in `focus status`'s "dns blocks" line: zsh prints a
   redirection-setup failure (`<file` on a missing file) straight to the
-  real stderr regardless of a `2>/dev/null` on the same simple command —
+  real stderr regardless of a `2>/dev/null` on the same simple command  - 
   it's a shell-level failure, not the invoked command's own error, so the
   suppression never worked. Fixed by piping through `cat` instead, whose
   own (redirectable) error is what actually gets suppressed. Verified with

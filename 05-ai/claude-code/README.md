@@ -4,7 +4,7 @@ The global Claude Code setup: instructions, subagents, skills and settings that
 apply to every project. Project-specific `.claude/` config stays in each
 project's own repo.
 
-```
+```text
 claude-code/
 ├── CLAUDE.md          → ~/.claude/CLAUDE.md     always-loaded engineering profile
 ├── settings.json      → ~/.claude/settings.json permissions, hooks, plugins, model defaults

@@ -16,7 +16,7 @@ sources:
 Interactive login shell configuration for CachyOS (`03-terminal/zsh/.zshrc`),
 plus archived reference configs for macOS and Ubuntu.
 
-```
+```text
 03-terminal/zsh/
 ├── README.md       ← you are here
 ├── .zshrc          → ~/.zshrc (linked via manifest.conf)

@@ -27,4 +27,4 @@ Confirmation prompts remain enabled
 paru -S --needed topgrade-bin
 ```
 
-Linked via `manifest.conf` to `~/.config/topgrade.toml` — edit either side.
+Linked via `manifest.conf` to `~/.config/topgrade.toml`, edit either side.

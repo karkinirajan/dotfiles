@@ -1,4 +1,4 @@
-# Fresh CachyOS Setup — AI-Agent Playbook
+# Fresh CachyOS Setup: AI-Agent Playbook
 
 Use this runbook to rebuild the CachyOS workstation represented by this repo.
 It coordinates the detailed chapter guides; it is not a disk image or an
@@ -65,7 +65,7 @@ versions written in older notes.
    have changed, adapt and explain the difference instead of forcing stale
    instructions.
 
-## Phase 1 — Prepare and inventory
+## Phase 1: Prepare and inventory
 
 1. Ask whether this is a blank target or a dual-boot replacement, which disk
    is the target, whether existing Windows/data must remain, whether full-disk
@@ -89,7 +89,7 @@ versions written in older notes.
    network. The AMD ROCm override in this repo is specific to the RX 6700 XT;
    do not apply it to a different GPU without checking its supported target.
 
-## Phase 2 — Install CachyOS (owner at the machine)
+## Phase 2: Install CachyOS (owner at the machine)
 
 1. Download the current Desktop ISO (release <!-- v:cachyos-iso -->260809<!-- /v -->) from the
    [official CachyOS download page](https://www.cachyos.org/download/) together
@@ -148,7 +148,7 @@ versions written in older notes.
    Do not set autologin. Finish the installer and let the owner perform the
    first boot.
 
-## Phase 3 — First boot and base system
+## Phase 3: First boot and base system
 
 1. Verify network access, the root filesystem, boot mode, and that the owner
    can log in from a TTY or the installer-selected desktop. Record:
@@ -232,7 +232,7 @@ versions written in older notes.
    sudo pacman -S --needed "${ai_packages[@]}"
    ```
 
-## Phase 4 — Apply Dotfiles
+## Phase 4: Apply Dotfiles
 
 1. Use the checkout created in Phase 3. If its remote is private, have the
    owner provide authentication; do not put credentials in commands, shell
@@ -261,7 +261,7 @@ versions written in older notes.
    old `os/cachyos/packages/` paths. Test plugins against the installed
    Hyprland version before enabling them.
 
-## Phase 5 — Boot, login, and recovery configuration
+## Phase 5: Boot, login, and recovery configuration
 
 ### Display manager (`greetd` + Noctalia greeter) and optional SDDM preset
 
@@ -340,7 +340,7 @@ versions written in older notes.
    single-entry boot menu. Take and verify a snapshot before large system
    changes. Never run `btrfs check --repair` as routine maintenance.
 
-## Phase 6 — Privileged integrations and user services
+## Phase 6: Privileged integrations and user services
 
 Install only after their package and firewall/service plans are reviewed:
 
@@ -371,7 +371,7 @@ Do not copy the old DNSCrypt `.pacnew` over the working file without comparing
 it. Preserve the selected upstream servers, local port, and dnsmasq forwarding
 relationship when configuring a new machine.
 
-## Phase 7 — Applications, development tools, and updates
+## Phase 7: Applications, development tools, and updates
 
 1. Use the app chapters in `01-system/cachyos/setup/` as the catalog for the
    full profile: Python/uv, Node/pnpm, editors, browsers, databases, Docker and
@@ -398,7 +398,7 @@ relationship when configuring a new machine.
    files. Do not log into personal accounts or sync private browser, cloud,
    password-manager, IDE, or AI-provider state without the owner present.
 
-## Phase 8 — Final acceptance checklist
+## Phase 8: Final acceptance checklist
 
 Have the owner participate in the final login/reboot checkpoint. Before that,
 collect evidence for each item and report any mismatch instead of declaring

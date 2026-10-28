@@ -21,7 +21,15 @@ EM_DASH = "\u2014"
 ALLOWED_STATUS = {"current", "reference", "archived", "draft"}
 FENCE_RE = re.compile(r"^(\s*)(`{3,}|~{3,})(.*)$")
 # Generated or imported text that is not authored here.
-STYLE_EXEMPT_PREFIXES = ("docs/modernization/inventory", "LICENSE")
+STYLE_EXEMPT_PREFIXES = ("docs/modernization/inventory", "LICENSE", "05-ai/claude-code/CLAUDE.md")
+# The owner's standing-instructions file, benchmark fixtures and Next.js text copied verbatim keep their wording.
+DASH_EXEMPT_PREFIXES = (
+    "05-ai/claude-code/CLAUDE.md",
+    "05-ai/ollama/claude-code-bench/fixtures/",
+    "05-ai/claude-code/skills/frontend-master/references/38-a-12",
+)
+# Claude Code defines the frontmatter of these files (name, description, tools ...), not this repo.
+FRONTMATTER_EXEMPT_PARTS = ("/skills/", "/agents/", "/commands/")
 
 
 def check_file(path: Path, root: Path, version_keys: set[str]) -> list[str]:
@@ -30,7 +38,7 @@ def check_file(path: Path, root: Path, version_keys: set[str]) -> list[str]:
     errors: list[str] = []
 
     for lineno, line in enumerate(text.splitlines(), 1):
-        if EM_DASH in line:
+        if EM_DASH in line and not rel.startswith(DASH_EXEMPT_PREFIXES):
             errors.append(f"{rel}:{lineno}: em dash")
 
     in_fence: str | None = None
@@ -50,7 +58,7 @@ def check_file(path: Path, root: Path, version_keys: set[str]) -> list[str]:
         meta, _ = split_frontmatter(text)
     except ValueError as exc:
         return errors + [f"{rel}: {exc}"]
-    if meta:
+    if meta and not any(part in f"/{rel}" for part in FRONTMATTER_EXEMPT_PARTS):
         for field in ("title", "topic", "last_verified", "status"):
             if field not in meta:
                 errors.append(f"{rel}: frontmatter missing '{field}'")

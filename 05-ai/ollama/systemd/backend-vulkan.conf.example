@@ -1,4 +1,4 @@
-# Alternate backend.conf content for Vulkan — kept for reference/rollback.
+# Alternate backend.conf content for Vulkan: kept for reference/rollback.
 # NOT currently active: see claude-code-bench/ollama-claude-setup.md §2 for
 # why ROCm is live instead (a reproduced Vulkan crash at large prompt sizes).
 # Written by `ollama-backend vulkan`.

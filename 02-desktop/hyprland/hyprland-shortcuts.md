@@ -16,7 +16,7 @@ Kept by hand in step with `~/.config/hypr/config/keybinds.conf` (there is no gen
 |---|---|
 | `SUPER + Return` | Open terminal (`alacritty`) |
 | `SUPER + E` | Open file manager (`alacritty -e yazi`) |
-| `SUPER + Space` | Open app launcher (Noctalia) — moves the cursor off the bar first, so a hover-triggered panel can't steal focus and close it instantly |
+| `SUPER + Space` | Open app launcher (Noctalia), moves the cursor off the bar first, so a hover-triggered panel can't steal focus and close it instantly |
 | `SUPER + Q` | Close current window (graceful) |
 | `SUPER + SHIFT + M` | Log out / end session |
 | `SUPER + L` | Lock screen |
@@ -34,11 +34,11 @@ Kept by hand in step with `~/.config/hypr/config/keybinds.conf` (there is no gen
 | `SUPER + H` | Toggle the Hyprspace workspace overview (GNOME/macOS Mission Control-style) |
 
 Also installed and loaded, with no dedicated keybind by design:
-- **dynamic-cursors** — cursor tilts with movement, shake-to-find (mouse-driven, no keybind needed).
+- **dynamic-cursors**: cursor tilts with movement, shake-to-find (mouse-driven, no keybind needed).
 
 Optional plugins documented in `plugins.conf` (not installed in the baseline):
-- **hy3** — i3/sway-style manual tiling layout, available as an alternative to the active `dwindle` layout.
-- **split-monitor-workspaces** — per-monitor independent workspace numbering.
+- **hy3**: i3/sway-style manual tiling layout, available as an alternative to the active `dwindle` layout.
+- **split-monitor-workspaces**: per-monitor independent workspace numbering.
 
 ## Screenshots
 
@@ -75,11 +75,11 @@ and opened in Swash for annotation.
 
 | Shortcut | Action |
 |---|---|
-| `SUPER + R`, then `←/→/↑/↓` or `h/j/k/l`, `Esc` to exit | Resize mode — tap repeatedly to grow/shrink 15px per press, no need to hold the mod key while in this mode |
+| `SUPER + R`, then `←/→/↑/↓` or `h/j/k/l`, `Esc` to exit | Resize mode, tap repeatedly to grow/shrink 15px per press, no need to hold the mod key while in this mode |
 | `SUPER + Ctrl + Shift + ←/→/↑/↓` (or `h/j/k/l`) | One-shot resize, 15px per press, no mode needed |
 | `SUPER + Right-click` + drag | Freeform resize with mouse |
 
-> Resize mode (`SUPER + R`) is the fastest way to fine-tune a window: hit it once, then just tap arrow keys/hjkl repeatedly, then `Esc` when done — you don't need to re-press `SUPER` each time.
+> Resize mode (`SUPER + R`) is the fastest way to fine-tune a window: hit it once, then just tap arrow keys/hjkl repeatedly, then `Esc` when done, you don't need to re-press `SUPER` each time.
 
 ## Gaps
 
@@ -126,7 +126,7 @@ and opened in Swash for annotation.
 ---
 
 ### Quick tips
-- Full reference: `~/.config/hypr/config/keybinds.conf` (every bind has a `bindd` description — run `hyprctl binds` in a terminal to list them all live, including descriptions).
-- If a shortcut ever doesn't fire, check `bindd = $mainMod ..., description, dispatcher, args` syntax (hyprlang, Hyprland 0.56.x): the 3rd field is the human description, 4th is the actual dispatcher. After the Lua migration the same binds become `hl.bind("SUPER + Q", hl.dsp..., { description = "..." })` (see `lua-migration.md`). Also check for a duplicate bind on the same key (`hyprctl binds -j` shows exactly what's actually registered) — a later `bindd` on the same key silently wins over an earlier one.
+- Full reference: `~/.config/hypr/config/keybinds.conf` (every bind has a `bindd` description, run `hyprctl binds` in a terminal to list them all live, including descriptions).
+- If a shortcut ever doesn't fire, check `bindd = $mainMod ..., description, dispatcher, args` syntax (hyprlang, Hyprland 0.56.x): the 3rd field is the human description, 4th is the actual dispatcher. After the Lua migration the same binds become `hl.bind("SUPER + Q", hl.dsp..., { description = "..." })` (see `lua-migration.md`). Also check for a duplicate bind on the same key (`hyprctl binds -j` shows exactly what's actually registered), a later `bindd` on the same key silently wins over an earlier one.
 - `workspace_back_and_forth = 1` is on, so pressing the same workspace number twice toggles back to the previous one.
-- Noctalia (bar, launcher, clipboard, control center) replaced Waybar/wofi/mako entirely — none of the shortcuts above launch those anymore, even though some dispatcher names still say things like "wofi" in older comments.
+- Noctalia (bar, launcher, clipboard, control center) replaced Waybar/wofi/mako entirely, none of the shortcuts above launch those anymore, even though some dispatcher names still say things like "wofi" in older comments.

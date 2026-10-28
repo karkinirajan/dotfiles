@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Focus block page server — listens on 127.0.0.1:80 (or FOCUS_PAGE_PORT)"""
+"""Focus block page server, listens on 127.0.0.1:80 (or FOCUS_PAGE_PORT)"""
 
 import http.server, os, socketserver, urllib.parse
 from datetime import datetime

@@ -14,7 +14,7 @@ sources:
 
 Cross-shell prompt configuration used by Zsh (`eval "$(starship init zsh)"`).
 
-```
+```text
 03-terminal/starship/
 ├── README.md
 └── starship.toml    → ~/.config/starship.toml (linked via manifest.conf)

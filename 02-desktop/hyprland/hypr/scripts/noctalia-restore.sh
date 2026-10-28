@@ -19,7 +19,7 @@
 #
 #   2. The write has to be atomic. Noctalia watches this file and reloads on
 #      every write; if it reads a half-written file it logs "no config files
-#      found, using defaults" and then SAVES those defaults — which is exactly
+#      found, using defaults" and then SAVES those defaults: which is exactly
 #      how the config was destroyed on 2026-09-07.
 #
 #   3. It must restart as a plain child of Hyprland, not of whatever shell ran
@@ -59,7 +59,7 @@ else
     SOURCE_DESC="repo working copy"
 fi
 
-python3 - "$STAGED" <<'PY' || die "the staged config is not valid TOML — refusing to install it"
+python3 - "$STAGED" <<'PY' || die "the staged config is not valid TOML - refusing to install it"
 import sys, tomllib, pathlib
 d = tomllib.loads(pathlib.Path(sys.argv[1]).read_text())
 bars = [b for b in d.get("bar", {}) if b != "order"]
@@ -94,8 +94,8 @@ info "wrote $LIVE"
 hyprctl dispatch exec "$WATCHDOG" >/dev/null 2>&1 \
     || die "Hyprland could not launch $WATCHDOG"
 for _ in $(seq 40); do pgrep -x noctalia >/dev/null && break; sleep 0.25; done
-pgrep -x noctalia >/dev/null || die "Noctalia did not come back up — start $WATCHDOG by hand"
+pgrep -x noctalia >/dev/null || die "Noctalia did not come back up - start $WATCHDOG by hand"
 sleep 3
 
 BAR=$(grep -oP '(?<=\[bar\] creating #0 ")[^"]+' "$HOME/.cache/noctalia/noctalia.log" 2>/dev/null | tail -1)
-printf '\033[32mrestored\033[0m — Noctalia is back up with bar %s\n' "${BAR:-<unknown>}"
+printf '\033[32mrestored\033[0m - Noctalia is back up with bar %s\n' "${BAR:-<unknown>}"

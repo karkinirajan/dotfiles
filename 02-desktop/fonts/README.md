@@ -13,7 +13,7 @@ sources:
 
 Fontconfig rendering rules for the Wayland desktop session.
 
-```
+```text
 02-desktop/fonts/
 ├── README.md
 └── fontconfig/

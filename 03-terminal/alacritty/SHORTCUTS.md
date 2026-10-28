@@ -1,4 +1,4 @@
-# Alacritty — keyboard reference
+# Alacritty: keyboard reference
 
 Alacritty has **no tabs and no splits** by design. Multiple terminals are
 Hyprland's job (`Super+Enter`) or tmux's, which is installed. Everything below
@@ -33,7 +33,7 @@ SSH can also drive the local clipboard.
 `SpawnNewInstance` inherits the cwd; `CreateNewWindow` does not. That is the
 only difference between the two.
 
-## Scrollback — 20 000 lines
+## Scrollback: 20 000 lines
 | Key | Action |
 |---|---|
 | `Ctrl+Shift+PageUp` / `PageDown` | Scroll a page |
@@ -42,7 +42,7 @@ only difference between the two.
 | `Ctrl+Shift+K` | Clear scrollback entirely |
 | `Ctrl+Shift+L` | Clear the log notice |
 
-`Ctrl+L` (no Shift) is the shell's own clear — it keeps scrollback.
+`Ctrl+L` (no Shift) is the shell's own clear, it keeps scrollback.
 
 ## Search the scrollback
 | Key | Action |
@@ -55,7 +55,7 @@ only difference between the two.
 
 While searching, matches are highlighted live and the viewport follows them.
 
-## Vi mode — `Ctrl+Shift+Space`
+## Vi mode: `Ctrl+Shift+Space`
 Navigate and select with the keyboard, no mouse. Cursor turns into a block.
 
 | Key | Action |
@@ -76,14 +76,14 @@ Navigate and select with the keyboard, no mouse. Cursor turns into a block.
 | `Enter` | Open the URL under the cursor |
 | `Esc` | Leave vi mode |
 
-## Hints — act on text without the mouse
+## Hints: act on text without the mouse
 | Key | Action |
 |---|---|
 | `Ctrl+Shift+U` | Label every URL on screen; press its label to open in the browser |
 | `Ctrl+Shift+O` | Label every `file:line`; press its label to open it in nvim **at that line** |
 | `Ctrl` + click | Open a URL directly |
 
-`Ctrl+Shift+O` is built for compiler and grep output — ripgrep, cargo, tsc,
+`Ctrl+Shift+O` is built for compiler and grep output, ripgrep, cargo, tsc,
 eslint and pytest all print `path:line`, so you can jump straight to the error.
 Labels use the home-row alphabet `jfkdls;ahgurieowpq`.
 
@@ -95,7 +95,7 @@ Labels use the home-row alphabet `jfkdls;ahgurieowpq`.
 | `Ctrl` + drag | Block (rectangular) selection |
 
 ## Config
-`live_config_reload` is on — edits to `alacritty.toml` apply to running windows
+`live_config_reload` is on, edits to `alacritty.toml` apply to running windows
 immediately, no restart.
 
 Colours are **not** in `alacritty.toml`. They come from

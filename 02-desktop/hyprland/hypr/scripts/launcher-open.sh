@@ -3,7 +3,7 @@ set -euo pipefail
 # Opening the launcher while the mouse cursor rests over a top-bar widget
 # (e.g. the media widget) triggers that widget's hover-preview panel
 # (Control Center), which force-closes the launcher within ~1s since
-# Noctalia's panels are mutually exclusive — confirmed reproducible: with
+# Noctalia's panels are mutually exclusive: confirmed reproducible: with
 # the cursor over the bar the launcher self-closes every time; with the
 # cursor away from the bar it stays open reliably.
 #

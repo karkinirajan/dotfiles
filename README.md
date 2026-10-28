@@ -1,6 +1,6 @@
 # Dotfiles
 
-Personal configuration for a CachyOS (Arch) Wayland workstation — Hyprland +
+Personal configuration for a CachyOS (Arch) Wayland workstation, Hyprland +
 Noctalia desktop, kitty/zsh terminal, editors, local LLM inference, and the
 tooling around them.
 
@@ -28,20 +28,20 @@ own README. Start at Part 00 and go in order, or jump to the part you need.
 
 | Chapter | File |
 |---------|------|
-| How the repo is wired to your home directory | [`manifest.conf`](manifest.conf) — the map: `<type> <repo path> <live path>` |
-| The installer | [`install.sh`](install.sh) — link, seed, status, pull, restore |
-| Fresh CachyOS setup | [`fresh-setup.md`](fresh-setup.md) — AI-agent playbook with owner checkpoints |
-| Current machine snapshot | [`system-summary.md`](system-summary.md) — hardware, packages, services, defaults, and fresh-setup order |
+| How the repo is wired to your home directory | [`manifest.conf`](manifest.conf), the map: `<type> <repo path> <live path>` |
+| The installer | [`install.sh`](install.sh), link, seed, status, pull, restore |
+| Fresh CachyOS setup | [`fresh-setup.md`](fresh-setup.md), AI-agent playbook with owner checkpoints |
+| Current machine snapshot | [`system-summary.md`](system-summary.md), hardware, packages, services, defaults, and fresh-setup order |
 
-### 01 · System — [`01-system/`](01-system/README.md)
+### 01 · System: [`01-system/`](01-system/README.md)
 
 | Chapter | Path |
 |---------|------|
 | CachyOS setup, dev stack, packages, and local AUR recipes | [`01-system/cachyos/`](01-system/cachyos/README.md), [`setup.md`](01-system/cachyos/setup.md), [`dev-stack.md`](01-system/cachyos/dev-stack.md), [`packages/`](01-system/cachyos/packages/) |
 | Snapshot options (Timeshift alternative; current host uses Snapper) | [`01-system/timeshift/`](01-system/timeshift/README.md) |
-| topgrade — update everything | [`01-system/topgrade/`](01-system/topgrade/README.md) |
+| topgrade, update everything | [`01-system/topgrade/`](01-system/topgrade/README.md) |
 
-### 02 · Desktop — [`02-desktop/`](02-desktop/README.md)
+### 02 · Desktop: [`02-desktop/`](02-desktop/README.md)
 
 | Chapter | Path |
 |---------|------|
@@ -49,7 +49,7 @@ own README. Start at Part 00 and go in order, or jump to the part you need.
 | Plasma removal log | [`02-desktop/hyprland/KDE-REMOVAL.md`](02-desktop/hyprland/KDE-REMOVAL.md) |
 | Font rendering rules | [`02-desktop/fonts/`](02-desktop/fonts/README.md) |
 
-### 03 · Terminal — [`03-terminal/`](03-terminal/README.md)
+### 03 · Terminal: [`03-terminal/`](03-terminal/README.md)
 
 | Chapter | Path |
 |---------|------|
@@ -59,7 +59,7 @@ own README. Start at Part 00 and go in order, or jump to the part you need.
 | Alacritty | [`03-terminal/alacritty/`](03-terminal/alacritty/README.md) |
 | starship prompt | [`03-terminal/starship/`](03-terminal/starship/README.md) |
 
-### 04 · Editors — [`04-editors/`](04-editors/README.md)
+### 04 · Editors: [`04-editors/`](04-editors/README.md)
 
 | Chapter | Path |
 |---------|------|
@@ -67,7 +67,7 @@ own README. Start at Part 00 and go in order, or jump to the part you need.
 | Zed | [`04-editors/zed/`](04-editors/zed/README.md) |
 | Sublime Text | [`04-editors/sublime/`](04-editors/sublime/README.md) |
 
-### 05 · AI — [`05-ai/`](05-ai/README.md)
+### 05 · AI: [`05-ai/`](05-ai/README.md)
 
 | Chapter | Path |
 |---------|------|
@@ -75,13 +75,13 @@ own README. Start at Part 00 and go in order, or jump to the part you need.
 | Ollama: ROCm and Vulkan backends, systemd drop-ins, benchmarks | [`05-ai/ollama/`](05-ai/ollama/README.md) |
 | Reading list and reference projects | [`05-ai/RESOURCES.md`](05-ai/RESOURCES.md) |
 
-### 06 · Tools — [`06-tools/`](06-tools/README.md)
+### 06 · Tools: [`06-tools/`](06-tools/README.md)
 
 | Chapter | Path |
 |---------|------|
 | focus: dnsmasq + nftables site blocker with schedule and lock mode | [`06-tools/focus/`](06-tools/focus/README.md) and [`packages.txt`](06-tools/focus/packages.txt) |
 
-### 07 · Networking — [`07-networking/`](07-networking/README.md)
+### 07 · Networking: [`07-networking/`](07-networking/README.md)
 
 | Chapter | Path |
 |---------|------|
@@ -179,7 +179,7 @@ notification override).
 | | `link` | `seed` |
 |---|---|---|
 | What it does | symlinks live → repo | copies repo → live, only if live is missing |
-| Can it drift? | **No** — one file, two names | **Yes** — two separate files |
+| Can it drift? | **No**, one file, two names | **Yes**, two separate files |
 | Used for | configs only you edit | files a program rewrites itself |
 
 For a seeded file, each direction is a deliberate step:
@@ -219,4 +219,4 @@ which is why that file is seeded.
 
 ## License
 
-MIT License — see [LICENSE](LICENSE).
+MIT License, see [LICENSE](LICENSE).

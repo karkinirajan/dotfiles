@@ -75,7 +75,7 @@ sudo pacman -S fzf ripgrep fd bat eza zoxide procs dust duf tokei hyperfine lazy
 
 | Tool | Replaces | Purpose |
 |---|---|---|
-| `fzf` | — | Fuzzy finder for files, history, everything |
+| `fzf` | n/a | Fuzzy finder for files, history, everything |
 | `ripgrep` (`rg`) | `grep` | 10× faster recursive search |
 | `fd` | `find` | Fast, intuitive file finder |
 | `bat` | `cat` | Syntax highlighting, Git integration |
@@ -86,7 +86,7 @@ sudo pacman -S fzf ripgrep fd bat eza zoxide procs dust duf tokei hyperfine lazy
 | `duf` | `df` | Colorful disk free output |
 | `tokei` | `cloc` | Fast code line counter |
 | `hyperfine` | `time` | Command benchmarking with statistics |
-| `lazygit` | — | Full Git TUI — staging, commits, branches, rebasing |
+| `lazygit` | n/a | Full Git TUI, staging, commits, branches, rebasing |
 
 **Shell aliases** (add to `~/.zshrc`):
 

@@ -32,7 +32,7 @@ uv add scikit-learn polars pyarrow
 | **Matplotlib/Seaborn** | Static plotting |
 | **Plotly** | Interactive charts |
 | **scikit-learn** | ML preprocessing, models, pipelines |
-| **PyArrow** | Apache Arrow — columnar data & Parquet I/O |
+| **PyArrow** | Apache Arrow, columnar data & Parquet I/O |
 
 ## 10.2 Apache Kafka: local setup
 
@@ -69,5 +69,5 @@ services:
 uv add prefect            # Python-native orchestration (3.9)
 uvx apache-airflow standalone   # Airflow 3.3: an unconstrained `uv add apache-airflow` is not supported; use the official constraints file for a project install
 uv add dagster            # asset-based orchestration (1.13)
-uv add "dask[complete]"   # Parallel computing — scales Pandas to larger-than-memory
+uv add "dask[complete]"   # Parallel computing, scales Pandas to larger-than-memory
 ```
