@@ -23,3 +23,4 @@ Resume file. Read this first after any context reset.
 - Phase 3 commits on this branch, in order: structure and migration, versions source of truth, OS/security, GPU/AI, languages, devops, databases, desktop, editors/shell/terminal, AI tooling and frontend-master, apps, setup runbook, style sweep (no em dashes, fence languages), markdownlint config, migration check, README and index.
 - Owner file `05-ai/claude-code/CLAUDE.md` is exempt from the style sweep and the lint; its no-AI-attribution rule is honoured in every commit.
 - If restarted: run `python tools/check_*.py`, `markdownlint-cli2`, then continue with Phase 4.
+- Pull request opened: https://github.com/karkinirajan/dotfiles/pull/2 (not merged). Hard stop reached; nothing further runs on the machine from this session.
