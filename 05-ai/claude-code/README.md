@@ -113,6 +113,10 @@ harness:
 Check the file with `claude plugin validate agents` and
 `claude plugin validate skills` after editing either.
 
+## The claude-brain hooks
+
+`settings.json` runs `claude-brain` hooks (session start, prompt, session end, pre-tool) and `CLAUDE.md` documents its CLI and MCP tools. The only public package of that name is the npm `claude-brain` 0.31.1 (a different project), whose source has none of these subcommands, so the owner's tool is private and none of this could be verified from public sources. Every hook ends in `|| true`, so the settings stay inert on a machine without the tool. <!-- UNVERIFIED: claude-brain hook subcommands and CLI surface -->
+
 ## Maintaining it
 
 - Check each agent and skill against the current docs when Claude Code
