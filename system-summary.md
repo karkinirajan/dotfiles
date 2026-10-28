@@ -173,106 +173,18 @@ Other notable active services include NetworkManager, systemd-resolved, systemd-
 
 ## Fresh setup order
 
-The following rebuilds this workstation's profile. Keep package versions rolling; do not copy this machine's IDs, filesystem UUIDs, credentials, or private data. Restore personal data and secrets separately from backups.
+The ordered, unattended procedure for rebuilding this workstation lives in [`docs/modernization/HANDOFF.md`](docs/modernization/HANDOFF.md) (full-auto order of operations with expected output per step). The explanations behind each step are in the setup chapters, and the interactive checkpoints in [`fresh-setup.md`](fresh-setup.md). Keep package versions rolling; do not copy this machine's IDs, filesystem UUIDs, credentials or private data, and restore personal data and secrets separately from backups.
 
-### 1. Inspect the target and install the CachyOS baseline
-
-Confirm UEFI mode, disks, GPU, network access, and available backups before running the installer. Do not format or repartition to match the snapshot. Clone the public repository and follow the package command in the root README:
-
-```sh
-git clone https://github.com/karkinirajan/dotfiles.git ~/dotfiles
-cd ~/dotfiles
-sudo pacman -Syu
-```
-
-Install the tracked desktop, system, font, CLI, and focus package lists using the README's repository/AUR split. The baseline includes the active greetd/Noctalia greeter and UFW packages. Review the package plan, especially AUR packages.
-
-### 2. Install the optional developer and application profile
-
-Follow `01-system/cachyos/dev-stack.md` to install `packages/developer.txt` and the optional AUR applications. Build Upwork from the tracked local PKGBUILD, not the AUR recipe that compiles Electron/Chromium. After the Mullvad package finishes, keep both Mullvad services disabled unless choosing Mullvad as the active VPN.
-
-### 3. Apply the dotfiles and refresh session environment
-
-Preview, install, and check the managed links:
-
-```sh
-./install.sh --dry-run
-./install.sh
-./install.sh status
-zsh -n ~/.zshrc
-```
-
-The user environment file selects `BROWSER=brave` and configures NVM. Sign out and back in after environment changes so Hyprland and user systemd services inherit the updated values.
-
-### 4. Initialize local databases
-
-Initialize PostgreSQL only if `/var/lib/postgres/data/PG_VERSION` does not exist. Keep the database bound to localhost:
-
-```sh
-sudo install -d -o postgres -g postgres -m 700 /var/lib/postgres/data
-sudo -u postgres initdb --locale=C.UTF-8 -E UTF8 \
-  -D /var/lib/postgres/data --data-checksums \
-  --auth-local=peer --auth-host=scram-sha-256
-sudo systemctl enable --now postgresql
-sudo -u postgres createuser --createdb "$USER"
-sudo -u postgres createdb -O "$USER" dev
-sudo -u postgres psql -d dev -c 'CREATE EXTENSION vector'
-```
-
-For MariaDB, initialize its data directory only if it is empty, install the tracked local bind configuration, and start the service:
-
-```sh
-sudo mariadb-install-db --user=mysql --basedir=/usr --datadir=/var/lib/mysql
-sudo install -Dm644 01-system/cachyos/mariadb-local.cnf \
-  /etc/my.cnf.d/90-local-dev.cnf
-sudo systemctl enable --now mariadb
-```
-
-Then, using the local root socket, create database `dev`, create the matching Unix-socket user, and grant that user access to `dev`. Start MongoDB and Valkey only after confirming their loopback bindings. No service in this profile needs a public listener.
-
-### 5. Enable rootless Docker
-
-`docker-rootless-extras` is an AUR package (it is in neither Arch extra nor the CachyOS repos); with the `rootlesskit` and `slirp4netns` packages it provides the rootless setup tooling, and `dockerd-rootless-setuptool.sh install` creates the user unit. Enable it, create/select the rootless context if needed, and run the smoke test:
-
-```sh
-systemctl --user enable --now docker
-```
-
-If the context is missing, create it with `docker context create rootless --docker "host=unix:///run/user/$(id -u)/docker.sock"`, then run `docker context use rootless` and `docker run --rm hello-world`. Do not add the user to the root-equivalent `docker` group. Lingering is not enabled on this host.
-
-### 6. Enable the AMD Ollama backend
-
-Check that the target GPU is the RX 6700 XT before using this host-specific override. Install the package set from `01-system/cachyos/packages/ai.txt`, copy the tracked ROCm and Claude Code drop-ins, backend helper, and pacman hook as described in `05-ai/ollama/README.md`, then:
-
-```sh
-sudo setcap cap_perfmon+ep /usr/bin/ollama
-sudo systemctl daemon-reload
-sudo systemctl enable --now ollama
-journalctl -u ollama -b --no-pager | rg 'inference compute'
-```
-
-Do not download a large model during setup. Choose a small model for an inference smoke test and confirm actual GPU layer placement before scaling up.
-
-### 7. Restore firewall and Razer behavior
-
-For a local workstation, reproduce UFW's deny-incoming/allow-outgoing policy after confirming no remote SSH session depends on inbound access. Do not add inbound database rules. Add the account to `openrazer`, sign out/in, then confirm the Razer Viper Mini daemon starts. Leave VPN services disconnected until the user signs in to the selected VPN provider.
-
-### 8. Verify the resulting host
-
-```sh
-systemctl is-active postgresql mongodb mariadb valkey ollama ufw
-systemctl --user is-active docker openrazer-daemon
-psql -d dev -c 'select current_user, current_database()'
-mongosh --quiet --eval 'db.runCommand({ping:1})'
-mariadb --protocol=socket -u "$USER" dev -e 'select database()'
-valkey-cli ping
-docker context show
-docker run --rm hello-world
-zramctl
-./install.sh status
-```
-
-Also verify that database and Ollama TCP listeners use loopback, XDG defaults are Brave/Zed/Swash, the user environment has `BROWSER=brave`, and the OpenRazer user service is active after the login refresh.
+| Step | Where it is documented |
+|---|---|
+| 1. Inspect the target, install the CachyOS baseline, refresh mirrors | [`fresh-setup.md`](fresh-setup.md), [chapter 01](01-system/cachyos/setup/01-system-foundation.md) |
+| 2. Install the desktop, system, font, CLI and focus package lists | [chapter 22](01-system/cachyos/setup/22-baseline-packages.md), root [`README.md`](README.md#install) |
+| 3. Install the developer and application profile (Upwork from the tracked PKGBUILD) | [`dev-stack.md`](01-system/cachyos/dev-stack.md) section 1 |
+| 4. Apply the dotfiles (`./install.sh`) and refresh the session environment | root [`README.md`](README.md#install) |
+| 5. Initialize local databases (PostgreSQL 18 needs the `initdb` auth flags) | [`dev-stack.md`](01-system/cachyos/dev-stack.md) section 3, [chapter 06](01-system/cachyos/setup/06-databases.md) |
+| 6. Enable rootless Docker | [`dev-stack.md`](01-system/cachyos/dev-stack.md) section 4, [chapter 08](01-system/cachyos/setup/08-docker-kubernetes.md) |
+| 7. Enable the AMD Ollama backend (ROCm, Vulkan, LACT) | [`dev-stack.md`](01-system/cachyos/dev-stack.md) section 5, [`05-ai/ollama/README.md`](05-ai/ollama/README.md), [chapter 02](01-system/cachyos/setup/02-amd-gpu-rocm.md) |
+| 8. Restore firewall and Razer behavior, verify the host | [`dev-stack.md`](01-system/cachyos/dev-stack.md) sections 3 to 4 and Verify |
 
 ## Beyond the base setup
 

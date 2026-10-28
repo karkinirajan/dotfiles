@@ -47,7 +47,7 @@ services:
 
 sudo install -d -m 755 /etc/dnsmasq.d /etc/nftables.d
 sudo cp 06-tools/focus/nftables/focus-filter.nft /etc/nftables.d/focus-filter.nft
-sudo nft -f /etc/nftables.d/focus-filter.nft
+sudo nft -f /etc/nftables.d/focus-filter.nft   # idempotent: the file flushes its own chain first, so reloading does not duplicate rules
 sudo cp 06-tools/focus/systemd/*  /etc/systemd/system/
 sudo cp 06-tools/focus/networkmanager/90-focus-default-dns.conf /etc/NetworkManager/conf.d/
 sudo cp 06-tools/focus/dnsmasq/dnsmasq.conf /etc/dnsmasq.conf
@@ -94,7 +94,11 @@ A browser with DoH enabled resolves names over HTTPS to its own provider and
 never consults dnsmasq, bypassing the DNS layer entirely. The nftables
 `blocked_ips` set is the backstop, but CDN IPs rotate frequently so it is
 best-effort. To close this properly, disable DoH in the browser
-(`network.trr.mode = 5` in Firefox) or block the DoH endpoints.
+(`network.trr.mode = 5` in Firefox, "Off by choice") or block the DoH endpoints.
+Firefox also honours a canary domain: answering `use-application-dns.net` with
+NXDOMAIN (dnsmasq `address=/use-application-dns.net/` with no address) keeps its
+DoH off by default. Brave and Chromium have their own secure-DNS setting and
+ignore the canary.
 
 ## Changelog
 

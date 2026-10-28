@@ -12,7 +12,7 @@ version, probing `antigravity --version` opens the IDE and returns no version.
 The Antigravity CLI step is disabled too: it runs `agy update`, which tries to
 overwrite `/usr/bin/agy` and fails because that path is not writable. Both
 binaries come from the `antigravity` and `antigravity-cli` packages, which
-`paru` already updates in the system step. Helm's native step is replaced by a
+`paru` already updates in the system step. <!-- UNVERIFIED: the Antigravity probe and `agy update` behaviour are recorded from this host only, not reproducible without the packages --> Helm's native step is replaced by a
 conditional custom command: it runs `helm repo update` only when at least one
 Helm repository is configured, so a fresh Helm install does not fail every
 upgrade with “no repositories found.”
