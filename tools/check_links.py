@@ -75,9 +75,8 @@ def check_local(src: Path, target: str, root: Path, cache: dict[Path, set[str]])
         return f"escapes repo: {target}"
     if not dest.exists():
         return f"missing path: {target}"
-    if frag and dest.is_file() and dest.suffix == ".md":
-        if frag not in anchors_of(dest, cache):
-            return f"missing anchor #{frag} in {dest.relative_to(root)}"
+    if frag and dest.is_file() and dest.suffix == ".md" and frag not in anchors_of(dest, cache):
+        return f"missing anchor #{frag} in {dest.relative_to(root)}"
     return None
 
 

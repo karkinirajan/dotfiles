@@ -97,30 +97,34 @@ def check_live(data: dict[str, Any]) -> list[str]:
     cachy = pkg_lookup.load_cachyos()
     for key, entry in data["entries"].items():
         target = str(entry["target"])
+        hold = str(entry.get("hold", ""))
         try:
             if entry.get("npm"):
                 latest = _json(f"https://registry.npmjs.org/{entry['npm']}/latest")["version"]
-                _compare(notes, key, "npm", target, latest)
+                _compare(notes, key, "npm", target, latest, hold)
             if entry.get("pypi"):
                 latest = _json(f"https://pypi.org/pypi/{entry['pypi']}/json")["info"]["version"]
-                _compare(notes, key, "pypi", target, latest)
+                _compare(notes, key, "pypi", target, latest, hold)
             pkg = entry.get("package")
             if pkg:
                 for hit in pkg_lookup.arch_lookup(pkg):
-                    _compare(notes, key, f"arch/{hit.source}", target, hit.version)
+                    _compare(notes, key, f"arch/{hit.source}", target, hit.version, hold)
                 for hit in cachy.get(pkg, []):
-                    _compare(notes, key, hit.source, target, hit.version)
+                    _compare(notes, key, hit.source, target, hit.version, hold)
                 if entry.get("source") == "aur":
-                    for name, hit in pkg_lookup.aur_lookup([pkg]).items():
-                        _compare(notes, key, f"aur{' (flagged out-of-date)' if hit.note else ''}", target, hit.version)
+                    for _name, hit in pkg_lookup.aur_lookup([pkg]).items():
+                        _compare(notes, key, f"aur{' (flagged out-of-date)' if hit.note else ''}", target, hit.version, hold)
         except (urllib.error.URLError, KeyError, json.JSONDecodeError, TimeoutError) as exc:
             notes.append(f"{key}: lookup failed ({exc})")
     return notes
 
 
-def _compare(notes: list[str], key: str, where: str, target: str, found: str) -> None:
+def _compare(notes: list[str], key: str, where: str, target: str, found: str, hold: str = "") -> None:
+    if where.endswith("testing"):
+        return
     if vtuple(found) > vtuple(target):
-        notes.append(f"{key}: target {target} is behind {where} {found}")
+        suffix = f" [hold: {hold}]" if hold else ""
+        notes.append(f"{key}: target {target} is {'held behind' if hold else 'behind'} {where} {found}{suffix}")
     elif vtuple(found) < vtuple(target):
         notes.append(f"{key}: target {target} is ahead of {where} {found} (distro lag)")
 
@@ -145,7 +149,7 @@ def main(argv: list[str] | None = None) -> int:
         notes = check_live(data)
         for note in notes:
             LOG.info("LIVE %s", note)
-        behind = [n for n in notes if "is behind" in n or "lookup failed" in n]
+        behind = [n for n in notes if " is behind " in n or "lookup failed" in n]
         LOG.info("%d live notes, %d behind or failed", len(notes), len(behind))
         if args.strict and behind:
             status = 1

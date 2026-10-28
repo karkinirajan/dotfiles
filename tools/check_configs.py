@@ -18,7 +18,6 @@ import tomllib
 from pathlib import Path
 
 import yaml
-
 from _lib import LOG, repo_root, setup_logging, tracked_files
 
 PKG_LINE = re.compile(r"^[a-z0-9@._+-]+(\s+\(AUR\))?$")
@@ -85,7 +84,7 @@ def check_unit(path: Path) -> str | None:
     parser = configparser.ConfigParser(strict=False, interpolation=None, delimiters=("=",))
     parser.optionxform = str  # type: ignore[assignment,method-assign]
     try:
-        parser.read_string("\n".join(l for l in path.read_text(encoding="utf-8").splitlines()))
+        parser.read_string(path.read_text(encoding="utf-8"))
     except configparser.Error as exc:
         return f"unit syntax: {exc}"
     if path.suffix == ".service" and not parser.has_section("Service"):
