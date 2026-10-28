@@ -10,6 +10,8 @@
 #   mullvad-vpn    Arch extra; the AUR mullvad-vpn-bin is no longer needed. Its install may
 #                  enable mullvad-daemon and the early-boot blocker: disable both while Proton VPN is in use
 #   docker-machine was removed: archived upstream in 2025-07
+#   mariadb-lts    the long-term series (12.3, supported to 2029-06); Arch's `mariadb` is the rolling 13.0
+#                  series with Community support ending in Q4 2026. The two packages conflict.
 act
 amdgpu_top
 ansible
@@ -33,7 +35,7 @@ kdiskmark
 kubectl
 lact
 lm_sensors
-mariadb
+mariadb-lts
 meld
 micro
 mission-center
