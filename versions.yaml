@@ -1039,6 +1039,16 @@ entries:
     source: registry
     npm: lefthook
     support: 2.2.2 exists but is blocked by the template trustPolicy; keep 2.2.1
+  lact:
+    name: LACT
+    package: lact
+    source: cachyos
+    arch: 0.10.1-1
+    cachyos: 0.10.1-1.1
+    target: 0.10.1
+    verify: lact --version
+    expect: 0.10.1
+    support: Enable lactd.service for the GUI to apply settings
 constraints:
 - id: hyprland-hold
   text: Hyprland stays on the CachyOS-delivered 0.56.2 until a Lua config is validated; 0.57.0 ignores hyprland.conf
