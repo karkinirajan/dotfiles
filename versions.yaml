@@ -1049,6 +1049,23 @@ entries:
     verify: lact --version
     expect: 0.10.1
     support: Enable lactd.service for the GUI to apply settings
+  mongosh:
+    name: mongosh
+    package: mongosh-bin
+    source: aur
+    aur: 2.14.0-1
+    target: 2.14.0
+    verify: mongosh --version
+    expect: 2.14.0
+  dbeaver:
+    name: DBeaver
+    package: dbeaver
+    source: cachyos
+    arch: 26.2.2-1
+    cachyos: 26.2.2-1.1
+    target: 26.2.2
+    verify: dbeaver --version
+    expect: 26.2.2
 constraints:
 - id: hyprland-hold
   text: Hyprland stays on the CachyOS-delivered 0.56.2 until a Lua config is validated; 0.57.0 ignores hyprland.conf
