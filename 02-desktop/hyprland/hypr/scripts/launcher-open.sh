@@ -17,6 +17,8 @@ m = next((m for m in monitors if m.get('focused')), monitors[0])
 print(round(m['x'] + m['width'] / 2), round(m['y'] + m['height'] / 2))
 ")
 read -r W H <<< "$MONITOR_INFO"
-hyprctl dispatch "hl.dsp.cursor.move({ x = $W, y = $H })"
+"$(dirname "${BASH_SOURCE[0]}")/hypr-dispatch.sh" \
+    "hl.dsp.cursor.move({ x = $W, y = $H })" \
+    "movecursor $W $H"
 
 noctalia msg panel-toggle launcher

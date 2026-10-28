@@ -1,6 +1,13 @@
+---
+title: Hyprland keyboard shortcuts
+topic: hyprland-shortcuts
+last_verified: 2026-10-29
+status: reference
+---
+
 # Hyprland Keyboard Shortcuts Cheat Sheet
 
-Generated from your actual config at `~/.config/hypr/config/keybinds.conf`.
+Kept by hand in step with `~/.config/hypr/config/keybinds.conf` (there is no generator; all 94 binds were compared against the file on 2026-10-29 and match).
 `SUPER` = the Windows/Cmd key (set as `$mainMod` in `~/.config/hypr/hyprland.conf`).
 
 ## Apps & Core
@@ -109,7 +116,7 @@ and opened in Swash for annotation.
 
 | Key | Action |
 |---|---|
-| Volume Up/Down | Adjust volume ±5%, and it keeps going past 100% up to 150% |
+| Volume Up/Down | Adjust volume ±5%, and it keeps going past 100% up to 150% (Noctalia `[audio] enable_overdrive = true`) |
 | SHIFT + Volume Up | Jump straight to the boosted maximum (150%) |
 | SHIFT + Volume Down | Drop back to a plain 100%, no boost |
 | Mute | Toggle mute |
@@ -120,6 +127,6 @@ and opened in Swash for annotation.
 
 ### Quick tips
 - Full reference: `~/.config/hypr/config/keybinds.conf` (every bind has a `bindd` description — run `hyprctl binds` in a terminal to list them all live, including descriptions).
-- If a shortcut ever doesn't fire, check `bindd = $mainMod ..., description, dispatcher, args` syntax — the 3rd field is the human description, 4th is the actual dispatcher. Also check for a duplicate bind on the same key (`hyprctl binds -j` shows exactly what's actually registered) — a later `bindd` on the same key silently wins over an earlier one.
+- If a shortcut ever doesn't fire, check `bindd = $mainMod ..., description, dispatcher, args` syntax (hyprlang, Hyprland 0.56.x): the 3rd field is the human description, 4th is the actual dispatcher. After the Lua migration the same binds become `hl.bind("SUPER + Q", hl.dsp..., { description = "..." })` (see `lua-migration.md`). Also check for a duplicate bind on the same key (`hyprctl binds -j` shows exactly what's actually registered) — a later `bindd` on the same key silently wins over an earlier one.
 - `workspace_back_and_forth = 1` is on, so pressing the same workspace number twice toggles back to the previous one.
 - Noctalia (bar, launcher, clipboard, control center) replaced Waybar/wofi/mako entirely — none of the shortcuts above launch those anymore, even though some dispatcher names still say things like "wofi" in older comments.

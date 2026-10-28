@@ -1,18 +1,42 @@
+---
+title: Hyprland and Noctalia
+part: "02"
+chapter: "01"
+topic: hyprland
+versions: [hyprland, hypridle, hyprlock, hyprsunset, noctalia, noctalia-greeter, uwsm, hyprspace-pin]
+last_verified: 2026-10-29
+status: current
+sources:
+  - https://hypr.land/news/26_lua/
+  - https://wiki.hypr.land/
+  - https://docs.noctalia.dev/
+  - https://github.com/hyprwm/Hyprland
+---
+
 # Hyprland + Noctalia
 
 CachyOS/Arch Wayland desktop: Hyprland compositor with Noctalia as the shell
-(bar, launcher, clipboard history, control center) — replaces Waybar/wofi/mako.
+(bar, launcher, clipboard history, control center), which replaces Waybar, wofi and mako.
 
 The manifest installs `hyprland-shortcuts.md` at `~/hyprland-shortcuts.md`.
-Hyprland scripts use the Lua dispatcher API in Hyprland 0.55 and newer; check
-the installed version before copying them to older releases.
+
+## Version and config-format hold (read first)
+
+| | Version | Config the tracked tree targets |
+|---|---|---|
+| This machine and the CachyOS v3 repo | Hyprland <!-- v:hyprland -->0.56.2<!-- /v --> | hyprlang `hyprland.conf` plus `config/*.conf` |
+| Arch `extra` and upstream | Hyprland <!-- v:hyprland:upstream -->0.57.0<!-- /v --> (2026-10-28) | **Lua only** (`hyprland.lua`); the hyprlang parser was removed |
+
+Hyprland 0.57.0 no longer reads `.conf` files: with only `hyprland.conf` it ignores the whole `hypr/config/` tree and writes a default Lua config. CachyOS has not rebuilt 0.57 yet, so a plain `pacman -Syu` still delivers <!-- v:hyprland -->0.56.2<!-- /v -->, but a later CachyOS update will deliver 0.57. Until a Lua config has been written and tested on the machine, keep `hyprland` and `hyprpm` on 0.56.2 (`IgnorePkg = hyprland hyprpm` in `/etc/pacman.conf`; this is the `hyprland-hold` constraint in [`versions.yaml`](../../versions.yaml)). The migration steps and the hyprlang-to-Lua mapping are in [`lua-migration.md`](lua-migration.md). `hypridle.conf` and `hyprlock.conf` stay hyprlang on 0.57; only the compositor config moved.
+
+`hyprctl dispatch 'hl.dsp...'` (the Lua dispatcher API, available from 0.55) only works when Hyprland loaded a Lua config. With the tracked `.conf` it answers "Invalid dispatcher". The scripts that dispatch (`minimize.sh`, `restore.sh`, `launcher-open.sh`, `dpms.sh` for hypridle) therefore go through `scripts/hypr-dispatch.sh`, which tries the Lua form and then the legacy form (`movetoworkspacesilent`, `movecursor`, `dpms`; names checked in the v0.56.2 source), so they work before and after the migration.
 
 ```
 hyprland/
 ├── hyprland-shortcuts.md          → ~/hyprland-shortcuts.md
-│                                  # Full keybind cheat sheet, regenerated from the
-│                                  #   actual keybinds.conf below whenever it drifts —
-│                                  #   don't hand-edit it out of sync with that file.
+│                                  # Full keybind cheat sheet, maintained by hand
+│                                  #   in step with keybinds.conf (no generator exists);
+│                                  #   compare the two whenever a bind changes.
 ├── KDE-REMOVAL.md                 # How the full KDE/Plasma desktop environment
 │                                  #   was removed from this originally dual-DE
 │                                  #   CachyOS install — landmines hit (a hard
@@ -78,6 +102,9 @@ hyprland/
 │   │   ├── animations.conf, decorations.conf, input.conf,
 │   │   │   monitor.conf, environment.conf
 │   └── scripts/
+│       ├── hypr-dispatch.sh           # Runs one dispatch in the Lua form, then the legacy form.
+│       │                              #   Used by the scripts below; see "Version and config-format hold".
+│       ├── dpms.sh                    # dpms.sh enable|disable, called by hypridle.conf
 │       ├── minimize.sh, restore.sh, screenshot.sh
 │       ├── volume.sh                  # PipeWire/wpctl volume control with 150% boost ceiling
 │       ├── nightlight-temperature.sh  # Scroll wheel handler (2500–6500 K in 250 K steps)
@@ -145,10 +172,13 @@ hyprland/
     │           check that file rather than assuming from this list.
     ├── state/settings.toml             → ~/.local/state/noctalia/settings.toml
     │       Bar layout and widgets, theme source, plugin enable list, keybinds.
-    │       SEEDED, never symlinked: Noctalia rewrites this file itself, both on
-    │       upgrade (schema migrations) and on every change made through its
-    │       settings GUI, so a symlink here would be destroyed by a
-    │       replace-style write and the repo would silently stop tracking it.
+    │       SEEDED, not symlinked: Noctalia rewrites this file itself, both on
+    │       upgrade (schema migrations, `config_version` 16 on Noctalia 5.4.0)
+    │       and on every change made through its settings GUI. Since June 2026
+    │       (all 5.x) its writes go through symlinks, so a link would no longer
+    │       be destroyed; the file stays a seed because it also holds machine
+    │       state (wallpaper paths, favorites, `/home/kneeraazon` paths) that
+    │       should not flow back into git on every change.
     │       `./install.sh status` compares repo against live and
     │       `./install.sh pull` brings live changes in as a reviewable diff —
     │       run pull after tuning the bar, or the change only ever exists on
@@ -197,11 +227,15 @@ systemctl --user disable --now mako.service noctalia.service 2>/dev/null || true
 #   /usr/local/share/wayland-sessions/hyprland-uwsm.desktop
 
 # 5. Plugins — see "Plugins" below for what each one is and why the fork/commit
+#    Valid on Hyprland 0.56.x only (see "Version and config-format hold"). hyprpm builds
+#    each plugin against the running Hyprland headers, so run this inside the session.
 hyprpm update
-hyprpm add https://github.com/ImanolBarba/Hyprspace 0799be7464fac7ea959b7c6c7809dadd6c21c5aa
+hyprpm add https://github.com/KZDKM/Hyprspace 0799be7464fac7ea959b7c6c7809dadd6c21c5aa
 hyprpm add https://github.com/VirtCode/hypr-dynamic-cursors
 hyprpm enable Hyprspace dynamic-cursors
 ```
+
+Label: `machine-only`. Proof: `hyprpm list` shows both plugins enabled and `hyprctl plugin list` shows them loaded.
 
 ## Plugins
 
@@ -216,16 +250,23 @@ the matching plugin is actually built and enabled.
 | [hy3](https://github.com/outfoxxed/hy3) | Optional i3/sway-style manual tiling layout, alternative to `dwindle` | none — not installed |
 | [split-monitor-workspaces](https://github.com/Duckonaut/split-monitor-workspaces) | Optional per-monitor workspace numbering | none — not installed |
 
-Hyprspace upstream does not build on Hyprland 0.56.x because of a moved
-header. The baseline uses the tested `ImanolBarba/Hyprspace` migration fork,
-pinned to commit `0799be7464fac7ea959b7c6c7809dadd6c21c5aa`. The `hy3` plugin
-is optional and not installed by the baseline.
+Hyprspace was blocked on Hyprland 0.56.x by a moved header until its migration
+PR was merged upstream on 2026-10-02. The pinned commit
+<!-- v:hyprspace-pin -->0799be7464fac7ea959b7c6c7809dadd6c21c5aa<!-- /v --> (the
+former `ImanolBarba/Hyprspace` fork head) is now an ancestor of `KZDKM/Hyprspace`
+main, so the fork is no longer needed and `hyprpm add` uses upstream with the
+same pin. **Hyprspace does not compile on Hyprland 0.57.0**: that release
+removed `m_renderPass` and `m_renderData` from `CHyprRenderer`, and upstream has
+no fix yet. That is a second reason to hold Hyprland at 0.56.2, or to drop the
+overview plugin before moving to 0.57. `dynamic-cursors` uses hyprpm's own
+0.56.2 pin; its `HEAD` is Lua-only. hyprpm has no 0.57 pin for any plugin.
+<!-- UNVERIFIED: plugin compile results on 0.57.0 (no compositor headers in the research sandbox) -->
+The `hy3` plugin is optional and not installed by the baseline.
 
-`hyprexpo` and `hyprgrass` were evaluated and dropped: every hyprexpo
-fork/branch found hits the same broken-header problem with no fix anywhere
-(Hyprspace already covers overview functionality, so not missed), and
-hyprgrass (touch gestures) has nothing to do on a machine with no
-touchscreen.
+`hyprexpo` and `hyprgrass` were evaluated and dropped: the hyprexpo forks
+checked hit the same broken-header problem (Hyprspace already covers overview
+functionality), and hyprgrass (touch gestures) has nothing to do on a machine
+with no touchscreen. <!-- UNVERIFIED: the claim that every hyprexpo fork is broken -->
 
 **hy3 and split-monitor-workspaces are optional and not part of the baseline
 plugin set**, since activating either changes fundamental interaction
@@ -251,7 +292,7 @@ Restart Hyprland (or reboot) to fix it.
 
 ## Notes
 
-- Noctalia (`noctalia` package) replaces Waybar, wofi, and
+- Noctalia (`noctalia` package, <!-- v:noctalia -->5.4.0<!-- /v -->; a native C++ Wayland shell configured in TOML, not the older Quickshell v4) replaces Waybar, wofi, and
   mako entirely — see `hypr/config/autostart.conf`
   (`scripts/noctalia-watchdog.sh`, not a systemd service — see that script's
   own comments for why) and `hypr/config/keybinds.conf` (`noctalia msg ...`
@@ -261,11 +302,12 @@ Restart Hyprland (or reboot) to fix it.
   `~/.config/hypr/`.
 - Old Waybar/wofi/Quickshell-custom-bar configs are intentionally not
   included here — retired in favor of Noctalia.
-- **Night light does not use Noctalia's own gamma engine.** That module has
-  a confirmed upstream bug in this build (`nightlight-force-toggle`,
-  `nightlight-disable`, and even a direct config edit + reload all fail to
-  turn it back off once forced on — verified via the running Noctalia's own
-  Control Center, not just IPC). The bar's nightlight widget is a
+- **Night light does not use Noctalia's own gamma engine.** On Noctalia
+  5.0.0-beta.10 (2026-08-27) the gamma module could not be turned back off once
+  forced on (`nightlight-force-toggle`, `nightlight-disable`, and a config edit
+  plus reload all failed, checked in the running Control Center). The code at
+  5.4.0 handles force toggling and no upstream issue confirms the bug either way,
+  so retest on 5.4.0 before removing the workaround. <!-- UNVERIFIED: bug status on 5.4.0 --> The bar's nightlight widget is a
   `custom_button` wired to `scripts/nightlight-toggle.sh`, which drives
   `hyprsunset` (Hyprland's own dedicated blue-light tool, `pacman -S
   hyprsunset`) as a plain process instead — on = launch it, off = kill it.
@@ -291,10 +333,26 @@ Restart Hyprland (or reboot) to fix it.
 - **Bar fonts come from packages, not this repo.** `[bar.kneeraazon].font_family`
   and `[widget.clock].font_family` use `JetBrains Mono`, `[shell].font_family`
   and `[widget."tmelik/system-monitor:summary"].font_family` use `DejaVu Sans`,
-  and terminal/editor configs use `JetBrains Maple Mono` and `FiraCode Nerd Font`.
+  and kitty and Alacritty use `FiraCode Nerd Font Mono` (Zed and VS Code use
+  `JetBrains Mono`). No config references `JetBrains Maple Mono`.
   If any of those is missing, Noctalia silently falls back to a default sans and
   the bar's metrics shift — `01-system/cachyos/packages/fonts.txt` lists which
   package supplies each.
+- **Noctalia 5.4.0 built-ins that overlap this setup.** `[audio] enable_overdrive = true`
+  (already set) lifts `volume-up`/`volume-down`/`volume-set` and the OSD to 150 %, so
+  the old claim that no setting allows it is out of date. Clipboard history
+  (data-control) and `screenshot-region|fullscreen|window|annotate` are built in:
+  the `wl-paste --watch cliphist store` autostart and the swash screenshot chain are
+  redundant but still work. It has its own lock screen and idle behaviors, so
+  `hyprlock`/`hypridle` and Noctalia's lock widgets are two coexisting stacks: do not
+  enable both idle chains. Layer namespaces are `noctalia-bar-<bar>`, `noctalia-panel`,
+  `noctalia-attached-panel`, `noctalia-notification`, `noctalia-osd`, `noctalia-dock`,
+  `noctalia-window-switcher` and `noctalia-wallpaper`; `windowrules.conf` covers only
+  three of them, while upstream's Hyprland guide gives one rule that covers all.
+  `noctalia config validate` reports legacy keys. Upstream recommends compositor
+  autostart (no systemd unit ships) and documents `[shell] launch_apps_as_systemd_services`
+  for the cgroup-inheritance problem the watchdog avoids; the watchdog is consistent
+  with that. <!-- UNVERIFIED: the Chromium SIGSEGV under a systemd service scope (needs coredumpctl on the machine) -->
 - **Window border color tracks Noctalia's theme automatically.**
   `scripts/theme-border-watch.sh` is autostarted and watches
   `settings.toml`'s `[theme]` block; any change re-runs
