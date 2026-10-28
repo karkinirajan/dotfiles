@@ -6,8 +6,9 @@
 # 05-ai/ollama/README.md before installing: the Vulkan backend is unstable on
 # some gfx1031 workloads. Install only the backend packages you intend to use.
 #
-# Do NOT use the upstream install.sh — see 05-ai/ollama/README.md for why
-# (it shadows the packaged binary and ships 7.4GB of CUDA libs useless here).
+# Do NOT use the upstream install.sh: it installs under /usr/local or /usr without checking for a
+# packaged install, deletes $OLLAMA_INSTALL_DIR/lib/ollama, and creates its own user and unit
+# (see 05-ai/ollama/README.md).
 #
 #   Review and install selected packages individually; this list includes
 #   mutually exclusive Ollama backend variants and is not a bulk install set.
@@ -17,6 +18,7 @@ ollama-rocm
 ollama-vulkan
 vulkan-radeon
 rocm-core
+vulkan-tools
 hip-runtime-amd
 hsa-rocr
 rocblas

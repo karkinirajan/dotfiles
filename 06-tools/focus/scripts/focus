@@ -89,10 +89,10 @@ _cmd_off() {
   sudo systemctl stop dnsmasq
   sudo systemctl stop focus-page 2>/dev/null || true
   sudo rm -f /etc/dnsmasq.d/focus-block.conf
-  sudo nft flush set inet filter blocked_ips 2>/dev/null || true
-  sudo nft flush set inet filter allowed_ips 2>/dev/null || true
-  sudo nft flush set inet filter blocked_ips6 2>/dev/null || true
-  sudo nft flush set inet filter allowed_ips6 2>/dev/null || true
+  sudo nft flush set inet focus blocked_ips 2>/dev/null || true
+  sudo nft flush set inet focus allowed_ips 2>/dev/null || true
+  sudo nft flush set inet focus blocked_ips6 2>/dev/null || true
+  sudo nft flush set inet focus allowed_ips6 2>/dev/null || true
   [[ -L /etc/resolv.conf ]] && sudo rm -f /etc/resolv.conf
   printf 'nameserver 1.1.1.1\nnameserver 9.9.9.9\n' | sudo tee /etc/resolv.conf > /dev/null
   echo "[OFF] focus mode disabled"
@@ -102,7 +102,7 @@ _cmd_off() {
 _cmd_status() {
   local dns_state nft_state lock_state page_state
   systemctl is-active dnsmasq &>/dev/null && dns_state="active" || dns_state="inactive"
-  sudo nft list table inet filter &>/dev/null && nft_state="loaded" || nft_state="missing"
+  sudo nft list table inet focus &>/dev/null && nft_state="loaded" || nft_state="missing"
   systemctl is-active focus-page &>/dev/null && page_state="active" || page_state="inactive"
   _is_locked && lock_state="LOCKED (until $(cat $LOCK_FILE))" || lock_state="unlocked"
 
@@ -114,7 +114,7 @@ _cmd_status() {
   echo "  lock:       $lock_state"
   echo "  allowed:    $(wc -l < $ALLOW_FILE) domains"
   echo "  blocked:    $(wc -l < $BLOCK_FILE) domains"
-  echo "  blocked IPs: $(sudo nft list set inet filter blocked_ips 2>/dev/null | grep -o '[0-9]\+\.[0-9]\+\.[0-9]\+\.[0-9]\+' | wc -l)"
+  echo "  blocked IPs: $(sudo nft list set inet focus blocked_ips 2>/dev/null | grep -o '[0-9]\+\.[0-9]\+\.[0-9]\+\.[0-9]\+' | wc -l)"
   echo "  dns blocks: $(cat /etc/dnsmasq.d/focus-block.conf 2>/dev/null | wc -l)"
 
   if [[ -f "$SCHEDULE_FILE" ]]; then
@@ -188,9 +188,9 @@ _cmd_test() {
   echo "  DNS →   ${ip:-NXDOMAIN}"
   if [[ -z "$ip" || "$ip" == "0.0.0.0" || "$ip" == "127.0.0.1" ]]; then
     echo "  result: BLOCKED (DNS)"
-  elif sudo nft list set inet filter blocked_ips 2>/dev/null | grep -q "$ip"; then
+  elif sudo nft list set inet focus blocked_ips 2>/dev/null | grep -q "$ip"; then
     echo "  result: BLOCKED (firewall)"
-  elif sudo nft list set inet filter allowed_ips 2>/dev/null | grep -q "$ip"; then
+  elif sudo nft list set inet focus allowed_ips 2>/dev/null | grep -q "$ip"; then
     echo "  result: ALLOWED (explicit whitelist)"
   else
     echo "  result: ALLOWED (default)"

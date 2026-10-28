@@ -1,10 +1,18 @@
+---
+title: Host system summary
+topic: system-summary
+last_verified: 2026-10-29
+status: reference
+---
+
 # Current System Summary
 
-**Snapshot:** 2026-10-28, Asia/Kathmandu (full repository audit & host reconciliation)  
+<!-- snapshot: 2026-10-28 -->
+**Snapshot:** 2026-10-28, Asia/Kathmandu (full repository audit and host reconciliation)  
 **Host:** CachyOS x86-64, user `kneeraazon`  
-**Purpose:** current host inventory and the ordered procedure to reproduce its configured development workstation from this repository.
+**Purpose:** inventory of the primary workstation as it was on the snapshot date. The ordered procedure to reproduce it lives in [`fresh-setup.md`](fresh-setup.md), [`01-system/cachyos/dev-stack.md`](01-system/cachyos/dev-stack.md) and [`docs/modernization/HANDOFF.md`](docs/modernization/HANDOFF.md).
 
-This file records the machine as it is, including enabled services, package versions, and local defaults. It intentionally omits passwords, network addresses, disk UUIDs, serial numbers, and other machine-specific identifiers. Package versions are a point-in-time snapshot; use current CachyOS/Arch and AUR packages during a fresh setup.
+This file records the machine as it was, including enabled services, package versions, and local defaults. It intentionally omits passwords, network addresses, disk UUIDs, serial numbers, and other machine-specific identifiers. Every version below is a dated observation, not a target: the targets are in [`versions.yaml`](versions.yaml), and a fresh setup installs current CachyOS/Arch and AUR packages. Statements about behavior (why a service is off, which package a unit comes from) were re-checked on 2026-10-29 and corrected where wrong.
 
 ## At a glance
 
@@ -42,7 +50,7 @@ This file records the machine as it is, including enabled services, package vers
 | Kernels | `linux-cachyos` 7.3.0-4 is the only installed CachyOS kernel package; LTS and RT kernels were removed to prevent menu regeneration |
 | Snapshots | Snapper root snapshots remain enabled; `limine-snapper-sync.service` is disabled/inactive and snapshots are hidden from Limine |
 | Other menu entries | Windows Boot Manager and the Limine EFI fallback entry were removed from `/boot/limine.conf`; EFI fallback files and firmware entries were preserved |
-| Limine policy | `/etc/default/limine`: `BOOT_ORDER="linux-cachyos"`, `FIND_BOOTLOADERS="no"`; `/boot/limine.conf`: default `CachyOS/linux-cachyos`, `remember_last_entry: no` |
+| Limine policy | `/etc/default/limine`: `BOOT_ORDER="linux-cachyos"` (ordering only; it is not documented as hiding entries), `FIND_BOOTLOADERS="no"` (stops discovery of other loaders); `/boot/limine.conf`: default `CachyOS/linux-cachyos`, `remember_last_entry: no`. The single-entry menu comes from removing the other kernel packages and disabling `limine-snapper-sync`. Whether manual `default_entry` edits survive `limine-update` is undocumented upstream: re-run `sudo limine-list` after each kernel update. <!-- UNVERIFIED --> |
 
 Only the primary `linux-cachyos` kernel package remains installed. The running kernel is `7.3.0-4-cachyos`.
 
@@ -99,9 +107,9 @@ The account is in the `openrazer` supplementary group (`id` includes `953(openra
 
 ### JavaScript and TypeScript
 
-- System Node: 26.12.1; NVM's default LTS in the interactive user shell: Node 24.22.1 and npm 11.19.1.
+- System Node: 26.12.1; NVM's default LTS in the interactive user shell at the snapshot: Node 24.22.1 and npm 11.19.1. Node 26 became LTS on 2026-10-28 and moved Node 24 to Maintenance on 2026-10-20, so `nvm install --lts` now resolves to 26.x.
 - pnpm 12.15.0; Yarn 1.22.22.
-- Global user tools: TypeScript 7, TypeScript language server, ESLint, Prettier, and Tailwind CSS language server.
+- Global user tools: TypeScript 7, TypeScript language server, ESLint, Prettier, and Tailwind CSS language server. Caveat found on 2026-10-29: TypeScript 7.0.2 ships no JS API and no `tsserver.js`, so `typescript-language-server` fails to start unless `typescript@6` (Arch `typescript`) is installed beside it, and `typescript-eslint` rejects TypeScript 7.
 - Create frontend projects with `pnpm create vite`; keep framework versions and project dependencies in the project manifest.
 
 ### Rust
@@ -145,7 +153,7 @@ UFW is enabled and active: default incoming deny, outgoing allow, routed traffic
 | Proton VPN | Package installed; `proton.VPN.service` active; no VPN tunnel/interface in the active network connections. |
 | Mullvad | Package installed; daemon and early-boot blocker disabled/inactive. Its package hook had enabled them during installation; they were explicitly disabled afterward. |
 | OpenRazer | Razer Viper Mini connected. User is in `openrazer` group; user unit `openrazer-daemon.service` is enabled and active. |
-| AppArmor | `apparmor.d` profiles installed and kernel module reports loaded, but `aa-status` says the AppArmor filesystem is not mounted. Do not treat profile enforcement as active. |
+| AppArmor | `apparmor.d` profiles installed. `linux-cachyos` is built with AppArmor (`CONFIG_SECURITY_APPARMOR=y`) but its default `CONFIG_LSM` is `landlock,lockdown,yama,integrity,bpf`, so `aa-status` reports the module loaded and the filesystem not mounted until the boot command line carries `lsm=landlock,lockdown,yama,integrity,apparmor,bpf`. Not enforcing. See [chapter 19](01-system/cachyos/setup/19-security-privacy.md) for the enablement steps; apparmor.d does not list greetd or Hyprland among supported desktops. |
 | Fail2ban | Installed, service not enabled. |
 | DNSCrypt/dnsmasq | Installed, services not enabled. DNS/network-manager configuration was left intact. |
 | Syncthing | Installed, service not enabled. |
@@ -224,7 +232,7 @@ Then, using the local root socket, create database `dev`, create the matching Un
 
 ### 5. Enable rootless Docker
 
-The CachyOS package `docker-rootless-extras` installs a user unit. Enable it, create/select the rootless context if needed, and run the smoke test:
+`docker-rootless-extras` is an AUR package (it is in neither Arch extra nor the CachyOS repos); with the `rootlesskit` and `slirp4netns` packages it provides the rootless setup tooling, and `dockerd-rootless-setuptool.sh install` creates the user unit. Enable it, create/select the rootless context if needed, and run the smoke test:
 
 ```sh
 systemctl --user enable --now docker

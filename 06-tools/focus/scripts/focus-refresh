@@ -35,16 +35,16 @@ trap 'rm -f "$DNSMASQ_TMP"' EXIT
 
 sudo install -d -m 755 /etc/dnsmasq.d 2>/dev/null || true
 
-# Ensure inet filter table and sets exist before flushing/populating
-if ! sudo nft list set inet filter blocked_ips &>/dev/null; then
+# Ensure inet focus table and sets exist before flushing/populating
+if ! sudo nft list set inet focus blocked_ips &>/dev/null; then
   [[ -f "$NFT_BOOTSTRAP" ]] && sudo nft -f "$NFT_BOOTSTRAP" 2>/dev/null || true
 fi
 
 # Reset nft sets
-sudo nft flush set inet filter blocked_ips 2>/dev/null || true
-sudo nft flush set inet filter allowed_ips 2>/dev/null || true
-sudo nft flush set inet filter blocked_ips6 2>/dev/null || true
-sudo nft flush set inet filter allowed_ips6 2>/dev/null || true
+sudo nft flush set inet focus blocked_ips 2>/dev/null || true
+sudo nft flush set inet focus allowed_ips 2>/dev/null || true
+sudo nft flush set inet focus blocked_ips6 2>/dev/null || true
+sudo nft flush set inet focus allowed_ips6 2>/dev/null || true
 
 # Upstream resolver used for IP discovery. MUST bypass the local dnsmasq:
 # during focus mode /etc/resolv.conf points at 127.0.0.1, so resolving a
@@ -84,11 +84,11 @@ while IFS= read -r domain; do
   [[ -z "$domain" || "$domain" == \#* ]] && continue
   for ip in $(resolve_ips "$domain"); do
     [[ -n "$ip" ]] && ALLOW_MAP[$ip]=1
-    sudo nft add element inet filter allowed_ips "{ $ip }" 2>/dev/null || true
+    sudo nft add element inet focus allowed_ips "{ $ip }" 2>/dev/null || true
   done
   for ip6 in $(resolve_ips6 "$domain"); do
     [[ -n "$ip6" ]] && ALLOW_MAP6[$ip6]=1
-    sudo nft add element inet filter allowed_ips6 "{ $ip6 }" 2>/dev/null || true
+    sudo nft add element inet focus allowed_ips6 "{ $ip6 }" 2>/dev/null || true
   done
 done < "$ALLOW_FILE"
 
@@ -106,13 +106,13 @@ while IFS= read -r domain; do
   for ip in $(resolve_ips "$domain"); do
     [[ -z "$ip" ]] && continue
     if [[ -z "${ALLOW_MAP[$ip]}" ]]; then
-      sudo nft add element inet filter blocked_ips "{ $ip }" 2>/dev/null || true
+      sudo nft add element inet focus blocked_ips "{ $ip }" 2>/dev/null || true
     fi
   done
   for ip6 in $(resolve_ips6 "$domain"); do
     [[ -z "$ip6" ]] && continue
     if [[ -z "${ALLOW_MAP6[$ip6]}" ]]; then
-      sudo nft add element inet filter blocked_ips6 "{ $ip6 }" 2>/dev/null || true
+      sudo nft add element inet focus blocked_ips6 "{ $ip6 }" 2>/dev/null || true
     fi
   done
 
