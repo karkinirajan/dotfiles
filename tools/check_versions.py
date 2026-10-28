@@ -60,6 +60,12 @@ def check_offline(root: Path, data: dict[str, Any]) -> list[str]:
         if "docs/modernization/" in md.as_posix() and md.name not in ("HANDOFF.md",):
             continue
         text = md.read_text(encoding="utf-8")
+        in_fence = False
+        for lineno, line in enumerate(text.splitlines(), 1):
+            if line.lstrip().startswith(("```", "~~~")):
+                in_fence = not in_fence
+            elif in_fence and MARKER_RE.search(line):
+                errors.append(f"{md.relative_to(root)}:{lineno}: version marker inside a code fence (renders literally)")
         for match in MARKER_RE.finditer(text):
             key, field, current = match.group(1), match.group(2) or "target", match.group(3)
             entry = entries.get(key)
