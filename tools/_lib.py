@@ -46,8 +46,7 @@ def tracked_files(root: Path, pattern: str | None = None) -> list[Path]:
 
 def markdown_files(root: Path) -> Iterator[Path]:
     """Every Markdown file in the repo that is not generated session state."""
-    for path in tracked_files(root, "*.md"):
-        yield path
+    yield from tracked_files(root, "*.md")
 
 
 def load_versions(root: Path) -> dict[str, Any]:

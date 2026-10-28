@@ -158,7 +158,7 @@ def _date(epoch: int | None) -> str:
         return ""
     import datetime as dt
 
-    return dt.datetime.fromtimestamp(epoch, dt.timezone.utc).strftime("%Y-%m-%d")
+    return dt.datetime.fromtimestamp(epoch, dt.UTC).strftime("%Y-%m-%d")
 
 
 def resolve(entries: list[tuple[str, str]]) -> list[dict[str, str]]:
