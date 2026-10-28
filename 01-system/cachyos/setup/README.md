@@ -8,28 +8,28 @@ Hardware profile: AMD Ryzen 5 5600, Radeon RX 6700 XT (gfx1031), 32 GiB RAM, Btr
 
 | # | Chapter | Last verified | Status |
 |---|---|---|---|
-| 01 | [01 System Foundation and Optimization](01-system-foundation.md) | 2026-10-06 | draft |
-| 02 | [02 AMD GPU Drivers and ROCm](02-amd-gpu-rocm.md) | 2026-10-06 | draft |
-| 03 | [03 Python Environment with uv](03-python-uv.md) | 2026-10-06 | draft |
-| 04 | [04 AI/ML and LLM Stack](04-ai-llm-stack.md) | 2026-10-06 | draft |
-| 05 | [05 Backend Frameworks and Tools](05-backend-frameworks.md) | 2026-10-06 | draft |
-| 06 | [06 Databases](06-databases.md) | 2026-10-06 | draft |
-| 07 | [07 DevOps and Cloud Tools](07-devops-cloud-tools.md) | 2026-10-06 | draft |
-| 08 | [08 Docker and Kubernetes](08-docker-kubernetes.md) | 2026-10-06 | draft |
-| 09 | [09 Infrastructure as Code and CI/CD](09-iac-ci-cd.md) | 2026-10-06 | draft |
-| 10 | [10 Data Engineering](10-data-engineering.md) | 2026-10-06 | draft |
-| 11 | [11 Frontend Development](11-frontend.md) | 2026-10-06 | draft |
-| 12 | [12 Code Editors and IDEs](12-editors-ides.md) | 2026-10-06 | draft |
-| 13 | [13 Terminal, Shell and CLI Tools](13-terminal-shell-cli.md) | 2026-10-06 | draft |
-| 14 | [14 Git and Version Control](14-git.md) | 2026-10-06 | draft |
-| 15 | [15 Browsers](15-browsers.md) | 2026-10-06 | draft |
-| 16 | [16 Knowledge Management and Productivity](16-knowledge-productivity.md) | 2026-10-06 | draft |
-| 17 | [17 Project Management and Freelance](17-freelance-project-management.md) | 2026-10-06 | draft |
-| 18 | [18 Communication and Collaboration](18-communication.md) | 2026-10-06 | draft |
-| 19 | [19 Security and Privacy](19-security-privacy.md) | 2026-10-06 | draft |
-| 20 | [20 System Maintenance and Monitoring](20-maintenance-monitoring.md) | 2026-10-06 | draft |
-| 21 | [21 Media, Office and Personal](21-media-office.md) | 2026-10-06 | draft |
-| 22 | [22 Baseline Package Installation](22-baseline-packages.md) | 2026-10-06 | draft |
-| 23 | [23 Zsh Configuration](23-zsh-configuration.md) | 2026-10-06 | draft |
-| 24 | [24 AI/ML Project Quickstart](24-ai-ml-quickstart.md) | 2026-10-06 | draft |
-| 25 | [25 Quick Reference and Services](25-quick-reference.md) | 2026-10-06 | draft |
+| 01 | [01 System Foundation and Optimization](01-system-foundation.md) | 2026-10-29 | current |
+| 02 | [02 AMD GPU Drivers and ROCm](02-amd-gpu-rocm.md) | 2026-10-29 | current |
+| 03 | [03 Python Environment with uv](03-python-uv.md) | 2026-10-29 | current |
+| 04 | [04 AI/ML and LLM Stack](04-ai-llm-stack.md) | 2026-10-29 | current |
+| 05 | [05 Backend Frameworks and Tools](05-backend-frameworks.md) | 2026-10-29 | current |
+| 06 | [06 Databases](06-databases.md) | 2026-10-29 | current |
+| 07 | [07 DevOps and Cloud Tools](07-devops-cloud-tools.md) | 2026-10-29 | current |
+| 08 | [08 Docker and Kubernetes](08-docker-kubernetes.md) | 2026-10-29 | current |
+| 09 | [09 Infrastructure as Code and CI/CD](09-iac-ci-cd.md) | 2026-10-29 | current |
+| 10 | [10 Data Engineering](10-data-engineering.md) | 2026-10-29 | current |
+| 11 | [11 Frontend Development](11-frontend.md) | 2026-10-29 | current |
+| 12 | [12 Code Editors and IDEs](12-editors-ides.md) | 2026-10-29 | current |
+| 13 | [13 Terminal, Shell and CLI Tools](13-terminal-shell-cli.md) | 2026-10-29 | current |
+| 14 | [14 Git and Version Control](14-git.md) | 2026-10-29 | current |
+| 15 | [15 Browsers](15-browsers.md) | 2026-10-29 | current |
+| 16 | [16 Knowledge Management and Productivity](16-knowledge-productivity.md) | 2026-10-29 | current |
+| 17 | [17 Project Management and Freelance](17-freelance-project-management.md) | 2026-10-29 | current |
+| 18 | [18 Communication and Collaboration](18-communication.md) | 2026-10-29 | current |
+| 19 | [19 Security and Privacy](19-security-privacy.md) | 2026-10-29 | current |
+| 20 | [20 System Maintenance and Monitoring](20-maintenance-monitoring.md) | 2026-10-29 | current |
+| 21 | [21 Media, Office and Personal](21-media-office.md) | 2026-10-29 | current |
+| 22 | [22 Baseline Package Installation](22-baseline-packages.md) | 2026-10-29 | current |
+| 23 | [23 Zsh Configuration](23-zsh-configuration.md) | 2026-10-29 | current |
+| 24 | [24 AI/ML Project Quickstart](24-ai-ml-quickstart.md) | 2026-10-29 | current |
+| 25 | [25 Quick Reference and Services](25-quick-reference.md) | 2026-10-29 | current |

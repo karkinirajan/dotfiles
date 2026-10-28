@@ -16,7 +16,7 @@ fi
 export ZSH="$HOME/.oh-my-zsh"
 export HOST_NAME=kneeraazon
 
-# Python 3 as default (no 'export alias' — that is invalid syntax)
+# Python 3 as default (no 'export alias': that is invalid syntax)
 alias python='python3'
 alias pip='pip3'
 
@@ -72,7 +72,7 @@ alias ...='cd ../..'
 alias ....='cd ../../..'
 
 # ==================================
-# System — Homebrew
+# System: Homebrew
 # ==================================
 alias update='brew update && brew upgrade'
 alias install='brew install'
@@ -83,7 +83,7 @@ alias cleanup='brew cleanup'
 alias doctor='brew doctor'
 
 # ==================================
-# Development — Editors
+# Development: Editors
 # ==================================
 alias c="open -a 'Visual Studio Code' ."
 alias code="open -a 'Visual Studio Code' ."
@@ -91,7 +91,7 @@ alias nv='nvim'
 alias v='vim'
 
 # ==================================
-# Development — Git
+# Development: Git
 # ==================================
 alias ga='git add'
 alias gaa='git add .'
@@ -113,7 +113,7 @@ alias gst='git stash'
 alias gstp='git stash pop'
 
 # ==================================
-# Development — Python / Django
+# Development: Python / Django
 # ==================================
 alias venv='source ./venv/bin/activate'
 alias runserver='python manage.py runserver'
@@ -123,7 +123,7 @@ alias createsuperuser='python manage.py createsuperuser'
 alias collectstatic='python manage.py collectstatic'
 
 # ==================================
-# Development — JavaScript / Node.js
+# Development: JavaScript / Node.js
 # ==================================
 export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
@@ -137,7 +137,7 @@ alias nid='npm i -D'
 alias create='npx create-react-app'
 
 # ==================================
-# Development — PostgreSQL
+# Development: PostgreSQL
 # ==================================
 alias postgres='sudo -u postgres psql'
 

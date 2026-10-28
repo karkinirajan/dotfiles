@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # =============================================================================
-#  install.sh — link this repo's configs into their live locations.
+#  install.sh: link this repo's configs into their live locations.
 #
 #  The repo is the single source of truth. Every managed path becomes a symlink
 #  back into the repo, so editing either side edits the same file and the two
@@ -17,7 +17,7 @@
 #  Safe to re-run: already-correct links are left untouched. Any existing real
 #  file is backed up to <path>.bak-<timestamp> before being replaced.
 #
-#  `link` entries can never drift — both paths are the same inode. `seed`
+#  `link` entries can never drift: both paths are the same inode. `seed`
 #  entries can: the owning program rewrites the live file and the repo copy
 #  silently goes stale. `status` reports that drift, and the two directions are:
 #
@@ -33,7 +33,7 @@
 #    git checkout HEAD -- 02-desktop/hyprland/noctalia/state/settings.toml
 #
 #  For Noctalia specifically use 02-desktop/hyprland/hypr/scripts/noctalia-restore.sh,
-#  which does the same thing but stops the shell first — restoring underneath a
+#  which does the same thing but stops the shell first: restoring underneath a
 #  running Noctalia lets it write its in-memory state back over the file.
 # =============================================================================
 set -euo pipefail
@@ -74,7 +74,7 @@ resolve() { ( cd "$(dirname "$1")" 2>/dev/null && readlink -f "$(basename "$1")"
 do_link() {
   local src="$1" dst="$2"
 
-  # A link entry is one file under two names — there is nothing to pull, and
+  # A link entry is one file under two names: there is nothing to pull, and
   # nothing to restore either; re-linking is all "restore" can mean here.
   if [ "$MODE" = pull ]; then return; fi
 
@@ -82,7 +82,7 @@ do_link() {
     say MISS "$c_err" "$dst" "repo path missing: $src"; n_err=$((n_err+1)); return
   fi
 
-  # Already pointing at the right place — nothing to do.
+  # Already pointing at the right place: nothing to do.
   if [ -L "$dst" ] && [ "$(resolve "$dst")" = "$(readlink -f "$src")" ]; then
     [ "$MODE" = status ] && say ok "$c_ok" "$dst" || :
     n_ok=$((n_ok+1)); return
@@ -154,7 +154,7 @@ do_seed() {
       n_pulled=$((n_pulled+1)); return
     fi
 
-    # restore: the opposite direction — the repo wins, live is overwritten.
+    # restore: the opposite direction: the repo wins, live is overwritten.
     if [ "$MODE" = restore ]; then
       if [ "$DRY_RUN" -eq 1 ]; then
         say PLAN "$c_dim" "$dst" "would restore ${src#$REPO_DIR/} -> live"; n_restored=$((n_restored+1)); return
@@ -188,10 +188,10 @@ do_seed() {
 
 # ── Run ──────────────────────────────────────────────────────────────────────
 case "$MODE" in
-  status) echo "status — $REPO_DIR" ;;
-  pull)   echo "pull (live -> repo, seeded entries only) — $REPO_DIR" ;;
-  restore) echo "restore (repo -> live, overwriting) — $REPO_DIR" ;;
-  *) [ "$DRY_RUN" -eq 1 ] && echo "dry run — nothing will change" || echo "installing — $REPO_DIR" ;;
+  status) echo "status - $REPO_DIR" ;;
+  pull)   echo "pull (live -> repo, seeded entries only) - $REPO_DIR" ;;
+  restore) echo "restore (repo -> live, overwriting) - $REPO_DIR" ;;
+  *) [ "$DRY_RUN" -eq 1 ] && echo "dry run - nothing will change" || echo "installing - $REPO_DIR" ;;
 esac
 echo
 

@@ -2,7 +2,7 @@
 
 ### 3.1 Single app layout (default)
 
-```
+```text
 .
 ├── AGENTS.md                     # agent instructions, points to FRONTEND-MASTER.md
 ├── FRONTEND-MASTER.md            # this file

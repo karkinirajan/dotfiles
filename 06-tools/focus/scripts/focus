@@ -1,5 +1,5 @@
 #!/usr/bin/env zsh
-# focus — system-level distraction blocker
+# focus: system-level distraction blocker
 # Manages DNS + firewall blocking, scheduling, locking, and stats.
 
 ALLOW_FILE="/home/kneeraazon/focus/allow.list"
@@ -13,11 +13,11 @@ DNSMASQ_LOG="/var/log/dnsmasq.log"
 
 mkdir -p /home/kneeraazon/focus/logs /home/kneeraazon/focus/stats
 
-# Create the list files only if they are missing — do NOT touch existing ones.
+# Create the list files only if they are missing: do NOT touch existing ones.
 # focus-refresh.path watches these with PathModified, so an unconditional
 # `touch` made every `focus` invocation (even `focus off` or `focus status`)
 # fire focus-refresh.service, which restarted dnsmasq and re-armed the nft
-# sets — silently undoing `focus off` a second after it ran.
+# sets: silently undoing `focus off` a second after it ran.
 for _f in "$ALLOW_FILE" "$BLOCK_FILE" "$LOG_FW"; do
   [[ -e "$_f" ]] || : > "$_f" 2>/dev/null || true
 done
@@ -249,7 +249,7 @@ _cmd_schedule() {
       ;;
     enable)
       sudo systemctl enable --now focus-schedule-on.timer focus-schedule-off.timer
-      echo "[schedule] enabled — focus on at $(source $SCHEDULE_FILE 2>/dev/null; echo ${SCHEDULE_START:-09:00}), off at $(source $SCHEDULE_FILE 2>/dev/null; echo ${SCHEDULE_END:-18:00})"
+      echo "[schedule] enabled - focus on at $(source $SCHEDULE_FILE 2>/dev/null; echo ${SCHEDULE_START:-09:00}), off at $(source $SCHEDULE_FILE 2>/dev/null; echo ${SCHEDULE_END:-18:00})"
       ;;
     disable)
       _lock_guard
@@ -339,7 +339,7 @@ _cmd_logs() { tail -f "$LOG_FW"; }
 # ── help ──────────────────────────────────────────────────────────────────
 _cmd_help() {
   cat << 'HELP'
-focus — system-level distraction blocker
+focus - system-level distraction blocker
 
   Core
     focus on                   Enable focus mode (DNS + firewall blocking)

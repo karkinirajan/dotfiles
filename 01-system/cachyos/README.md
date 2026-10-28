@@ -3,7 +3,7 @@
 OS-level documentation, package manifests, database loopback drop-ins, and
 reproducible local PKGBUILDs for this CachyOS (Arch) workstation.
 
-```
+```text
 01-system/cachyos/
 ├── README.md                 ← you are here
 ├── setup/                    # 25 numbered chapters (the setup walkthrough)

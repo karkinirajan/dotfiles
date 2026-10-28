@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# root-steps.sh — every privileged step for the Claude-Code-over-Ollama setup.
+# root-steps.sh: every privileged step for the Claude-Code-over-Ollama setup.
 # I (the agent) never run sudo myself, per this task's hard rules. Run this
 # YOURSELF, in a separate terminal, as:
 #
@@ -12,7 +12,7 @@
 # covers Phase 2 Step 1 (Vulkan) AND the corrected Phase 3 server config in
 # one pass, since ollama-vulkan and vulkan-radeon are already installed (no
 # package step needed) and the two existing broken drop-ins need replacing
-# either way. ROCm is NOT touched here — per this spec, it stays a deferred
+# either way. ROCm is NOT touched here: per this spec, it stays a deferred
 # challenger, tested later only if Vulkan's Phase 5 Stage 1 numbers warrant
 # it, and that will be a separate, small, one-line root-steps ask (a backend
 # drop-in swap), not a package install (ollama-rocm is already present too).
@@ -36,7 +36,7 @@ backup() {
 log "1/6: removing the two existing (broken) drop-ins, replacing with one consolidated file"
 # Why replace rather than patch: Phase 1 discovery found override.conf's
 # [Service] block had been overwritten at some point with a duplicate of
-# context.conf's lines — its own header comment describes
+# context.conf's lines: its own header comment describes
 # HSA_OVERRIDE_GFX_VERSION, but that line is gone from the actual config.
 # Both old files ALSO set OLLAMA_CONTEXT_LENGTH globally, which this task's
 # hard rules explicitly forbid (it would force a 64k KV cache onto every
@@ -47,7 +47,7 @@ backup "$DROPIN_DIR/context.conf"
 mkdir -p "$DROPIN_DIR"
 
 cat > "$DROPIN_DIR/claude-code.conf" <<'DROPIN'
-# Managed by ~/ollama-setup/root-steps.sh — do not hand-edit; re-run that
+# Managed by ~/ollama-setup/root-steps.sh: do not hand-edit; re-run that
 # script (or its Phase-5/6 successor, if the backend choice changes) to
 # change anything here. See ~/ollama-setup/REPORT.md for the measurements
 # behind every value.
@@ -78,7 +78,7 @@ log "2/6: setcap cap_perfmon+ep on the ollama binary"
 # Why: lets Ollama's Vulkan backend query real free-VRAM from the kernel
 # instead of guessing model-size-based approximations (per Ollama's own
 # docs). There is one upstream report (ollama#15321) of this capability
-# breaking GPU discovery on some setups — step 4 below verifies discovery
+# breaking GPU discovery on some setups: step 4 below verifies discovery
 # still works, and step 6 tells you how to revert if it does not.
 setcap cap_perfmon+ep "$OLLAMA_BIN"
 getcap "$OLLAMA_BIN"
@@ -109,7 +109,7 @@ systemctl daemon-reload
 systemctl restart ollama
 sleep 2
 systemctl is-active --quiet ollama && log "ollama.service is active" || {
-    echo "ollama.service failed to start — check: journalctl -u ollama -n 50" >&2
+    echo "ollama.service failed to start - check: journalctl -u ollama -n 50" >&2
     exit 1
 }
 

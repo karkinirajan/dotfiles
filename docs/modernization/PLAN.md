@@ -20,7 +20,7 @@ Decision: **B**. Reason: it delivers the readability and scalability goals witho
 
 Only documentation and tooling move. No config file, script, unit, package list or `manifest.conf` target path changes.
 
-```
+```text
 README.md                     book front page: tech stack table, contents, install, contact footer
 INDEX.md                      GENERATED from frontmatter by tools/gen_index.py
 versions.yaml                 single source of truth for versions, commands that prove them

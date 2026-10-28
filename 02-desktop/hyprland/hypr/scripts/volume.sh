@@ -8,8 +8,8 @@
 #   * its Settings window has no Audio section at all, and a search for
 #     "amplif" returns "No settings found"
 #
-# PipeWire has no such limit — `wpctl set-volume @DEFAULT_AUDIO_SINK@ 110%`
-# sets 1.10 without complaint — so this drives wpctl directly and uses its
+# PipeWire has no such limit: `wpctl set-volume @DEFAULT_AUDIO_SINK@ 110%`
+# sets 1.10 without complaint: so this drives wpctl directly and uses its
 # own `--limit` flag as the ceiling.
 #
 # The keybinds this replaces went through pactl and clamped to 100% by hand
@@ -22,7 +22,7 @@ set -uo pipefail
 
 # Ceiling for boosted volume, as a percentage. Past roughly 150% most
 # speakers distort rather than get louder, so that is the default. Raise it
-# here if you want more headroom — it is the only place the limit is set.
+# here if you want more headroom: it is the only place the limit is set.
 CEILING_PCT=150
 STEP_PCT=5
 SINK="@DEFAULT_AUDIO_SINK@"
@@ -36,7 +36,7 @@ current_pct() {
 }
 
 # Show feedback. Noctalia's OSD refuses anything over 100, so the bar pins at
-# full there and the true figure goes out as a notification instead — tagged
+# full there and the true figure goes out as a notification instead: tagged
 # synchronous so repeated steps replace the previous popup rather than stack.
 show_feedback() {
     local vol="$1" osd="$1"
