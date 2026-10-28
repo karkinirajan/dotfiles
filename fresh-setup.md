@@ -232,9 +232,22 @@ versions written in older notes.
 
 ## Phase 5 — Boot, login, and recovery configuration
 
-### SDDM and UWSM session
+### Display manager (`greetd` + Noctalia greeter) and optional SDDM preset
 
-1. Install the tracked config and only the managed session entry:
+1. The active profile uses **`greetd` with `noctalia-greeter`**, launching
+   Hyprland through UWSM (`uwsm start -- hyprland.desktop`). Confirm `greetd`,
+   `noctalia-greeter`, `uwsm`, Hyprland, and `xdg-desktop-portal-hyprland` are
+   installed and that `display-manager.service` points to `greetd.service`:
+
+   ```sh
+   readlink -f /etc/systemd/system/display-manager.service
+   ```
+
+2. SDDM is installed as an **inactive fallback**. The tracked SDDM preset under
+   `02-desktop/hyprland/sddm/` can be staged into `/etc/sddm.conf.d/` and
+   `/usr/local/share/wayland-sessions/`, but do **not** enable `sddm.service`
+   over `greetd.service` unless the owner explicitly asks to switch display
+   managers:
 
    ```sh
    cd ~/dotfiles
@@ -244,25 +257,11 @@ versions written in older notes.
      /usr/local/share/wayland-sessions/hyprland-uwsm.desktop
    ```
 
-2. Ensure `uwsm`, Hyprland, SDDM, and the Hyprland portal are installed. Keep
-   autologin disabled. Before making SDDM the only display manager, confirm the
-   unit symlink and test the managed session from the current login/TTY. If
-   changing display managers, inspect `display-manager.service` and show the
-   owner the old/new targets before switching. After the owner approves the
-   change, enable SDDM and verify the resulting symlink:
-
-   ```sh
-   sudo systemctl enable sddm.service
-   readlink -f /etc/systemd/system/display-manager.service
-   ```
-
-   Confirm that the link resolves to SDDM. If it points to another display
-   manager or the enable command reports a conflict, stop and fix that with the
-   owner before disabling anything.
-3. After logging in through SDDM, check the active session, compositor config,
-   portals, and logs. Require zero Hyprland config errors and a usable terminal
-   before considering the login setup complete. Do not troubleshoot a session
-   crash by deleting user state or disabling security modules without evidence.
+3. After logging in through the active greeter (`greetd` + Noctalia greeter),
+   check the active session, compositor config, portals, and logs. Require zero
+   Hyprland config errors and a usable terminal before considering the login
+   setup complete. Do not troubleshoot a session crash by deleting user state
+   or disabling security modules without evidence.
 
 ### Limine, CachyOS, and snapshots
 
@@ -283,7 +282,7 @@ versions written in older notes.
    of menu cleanup. The current firmware has a Limine entry and a generic UEFI
    OS fallback entry, with no Windows entry observed. Confirm the owner wants
    firmware-level entries removed before changing them.
-3. Configure Snapper and its current Limine integration as described in
+4. Configure Snapper and its current Limine integration as described in
    `01-system/cachyos/setup.md` only after checking the actual filesystem
    layout and current package hooks. Keep snapshot entries out of the target
    single-entry boot menu. Take and verify a snapshot before large system
@@ -298,15 +297,16 @@ Install only after their package and firewall/service plans are reviewed:
   inference with a small model before downloading large models. Never restore
   model cache files unless requested.
 - **Nginx:** install
-  [`04-networking/nginx/conf.d/00-types-hash.conf`](04-networking/nginx/conf.d/00-types-hash.conf)
-  into `/etc/nginx/conf.d/`, run `sudo nginx -t`, then enable/reload only if
-  nginx is intended to run on the new machine.
+  [`07-networking/nginx/conf.d/00-types-hash.conf`](07-networking/nginx/conf.d/00-types-hash.conf)
+  into `/etc/nginx/conf.d/`, ensure `/etc/nginx/nginx.conf` includes
+  `include conf.d/*.conf;` inside `http { ... }`, run `sudo nginx -t`, then
+  enable/reload only if nginx is intended to run on the new machine.
 - **DNS filtering/encrypted DNS:** follow `06-tools/focus/README.md` and
   section 19.5 of `01-system/cachyos/setup.md`. Review NetworkManager,
   dnsmasq, dnscrypt-proxy, `/etc/resolv.conf`, and local listening ports as one
   plan before changing DNS; test name resolution and have a rollback ready.
 - **SSH:** install the user unit from
-  [`04-networking/ssh/README.md`](04-networking/ssh/README.md) only if the
+  [`07-networking/ssh/README.md`](07-networking/ssh/README.md) only if the
   owner has configured its host alias in `~/.ssh/config`. The private key is
   supplied by the owner and is never part of this repo. Check the unit's
   journal after startup; no rapid restart loop should remain.
@@ -326,14 +326,14 @@ relationship when configuring a new machine.
    Kubernetes, cloud CLIs, media and office apps. Show the owner a grouped
    install plan. Resolve renamed/unavailable packages through current official
    package metadata; do not silently substitute an AUR build.
-2. Install topgrade and use the tracked config. `assume_yes = false` is
-   intentional: dependency conflicts must remain visible for owner review.
-   Run a dry run, then update interactively and inspect any `.pacnew` files.
-   Do not update Git working trees automatically while this Dotfiles checkout
-   has unreviewed changes:
+2. Install topgrade (`topgrade-bin` from the AUR) and use the tracked config.
+   `assume_yes = false` is intentional: dependency conflicts must remain
+   visible for owner review. Run a dry run, then update interactively and
+   inspect any `.pacnew` files. Do not update Git working trees automatically
+   while this Dotfiles checkout has unreviewed changes:
 
    ```sh
-   sudo pacman -S --needed topgrade
+   paru -S --needed topgrade-bin
    topgrade --dry-run
    ```
 
@@ -356,8 +356,9 @@ the setup finished:
   packages are installed and there are no unresolved dependency warnings.
 - `sudo systemctl --failed --no-pager` has no failed units. Every enabled
   network, database, GPU, and desktop service is intentional and starts cleanly.
-- SDDM presents the managed UWSM Hyprland session, autologin is off, Hyprland
-  has no config errors, and the portal/lock/polkit/session services work.
+- `greetd` + Noctalia greeter presents the managed UWSM Hyprland session,
+  autologin is off, Hyprland has no config errors, and the
+  portal/lock/polkit/session services work.
 - `sudo limine-list` shows exactly one primary CachyOS kernel entry. The
   generated config points to existing kernel/initramfs files; there are no
   Windows, secondary-kernel, fallback-loader, or snapshot entries.

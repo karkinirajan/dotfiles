@@ -8,6 +8,7 @@ arch=('x86_64')
 url='https://www.upwork.com/ab/downloads/?os=linux'
 license=('LicenseRef-Upwork-EULA')
 depends=('libxcrypt-compat' 'libxss' 'libappindicator-gtk3')
+makedepends=('binutils' 'libarchive')
 source=(
   "https://upwork-usw2-desktopapp.upwork.com/binaries/v5_8_0_41_f0de03505cc349f2/upwork_${pkgver}_amd64.deb"
   'upwork-license.pdf::https://upwork.pactsafe.io/versions/6887e5128f84f23a737bf6bb.pdf'
@@ -21,16 +22,16 @@ options=(!debug !strip)
 
 prepare() {
   mkdir -p "$srcdir/extract"
-  cd "$srcdir/extract"
+  cd "$srcdir/extract" || return 1
   ar x "$srcdir/upwork_${pkgver}_amd64.deb"
   bsdtar -xf data.tar.xz
 }
 
 package() {
   install -d "$pkgdir/opt" "$pkgdir/usr/share"
-  cp -a "$srcdir/extract/opt/Upwork" "$pkgdir/opt/"
-  cp -a "$srcdir/extract/usr/share/applications" "$pkgdir/usr/share/"
-  cp -a "$srcdir/extract/usr/share/icons" "$pkgdir/usr/share/"
+  cp -dr --no-preserve=ownership "$srcdir/extract/opt/Upwork" "$pkgdir/opt/"
+  cp -dr --no-preserve=ownership "$srcdir/extract/usr/share/applications" "$pkgdir/usr/share/"
+  cp -dr --no-preserve=ownership "$srcdir/extract/usr/share/icons" "$pkgdir/usr/share/"
   install -Dm644 "$srcdir/upwork-license.pdf" \
     "$pkgdir/usr/share/licenses/upwork/upwork-license.pdf"
 }

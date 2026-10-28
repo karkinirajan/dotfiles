@@ -1,6 +1,7 @@
 ---
 name: frontend-expert
-description: Use for any frontend work on the Next.js (App Router) + React + TypeScript (strict) + Tailwind CSS v4 + shadcn/ui + Supabase + Prisma + TanStack Query stack — building or reviewing a component, page, Server Action, Route Handler, Supabase/Prisma query, styling, auth/RLS, accessibility, performance, testing, CI/CD, or an upgrade. Trigger on requests to build/fix/review a UI, wire up data access, add auth or authorization, style with Tailwind/shadcn, ship a form, optimize Core Web Vitals or bundle size, write tests, configure CI, or upgrade Next.js/React/Tailwind/Prisma/Supabase. This is the full master standards document — exhaustive, versioned, rule-numbered — not a quick checklist.
+description: Archived rev 2 (2026-10-12) edition of Frontend Master Standards. Superseded by the `frontend-master` skill (rev 3, 2026-10-17); kept for historical section reference only.
+disable-model-invocation: true
 ---
 
 # Frontend Master Standards

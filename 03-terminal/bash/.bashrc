@@ -39,7 +39,7 @@ bldgrn='\e[1;32m'
 bldpur='\e[1;35m'
 txtrst='\e[0m'
 
-PS1="\[\033[38m\]\u\[\033[32m\] \w \[\033[31m\]\$(git_branch)\[\033[37m\]\$ \[\033[00m\]"
+PS1="\[\033[39m\]\u\[\033[32m\] \w \[\033[31m\]\$(git_branch)\[\033[37m\]\$ \[\033[00m\]"
 
 # History search with arrow keys
 bind '"\e[A": history-search-backward'
@@ -87,7 +87,8 @@ alias update='sudo pacman -Syu'
 alias install='sudo pacman -S'
 alias remove='sudo pacman -R'
 alias purge='sudo pacman -Rns'
-alias autoremove='sudo pacman -Rns $(pacman -Qdtq 2>/dev/null)'
+# List orphan packages without blindly removing them (see 02-desktop/hyprland/KDE-REMOVAL.md)
+alias orphans='pacman -Qtdq'
 alias clean='sudo pacman -Sc'
 alias search-pkg='pacman -Ss'
 alias show-pkg='pacman -Qi'
@@ -162,9 +163,8 @@ alias gdev='gatsby develop'   # renamed from gd: it shadowed `gd='git diff'` abo
 # Network & Security
 # ==================================
 alias myip='curl -s ifconfig.me'
-alias ports='netstat -tulanp'
-alias skpb='cat ~/.ssh/id_rsa.pub'
-alias skpv='cat ~/.ssh/id_rsa'
+alias ports='ss -tulnp'
+alias skpb='cat ~/.ssh/id_ed25519.pub 2>/dev/null || cat ~/.ssh/id_rsa.pub'
 
 # ==================================
 # Custom Functions
@@ -210,7 +210,7 @@ pacman-history() {
 # Fabricator task completion
 _fab_completion() {
   COMPREPLY=()
-  /usr/bin/which -s fab || return 0
+  command -v fab >/dev/null 2>&1 || return 0
   [[ -e fabfile.py ]] || return 0
   local cur="${COMP_WORDS[COMP_CWORD]}"
   tasks=$(fab --shortlist)

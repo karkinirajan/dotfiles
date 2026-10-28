@@ -25,7 +25,10 @@ mapfile -t repo_packages < <(awk 'NF && $1 !~ /^#/ && $2 != "(AUR)" {print $1}' 
 mapfile -t aur_packages < <(awk 'NF && $1 !~ /^#/ && $2 == "(AUR)" {print $1}' \
   01-system/cachyos/packages/developer.txt)
 sudo pacman -S --needed "${repo_packages[@]}"
-yay -S --needed "${aur_packages[@]}"
+aur_helper="$(command -v paru || command -v yay || true)"
+if ((${#aur_packages[@]})); then
+  "$aur_helper" -S --needed "${aur_packages[@]}"
+fi
 ```
 
 The Mullvad package's install hook may enable its daemon and early-boot
@@ -145,10 +148,8 @@ in this guide without checking current memory and workload needs.
 ## Desktop defaults and optional applications
 
 Brave is the XDG browser default, Zed opens text and source files, and Swash
-opens images. The shell config, UWSM environment file, and systemd user
-environment use `BROWSER=brave`. The already-running Hyprland process inherited
-`BROWSER=firefox` before that change; a fresh login is needed to refresh its
-environment. New interactive Zsh shells already export Brave.
+opens images. The shell config, UWSM environment file, running Hyprland
+session, and systemd user environment all use `BROWSER=brave`.
 
 Upwork, VS Code, Sublime Text, PyCharm Community, DBeaver, MongoDB Compass,
 Firefox, Obsidian, Notion, Anytype, Logseq, Todoist, Slack, Signal, Discord,

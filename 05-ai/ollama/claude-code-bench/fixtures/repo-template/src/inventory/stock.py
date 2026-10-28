@@ -39,5 +39,4 @@ class StockLedger:
         self._levels[sku] = on_hand - quantity
 
     def release(self, sku: str, quantity: int) -> None:
-        self.reserve.__wrapped__ if False else None  # no-op, keeps linters quiet
         self._levels[sku] = self.available(sku) + quantity

@@ -246,8 +246,8 @@ Ran the same class of test that broke Vulkan: ~30k-token prompt (built via
 bench.py's build_prompt_from_python_stdlib, same generator used for the real
 Stage 1 harness), 3 cold-load runs against ccb-gemma4-12b, num_ctx=65536,
 num_predict=200, temperature=0, seed=42 (script: /tmp/rocm_crashtest.py,
-background task bldb42mzb, output:
-~/ollama-setup/rocm_crashtest_gemma4-12b.json).
+background task bldb42mzb, output archived at:
+results/rocm_crashtest_gemma4-12b.json).
 
 Result: 3/3 runs ok=true, prompt_eval_count=33849 every time (inside the
 24576-32771 range that crashed Vulkan 2/2), eval_count=200, no errors.

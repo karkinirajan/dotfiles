@@ -19,11 +19,11 @@ BEGIN = "# >>> ccl >>>"
 END = "# <<< ccl <<<"
 
 BLOCK = f"""{BEGIN}
-# Claude Code against the local Ollama server (~/ollama-setup). Both tiers
-# point at the SAME model on purpose: OLLAMA_MAX_LOADED_MODELS=1 means a
-# second model loaded for e.g. a "haiku" tier would evict the first and
-# thrash VRAM on every call. See ~/ollama-setup/REPORT.md for how cc-local
-# and cc-fast were chosen.
+# Claude Code against the local Ollama server (05-ai/ollama/claude-code-bench).
+# Both tiers point at the SAME model on purpose: OLLAMA_MAX_LOADED_MODELS=1
+# means a second model loaded for e.g. a "haiku" tier would evict the first and
+# thrash VRAM on every call. See 05-ai/ollama/claude-code-bench/ollama-claude-setup.md
+# for how cc-local and cc-fast are configured.
 ccl() {{
   local model="${{CCL_MODEL:-cc-local}}"
   ANTHROPIC_BASE_URL=http://localhost:11434 ANTHROPIC_AUTH_TOKEN=ollama ANTHROPIC_API_KEY="" \\
@@ -34,7 +34,7 @@ ccl() {{
   claude --model "$model" "$@"
 }}
 cclf() {{ CCL_MODEL=cc-fast ccl "$@" }}
-alias ccl-bench='python ~/ollama-setup/bench.py'
+alias ccl-bench='python3 ~/dotfiles/05-ai/ollama/claude-code-bench/bench.py'
 {END}
 """
 

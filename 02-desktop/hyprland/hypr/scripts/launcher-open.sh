@@ -1,4 +1,5 @@
 #!/bin/bash
+set -euo pipefail
 # Opening the launcher while the mouse cursor rests over a top-bar widget
 # (e.g. the media widget) triggers that widget's hover-preview panel
 # (Control Center), which force-closes the launcher within ~1s since

@@ -38,7 +38,7 @@ logging.basicConfig(
 )
 log = logging.getLogger("e2e")
 
-SETUP_DIR = Path.home() / "ollama-setup"
+SETUP_DIR = Path(__file__).resolve().parent
 FIXTURE_TEMPLATE = SETUP_DIR / "fixtures" / "repo-template"
 RUNS_DIR = SETUP_DIR / "fixtures" / "runs"
 TRANSCRIPTS_DIR = SETUP_DIR / "transcripts"
@@ -89,7 +89,15 @@ def make_checkout(model: str, run_index: int) -> Path:
     if dest.exists():
         shutil.rmtree(dest)
     dest.parent.mkdir(parents=True, exist_ok=True)
-    subprocess.run(["git", "clone", "-q", str(FIXTURE_TEMPLATE), str(dest)], check=True)
+    if (FIXTURE_TEMPLATE / ".git").exists():
+        subprocess.run(["git", "clone", "-q", str(FIXTURE_TEMPLATE), str(dest)], check=True)
+    else:
+        shutil.copytree(FIXTURE_TEMPLATE, dest)
+        subprocess.run(["git", "init", "-q"], cwd=dest, check=True)
+        subprocess.run(["git", "config", "user.name", "kneeraazon404"], cwd=dest, check=True)
+        subprocess.run(["git", "config", "user.email", "kneeraazon404@localhost"], cwd=dest, check=True)
+        subprocess.run(["git", "add", "-A"], cwd=dest, check=True)
+        subprocess.run(["git", "commit", "-q", "-m", "initial fixture baseline"], cwd=dest, check=True)
     return dest
 
 

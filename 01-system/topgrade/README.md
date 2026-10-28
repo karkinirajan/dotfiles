@@ -24,7 +24,7 @@ Confirmation prompts remain enabled
 ## Install
 
 ```sh
-sudo pacman -S --needed topgrade
+paru -S --needed topgrade-bin
 ```
 
 Linked via `manifest.conf` to `~/.config/topgrade.toml` — edit either side.

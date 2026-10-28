@@ -24,7 +24,7 @@ import requests
 logging.basicConfig(level=logging.INFO, format="%(asctime)s %(levelname)-7s %(message)s", datefmt="%H:%M:%S")
 log = logging.getLogger("phase2")
 
-SETUP_DIR = Path.home() / "ollama-setup"
+SETUP_DIR = Path(__file__).resolve().parent.parent
 MODELS_DIR = SETUP_DIR / "test-models"
 LOG_DIR = SETUP_DIR / "logs"
 OUT = SETUP_DIR / "phase2_results.json"
@@ -88,10 +88,10 @@ def start_server(v: Variant) -> subprocess.Popen:
 
     LOG_DIR.mkdir(parents=True, exist_ok=True)
     log_path = LOG_DIR / f"phase2-{v.label}.log"
-    log_f = open(log_path, "w")
-    proc = subprocess.Popen(
-        ["/usr/bin/ollama", "serve"], env=env, stdout=log_f, stderr=subprocess.STDOUT,
-    )
+    with open(log_path, "w") as log_f:
+        proc = subprocess.Popen(
+            ["/usr/bin/ollama", "serve"], env=env, stdout=log_f, stderr=subprocess.STDOUT,
+        )
     return proc
 
 

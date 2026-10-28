@@ -11,10 +11,10 @@ order = [ "kneeraazon", "default" ]
     enabled = false
 
     [bar.kneeraazon]
-    border = "#cba6f7aa"
+    border = "#e95678aa"
     border_width = 1.5
     capsule = true
-    capsule_border = "#cba6f799"
+    capsule_border = "#e9567899"
     capsule_fill = "on_primary"
     capsule_radius = 2
     capsule_thickness = 0.71999998763203621
@@ -22,15 +22,13 @@ order = [ "kneeraazon", "default" ]
     concave_edge_corners = false
     contact_shadow = true
     end = [
+        "ai_usage_codex",
         "audio_visualizer",
         "clock",
         "speedtest-widget",
         "screenshot",
         "status",
         "notes",
-        "bar",
-        "ai_usage_agy",
-        "ai_usage_codex",
         "ram",
         "weather",
         "bar_6",
@@ -158,17 +156,13 @@ force = false
 temperature_day = 10000
 temperature_night = 5000
 
-[plugin_settings."davinci13/containers"]
-show_stopped = true
-view_mode = "cards"
-
 [plugin_settings."davemhammer/obsidian"]
-vault_path = "/home/kneeraazon/Documents/kneeraazon"
 vault_name = "kneeraazon"
+vault_path = "/home/kneeraazon/Documents/kneeraazon"
 
-[plugin_settings."felipeartur/ai-usagebar"]
-panel_open_near_click = false
-refresh_minutes = 120
+[plugin_settings."davinci13/containers"]
+panel_open_near_click = true
+show_stopped = true
 
 [plugin_settings."giodamelio/beeminder"]
 goals_open_near_click = false
@@ -219,12 +213,9 @@ enabled = [
     name = "community"
 
 [shell]
-app_icon_color = "primary"
+app_icon_color = "#01C4FC"
 font_family = "DejaVu Sans"
 settings_window_translucent = true
-
-    [shell.animation]
-    speed = 0.80000001192092896
 
     [shell.launcher]
     app_grid = true
@@ -261,21 +252,25 @@ settings_window_translucent = true
     [shell.session]
     grid = true
 
+    [shell.shadow]
+    alpha = 0.99999997764825821
+    direction = "center"
+
     [shell.window_switcher]
     mru = true
 
 [theme]
-builtin = "Dracula"
-community_palette = "Paradise"
+builtin = "Ayu"
+community_palette = "Horizon"
 custom_palette = "CatppuccinMocha"
 mode = "dark"
 pure_black_dark = true
-source = "custom"
+source = "community"
 sync_color_scheme = false
 wallpaper_scheme = "m3-content"
 
     [theme.templates]
-    builtin_ids = [ "alacritty", "btop", "foot", "gtk4", "hyprland", "kitty", "qt", "starship" ]
+    builtin_ids = [ "alacritty", "btop", "foot", "gtk4", "qt", "starship" ]
     community_ids = [
         "antigravity",
         "claude-code",
@@ -295,7 +290,6 @@ wallpaper_scheme = "m3-content"
         "papirus-icons",
         "fzf",
         "glow",
-        "konsole",
         "tmux"
     ]
 
@@ -403,21 +397,6 @@ color = "#FFFFFF"
 font_weight = 400
 title_scroll = "on_hover"
 
-[widget.bar]
-anchor = true
-capsule = true
-font_weight = 800
-glyph_position = "after"
-show_name = true
-type = "felipeartur/ai-usagebar:bar"
-vendor = "anthropic"
-
-[widget.ai_usage_agy]
-capsule = true
-show_name = true
-type = "felipeartur/ai-usagebar:bar"
-vendor = "antigravity"
-
 [widget.ai_usage_codex]
 capsule = true
 show_name = true
@@ -479,7 +458,7 @@ icon_color = "#28B8AF"
 show_label = false
 
 [widget.nightlight]
-glyph = "moon-stars"
+glyph = "moon-off"
 icon_color = "#C14E0B"
 tooltip = "Click to toggle · scroll to adjust warmth"
 type = "custom_button"

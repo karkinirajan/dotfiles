@@ -5,10 +5,11 @@ and the update routine.
 
 | Chapter | Path | Purpose |
 |---------|------|---------|
+| CachyOS profile | [`cachyos/`](cachyos/README.md) | Overview of OS configs, `mariadb-local.cnf`, and local PKGBUILDs |
 | Setup walkthrough | [`cachyos/setup.md`](cachyos/setup.md) | Full install narrative: GPU drivers, toolchains, Kubernetes, Terraform |
-| Packages | [`cachyos/packages/`](cachyos/packages/) | Desktop, system, font, CLI, and optional local-AI package lists; `(AUR)` marks AUR packages |
+| Packages | [`cachyos/packages/`](cachyos/packages/) | Desktop, system, font, CLI, developer, Claude Code, and local-AI package lists |
 | Full developer profile | [`cachyos/dev-stack.md`](cachyos/dev-stack.md) | Optional toolchains, local databases, rootless Docker, and host-specific setup |
-| Snapshots | [`timeshift/`](timeshift/README.md) | Optional Timeshift alternative; current CachyOS host uses Snapper |
+| Snapshots (archived) | [`timeshift/`](timeshift/README.md) | Archived Timeshift alternative; current CachyOS host uses Snapper |
 | Updates | [`topgrade/`](topgrade/README.md) | `topgrade.toml` — which update steps run, which are disabled and why |
 
 Packages are not installed by `install.sh`, which runs unprivileged. Install

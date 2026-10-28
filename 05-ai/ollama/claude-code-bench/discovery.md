@@ -167,10 +167,6 @@ Sep 23 13:21:04 cachyos ollama[67704]: time=2026-09-23T13:21:04.992+05:45 level=
 /sys/class/drm/card1/device/mem_info_vram_used: 1091891200
 ```
 
-## GPU power sensor
-```
-```
-
 ## GPU power sensor (corrected — nested under hwmon2)
 ```
 path: /sys/class/drm/card1/device/hwmon/hwmon2/power1_average

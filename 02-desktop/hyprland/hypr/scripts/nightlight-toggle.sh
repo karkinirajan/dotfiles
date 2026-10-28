@@ -21,18 +21,33 @@ SETTINGS="$HOME/.local/state/noctalia/settings.toml"
 TEMP_FILE="$HOME/.local/state/hyprsunset/temperature-k"
 
 python3 - "$STATE_FILE" "$SETTINGS" "$TEMP_FILE" <<'PYEOF'
-import sys, re, subprocess, os
+import sys, re, subprocess, os, pathlib, tempfile, tomllib
+
+def write_atomic(path, text):
+    tomllib.loads(text)
+    path = pathlib.Path(path)
+    fd, tmp = tempfile.mkstemp(dir=str(path.parent), prefix=path.name + ".", suffix=".tmp")
+    try:
+        with os.fdopen(fd, "w") as fh:
+            fh.write(text)
+            fh.flush()
+            os.fsync(fh.fileno())
+        os.replace(tmp, path)
+    except BaseException:
+        pathlib.Path(tmp).unlink(missing_ok=True)
+        raise
 
 state_file, settings_path = sys.argv[1], sys.argv[2]
 is_on = os.path.exists(state_file)
 
-text = open(settings_path).read()
-m = re.search(r'(\[widget\.nightlight\]\n)(.*?)(\n\[)', text, re.S)
+text = pathlib.Path(settings_path).read_text()
+m = re.search(r'(\[widget\.nightlight\]\n)(.*?)(\n\[|\Z)', text, re.S)
 if m:
     new_glyph = "moon-off" if is_on else "moon-stars"
     new_section = re.sub(r'glyph = ".*?"', f'glyph = "{new_glyph}"', m.group(2))
-    text = text[:m.start(2)] + new_section + text[m.end(2):]
-    open(settings_path, "w").write(text)
+    new_text = text[:m.start(2)] + new_section + text[m.end(2):]
+    if new_text != text:
+        write_atomic(settings_path, new_text)
 
 if is_on:
     subprocess.run(["pkill", "-x", "hyprsunset"])

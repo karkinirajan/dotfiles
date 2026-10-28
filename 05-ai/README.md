@@ -12,9 +12,9 @@ AMD GPU, and the reading that informs both.
 
 ## How the chapters connect
 
-- `claude-code/` is what runs. Its `settings.json` and `CLAUDE.md` are linked
-  into `~/.claude/`; skills load on demand. Token-efficient usage and optional
-  helper packages are documented in that chapter.
+- `claude-code/` is what runs. Its `CLAUDE.md`, `settings.json`, `agents/`,
+  `commands/`, and `skills/` are linked into `~/.claude/`; skills load on demand.
+  Token-efficient usage and optional helper packages are documented in that chapter.
 - `ollama/` is what serves local models. The `claude-code-bench/` area wires a
   local model into Claude Code as a second endpoint, and is kept for reference
   rather than linked.

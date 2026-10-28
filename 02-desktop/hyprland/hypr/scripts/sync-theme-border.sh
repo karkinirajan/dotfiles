@@ -61,6 +61,18 @@ mode = get("mode", default="dark")
 
 primary = secondary = None
 
+KNOWN_PALETTES = {
+    "CatppuccinMocha": ("#cba6f7", "#89b4fa"),
+    "ShadesOfJade": ("#00a86b", "#75d99c"),
+    "Horizon": ("#e95678", "#fab795"),
+    "Paradise": ("#8da3b9", "#b66467"),
+    "Dracula": ("#bd93f9", "#ff79c6"),
+    "Ayu": ("#ffb454", "#59c2ff"),
+    "Gruvbox": ("#fe8019", "#b8bb26"),
+    "Nord": ("#88c0d0", "#81a1c1"),
+    "TokyoNight": ("#7aa2f7", "#bb9af7"),
+}
+
 if source == "custom":
     name = get("custom_palette")
     if name:
@@ -70,10 +82,33 @@ if source == "custom":
             variant = data.get(mode) or data.get("dark") or next(iter(data.values()))
             primary = variant.get("mPrimary")
             secondary = variant.get("mSecondary")
+        elif name in KNOWN_PALETTES:
+            primary, secondary = KNOWN_PALETTES[name]
+elif source == "community":
+    name = get("community_palette")
+    if name:
+        for base in [
+            pathlib.Path.home() / ".cache/noctalia/palettes",
+            pathlib.Path.home() / ".local/share/noctalia/palettes",
+            pathlib.Path(palettes_dir),
+        ]:
+            p = base / f"{name}.json"
+            if p.exists():
+                data = json.loads(p.read_text())
+                variant = data.get(mode) or data.get("dark") or next(iter(data.values()))
+                primary = variant.get("mPrimary")
+                secondary = variant.get("mSecondary")
+                break
+        if not primary and name in KNOWN_PALETTES:
+            primary, secondary = KNOWN_PALETTES[name]
+elif source == "builtin":
+    name = get("builtin")
+    if name in KNOWN_PALETTES:
+        primary, secondary = KNOWN_PALETTES[name]
 
 if not primary:
-    print("Could not resolve a custom palette primary color; leaving colors.conf untouched.", file=sys.stderr)
-    sys.exit(1)
+    print(f"Could not resolve palette primary color for source={source}; leaving colors.conf untouched.", file=sys.stderr)
+    sys.exit(0)
 
 colors_conf = pathlib.Path(colors_conf_path)
 conf_text = colors_conf.read_text()

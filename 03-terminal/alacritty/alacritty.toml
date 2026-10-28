@@ -148,7 +148,7 @@ bindings = [
   # Window
   { key = "F11",                            action = "ToggleFullscreen" },
 
-  # Ctrl+L clears the screen but keeps scrollback; this wipes both.
+  # Dismiss Alacritty's warning/error log notice bar (Ctrl+Shift+K wipes scrollback).
   { key = "L",      mods = "Control|Shift", action = "ClearLogNotice" },
 
   # Shift+Enter sends ESC+CR (for apps that expect it, e.g. some REPLs)

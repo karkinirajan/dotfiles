@@ -41,15 +41,18 @@ _parse_duration() {
   # Accepts: 30m  2h  1h30m  90m  1.5h
   local raw="$1"
   local total=0
-  local h m
   if [[ "$raw" =~ ^([0-9]+)h([0-9]+)m$ ]]; then
     total=$(( ${match[1]} * 3600 + ${match[2]} * 60 ))
+  elif [[ "$raw" =~ ^([0-9]+)\.([0-9]+)h$ ]]; then
+    local whole="${match[1]}" frac="${match[2]}"
+    local scale=$(( 10 ** ${#frac} ))
+    total=$(( whole * 3600 + (frac * 3600) / scale ))
   elif [[ "$raw" =~ ^([0-9]+)h$ ]]; then
     total=$(( ${match[1]} * 3600 ))
   elif [[ "$raw" =~ ^([0-9]+)m$ ]]; then
     total=$(( ${match[1]} * 60 ))
   else
-    echo "Invalid duration: $raw  (use 30m, 2h, 1h30m)" >&2
+    echo "Invalid duration: $raw  (use 30m, 2h, 1h30m, 1.5h)" >&2
     return 1
   fi
   echo $total
@@ -88,6 +91,8 @@ _cmd_off() {
   sudo rm -f /etc/dnsmasq.d/focus-block.conf
   sudo nft flush set inet filter blocked_ips 2>/dev/null || true
   sudo nft flush set inet filter allowed_ips 2>/dev/null || true
+  sudo nft flush set inet filter blocked_ips6 2>/dev/null || true
+  sudo nft flush set inet filter allowed_ips6 2>/dev/null || true
   [[ -L /etc/resolv.conf ]] && sudo rm -f /etc/resolv.conf
   printf 'nameserver 1.1.1.1\nnameserver 9.9.9.9\n' | sudo tee /etc/resolv.conf > /dev/null
   echo "[OFF] focus mode disabled"
@@ -128,11 +133,18 @@ _cmd_refresh() {
 
 # ── allow ─────────────────────────────────────────────────────────────────
 _cmd_allow() {
+  _lock_guard
   shift
+  local tmp real_block real_allow
+  real_block="$(readlink -f "$BLOCK_FILE" 2>/dev/null || echo "$BLOCK_FILE")"
+  real_allow="$(readlink -f "$ALLOW_FILE" 2>/dev/null || echo "$ALLOW_FILE")"
   for d in "$@"; do
     [[ -z "$d" ]] && continue
-    grep -vx "$d" "$BLOCK_FILE" > /tmp/block.tmp 2>/dev/null && mv /tmp/block.tmp "$BLOCK_FILE"
-    grep -qx "$d" "$ALLOW_FILE" || echo "$d" >> "$ALLOW_FILE"
+    tmp="$(mktemp /tmp/focus-block.XXXXXX)"
+    { grep -vxF "$d" "$real_block" 2>/dev/null || true; } > "$tmp"
+    cp "$tmp" "$real_block"
+    rm -f "$tmp"
+    grep -qxF "$d" "$real_allow" 2>/dev/null || echo "$d" >> "$real_allow"
     echo "[+] allowed: $d"
   done
   /home/kneeraazon/focus/scripts/focus-refresh >/dev/null 2>&1
@@ -140,11 +152,18 @@ _cmd_allow() {
 
 # ── block ─────────────────────────────────────────────────────────────────
 _cmd_block() {
+  _lock_guard
   shift
+  local tmp real_block real_allow
+  real_block="$(readlink -f "$BLOCK_FILE" 2>/dev/null || echo "$BLOCK_FILE")"
+  real_allow="$(readlink -f "$ALLOW_FILE" 2>/dev/null || echo "$ALLOW_FILE")"
   for d in "$@"; do
     [[ -z "$d" ]] && continue
-    grep -vx "$d" "$ALLOW_FILE" > /tmp/allow.tmp 2>/dev/null && mv /tmp/allow.tmp "$ALLOW_FILE"
-    grep -qx "$d" "$BLOCK_FILE" || echo "$d" >> "$BLOCK_FILE"
+    tmp="$(mktemp /tmp/focus-allow.XXXXXX)"
+    { grep -vxF "$d" "$real_allow" 2>/dev/null || true; } > "$tmp"
+    cp "$tmp" "$real_allow"
+    rm -f "$tmp"
+    grep -qxF "$d" "$real_block" 2>/dev/null || echo "$d" >> "$real_block"
     echo "[-] blocked: $d"
   done
   /home/kneeraazon/focus/scripts/focus-refresh >/dev/null 2>&1
@@ -214,13 +233,16 @@ _cmd_schedule() {
   local sub="$2"
   case "$sub" in
     set)
+      _lock_guard
       local start="${3:-09:00}" end="${4:-18:00}"
-      echo "SCHEDULE_START=$start" > "$SCHEDULE_FILE"
-      echo "SCHEDULE_END=$end"    >> "$SCHEDULE_FILE"
+      local real_sched
+      real_sched="$(readlink -f "$SCHEDULE_FILE" 2>/dev/null || echo "$SCHEDULE_FILE")"
+      echo "SCHEDULE_START=$start" > "$real_sched"
+      echo "SCHEDULE_END=$end"    >> "$real_sched"
       # Rewrite the timer OnCalendar lines
-      sudo sed -i "s|OnCalendar=.*focus-schedule-on.*|OnCalendar=Mon-Fri *-*-* ${start}:00|" \
+      sudo sed -i "s|^OnCalendar=.*|OnCalendar=Mon-Fri *-*-* ${start}:00|" \
         /etc/systemd/system/focus-schedule-on.timer 2>/dev/null || true
-      sudo sed -i "s|OnCalendar=.*|OnCalendar=Mon-Fri *-*-* ${end}:00|" \
+      sudo sed -i "s|^OnCalendar=.*|OnCalendar=Mon-Fri *-*-* ${end}:00|" \
         /etc/systemd/system/focus-schedule-off.timer 2>/dev/null || true
       sudo systemctl daemon-reload
       echo "[schedule] set to ${start}–${end} Mon–Fri"
@@ -230,6 +252,7 @@ _cmd_schedule() {
       echo "[schedule] enabled — focus on at $(source $SCHEDULE_FILE 2>/dev/null; echo ${SCHEDULE_START:-09:00}), off at $(source $SCHEDULE_FILE 2>/dev/null; echo ${SCHEDULE_END:-18:00})"
       ;;
     disable)
+      _lock_guard
       sudo systemctl disable --now focus-schedule-on.timer focus-schedule-off.timer
       echo "[schedule] disabled"
       ;;
@@ -246,13 +269,25 @@ _cmd_schedule() {
 # ── stats ─────────────────────────────────────────────────────────────────
 _cmd_stats() {
   local period="${2:-today}"
-  local since
+  local date_pattern=""
 
   case "$period" in
-    today)   since=$(date '+%b %e') ;;
-    week)    since=$(date -d '7 days ago' '+%b %e' 2>/dev/null || date -v-7d '+%b %e') ;;
-    all)     since="" ;;
-    *)       since="$period" ;;
+    today)
+      date_pattern="^$(date '+%b %e')"
+      ;;
+    week)
+      local d_list=()
+      for i in {0..6}; do
+        d_list+=("^$(date -d "$i days ago" '+%b %e' 2>/dev/null || date -v-${i}d '+%b %e')")
+      done
+      date_pattern="${(j:|:)d_list}"
+      ;;
+    all)
+      date_pattern=""
+      ;;
+    *)
+      date_pattern="$period"
+      ;;
   esac
 
   echo "──── Focus Stats ($period) ────────────────────────"
@@ -264,10 +299,10 @@ _cmd_stats() {
 
   # Extract blocked domain queries from dnsmasq log
   local log_input
-  if [[ -n "$since" ]]; then
-    log_input=$(grep "$since" "$DNSMASQ_LOG" 2>/dev/null)
+  if [[ -n "$date_pattern" ]]; then
+    log_input=$(grep -E "$date_pattern" "$DNSMASQ_LOG" 2>/dev/null | grep -E 'query\[(A|AAAA)\]' || true)
   else
-    log_input=$(cat "$DNSMASQ_LOG")
+    log_input=$(grep -E 'query\[(A|AAAA)\]' "$DNSMASQ_LOG" 2>/dev/null || true)
   fi
 
   # Get blocked domains from block.list and count queries
@@ -278,7 +313,7 @@ _cmd_stats() {
 
   while IFS= read -r domain; do
     [[ -z "$domain" || "$domain" == \#* ]] && continue
-    hit_count=$(echo "$log_input" | grep -F "$domain" | wc -l | tr -d " ")
+    hit_count=$(print -r -- "$log_input" | grep -F "$domain" | wc -l | tr -d " ")
     if (( hit_count > 0 )); then
       printf "  %-30s %d\n" "$domain" "$hit_count"
       total=$((total + hit_count))
@@ -290,8 +325,12 @@ _cmd_stats() {
 
   # Save snapshot
   local snapfile="$STATS_DIR/$(date '+%Y-%m-%d').log"
+  local clean_patterns
+  clean_patterns=$(grep -vE '^[[:space:]]*(#|$)' "$BLOCK_FILE" 2>/dev/null || true)
   echo "=== Stats run @ $(date '+%H:%M:%S') ===" >> "$snapfile"
-  echo "$log_input" | grep -f "$BLOCK_FILE" >> "$snapfile" 2>/dev/null || true
+  if [[ -n "$clean_patterns" && -n "$log_input" ]]; then
+    print -r -- "$log_input" | grep -F -f <(print -r -- "$clean_patterns") >> "$snapfile" 2>/dev/null || true
+  fi
 }
 
 # ── logs ──────────────────────────────────────────────────────────────────

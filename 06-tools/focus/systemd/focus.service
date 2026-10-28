@@ -1,6 +1,7 @@
 [Unit]
 Description=Focus Firewall System
 After=network.target dnsmasq.service
+Wants=focus-page.service
 
 [Service]
 Type=oneshot

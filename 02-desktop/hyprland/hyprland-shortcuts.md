@@ -7,18 +7,18 @@ Generated from your actual config at `~/.config/hypr/config/keybinds.conf`.
 
 | Shortcut | Action |
 |---|---|
-| `SUPER + Return` | Open terminal (kitty) |
-| `SUPER + E` | Open file manager (kitty + yazi) |
+| `SUPER + Return` | Open terminal (`alacritty`) |
+| `SUPER + E` | Open file manager (`alacritty -e yazi`) |
 | `SUPER + Space` | Open app launcher (Noctalia) — moves the cursor off the bar first, so a hover-triggered panel can't steal focus and close it instantly |
 | `SUPER + Q` | Close current window (graceful) |
 | `SUPER + SHIFT + M` | Log out / end session |
 | `SUPER + L` | Lock screen |
-| `SUPER + O` | Reload/restart Noctalia shell |
+| `SUPER + O` | Reload/restart Noctalia shell (respawned by `noctalia-watchdog.sh`) |
 | `SUPER + B` | Toggle the top bar visibility (also drops its blur decoration, so no ghost strip is left behind) |
 | `SUPER + C` | Clipboard history (Noctalia) |
 | `SUPER + P` | Color picker (copies hex) |
-| `SUPER + W` | Open the WallRizz wallpaper/theme picker |
-| `SUPER + SHIFT + W` | Switch to a random wallpaper via WallRizz |
+| `SUPER + W` | Open Noctalia's wallpaper picker panel |
+| `SUPER + SHIFT + W` | Switch to a random wallpaper via Noctalia |
 
 ## Plugins (hyprpm)
 
@@ -26,12 +26,12 @@ Generated from your actual config at `~/.config/hypr/config/keybinds.conf`.
 |---|---|
 | `SUPER + H` | Toggle the Hyprspace workspace overview (GNOME/macOS Mission Control-style) |
 
-Also installed and loaded, but with no dedicated keybind by design:
-- **hy3** — i3/sway-style manual tiling layout, available as an alternative to the active `dwindle` layout. Not switched on by default (would change how every window tiles); set `general:layout = hy3` in `variables.conf` to try it.
-- **split-monitor-workspaces** — per-monitor independent workspace numbering. Loaded but not wired into the workspace keybinds below, since that would mean rewriting all of them.
+Also installed and loaded, with no dedicated keybind by design:
 - **dynamic-cursors** — cursor tilts with movement, shake-to-find (mouse-driven, no keybind needed).
-- **hyprfocus** — flash animation on keyboard-driven focus changes (automatic, no keybind).
-- **borders-plus-plus** — extra static outer border accent (visual only, no keybind).
+
+Optional plugins documented in `plugins.conf` (not installed in the baseline):
+- **hy3** — i3/sway-style manual tiling layout, available as an alternative to the active `dwindle` layout.
+- **split-monitor-workspaces** — per-monitor independent workspace numbering.
 
 ## Screenshots
 
@@ -78,17 +78,17 @@ and opened in Swash for annotation.
 
 | Shortcut | Action |
 |---|---|
-| `SUPER + G` | Remove gaps between windows |
-| `SUPER + SHIFT + G` | Restore default CachyOS gaps |
+| `SUPER + G` | Remove gaps between windows (`gaps_out 0`, `gaps_in 0`) |
+| `SUPER + SHIFT + G` | Restore default gaps (`gaps_out 4,0,0,0`, `gaps_in 4`) |
 
 ## Workspaces
 
 | Shortcut | Action |
 |---|---|
-| `SUPER + [1-9, 0]` | Switch to workspace 1–10 |
-| `SUPER + Ctrl + [1-9, 0]` | Move active window to workspace N **and follow it** |
-| `SUPER + Shift + [1-9, 0]` | Move active window to workspace N **silently** (you stay put) |
-| `SUPER + Ctrl + ←/→` | Move window to next/previous workspace and follow |
+| `SUPER + [1-6]` | Switch to workspace 1–6 (capped at 6 by design) |
+| `SUPER + Ctrl + [1-6]` | Move active window to workspace N **and follow it** |
+| `SUPER + Shift + [1-6]` | Move active window to workspace N **silently** (you stay put) |
+| `SUPER + Ctrl + ←/→` | Move window to previous (`←`) / next (`→`) workspace and follow |
 | `SUPER + . ` (period) | Scroll to next workspace |
 | `SUPER + ,` (comma) | Scroll to previous workspace |
 | `SUPER + scroll wheel` | Scroll through workspaces |

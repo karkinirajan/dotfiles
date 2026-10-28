@@ -4,6 +4,8 @@ Description=Watch focus lists and refresh nft sets
 [Path]
 PathModified=/home/kneeraazon/focus/block.list
 PathModified=/home/kneeraazon/focus/allow.list
+PathModified=/home/kneeraazon/dotfiles/06-tools/focus/block.list
+PathModified=/home/kneeraazon/dotfiles/06-tools/focus/allow.list
 
 [Install]
 WantedBy=multi-user.target

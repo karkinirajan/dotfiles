@@ -37,9 +37,9 @@ export PNPM_HOME="$HOME/.local/share/pnpm"
 typeset -U path PATH
 path=(
   "$HOME/.local/bin"
+  "$HOME/.kimi-code/bin"
   "$HOME/focus/scripts"
   "$PNPM_HOME"
-  "$PNPM_HOME/bin"
   "/usr/lib/ccache/bin"
   $path
 )
@@ -177,19 +177,6 @@ setopt HIST_REDUCE_BLANKS HIST_VERIFY
 setopt AUTO_CD AUTO_PUSHD PUSHD_IGNORE_DUPS PUSHD_SILENT
 setopt EXTENDED_GLOB NO_CASE_GLOB INTERACTIVE_COMMENTS
 
-# ─── Gruvbox Dark Hard palette ───────────────────────────────────────────────
-typeset -gA GRUVBOX
-GRUVBOX=(
-  bg0  "29;32;33"     bg1  "60;56;54"     bg2  "80;73;69"
-  fg   "235;219;178"  fg4  "168;153;132"  gray "146;131;116"
-  red    "204;36;29"   green  "152;151;26"  yellow "215;153;33"
-  blue   "69;133;136"  purple "177;98;134"  aqua   "104;157;106"
-  orange "214;93;14"
-  br_red    "251;73;52"   br_green  "184;187;38"  br_yellow "250;189;47"
-  br_blue   "131;165;152" br_purple "211;134;155" br_aqua   "142;192;124"
-  br_orange "254;128;25"
-)
-
 # ─── LS_COLORS / EZA_COLORS ──────────────────────────────────────────────────
 export LS_COLORS="\
 di=01;38;2;117;50;84:\
@@ -285,11 +272,12 @@ FX=(reset "\033[0m" bold "\033[1m" dim "\033[2m" italic "\033[3m" underline "\03
 
 typeset -gA CLR
 CLR=(
-  red     "\033[38;2;204;36;29m"   green   "\033[38;2;152;151;26m"
-  yellow  "\033[38;2;215;153;33m"  blue    "\033[38;2;69;133;136m"
-  purple  "\033[38;2;177;98;134m"  aqua    "\033[38;2;104;157;106m"
-  orange  "\033[38;2;214;93;14m"   gray    "\033[38;2;146;131;116m"
-  fg      "\033[38;2;235;219;178m"
+  red      "\033[38;2;204;36;29m"   green    "\033[38;2;152;151;26m"
+  br_green "\033[38;2;184;187;38m"
+  yellow   "\033[38;2;215;153;33m"  blue     "\033[38;2;69;133;136m"
+  purple   "\033[38;2;177;98;134m"  aqua     "\033[38;2;104;157;106m"
+  orange   "\033[38;2;214;93;14m"   gray     "\033[38;2;146;131;116m"
+  fg       "\033[38;2;235;219;178m"
 )
 R="${FX[reset]}"
 
@@ -418,7 +406,6 @@ command -v btop       >/dev/null 2>&1 && alias top='btop'
 command -v amdgpu_top >/dev/null 2>&1 && alias gpumon='amdgpu_top'
 
 # ─── Git ──────────────────────────────────────────────────────────────────────
-# ── Git ──────────────────────────────────────────────────────────────────────
 # These load after oh-my-zsh, so they deliberately override the git plugin.
 # Seven differ from the plugin's meaning — kept on purpose, listed here so the
 # divergence is intentional rather than accidental:
@@ -536,7 +523,7 @@ alias dmongo='docker run --name mongo-dev -p 27017:27017 -d mongo'
 alias pgconnect='docker exec -it pg-dev psql -U postgres'
 
 # ─── Editors / network ────────────────────────────────────────────────────────
-# alias c='code .'  # VS Code removed 2026-09-23
+command -v code >/dev/null 2>&1 && alias c='code .'
 alias n='nano'
 alias vim='nvim'
 alias v='nvim'
@@ -693,7 +680,6 @@ command -v dust       >/dev/null 2>&1 && alias du='dust'
 command -v procs      >/dev/null 2>&1 && alias ps='procs'
 command -v lazygit    >/dev/null 2>&1 && alias lg='lazygit'
 command -v lazydocker >/dev/null 2>&1 && alias ld='lazydocker'
-command -v btop       >/dev/null 2>&1 && alias top='btop'
 command -v pgcli      >/dev/null 2>&1 && alias pg='pgcli'
 command -v http       >/dev/null 2>&1 && alias rest='http'
 command -v yazi       >/dev/null 2>&1 && alias fm='yazi'
@@ -835,31 +821,33 @@ alias diff='diff --color=auto'
 alias grep='grep --color=auto'
 alias pgrep='pgrep -a'
 alias watch='watch -c'
-alias du='du -h'
 alias ping='ping -c 5'
 alias wget='wget -c'           # resume by default
 alias rsync='rsync -avz --progress'
-alias clip='xclip -selection clipboard'
+if command -v wl-copy >/dev/null 2>&1; then
+  alias clip='wl-copy'
+else
+  alias clip='xclip -selection clipboard'
+fi
 alias open='xdg-open'
-# wallpaper           interactive WallRizz picker over ~/.wallpapers
-# wallpaper <name>     preview (kitty graphics protocol, if available) and
-#                      apply a specific wallpaper by filename or path
+# wallpaper           open Noctalia's wallpaper panel
+# wallpaper <path>    set a specific wallpaper via Noctalia
 wallpaper() {
-  local dir="$HOME/.wallpapers"
   if [ $# -eq 0 ]; then
-    wallrizz -d "$dir"
+    noctalia msg panel-toggle wallpaper
     return
   fi
+  local dir="$HOME/Pictures"
   local target="$1"
   [ -f "$target" ] || target="$dir/$1"
   if [ ! -f "$target" ]; then
     echo "wallpaper: not found: $1 (looked in $dir)" >&2
     return 1
   fi
-  if [ -n "$KITTY_WINDOW_ID" ] && command -v kitten >/dev/null 2>&1; then
+  if [ -n "${KITTY_WINDOW_ID:-}" ] && command -v kitten >/dev/null 2>&1; then
     kitten icat "$target"
   fi
-  ~/.config/hypr/scripts/wallpaper.sh "$target"
+  noctalia msg wallpaper-set "$(readlink -f "$target")"
 }
 
 # quick git aliases not already defined by OMZ git plugin
@@ -884,12 +872,5 @@ elif [[ -s "$NVM_DIR/nvm.sh" ]]; then
   [[ -s "$NVM_DIR/bash_completion" ]] && source "$NVM_DIR/bash_completion"
 fi
 
-# kimi-code
-export PATH="$HOME/.kimi-code/bin:$PATH"
-
 # OpenClaw Completion
 [ -f "$HOME/.openclaw/completions/openclaw.zsh" ] && source "$HOME/.openclaw/completions/openclaw.zsh"
-
-
-# Added by Antigravity CLI installer
-export PATH="$HOME/.local/bin:$PATH"

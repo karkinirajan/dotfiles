@@ -1,10 +1,10 @@
 # Current System Summary
 
-**Snapshot:** 2026-10-27, Asia/Kathmandu (refreshed after Stremio installation)  
+**Snapshot:** 2026-10-28, Asia/Kathmandu (full repository audit & host reconciliation)  
 **Host:** CachyOS x86-64, user `kneeraazon`  
 **Purpose:** current host inventory and the ordered procedure to reproduce its configured development workstation from this repository.
 
-This file records the machine as it is, including enabled services, package versions, local defaults, and the remaining login refresh. It intentionally omits passwords, network addresses, disk UUIDs, serial numbers, and other machine-specific identifiers. Package versions are a point-in-time snapshot; use current CachyOS/Arch and AUR packages during a fresh setup.
+This file records the machine as it is, including enabled services, package versions, and local defaults. It intentionally omits passwords, network addresses, disk UUIDs, serial numbers, and other machine-specific identifiers. Package versions are a point-in-time snapshot; use current CachyOS/Arch and AUR packages during a fresh setup.
 
 ## At a glance
 
@@ -58,7 +58,7 @@ Only the primary `linux-cachyos` kernel package remains installed. The running k
 - `/etc/os-release`: CachyOS Linux, rolling release.
 - Active session: Hyprland `0.56.2`, Wayland; Noctalia Shell `5.4.0`.
 - Active login manager: `greetd` with `/usr/bin/noctalia-greeter-session`. SDDM remains installed but disabled and inactive.
-- Limine manages the CachyOS, LTS, real-time, and Snapper snapshot entries.
+- Limine exposes only `CachyOS → linux-cachyos`; Snapper snapshots remain available for rollback but are hidden from the boot menu.
 - Locale configuration: `en_US.UTF-8`, including `LC_TIME=en_US.UTF-8`. Timezone: `Asia/Kathmandu`; system clock sync is enabled.
 - Audio session: PipeWire, PipeWire Pulse, and WirePlumber.
 - Display server compatibility: Xwayland is installed for X11 applications.
@@ -77,9 +77,9 @@ Firefox is installed as an alternate browser. Vim and Neovim are installed. Othe
 
 ### Current session environment refresh
 
-The tracked Zsh config, tracked UWSM environment, XDG defaults, and systemd user-manager environment now select Brave. The already-running Hyprland process still has `BROWSER=firefox`, inherited before those changes. The user manager has `BROWSER=brave`, and new interactive Zsh shells export Brave.
+The tracked Zsh config, tracked UWSM environment, XDG defaults, running Hyprland session (`BROWSER=brave`), and systemd user-manager environment all select Brave.
 
-The account was also added to the `openrazer` group for the connected Razer Viper Mini. Existing processes and the running user service manager do not gain that new supplementary group until a fresh login. **One sign-out/sign-in is still needed** to refresh both Hyprland's inherited browser environment and the OpenRazer group. This session was left running to avoid closing the user's applications. After logging back in, check the browser environment and `systemctl --user status openrazer-daemon`.
+The account is in the `openrazer` supplementary group (`id` includes `953(openrazer)`) and the user unit `openrazer-daemon.service` is active for the connected Razer Viper Mini.
 
 ## Shell and language toolchains
 
@@ -88,12 +88,12 @@ The account was also added to the `openrazer` group for the connected Razer Vipe
 - `/usr/bin/zsh` is the login shell; Oh My Zsh and Starship are configured.
 - `~/.zshrc` is syntax-checked and integrates NVM from `/usr/share/nvm`.
 - Kitty, FZF, zoxide, Atuin, eza, bat, ripgrep, fd, lazygit, tmux, and other command-line tools are in the package lists.
-- `./install.sh status` reports 31 managed entries OK, 0 drift, 0 missing, and 0 errors. `git diff --check` and `zsh -n ~/.zshrc` pass.
+- `./install.sh status` reports all 32 managed entries in sync. `git diff --check` and `zsh -n ~/.zshrc` pass.
 
 ### Python
 
 - System Python: 3.14.8, managed by pacman.
-- uv: 0.13.5; uv-managed CPython 3.12.15 and 3.13.17.
+- uv: 0.13.6; uv-managed CPython 3.12.15 and 3.13.17.
 - User tools: Ruff, Pyright, mypy, pre-commit, IPython, HTTPie, and JupyterLab.
 - Add frameworks and database drivers to each project with `uv add`; no project framework is installed into the system Python.
 
@@ -144,7 +144,7 @@ UFW is enabled and active: default incoming deny, outgoing allow, routed traffic
 |---|---|
 | Proton VPN | Package installed; `proton.VPN.service` active; no VPN tunnel/interface in the active network connections. |
 | Mullvad | Package installed; daemon and early-boot blocker disabled/inactive. Its package hook had enabled them during installation; they were explicitly disabled afterward. |
-| OpenRazer | Razer Viper Mini connected. User was added to `openrazer`; enabled user unit is inactive until the next login refreshes group membership. |
+| OpenRazer | Razer Viper Mini connected. User is in `openrazer` group; user unit `openrazer-daemon.service` is enabled and active. |
 | AppArmor | `apparmor.d` profiles installed and kernel module reports loaded, but `aa-status` says the AppArmor filesystem is not mounted. Do not treat profile enforcement as active. |
 | Fail2ban | Installed, service not enabled. |
 | DNSCrypt/dnsmasq | Installed, services not enabled. DNS/network-manager configuration was left intact. |
@@ -153,7 +153,7 @@ UFW is enabled and active: default incoming deny, outgoing allow, routed traffic
 | SDDM | Installed, service disabled/inactive; greetd is the active greeter. |
 | Rootful Docker daemon | Not used. Docker operates as the rootless user service; the user is not in the `docker` group. |
 
-Other notable active services include NetworkManager, systemd-resolved, systemd-timesyncd, power-profiles-daemon (performance profile), Avahi, Ananicy-C++, bpftune, dmemcg-booster, and Limine/Snapper synchronization.
+Other notable active services include NetworkManager, systemd-resolved, systemd-timesyncd, power-profiles-daemon (performance profile), Avahi, Ananicy-C++, bpftune, and dmemcg-booster (`limine-snapper-sync.service` is intentionally disabled so Snapper snapshots stay out of the single-entry Limine boot menu).
 
 ## Dotfiles and package records
 
@@ -161,8 +161,7 @@ Other notable active services include NetworkManager, systemd-resolved, systemd-
 - Root README install instructions cover the desktop, system, font, CLI, and focus manifests. `01-system/cachyos/dev-stack.md` documents the optional developer profile; `05-ai/ollama/README.md` documents the AMD-specific Ollama configuration.
 - The desktop manifest reflects the active greetd/Noctalia greeter and the installed desktop applications. The system manifest records UFW, power management, snapshot packages, and installed-but-disabled optional security services.
 - The tracked MariaDB loopback configuration is `01-system/cachyos/mariadb-local.cnf`; the reproducible bundled-runtime Upwork package is `01-system/cachyos/aur/upwork/PKGBUILD`.
-- At snapshot time, pacman listed 1,713 installed packages: 324 explicitly installed and 78 foreign packages not found in enabled sync repositories. The complete explicit and foreign package/version snapshots are below.
-- The checkout has uncommitted local changes from the desktop, shell, system, and developer-profile work. It has not been committed or pushed.
+- At snapshot time, pacman listed 1,730 installed packages: 324 explicitly installed and 30 foreign packages not found in enabled sync repositories. The complete explicit and foreign package/version snapshots are below.
 
 ## Fresh setup order
 
@@ -279,7 +278,7 @@ Also verify that database and Ollama TCP listeners use loopback, XDG defaults ar
 
 ## Complete explicit package snapshot
 
-The following is the sorted live `pacman -Qe` output captured on 2026-10-27 after removing Google Cloud CLI, enabling the matching multilib repository, installing paru, and installing Stremio. It records explicitly installed package names and versions; dependency packages are omitted. The second list records packages not present in enabled sync repositories (`pacman -Qm`), including AUR build dependencies.
+The following is the sorted live `pacman -Qe` output captured on 2026-10-28. It records explicitly installed package names and versions; dependency packages are omitted. The second list records packages not present in enabled sync repositories (`pacman -Qm`).
 
 <details>
 <summary>Explicitly installed packages (pacman -Qe)</summary>
@@ -287,7 +286,7 @@ The following is the sorted live `pacman -Qe` output captured on 2026-10-27 afte
 ```text
 accountsservice 26.27.3-1.1
 act 0.2.89-1.1
-ai-usagebar-bin 1.44.0-1
+ai-usagebar-bin 1.45.0-1
 alacritty 0.17.0-1.2
 alsa-firmware 1.2.4-4
 alsa-plugins 1:1.2.12-6.1
@@ -296,8 +295,8 @@ amd-ucode 1:20261019-1
 amdgpu_top 0.11.5-1.1
 ansible 14.5.0-1
 antigravity 2.26.0-1
-antigravity-cli 1.4.8_5447777392656384-1
-antigravity-ide 2.5.5-2
+antigravity-cli 1.4.9_4962164969177088-1
+antigravity-ide 2.6.0-1
 anytype-bin 0.57.4-1
 apparmor.d 0.4915.0-1
 ark 26.08.2-1.1
@@ -333,7 +332,7 @@ cachyos-mirrorlist 27-1
 cachyos-packageinstaller 1.6.2-1
 cachyos-plymouth-bootanimation 2-4
 cachyos-plymouth-theme 1-2
-cachyos-rate-mirrors 24-1
+cachyos-rate-mirrors 25-1
 cachyos-settings 1:1.4.1-1
 cachyos-snapper-support 1.0.2-1
 cachyos-v3-mirrorlist 27-1
@@ -342,7 +341,7 @@ cachyos-wallpapers r23.964263e-1
 cachyos-zsh-config 1.0.3-1
 cantarell-fonts 1:0.311-1
 chwd 1.25.0-1
-claude-code 2.1.310-1
+claude-code 2.1.311-1
 claude-desktop 3.6556.2-1
 cliphist 1:0.7.0-2.1
 copyq 16.0.0-1.1
@@ -358,7 +357,7 @@ discord 1:1.0.167-1
 dmemcg-booster 0.1.3-1
 dmidecode 3.7-1
 dmraid 1.0.0.rc16.3-15.1
-dnscrypt-proxy 2.1.19-1.1
+dnscrypt-proxy 2.1.20-1.1
 dnsmasq 2.93-1.1
 docker 1:29.9.2-1.1
 docker-buildx 0.38.1-1.1
@@ -379,7 +378,7 @@ fail2ban 1.1.1-1
 fastfetch 2.70.0-1.1
 ffmpegthumbnailer 2.3.1-1.1
 ffmpegthumbs 26.08.2-1.1
-firefox 158.0.1-1.1
+firefox 159.0-1.1
 flameshot 14.0.0-1.1
 fsarchiver 0.8.9-1.1
 gimp 3.2.6-2.1
@@ -457,7 +456,7 @@ mission-center 1.2.0-1.1
 mkinitcpio 42.2-1
 modemmanager 1.24.2-2.1
 mongodb-bin 8.3.9-1
-mongodb-compass-bin 1.53.0-1
+mongodb-compass-bin 1.53.2-1
 mpv 1:0.41.0-6.1
 mtools 1:4.0.49-1.1
 mullvad-vpn-bin 2026.5-1
@@ -480,14 +479,14 @@ noto-fonts-emoji 1:2.057-1
 nss-mdns 0.15.1-3.1
 nvm 0.40.8-1
 nvtop 3.3.2-1.1
-obs-studio 32.2.2-1.1
+obs-studio 33.0.0-1.1
 obsidian 1.14.5-1
 okular 26.08.2-1.1
 ollama 0.40.11-1.1
 ollama-rocm 0.40.11-1.1
 ollama-vulkan 0.40.11-1.1
 onlyoffice-bin 10.0.0-1
-openai-codex 0.164.0-1.1
+openai-codex 0.165.0-1.1
 opencl-mesa 3:26.2.5-1
 opendesktop-fonts 1.4.2-7
 openrazer-daemon 3.12.4-1
@@ -577,12 +576,12 @@ ttf-roboto 3.016-1
 ttf-weather-icons 2.0.12-1
 ufw 0.36.2-7
 ufw-extras 1.3.0-1
-unrar 1:7.3.1-1.1
+unrar 1:7.3.2-1.1
 unzip 6.0-23.1
 upower 1.91.5-1.1
 upwork 5.8.0.41-6
 usb_modeswitch 2.6.2.20251207-1.1
-usbutils 019-1.1
+usbutils 020-1.1
 uv 0.13.6-1.1
 valkey 9.1.2-1.1
 vim 9.2.1178-1.1
@@ -616,16 +615,16 @@ zoxide 0.10.0-1.1
 <summary>Foreign packages (pacman -Qm)</summary>
 
 ```text
-ai-usagebar-bin 1.44.0-1
+ai-usagebar-bin 1.45.0-1
 antigravity 2.26.0-1
-antigravity-cli 1.4.8_5447777392656384-1
-antigravity-ide 2.5.5-2
+antigravity-cli 1.4.9_4962164969177088-1
+antigravity-ide 2.6.0-1
 anytype-bin 0.57.4-1
 appimagelauncher 3.0.0_beta_3-1
 docker-rootless-extras 29.9.2-1
 logseq-desktop-bin 0.10.15-1
 mongodb-bin 8.3.9-1
-mongodb-compass-bin 1.53.0-1
+mongodb-compass-bin 1.53.2-1
 mongosh-bin 2.14.0-1
 mullvad-vpn-bin 2026.5-1
 mullvad-vpn-daemon-bin 2026.5-1
@@ -649,9 +648,9 @@ zoom 7.2.1-1
 ```
 </details>
 
-## Claude Code update (2026-10-27)
+## Claude Code update (2026-10-28)
 
-- Claude Code `2.1.310` and Claude Desktop are installed. Its global configuration, agents, and skills are linked from this repository; 24 skills were already present. Added `token-efficient-workflow` as an on-demand skill. Restart Claude Code to refresh skill discovery, then invoke `/token-efficient-workflow` or let it trigger for relevant work.
+- Claude Code `2.1.311` and Claude Desktop are installed. Its global configuration, agents, and skills are linked from this repository; 25 skills are present including `token-efficient-workflow`. Restart Claude Code to refresh skill discovery, then invoke `/token-efficient-workflow` or let it trigger for relevant work.
 - Installed user-level `ccusage` `20.0.45` with pnpm. It reports local Claude Code usage with `ccusage claude daily` and `ccusage claude session`; it does not change usage by itself.
 - Added an optional package set for structural search, diffs, shell/workflow validation, benchmarking, and file watching. These eight pacman packages are documented but not installed: `ast-grep`, `actionlint`, `difftastic`, `git-delta`, `hyperfine`, `shellcheck`, `shfmt`, and `watchexec`. The install command is in `05-ai/claude-code/README.md`.
 - Claude Code skills validated successfully with `claude plugin validate --strict`. `claude doctor` reports no installation issues.

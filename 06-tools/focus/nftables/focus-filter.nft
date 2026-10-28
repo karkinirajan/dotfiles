@@ -1,0 +1,35 @@
+#!/usr/sbin/nft -f
+# Focus firewall table and IP sets (/etc/nftables.d/focus-filter.nft)
+# Provides the inet filter sets populated by focus-refresh.
+
+table inet filter {
+    set allowed_ips {
+        type ipv4_addr
+        flags interval
+    }
+
+    set blocked_ips {
+        type ipv4_addr
+        flags interval
+    }
+
+    set allowed_ips6 {
+        type ipv6_addr
+        flags interval
+    }
+
+    set blocked_ips6 {
+        type ipv6_addr
+        flags interval
+    }
+
+    chain output {
+        type filter hook output priority 0; policy accept;
+        ip daddr 127.0.0.0/8 accept
+        ip6 daddr ::1 accept
+        ip daddr @allowed_ips accept
+        ip6 daddr @allowed_ips6 accept
+        ip daddr @blocked_ips reject with icmpx type admin-prohibited
+        ip6 daddr @blocked_ips6 reject with icmpx type admin-prohibited
+    }
+}

@@ -1,8 +1,9 @@
 #!/usr/bin/env python3
-"""Reads results.json, e2e_results.json, phase2_results.json and
-tune_results.json (whichever exist) and produces the scored results table
-for REPORT.md. Every number here is read straight from those files — this
-script computes gates/ranking, it never fabricates a measurement.
+"""Reads results.jsonl (or results.json), e2e_results.jsonl (or e2e_results.json),
+phase2_results.json and tune_results.json (whichever exist) and produces the
+scored results table for REPORT.md. Every number here is read straight from
+those files — this script computes gates/ranking, it never fabricates a
+measurement.
 """
 
 from __future__ import annotations
@@ -16,7 +17,7 @@ from typing import Any
 logging.basicConfig(level=logging.INFO, format="%(asctime)s %(levelname)-7s %(message)s", datefmt="%H:%M:%S")
 log = logging.getLogger("report")
 
-SETUP_DIR = Path.home() / "ollama-setup"
+SETUP_DIR = Path(__file__).resolve().parent.parent
 
 GATE_DECODE = 10.0
 GATE_TOOL = 0.8
@@ -34,15 +35,52 @@ def load(path: Path) -> Any:
         return None
 
 
-def main() -> None:
-    bench = load(SETUP_DIR / "results.json") or {}
-    e2e = load(SETUP_DIR / "e2e_results.json") or {}
+def load_jsonl(path: Path) -> list[dict[str, Any]]:
+    if not path.exists():
+        return []
+    rows: list[dict[str, Any]] = []
+    for line in path.read_text().splitlines():
+        line = line.strip()
+        if not line:
+            continue
+        try:
+            rows.append(json.loads(line))
+        except json.JSONDecodeError as exc:
+            log.warning("skipping malformed line in %s: %s", path, exc)
+    return rows
 
-    # bench.py nests results under a label; flatten to {model: data} using
-    # the most recent label found (last key wins if run more than once).
+
+def main() -> None:
     bench_flat: dict[str, dict] = {}
-    for _label, models in bench.items():
-        bench_flat.update(models)
+    bench_json = load(SETUP_DIR / "results.json")
+    if isinstance(bench_json, dict):
+        for _label, models in bench_json.items():
+            if isinstance(models, dict):
+                bench_flat.update(models)
+    for row in load_jsonl(SETUP_DIR / "results.jsonl"):
+        m = row.get("model")
+        if not m:
+            continue
+        entry = bench_flat.setdefault(m, {"short_runs": [], "long_runs": []})
+        if not row.get("ok", True):
+            entry["crashed"] = True
+        if row.get("size") == "M" and row.get("ok"):
+            eval_dur = row.get("eval_duration_s", 0.0)
+            if eval_dur > 0:
+                entry["decode_tok_s_18k"] = row.get("eval_count", 0) / eval_dur
+        if row.get("size") == "L":
+            entry.setdefault("long_runs", []).append(row)
+        else:
+            entry.setdefault("short_runs", []).append(row)
+
+    e2e: dict[str, list[dict[str, Any]]] = {}
+    e2e_json = load(SETUP_DIR / "e2e_results.json")
+    if isinstance(e2e_json, dict):
+        e2e.update(e2e_json)
+    for row in load_jsonl(SETUP_DIR / "e2e_results.jsonl"):
+        m = row.get("model")
+        if m:
+            e2e.setdefault(m, []).append(row)
 
     models = sorted(set(bench_flat) | set(e2e))
     rows = []

@@ -1,4 +1,4 @@
-# focus — system-wide distraction blocker
+# 06.1 · focus — system-wide distraction blocker
 
 DNS + firewall blocking for CachyOS/Arch, with scheduling and a lock mode.
 Blocking is enforced at the OS level (dnsmasq + nftables), so it applies to
@@ -8,18 +8,19 @@ every browser and app — not just one extension.
 
 ```
        ┌─────────────┐
-apps ─▶│ /etc/resolv │──▶ 127.0.0.1 ──▶ dnsmasq ──▶ address=/blocked/127.0.0.1
+apps ─▶│ /etc/resolv │──▶ 127.0.0.1 ──▶ dnsmasq ──▶ address=/blocked/127.0.0.1 + ::1
        │    .conf    │                     │
        └─────────────┘                     └──────▶ upstream 1.1.1.1 / 9.9.9.9
                                                     (for everything else)
               nftables inet filter output chain:
-                  ip daddr 127.0.0.1   accept
-                  ip daddr @allowed_ips accept
-                  ip daddr @blocked_ips drop     ← catches DNS-caching apps
+                  ip daddr 127.0.0.0/8   accept
+                  ip daddr @allowed_ips  accept
+                  ip daddr @blocked_ips  reject   ← catches DNS-caching apps
 ```
 
 - **`block.list`** — domains to block. dnsmasq's `address=/domain/` covers the
-  apex *and* all subdomains, so `youtube.com` also blocks `www.`/`m.youtube.com`.
+  apex *and* all subdomains (both IPv4 `A` and IPv6 `AAAA`), so `youtube.com`
+  also blocks `www.`/`m.youtube.com`.
 - **`allow.list`** — **not** an "only these are allowed" list. It exempts those
   domains' IPs from *firewall*-level blocking, so a shared CDN address can't
   take down something you need. A domain is only ever blocked by `block.list`.
@@ -32,16 +33,24 @@ Install the listed dependencies first:
 sudo pacman -S --needed bind dnsmasq nftables
 ```
 
-This only installs the programs. The steps below change NetworkManager's DNS
-behavior and route system DNS through local dnsmasq. Keep a rollback ready and
-verify ordinary name resolution before enabling the focus services.
+User-level files (`~/focus/{allow.list,block.list,schedule.conf}` and
+`~/focus/scripts/{focus,focus-page,focus-refresh}`) are symlinked automatically
+by `./install.sh` at the repo root.
+
+The root-owned system configuration below changes NetworkManager's DNS behavior
+and routes system DNS through local dnsmasq when focus mode is turned on. Keep
+a rollback ready and verify ordinary name resolution before enabling the focus
+services:
 
 ```bash
-cp -r scripts ~/focus/
-cp allow.list block.list schedule.conf ~/focus/
-sudo cp systemd/*  /etc/systemd/system/
-sudo cp networkmanager/90-focus-default-dns.conf /etc/NetworkManager/conf.d/
-sudo cp dnsmasq/dnsmasq.conf /etc/dnsmasq.conf
+./install.sh
+
+sudo install -d -m 755 /etc/dnsmasq.d /etc/nftables.d
+sudo cp 06-tools/focus/nftables/focus-filter.nft /etc/nftables.d/focus-filter.nft
+sudo nft -f /etc/nftables.d/focus-filter.nft
+sudo cp 06-tools/focus/systemd/*  /etc/systemd/system/
+sudo cp 06-tools/focus/networkmanager/90-focus-default-dns.conf /etc/NetworkManager/conf.d/
+sudo cp 06-tools/focus/dnsmasq/dnsmasq.conf /etc/dnsmasq.conf
 
 # Make `focus` a real global command — resolvable from any shell, systemd
 # unit, GUI launcher, or non-interactive context, not just an interactive
@@ -55,7 +64,7 @@ sudo systemctl enable --now focus-schedule-on.timer focus-schedule-off.timer
 ```
 
 The scripts hardcode `/home/kneeraazon/...`. Adjust those paths (and the
-`ExecStart=` lines in `systemd/`) before using this on another machine.
+`ExecStart=` lines in `06-tools/focus/systemd/`) before using this on another machine.
 
 ## Usage
 
@@ -75,8 +84,9 @@ focus schedule set 09:00 18:00
 
 `/etc/resolv.conf` must be a **real file**, not NetworkManager's symlink into
 `/run` — see the note in `networkmanager/90-focus-default-dns.conf`. Also
-requires `dnsmasq`, `nftables` with an `inet filter` table containing
-`allowed_ips` / `blocked_ips` sets, and `dig` (`bind-tools`).
+requires `dnsmasq`, `nftables` with the `inet filter` table defined in
+`nftables/focus-filter.nft` (`allowed_ips` / `blocked_ips` / `allowed_ips6` /
+`blocked_ips6` sets), and `dig` (`bind`).
 
 ## Known limitation: DNS-over-HTTPS
 

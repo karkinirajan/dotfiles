@@ -1,6 +1,6 @@
 # Zed
 
-`zed-settings.json` → symlink or copy to `~/.config/zed/settings.json`.
+`settings.json` → linked to `~/.config/zed/settings.json` by `./install.sh` via `manifest.conf`.
 
 ## Extensions (manual install — Zed has no CLI extension installer)
 
@@ -20,7 +20,7 @@ once the matching extension is installed via Zed's own extension panel
 | Markdown Preview | Better markdown editing/preview than the default |
 
 Without these, the `languages.*.language_servers` entries in
-`zed-settings.json` silently no-op — Zed doesn't error, it just won't have
+`settings.json` silently no-op — Zed doesn't error, it just won't have
 the LSP feature available.
 
 ## What was fixed here (2026-08-21)

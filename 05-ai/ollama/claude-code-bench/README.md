@@ -42,7 +42,7 @@ not currently used).
 - `root-steps/` — the root-run setup scripts, in order, including the
   `02-backend-switch-helper.sh` script with a known, since-fixed bug (kept
   as-is for the audit trail — see `ollama-claude-setup.md` §7).
-- `rocm_crashtest_gemma4-12b.json` — raw output of the ROCm large-prompt
+- `results/rocm_crashtest_gemma4-12b.json` — raw output of the ROCm large-prompt
   stress test referenced above.
 - `scripts/` — Phase 6/7 support (tuning, report generation, zsh install).
   Written, not yet exercised against real results.
