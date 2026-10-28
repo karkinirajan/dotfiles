@@ -1066,6 +1066,15 @@ entries:
     target: 26.2.2
     verify: dbeaver --version
     expect: 26.2.2
+  cursor:
+    name: Cursor (AUR cursor-bin)
+    package: cursor-bin
+    source: aur
+    cachyos: 3.27.14-1
+    aur: 3.28.5-1
+    target: 3.28.5
+    verify: cursor --version
+    expect: 3.28.5
 constraints:
 - id: hyprland-hold
   text: Hyprland stays on the CachyOS-delivered 0.56.2 until a Lua config is validated; 0.57.0 ignores hyprland.conf

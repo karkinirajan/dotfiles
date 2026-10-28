@@ -19,7 +19,9 @@ export PAGER="less"
 export LESS="-R --use-color -Dd+r -Du+b"
 export MANPAGER="nvim +Man!"
 
-# AMD RDNA2 (RX 6700 XT) — ROCm compatibility mode
+# AMD RDNA2 (RX 6700 XT, gfx1031) — ROCm compatibility mode. Required by the PyTorch
+# pip wheels; Ollama's packaged ROCm build runs native gfx1031 without it. Exported
+# globally on purpose (frequent PyTorch work); it makes rocminfo report gfx1030.
 export HSA_OVERRIDE_GFX_VERSION=10.3.0
 
 # Ollama — local LLM inference
@@ -40,6 +42,7 @@ path=(
   "$HOME/.kimi-code/bin"
   "$HOME/focus/scripts"
   "$PNPM_HOME"
+  "$PNPM_HOME/bin"   # pnpm 12 puts global binaries here
   "/usr/lib/ccache/bin"
   $path
 )
@@ -53,7 +56,6 @@ path=(
 # No OMZ theme — starship owns the prompt.
 ZSH_THEME=""
 DISABLE_AUTO_UPDATE=true
-ZSH_AUTOSUGGEST_USE_ASYNC=true
 
 # ── history-substring-search must be configured before OMZ loads ───────────────
 HISTORY_SUBSTRING_SEARCH_HIGHLIGHT_FOUND='bg=239,fg=142,bold'
@@ -92,7 +94,6 @@ if [[ -r "$ZSH/oh-my-zsh.sh" ]]; then
 elif [[ -o interactive ]]; then
   print -u2 -- "Oh My Zsh is not installed; loading the shell without its plugins. See 03-terminal/README.md."
 fi
-[[ -f "$HOME/.fzf.zsh" ]] && source "$HOME/.fzf.zsh"
 
 # ── history-substring-search keybindings (after OMZ, avoids override) ─────────
 bindkey '^[[A' history-substring-search-up
@@ -729,7 +730,7 @@ fi
 psql() {
   local psql_bin
   psql_bin="$(command -v psql)" || { _err "PostgreSQL client (psql) is not installed"; return 127; }
-  kitty --config "$HOME/.config/kitty/psql-mode.conf" -- "$psql_bin" "$@"
+  kitty --title psql --config "$HOME/.config/kitty/psql-mode.conf" -- "$psql_bin" "$@"
 }
 
 # ─── Power functions ──────────────────────────────────────────────────────────
@@ -737,7 +738,7 @@ psql() {
 # fzf-powered process killer
 fkill() {
   local pid
-  pid=$(ps aux | sed 1d | fzf -m --header="Select process(es) to kill" \
+  pid=$(command ps aux | sed 1d | fzf -m --header="Select process(es) to kill" \
     --preview 'echo {}' --preview-window=down:2:wrap | awk '{print $2}')
   [[ -n "$pid" ]] && echo "$pid" | xargs kill -"${1:-9}" && echo "Killed: $pid"
 }
@@ -810,7 +811,7 @@ tmp() {
 path-show() { echo "$PATH" | tr ':' '\n' | nl; }
 
 # show disk usage of current dir sorted by size
-duh() { du -h --max-depth="${1:-1}" . | sort -h; }
+duh() { command du -h --max-depth="${1:-1}" . | sort -h; }
 
 # colorized env with fzf filter
 envf() { env | sort | fzf --preview 'echo {}'; }
