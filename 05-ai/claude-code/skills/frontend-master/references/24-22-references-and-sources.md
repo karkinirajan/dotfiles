@@ -31,4 +31,3 @@ Standards and general references:
 - OWASP Top 10: https://owasp.org/www-project-top-ten/
 
 ---
-

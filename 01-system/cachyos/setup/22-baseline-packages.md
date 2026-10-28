@@ -11,7 +11,6 @@ sources: []
 
 # 22 Baseline Package Installation
 
-
 The baseline and optional profiles are managed in these package manifests:
 
 - `01-system/cachyos/packages/desktop.txt`: Hyprland, Noctalia, greetd, portals, and desktop applications.

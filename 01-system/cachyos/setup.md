@@ -1,7 +1,7 @@
 ---
 title: "CachyOS setup guide (moved)"
 topic: setup-guide-moved
-last_verified: 2026-10-06
+last_verified: 2026-10-29
 status: archived
 ---
 

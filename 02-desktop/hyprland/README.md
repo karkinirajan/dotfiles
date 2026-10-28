@@ -271,6 +271,7 @@ with no touchscreen. <!-- UNVERIFIED: the claim that every hyprexpo fork is brok
 **hy3 and split-monitor-workspaces are optional and not part of the baseline
 plugin set**, since activating either changes fundamental interaction
 behavior:
+
 - hy3 would be a full alternative layout engine: `general:layout` is still
   `dwindle` in `variables.conf`. Set it to `hy3` to try it.
 - split-monitor-workspaces would need every workspace keybind in `keybinds.conf`

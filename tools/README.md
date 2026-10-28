@@ -16,6 +16,7 @@ python tools/check_versions.py     # markers vs versions.yaml, constraints (add 
 python tools/check_configs.py      # TOML, JSON, YAML, units, manifest.conf, package lists
 python tools/check_style.py        # no em dashes, frontmatter, fenced languages
 python tools/gen_index.py --check  # INDEX.md and setup/README.md are current
+python tools/check_migration.py    # every path tracked on origin/master resolves or is in REMOVALS.md
 bash tools/smoke_install.sh        # install.sh against a throwaway HOME
 ```
 
@@ -28,6 +29,7 @@ bash tools/smoke_install.sh        # install.sh against a throwaway HOME
 | `check_configs.py` | Parses every shipped config and validates `manifest.conf` and package lists |
 | `check_style.py` | Repo style rules (em dashes, frontmatter, code fence languages) |
 | `pkg_lookup.py` | Resolves package names against Arch, CachyOS and AUR; run with `--lists` on the package files |
+| `check_migration.py` | Confirms the migration map: each path on the base branch still exists or is listed in `docs/modernization/REMOVALS.md` |
 | `smoke_install.sh` | Runs `install.sh` in a temporary `HOME` and asserts it links, is idempotent and backs up real files |
 
 `pkg_lookup.py` and `check_versions.py --live` need network access. Everything else is offline.

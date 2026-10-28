@@ -34,9 +34,11 @@ Kept by hand in step with `~/.config/hypr/config/keybinds.conf` (there is no gen
 | `SUPER + H` | Toggle the Hyprspace workspace overview (GNOME/macOS Mission Control-style) |
 
 Also installed and loaded, with no dedicated keybind by design:
+
 - **dynamic-cursors**: cursor tilts with movement, shake-to-find (mouse-driven, no keybind needed).
 
 Optional plugins documented in `plugins.conf` (not installed in the baseline):
+
 - **hy3**: i3/sway-style manual tiling layout, available as an alternative to the active `dwindle` layout.
 - **split-monitor-workspaces**: per-monitor independent workspace numbering.
 
@@ -96,7 +98,7 @@ and opened in Swash for annotation.
 | `SUPER + Ctrl + [1-6]` | Move active window to workspace N **and follow it** |
 | `SUPER + Shift + [1-6]` | Move active window to workspace N **silently** (you stay put) |
 | `SUPER + Ctrl + ←/→` | Move window to previous (`←`) / next (`→`) workspace and follow |
-| `SUPER + . ` (period) | Scroll to next workspace |
+| `SUPER + .` (period) | Scroll to next workspace |
 | `SUPER + ,` (comma) | Scroll to previous workspace |
 | `SUPER + scroll wheel` | Scroll through workspaces |
 | `SUPER + /` (slash) | Jump to previous (last-used) workspace |
@@ -126,6 +128,7 @@ and opened in Swash for annotation.
 ---
 
 ### Quick tips
+
 - Full reference: `~/.config/hypr/config/keybinds.conf` (every bind has a `bindd` description, run `hyprctl binds` in a terminal to list them all live, including descriptions).
 - If a shortcut ever doesn't fire, check `bindd = $mainMod ..., description, dispatcher, args` syntax (hyprlang, Hyprland 0.56.x): the 3rd field is the human description, 4th is the actual dispatcher. After the Lua migration the same binds become `hl.bind("SUPER + Q", hl.dsp..., { description = "..." })` (see `lua-migration.md`). Also check for a duplicate bind on the same key (`hyprctl binds -j` shows exactly what's actually registered), a later `bindd` on the same key silently wins over an earlier one.
 - `workspace_back_and_forth = 1` is on, so pressing the same workspace number twice toggles back to the previous one.

@@ -73,6 +73,7 @@ Those are the strongest candidates for a real note, something hit three times in
 three sessions is a fact about the work, not an incident.
 
 Rules:
+
 - **Organize into topical subfolders, never a flat dump**: file notes under a
   domain folder (`Notes/rust/`, `Notes/deploy/`, …); create new domain folders
   freely when none fits (3+ related notes deserve their own folder). Folder-scoped

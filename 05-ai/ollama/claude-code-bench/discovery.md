@@ -4,6 +4,7 @@
 > **Dated record (2026-09-23).** Measured with kernel 7.2.6-1-cachyos, Ollama 0.34.3, Mesa 26.2.3, ROCm 7.2.4 and Claude Code 2.1.280. The primary host now runs kernel 7.3.0-4, Ollama 0.40.11, Mesa 26.2.5 and Claude Code 2.1.311. Package tables, token rates, defaults and "not documented" statements here describe that day; re-measure before relying on them. Known corrections: `CLAUDE_CODE_AUTO_COMPACT_WINDOW` is now documented (valid range 100000 to 1000000, so 65536 is below its minimum), and `OLLAMA_VULKAN` is on by default when the Vulkan backend is installed.
 
 ## Versions
+
 ```text
 7.2.6-1-cachyos
 SHELL=/bin/zsh
@@ -13,10 +14,12 @@ ollama version is 0.34.3
 ```
 
 ## ollama version gate (needs >= 0.30.5 for gemma4:12b per brief)
+
 detected: 0.34.3
 OK, >= 0.30.5
 
 ## Packages
+
 ```text
 hip-runtime-amd 7.2.4-1.1
 hipblas 7.2.4-1.1
@@ -44,12 +47,14 @@ vulkan-tools 1.4.357.0-1.1
 ```
 
 ## ROCm / HIP version specifically
+
 ```text
 rocm-core 7.2.4-1.1
 hip-runtime-amd 7.2.4-1.1
 ```
 
 ## systemctl status ollama
+
 ```text
 ● ollama.service - Ollama Service
      Loaded: loaded (/usr/lib/systemd/system/ollama.service; enabled; preset: disabled)
@@ -77,6 +82,7 @@ Sep 23 13:46:26 cachyos ollama[67704]: [GIN] 2026/09/23 - 13:46:26 | 200 |      
 ```
 
 ## systemctl cat ollama (all existing drop-ins)
+
 ```text
 # /usr/lib/systemd/system/ollama.service
 [Unit]
@@ -142,6 +148,7 @@ Environment="OLLAMA_KEEP_ALIVE=30m"
 ```
 
 ## journalctl GPU-relevant lines (this boot)
+
 ```text
 Sep 23 12:44:04 cachyos ollama[1016]: time=2026-09-23T12:44:04.058+05:45 level=INFO source=routes.go:1940 msg="server config" env="map[CUDA_VISIBLE_DEVICES: GGML_VK_VISIBLE_DEVICES: GPU_DEVICE_ORDINAL: HIP_VISIBLE_DEVICES: HSA_OVERRIDE_GFX_VERSION:10.3.0 HTTPS_PROXY: HTTP_PROXY: LLAMA_ARG_FIT: LLAMA_ARG_FIT_TARGET: NO_PROXY: OLLAMA_CONTEXT_LENGTH:65536 OLLAMA_CREATE_REMOTE:false OLLAMA_DEBUG:INFO OLLAMA_DEBUG_LOG_REQUESTS:false OLLAMA_EDITOR: OLLAMA_FLASH_ATTENTION:true OLLAMA_GO_TEMPLATE:true OLLAMA_GPU_OVERHEAD:0 OLLAMA_HOST:http://127.0.0.1:11434 OLLAMA_IGPU_ENABLE: OLLAMA_KEEP_ALIVE:5m0s OLLAMA_KV_CACHE_TYPE:q8_0 OLLAMA_LLM_LIBRARY: OLLAMA_LOAD_TIMEOUT:5m0s OLLAMA_MAX_LOADED_MODELS:0 OLLAMA_MAX_QUEUE:512 OLLAMA_MAX_TRANSFER_STREAMS:4 OLLAMA_MODELS:/var/lib/ollama OLLAMA_NOHISTORY:false OLLAMA_NOPRUNE:false OLLAMA_NO_CLOUD:false OLLAMA_NUM_PARALLEL:1 OLLAMA_ORIGINS:[http://localhost https://localhost http://localhost:* https://localhost:* http://127.0.0.1 https://127.0.0.1 http://127.0.0.1:* https://127.0.0.1:* http://0.0.0.0 https://0.0.0.0 http://0.0.0.0:* https://0.0.0.0:* app://* file://* tauri://* vscode-webview://* vscode-file://*] OLLAMA_REMOTES:[ollama.com] OLLAMA_SCHED_SPREAD:false OLLAMA_VULKAN:true ROCR_VISIBLE_DEVICES: http_proxy: https_proxy: no_proxy:]"
 Sep 23 12:44:04 cachyos ollama[1016]: time=2026-09-23T12:44:04.060+05:45 level=WARN source=runner.go:722 msg="user overrode visible devices" HSA_OVERRIDE_GFX_VERSION=10.3.0
@@ -165,12 +172,14 @@ Sep 23 13:21:04 cachyos ollama[67704]: time=2026-09-23T13:21:04.992+05:45 level=
 ```
 
 ## VRAM (idle, desktop baseline)
+
 ```text
 /sys/class/drm/card1/device/mem_info_vram_total: 12868124672
 /sys/class/drm/card1/device/mem_info_vram_used: 1091891200
 ```
 
 ## GPU power sensor (corrected: nested under hwmon2)
+
 ```text
 path: /sys/class/drm/card1/device/hwmon/hwmon2/power1_average
 label: PPT
@@ -179,6 +188,7 @@ cap: 211000000 microwatts
 ```
 
 ## free -g / df -h models dir
+
 ```text
                total        used        free      shared  buff/cache   available
 Mem:              31           9          11           0          12          21
@@ -188,6 +198,7 @@ Filesystem      Size  Used Avail Use% Mounted on
 ```
 
 ## ollama list / ollama ps
+
 ```text
 NAME               ID              SIZE     MODIFIED      
 qwen3-coder:30b    06c1097efce0    18 GB    5 minutes ago    
@@ -195,25 +206,27 @@ NAME    ID    SIZE    PROCESSOR    CONTEXT    UNTIL
 ```
 
 ## vulkaninfo --summary
+
 ```text
 Devices:
 ========
 GPU0:
-	apiVersion         = 1.4.354
-	driverVersion      = 26.2.3
-	vendorID           = 0x1002
-	deviceID           = 0x73df
-	deviceType         = PHYSICAL_DEVICE_TYPE_DISCRETE_GPU
-	deviceName         = AMD Radeon RX 6700 XT (RADV NAVI22)
-	driverID           = DRIVER_ID_MESA_RADV
-	driverName         = radv
-	driverInfo         = Mesa 26.2.3-arch3.1
-	conformanceVersion = 1.4.5.3
-	deviceUUID         = 00000000-0700-0000-0000-000000000000
-	driverUUID         = 414d442d-4d45-5341-2d44-525600000000
+ apiVersion         = 1.4.354
+ driverVersion      = 26.2.3
+ vendorID           = 0x1002
+ deviceID           = 0x73df
+ deviceType         = PHYSICAL_DEVICE_TYPE_DISCRETE_GPU
+ deviceName         = AMD Radeon RX 6700 XT (RADV NAVI22)
+ driverID           = DRIVER_ID_MESA_RADV
+ driverName         = radv
+ driverInfo         = Mesa 26.2.3-arch3.1
+ conformanceVersion = 1.4.5.3
+ deviceUUID         = 00000000-0700-0000-0000-000000000000
+ driverUUID         = 414d442d-4d45-5341-2d44-525600000000
 ```
 
 ## rocminfo gfx
+
 ```text
   Name:                    gfx1030                            
       Name:                    amdgcn-amd-amdhsa--gfx1030         
@@ -221,11 +234,13 @@ GPU0:
 ```
 
 ## ollama user groups + getcap
+
 ```text
 ollama : ollama render video
 ```
 
 ## Existing ANTHROPIC_*/ollama lines in shell rc + settings.json
+
 ```text
 ~/.zshrc real target: /home/kneeraazon/dotfiles/terminal/zsh/.zshrc
 /home/kneeraazon/.zshrc:22:export HSA_OVERRIDE_GFX_VERSION=10.3.0
@@ -237,6 +252,7 @@ settings.json env block: {} (empty)
 ```
 
 ## Compositor in use
+
 ```text
 XDG_CURRENT_DESKTOP=Hyprland
 XDG_SESSION_TYPE=wayland
@@ -247,6 +263,7 @@ kwin_wayland process: not found
 ```
 
 ## ollama launch --help / ollama launch claude --help
+
 ```text
 Launch the Ollama interactive menu, or directly launch a specific integration.
 
@@ -348,6 +365,7 @@ Flags:
 ```
 
 ## ollama launch claude --config probe (safe: settings.json/claude.json backed up first, diffed after)
+
 ```text
 Invoking 'ollama launch claude --model qwen3-coder:30b --config -y' errored before doing
 anything persistent (needed a prompt via stdin, since --config still launches claude itself
@@ -359,6 +377,7 @@ So this version's --config flag is not a safe read-only inspection path.
 ```
 
 ## Auto-compact / context-window control: two DIFFERENT pieces of evidence, not to be conflated
+
 ```text
 1) Directly observed from the RUNNING claude 2.1.280 CLI (ground truth for this install),
    from the earlier smoke test warning text verbatim:
@@ -382,6 +401,7 @@ empirically-confirmed lever, matching the exact number in each model's Modelfile
 ```
 
 ## claude --help: -p, --model, --allowedTools, --output-format, --permission-mode
+
 ```text
   --allowedTools, --allowed-tools <tools...>
       Comma or space-separated list of tool names to allow (e.g. "Bash(git *)
@@ -423,6 +443,7 @@ empirically-confirmed lever, matching the exact number in each model's Modelfile
 ```
 
 ## max-turns flag: DOES NOT EXIST in this version
+
 ```text
 0
 0 matches confirmed (checked earlier smoke test too), the wall-clock 'timeout N' wrapper
@@ -452,7 +473,7 @@ tokens with no issue).
 **CRITICAL, must-fix violation of this spec's hard rules**: both existing
 drop-ins ALSO set `OLLAMA_CONTEXT_LENGTH=65536` globally. This spec
 explicitly forbids that ("would force a 64k KV cache onto every model,
-including Continue.dev's"). This was not something done in this session  - 
+including Continue.dev's"). This was not something done in this session  -
 it predates both v1 and v2 of this task, but it is live right now and must
 be removed in Phase 3's root-steps.sh, replaced by per-Modelfile `num_ctx`.
 Continue.dev, if it has made any request against this server today, has
@@ -508,6 +529,7 @@ from `.claude.json`'s own internal usage telemetry.
 **Ollama version 0.34.3, passes the gemma4:12b >= 0.30.5 gate.**
 
 ## Open items carried into Phase 2
+
 1. Vulkan is untested beyond the v1 smoke test's single short decode run
    (32.40 tok/s on gemma4:12b, no crash), needs the real staged Stage-1
    procedure (cold load, cold prefill w/ nonce, warm turn) per this spec.

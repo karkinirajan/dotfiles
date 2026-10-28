@@ -44,4 +44,3 @@
 2. Radix to Base UI has no CLI migration (`shadcn migrate` offers `cn`, `icons`, `base-color`, `radix`, and `rtl`). Run it through the shadcn skill and an agent, component by component, behind visual regression, with an ADR. Do not mix bases within one project.
 
 ---
-

@@ -24,4 +24,3 @@
   - Prefer fetching docs through a docs MCP server or the official docs over trusting model memory for APIs that changed in the last year.
 
 ---
-

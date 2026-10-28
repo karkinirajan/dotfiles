@@ -108,4 +108,3 @@ Default recommendation: A for most client apps, B when the domain logic justifie
 - DAL-06 (MUST): Log with a request id. `proxy.ts` gives every request an `x-request-id` (an inbound id is kept only when it matches `^[A-Za-z0-9_-]{8,64}$`), and server code logs through `requestLogger()` (A.15), which stamps each line with it. Never log tokens, cookies, passwords, or personal data.
 
 ---
-

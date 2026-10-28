@@ -131,4 +131,3 @@ Recompute the table whenever a token changes (STYLE-03). `color-scheme` follows 
   }
 }
 ```
-

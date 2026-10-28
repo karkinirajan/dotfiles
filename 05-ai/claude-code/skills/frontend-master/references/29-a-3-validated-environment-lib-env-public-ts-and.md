@@ -38,4 +38,3 @@ const serverSchema = z.object({
 
 export const serverEnv = serverSchema.parse(process.env);
 ```
-

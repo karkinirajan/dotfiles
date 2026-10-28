@@ -96,7 +96,7 @@ sudo ollama-backend vulkan
 sudo ollama-backend rocm
 ```
 
-**ROCm is the one currently live**, not because it was preferred going in  - 
+**ROCm is the one currently live**, not because it was preferred going in  -
 Vulkan was tried first and found to crash on large prompts. Full story,
 with the exact journalctl evidence, in
 [`claude-code-bench/ollama-claude-setup.md`](claude-code-bench/ollama-claude-setup.md).
