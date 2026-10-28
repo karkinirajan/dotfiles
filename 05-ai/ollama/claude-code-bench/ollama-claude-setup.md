@@ -2,6 +2,9 @@
 
 *Last updated: 2026-09-23 14:54 · Status: **in progress, not finished** — infrastructure is live and verified including the ROCm large-prompt stress test, the model benchmark suite has not run yet*
 
+<!-- snapshot: 2026-09-23 -->
+> **Dated record.** Everything below was measured on 2026-09-23 with kernel 7.2.6-1-cachyos, Ollama 0.34.3, Mesa 26.2.3, ROCm 7.2.4 and Claude Code 2.1.280. Treat each number as "measured on that date with those versions", not as a property of today's stack (kernel 7.3.0-4, Ollama 0.40.11, Mesa 26.2.5, Claude Code 2.1.311 on the primary host). Re-test before relying on it. Corrections from the 2026-10-29 review are marked `[2026-10-29]`.
+
 This document reflects exactly what has been measured so far. Nothing below is estimated — every number has a command or a log line behind it, and every "pending" is labeled as such rather than implied to be done.
 
 ---
@@ -46,10 +49,10 @@ Switched to via a small helper installed for exactly this purpose:
 ```bash
 sudo ollama-backend rocm   # or: sudo ollama-backend vulkan, to switch back
 ```
-- Live config: `OLLAMA_VULKAN=0`, `HSA_OVERRIDE_GFX_VERSION=10.3.0` (this card's gfx1031 reports as its supported sibling gfx1030 — without this, ROCm does not initialize on this GPU at all).
+- Live config: `OLLAMA_VULKAN=0`, `HSA_OVERRIDE_GFX_VERSION=10.3.0` (this card's gfx1031 reports as its supported sibling gfx1030). `[2026-10-29]` The repo's own `discovery.md` journal (2026-09-23 13:21) and `STATE.md` show ROCm also initializes natively as gfx1031 without the override (32.85 tok/s native against 32.79 spoofed), so the override is a fallback here, not a requirement.
 - Verified: `ollama ps` shows **100% GPU**, clean load, no error. First real generation: 33.6 tok/s decode, 135 tok/s prefill, on a trivial prompt.
 - **Large-prompt stress test — passed.** The same test that reproduced the Vulkan crash (a ~30k-token prompt built from the Python stdlib, 3 cold-load runs, `ccb-gemma4-12b`, `num_ctx=65536`) was run against ROCm: **3/3 runs succeeded**, `prompt_eval_count: 33849` each time (squarely inside the 24,576–32,771 range that crashed Vulkan twice), `eval_count: 200`, no errors, `ollama.service` still active afterward. Raw results: `results/rocm_crashtest_gemma4-12b.json`.
-- The spec's own known risk (`HSA_OVERRIDE_GFX_VERSION` + ROCm ≥ 6.4.3 reported to SIGSEGV on gfx1031) has **not** reproduced on this box's ROCm 7.2.4, now including at realistic Claude-Code-sized prompts. ROCm clears gate G4 where Vulkan did not — this is the backend going forward.
+- The spec's own known risk (`HSA_OVERRIDE_GFX_VERSION` + ROCm ≥ 6.4.3 reported to SIGSEGV on gfx1031; `[2026-10-29]` ollama issue 12111, closed 2026-07-03 and fixed by rocBLAS/rocSPARSE 6.4.3-3) has **not** reproduced on this box's ROCm 7.2.4, now including at realistic Claude-Code-sized prompts. ROCm clears gate G4 where Vulkan did not — this is the backend going forward.
 
 ---
 
