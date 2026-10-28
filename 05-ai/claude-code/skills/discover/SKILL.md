@@ -1,4 +1,5 @@
 ---
+name: discover
 description: Map an unfamiliar project's stack and architecture before making changes
 ---
 

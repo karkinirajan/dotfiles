@@ -157,35 +157,20 @@ alias c='code .'  # Open current directory in VS Code (install code from code.vi
 alias nv='nvim'   # Alias for Neovim (install with: sudo apt install neovim)
 alias v='vim'     # Alias for Vim (install with: sudo apt install vim)
 # alias n='nano'  # Alias for Nano (simple editor, uncomment if preferred)
-alias dotfiles='nv ~/.dotfiles' # Example: Edit your dotfiles using nvim (adjust path)
+alias dotfiles='nv ~/dotfiles'  # Edit dotfiles using nvim
 alias zshrc='nv ~/.zshrc'       # Edit this zshrc file quickly
 
 # ==================================
 # 🔧 Custom Functions
 # ==================================
 # Show recent apt package history (install, upgrade, remove)
-# Reads the apt history log file.
 apt-log-history() {
-  # Check if the apt history log file exists
   if [ -f /var/log/apt/history.log ]; then
-    # Use awk to format output, filtering by action keywords
-    awk '/^(Commandline|Install:|Upgrade:|Remove:)/' /var/log/apt/history.log |
-    # Further process to grep for specific actions
-    case "$1" in
-      install)
-        grep -A 1 "Install:" /var/log/apt/history.log
-        ;;
-      upgrade)
-        grep -A 1 "Upgrade:" /var/log/apt/history.log
-        ;;
-      remove)
-        grep -A 1 "Remove:" /var/log/apt/history.log
-        ;;
-      *)
-        echo "Usage: apt-log-history (install|upgrade|remove)"
-        # Show last few entries by default if no argument given or argument is invalid
-        # tail /var/log/apt/history.log
-        ;;
+    case "${1:-}" in
+      install) grep -A 1 "Install:" /var/log/apt/history.log ;;
+      upgrade) grep -A 1 "Upgrade:" /var/log/apt/history.log ;;
+      remove)  grep -A 1 "Remove:" /var/log/apt/history.log ;;
+      *)       echo "Usage: apt-log-history (install|upgrade|remove)" ;;
     esac
   else
     echo "Apt history log not found at /var/log/apt/history.log"

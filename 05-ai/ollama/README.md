@@ -1,4 +1,4 @@
-# Ollama — local LLM inference on an RX 6700 XT
+# 05.2 · Ollama — local LLM inference on an RX 6700 XT
 
 GPU-accelerated Ollama on hardware AMD does not officially support, tuned by
 measurement rather than guesswork. Two layers here: the base server setup
@@ -26,6 +26,7 @@ touching it).
 │   └── ollama-backend           → /usr/local/sbin/ollama-backend
 │                                   `ollama-backend {vulkan|rocm}` — swaps
 │                                   backend.conf and restarts the service
+├── bench.py                     quick standalone HTTP benchmark & GPU placement check
 ├── claude-code-bench/           local models wired into Claude Code itself
 │                                   (ccl/cclf) — see its own README
 └── README.md
@@ -37,7 +38,7 @@ touching it).
 |---|---|
 | GPU | Radeon RX 6700 XT, 12 GB, **gfx1031** (not officially ROCm-supported) |
 | CPU | Ryzen 5 5600, 6C/12T |
-| RAM | 32 GB DDR4 @ **2666 MT/s** — the weak axis, ~30-40 GB/s |
+| RAM | 32 GB DDR4 @ **3600 MT/s** — system RAM bandwidth ~30-40 GB/s |
 | Packages | `ollama`, `ollama-rocm`, `ollama-vulkan` — all three installed side by side; which one is *live* is whatever `backend.conf` currently says |
 
 ## Install

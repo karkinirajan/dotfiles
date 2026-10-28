@@ -4,15 +4,14 @@ Shells, terminal emulators and the prompt.
 
 | Chapter | Path | Purpose |
 |---------|------|---------|
-| zsh | [`zsh/`](zsh/.zshrc) | Oh My Zsh, deferred plugin loading, starship/p10k switch. `macos.zshrc` and `ubuntu.zshrc` are per-OS variants |
-| bash | [`bash/`](bash/.bashrc) | Bash equivalent for hosts without zsh |
-| kitty | [`kitty/`](kitty/kitty.conf) | `kitty.conf` plus two colour themes. `current-theme.conf` is generated and not tracked |
-| Alacritty | [`alacritty/`](alacritty/SHORTCUTS.md) | Main config; the Noctalia-generated theme is not tracked |
-| starship | [`starship/`](starship/starship.toml) | Prompt modules: battery, git, memory, language versions |
-| fzf preview | [`fzf/preview.sh`](fzf/preview.sh) | File and directory previews used by the zsh fzf bindings |
+| zsh | [`zsh/`](zsh/README.md) | Oh My Zsh, deferred plugin loading, Starship prompt, local LLM helpers (`ccl`/`cclf`) |
+| bash | [`bash/`](bash/README.md) | Bash reference config for subshells or hosts without zsh |
+| kitty | [`kitty/`](kitty/README.md) | `kitty.conf` plus Catppuccin Mocha & Gruvbox Dark Hard themes |
+| Alacritty | [`alacritty/`](alacritty/README.md) | Primary terminal config (`alacritty.toml`) and [`SHORTCUTS.md`](alacritty/SHORTCUTS.md) |
+| starship | [`starship/`](starship/README.md) | Prompt modules: OS, git, memory, command duration, language & cloud versions |
+| fzf preview | [`fzf/`](fzf/README.md) | File and directory preview script (`preview.sh`) used by the zsh fzf bindings |
 
-zsh runs starship by default. Switch prompts at runtime with `theme-starship`
-or `theme-p10k`; the choice persists in `~/.config/zsh/prompt-framework`.
+zsh runs `starship` (`03-terminal/starship/starship.toml`) as its prompt (`ZSH_THEME=""`).
 
 Install the baseline CLI dependencies from
 [`01-system/cachyos/packages/cli.txt`](../01-system/cachyos/packages/cli.txt)

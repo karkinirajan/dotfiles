@@ -8,12 +8,18 @@ project's own repo.
 claude-code/
 ├── CLAUDE.md          → ~/.claude/CLAUDE.md     always-loaded engineering profile
 ├── settings.json      → ~/.claude/settings.json permissions, hooks, plugins, model defaults
+├── commands/          → ~/.claude/commands/     custom slash commands (/discover, /shipcheck)
+│   ├── discover.md
+│   └── shipcheck.md
 ├── agents/            → ~/.claude/agents/       focused subagents, one file each
 │   ├── ai-agent-engineer.md
 │   ├── backend-engineer.md
 │   ├── data-ml-engineer.md
 │   ├── database-engineer.md
+│   ├── frontend-auditor.md
 │   ├── frontend-engineer.md
+│   ├── frontend-engineer-kit.md
+│   ├── frontend-verifier.md
 │   ├── qa-engineer.md
 │   └── release-engineer.md
 └── skills/            → ~/.claude/skills/       one folder per skill, each with SKILL.md
@@ -22,6 +28,9 @@ claude-code/
     ├── shipcheck/             run real build/lint/test gates before "done"
     ├── visual-qa/             check rendered UI, not just the source
     ├── token-efficient-workflow/ keep context focused and inspect usage
+    ├── frontend-master/       Next.js/React/TS/Tailwind/Supabase/Prisma rulebook (rev 3)
+    ├── frontend-audit/        automated + multi-agent FRONTEND-MASTER auditor
+    ├── frontend-development-standards/ UI, CWV, WCAG 2.2 AA, and motion checklist
     └── …                      stack patterns: FastAPI, Django/DRF, Flask,
                                SQLAlchemy, Pydantic v2, Postgres/MySQL/Mongo/Redis,
                                JWT, OAuth, CORS/CSRF, secrets, Docker, Nginx
@@ -32,13 +41,14 @@ claude-code/
 | Piece | Loaded when | Format |
 |-------|-------------|--------|
 | `CLAUDE.md` | every session, at start | plain Markdown |
+| `commands/*.md` | you run `/command-name` explicitly | Markdown prompt |
 | `agents/*.md` | a task matches the agent's `description`, or you name it | YAML frontmatter + system prompt. Fields are checked against the [subagent schema](https://code.claude.com/docs/en/sub-agents) |
 | `skills/*/SKILL.md` | a task matches the skill's `description` | YAML frontmatter (`name`, `description`) + instructions. Supporting files sit beside it |
 | `settings.json` | every session, at start | JSON. Hooks run the commands listed under each event |
 
 Claude Code loads skills only from **direct children** of `~/.claude/skills/`.
 Do not nest skills in category folders, or they will not load. Keep the flat
-layout and sort skills by name prefix instead.
+layout in `skills/`.
 
 The global skills directory is a symlink to this tracked directory, so skills
 are available to new Claude Code sessions without a separate enable step. The
@@ -94,9 +104,9 @@ installed plugin code is left out.
 must hold every time goes in `settings.json` instead, which is enforced by the
 harness:
 
-- `permissions.deny` blocks `sudo`, every form of `git push`/`pull`/`fetch`,
-  and reads of `.env` and the credentials file. Deny rules are checked before
-  allow rules, so an allow can't override them.
+- `permissions.deny` blocks `sudo`, every form of `git push`/`pull`/`fetch`/`remote`,
+  `git config --global`, and reads of `.env` and the credentials file. Deny rules
+  are checked before allow rules, so an allow can't override them.
 - Bash rules match the command text as written. `git push *` does not catch
   `git -C . push`, so the `-C` and `-c` forms are listed separately.
 - `maxTurns: 40` on each agent caps a runaway subagent.
@@ -119,10 +129,11 @@ Check the file with `claude plugin validate agents` and
 `install.sh` links these from the manifest. To do it by hand:
 
 ```sh
-ln -sfn "$PWD/05-ai/claude-code/CLAUDE.md"   ~/.claude/CLAUDE.md
+ln -sfn "$PWD/05-ai/claude-code/CLAUDE.md"     ~/.claude/CLAUDE.md
 ln -sfn "$PWD/05-ai/claude-code/settings.json" ~/.claude/settings.json
-ln -sfn "$PWD/05-ai/claude-code/agents"      ~/.claude/agents
-ln -sfn "$PWD/05-ai/claude-code/skills"      ~/.claude/skills
+ln -sfn "$PWD/05-ai/claude-code/agents"        ~/.claude/agents
+ln -sfn "$PWD/05-ai/claude-code/skills"        ~/.claude/skills
+ln -sfn "$PWD/05-ai/claude-code/commands"      ~/.claude/commands
 ```
 
 `settings.local.json` and `.credentials.json` are per-machine. Set them up

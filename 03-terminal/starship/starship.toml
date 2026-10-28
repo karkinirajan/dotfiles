@@ -1,7 +1,9 @@
 palette = "noctalia"
 # =============================================================================
 #  ~/.config/starship.toml — kneeraazon
-#  Gruvbox Dark Hard · Two-line box-drawing · Fill separator
+#  Gruvbox Dark Hard · Single-line powerline left/right prompt
+#  Note: Module styles use explicit Gruvbox hex values; [palettes.noctalia] at
+#  the bottom is updated by Noctalia's built-in starship template.
 # =============================================================================
 
 add_newline = true

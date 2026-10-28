@@ -23,21 +23,24 @@ hyprland/
 │                                  #   ever running `pacman -Rns $(pacman -Qtdq)`
 │                                  #   on this machine.
 ├── sddm/
-│   └── hyprland.conf              → /etc/sddm.conf.d/hyprland.conf
-│                                  # Only needed if starting from a Plasma-default
-│                                  #   login manager — see KDE-REMOVAL.md. Presets
-│                                  #   one UWSM-managed Hyprland session and an
-│                                  #   X11 greeter; does NOT enable autologin.
+│   ├── hyprland.conf              → /etc/sddm.conf.d/hyprland.conf (optional preset)
+│   │                              # Only needed if using SDDM instead of the
+│   │                              #   active greetd + noctalia-greeter login
+│   │                              #   manager — see KDE-REMOVAL.md. Presets
+│   │                              #   one UWSM-managed Hyprland session and an
+│   │                              #   X11 greeter; does NOT enable autologin.
+│   ├── sddm.conf                  # Reference SDDM base configuration
 │   └── sessions/
 │       └── hyprland-uwsm.desktop  → /usr/local/share/wayland-sessions/
-│                                  # SDDM is limited to this session so it cannot
-│                                  # restore the plain, unmanaged Hyprland entry.
+│                                  # Limits SDDM to the UWSM-managed Hyprland session.
+├── uwsm/
+│   └── env                        → ~/.config/uwsm/env (linked via manifest.conf)
+│                                  # Session environment: BROWSER=brave, cursor
+│                                  #   theme (Bibata-Modern-Ice), Qt/Electron
+│                                  #   Wayland hints, PATH, and NVM initialization.
 ├── hypr/                          → ~/.config/hypr/
 │   ├── hyprland.conf              # entry point, sources everything below
 │   ├── hyprlock.conf, hypridle.conf
-│   │                              # hyprpaper.conf is kept in the repo for
-│   │                              #   reference only — see "hyprpaper and
-│   │                              #   WallRizz" below; it is not linked.
 │   ├── config/
 │   │   ├── autostart.conf         # exec-once list — session infrastructure ONLY:
 │   │   │                          #   hyprpm reload, Noctalia via the watchdog
@@ -76,6 +79,8 @@ hyprland/
 │   │   │   monitor.conf, environment.conf
 │   └── scripts/
 │       ├── minimize.sh, restore.sh, screenshot.sh
+│       ├── volume.sh                  # PipeWire/wpctl volume control with 150% boost ceiling
+│       ├── nightlight-temperature.sh  # Scroll wheel handler (2500–6500 K in 250 K steps)
 │       ├── noctalia-watchdog.sh       # Runs `noctalia` in a restart-on-crash loop.
 │       │                              #   Deliberately NOT a systemd --user service:
 │       │                              #   apps launched from Noctalia's own launcher
@@ -148,10 +153,10 @@ hyprland/
     │       `./install.sh pull` brings live changes in as a reviewable diff —
     │       run pull after tuning the bar, or the change only ever exists on
 │       this machine. The Obsidian status widget is configured for the
-│       `~/Documents/kneeraazon` vault (URI name `kneeraazon`), and the AI
-│       usage capsules are pinned in Claude → Antigravity → Codex order.
+│       `~/Documents/kneeraazon` vault (URI name `kneeraazon`), alongside the
+│       AI usage bar widget.
 │       See "Bar styling can be reset by an upgrade" below.
-    └── dbus-override/fr.emersion.mako.service   → ~/.local/share/dbus-1/services/
+    └── dbus-override/fr.emersion.mako.service   → ~/.local/share/dbus-1/services/ (linked)
             User-level override so D-Bus service *activation* launches
             Noctalia instead of mako when something requests
             org.freedesktop.Notifications. Needed because mako ships its own
@@ -177,21 +182,21 @@ if ((${#aur_packages[@]})); then
   "$aur_helper" -S --needed "${aur_packages[@]}"
 fi
 
-# 2. Config — the repo root installer links hypr/, scripts/, the Noctalia
-#    palettes and fontconfig, and seeds Noctalia's settings.toml.
+# 2. Config — the repo root installer links hypr/, scripts/, uwsm/env, the
+#    Noctalia palettes, the D-Bus mako override, and fontconfig, and seeds
+#    Noctalia's settings.toml.
 cd ../.. && ./install.sh && ./install.sh status
 
-# 3. The two pieces the manifest does not cover:
-mkdir -p ~/.local/share/dbus-1/services
-cp 02-desktop/hyprland/noctalia/dbus-override/fr.emersion.mako.service ~/.local/share/dbus-1/services/
-systemctl --user disable --now mako.service noctalia.service 2>/dev/null
+# 3. Ensure competing user notification/shell units stay disabled:
+systemctl --user disable --now mako.service noctalia.service 2>/dev/null || true
 
-# 4. SDDM: install the managed session and its session-only config.
-sudo install -Dm644 02-desktop/hyprland/sddm/hyprland.conf /etc/sddm.conf.d/hyprland.conf
-sudo install -Dm644 02-desktop/hyprland/sddm/sessions/hyprland-uwsm.desktop \
-  /usr/local/share/wayland-sessions/hyprland-uwsm.desktop
+# 4. Display manager: greetd + noctalia-greeter is the active login manager on
+#    this workstation. If using SDDM instead, install its optional session preset:
+# sudo install -Dm644 02-desktop/hyprland/sddm/hyprland.conf /etc/sddm.conf.d/hyprland.conf
+# sudo install -Dm644 02-desktop/hyprland/sddm/sessions/hyprland-uwsm.desktop \
+#   /usr/local/share/wayland-sessions/hyprland-uwsm.desktop
 
-# Plugins — see "Plugins" below for what each one is and why the fork/commit
+# 5. Plugins — see "Plugins" below for what each one is and why the fork/commit
 hyprpm update
 hyprpm add https://github.com/ImanolBarba/Hyprspace 0799be7464fac7ea959b7c6c7809dadd6c21c5aa
 hyprpm add https://github.com/VirtCode/hypr-dynamic-cursors
@@ -228,7 +233,7 @@ behavior:
 - hy3 would be a full alternative layout engine — `general:layout` is still
   `dwindle` in `variables.conf`. Set it to `hy3` to try it.
 - split-monitor-workspaces would need every workspace keybind in `keybinds.conf`
-  (`Super`+`1-9,0`, `Shift`+those, `Ctrl`+those — ~30 binds) rewritten from
+  (`Super`+`1-6`, `Shift`+those, `Ctrl`+those — 18 binds) rewritten from
   `workspace`/`movetoworkspace(silent)` to this plugin's own
   `split-workspace`/`split-movetoworkspace(silent)` dispatchers to do
   anything at all. Not done here since that's a decision, not a default.
@@ -283,11 +288,13 @@ Restart Hyprland (or reboot) to fix it.
   reports this as DRIFT on the seeded settings.toml; the fix is to compare
   against the last known-good copy in git (`git log -p --
   02-desktop/hyprland/noctalia/state/settings.toml`) rather than re-tuning by eye.
-- **Bar fonts come from packages, not this repo.** `[bar].font_family` is
-  `JetBrains Mono`, the clock widget is `JetBrains Maple Mono` and the
-  system-monitor widget is `FiraCode Nerd Font Mono`. If any of those is
-  missing, Noctalia silently falls back to a default sans and the bar's metrics
-  shift — `01-system/cachyos/packages/fonts.txt` lists which package supplies each.
+- **Bar fonts come from packages, not this repo.** `[bar.kneeraazon].font_family`
+  and `[widget.clock].font_family` use `JetBrains Mono`, `[shell].font_family`
+  and `[widget."tmelik/system-monitor:summary"].font_family` use `DejaVu Sans`,
+  and terminal/editor configs use `JetBrains Maple Mono` and `FiraCode Nerd Font`.
+  If any of those is missing, Noctalia silently falls back to a default sans and
+  the bar's metrics shift — `01-system/cachyos/packages/fonts.txt` lists which
+  package supplies each.
 - **Window border color tracks Noctalia's theme automatically.**
   `scripts/theme-border-watch.sh` is autostarted and watches
   `settings.toml`'s `[theme]` block; any change re-runs

@@ -30,7 +30,7 @@ layer; add one before copying any ECC rules.
 
 | Resource | Use it for |
 |----------|------------|
-| [Ollama Vulkan support](https://www.phoronix.com/news/ollama-0.12.11-Vulkan) | Vulkan GPU backend: stabilised in 0.12.11 behind `OLLAMA_VULKAN=1`. The reason the Vulkan backend exists alongside ROCm on this card |
+| [Ollama Vulkan support](https://www.phoronix.com/news/ollama-0.12.11-Vulkan) | Vulkan GPU backend: stabilised in 0.12.11 (`OLLAMA_VULKAN=1`, or `OLLAMA_LLM_LIBRARY=vulkan` when ROCm is also installed). The reason the Vulkan backend exists alongside ROCm on this card |
 | [`ollama-vulkan` on Arch](https://archlinux.org/packages/extra/x86_64/ollama-vulkan) | The packaged Vulkan build. Prefer it over the upstream installer, as `01-system/cachyos/packages/ai.txt` notes |
 
 ## Rules for keeping this list honest

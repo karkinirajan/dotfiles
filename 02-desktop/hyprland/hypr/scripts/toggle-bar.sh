@@ -9,11 +9,14 @@ STATE_FILE="/tmp/noctalia-bar-hidden"
 
 if [ -f "$STATE_FILE" ]; then
     noctalia msg bar-show
+    hyprctl keyword layerrule "blur on, match:namespace noctalia-bar-kneeraazon"
+    hyprctl keyword layerrule "xray on, match:namespace noctalia-bar-kneeraazon"
     hyprctl keyword layerrule "blur on, match:namespace noctalia-bar-default"
     hyprctl keyword layerrule "xray on, match:namespace noctalia-bar-default"
     rm -f "$STATE_FILE"
 else
     noctalia msg bar-hide
+    hyprctl keyword layerrule "blur off, match:namespace noctalia-bar-kneeraazon"
     hyprctl keyword layerrule "blur off, match:namespace noctalia-bar-default"
     touch "$STATE_FILE"
 fi

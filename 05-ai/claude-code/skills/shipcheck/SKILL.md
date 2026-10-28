@@ -1,4 +1,5 @@
 ---
+name: shipcheck
 description: Run the real build/lint/typecheck/test/security gates before declaring work done — not a guess
 ---
 

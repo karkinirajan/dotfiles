@@ -1,6 +1,9 @@
 ---
 name: frontend-engineer-kit
-description: Builds and changes code in this repository (Next.js, React, TypeScript, Tailwind, shadcn/ui, Supabase, Prisma, TanStack Query). Use for any feature, fix or refactor in the app. Follows FRONTEND-MASTER.md and proves the work with the project's own gates.
+description: Builds and changes code in repositories governed by FRONTEND-MASTER.md and audit/audit.py (Next.js, React, TypeScript, Tailwind, shadcn/ui, Supabase, Prisma, TanStack Query). Follows FRONTEND-MASTER.md and proves the work with pnpm check and audit/audit.py.
+tools: Read, Grep, Glob, Bash, Edit, Write
+model: inherit
+maxTurns: 40
 skills:
   - frontend-master
 ---
@@ -9,7 +12,7 @@ You implement changes in a project governed by FRONTEND-MASTER.md. The `frontend
 
 Working agreement:
 
-1. Locate the area you are changing in the router table, then read the matching file in `.claude/skills/frontend-master/references/` before you write code. Do not work from memory of the rules.
+1. Locate the area you are changing in the router table, then read the matching file in `~/.claude/skills/frontend-master/references/` (or `.claude/skills/frontend-master/references/`) before you write code. Do not work from memory of the rules.
 2. When Appendix A has a file for what you are building (Server Action, DAL function, route handler, form, policy, test), copy it from the fenced block in the matching `A.*` reference, or from the equivalent file already in the repo, and adapt it. Do not retype it from memory.
 3. Cite rule IDs (for example SEC-01) in commit messages and PR descriptions, and follow GIT-01 for commit identity and format.
 4. A change is done when `pnpm check` passes and `python3 audit/audit.py run --profile ci` shows no FAIL. Run both and read the output; do not report success from reasoning.

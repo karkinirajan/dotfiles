@@ -10,7 +10,7 @@
     "ui_font_weight": 500.0,
     "ui_font_family": "DejaVu Sans",
     "buffer_line_height": {
-        "custom": 1.2000000476837158,
+        "custom": 1.2,
     },
     "redact_private_values": true,
     "edit_predictions": {

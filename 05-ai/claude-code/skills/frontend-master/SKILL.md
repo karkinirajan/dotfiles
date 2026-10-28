@@ -5,8 +5,8 @@ description: Frontend standards for Next.js App Router, React, TypeScript, Tailw
 
 # Frontend Master Standards (router)
 
-This skill is generated from `FRONTEND-MASTER.md`. Do not edit anything under `references/` or
-Edit the document, then rebuild the kit with `python3 scripts/build_kit.py`.
+This skill is generated from `FRONTEND-MASTER.md`. Do not edit anything under `references/` by hand;
+edit the source document and rebuild the kit with `python3 scripts/build_kit.py`.
 
 Rule language: MUST is a merge blocker, SHOULD needs a justification in the PR, MAY is taste.
 Cite rule IDs (for example `SEC-01`) in commits, PRs and review comments.

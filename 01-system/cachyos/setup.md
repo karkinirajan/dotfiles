@@ -155,22 +155,20 @@ export HSA_OVERRIDE_GFX_VERSION=10.3.0   # RDNA2 (RX 6700/6800/6900 series)
 # export HSA_OVERRIDE_GFX_VERSION=11.0.0  # RDNA3 (RX 7000 series)
 ```
 
-**For Ollama service override** (required for GPU acceleration):
+**For Ollama service override** (see [`../../05-ai/ollama/README.md`](../../05-ai/ollama/README.md) for the tracked drop-ins):
 
 ```bash
-sudo mkdir -p /etc/systemd/system/ollama.service.d/
-sudo tee /etc/systemd/system/ollama.service.d/override.conf << 'EOF'
-[Service]
-Environment="HSA_OVERRIDE_GFX_VERSION=10.3.0"
-EOF
+sudo install -Dm644 05-ai/ollama/systemd/backend-rocm.conf \
+  /etc/systemd/system/ollama.service.d/backend.conf
+sudo install -Dm644 05-ai/ollama/systemd/claude-code.conf \
+  /etc/systemd/system/ollama.service.d/claude-code.conf
 sudo systemctl daemon-reload && sudo systemctl restart ollama
 ```
 
 ### 2.4 GPU Monitoring Tools
 
 ```bash
-sudo pacman -S radeontop rocm-smi-lib
-paru -S amdgpu_top   # Modern TUI with per-process GPU usage
+sudo pacman -S radeontop rocm-smi-lib amdgpu_top
 ```
 
 | Tool | Command | Purpose |
@@ -193,10 +191,7 @@ On Arch/CachyOS, `pip install` globally throws `error: externally-managed-enviro
 - Generates `uv.lock` for reproducible builds
 
 ```bash
-# Recommended — enables self-update:
-curl -LsSf https://astral.sh/uv/install.sh | sh
-
-# Or from pacman (disables uv self update):
+# Installed via pacman on CachyOS (tracked in packages/cli.txt):
 sudo pacman -S uv
 ```
 
@@ -366,18 +361,19 @@ docker run -it --network=host --device=/dev/kfd --device=/dev/dri \
 
 ### 4.3 Ollama — Local LLM Inference ⭐
 
-CachyOS ships `ollama-rocm` — pre-built with AMD GPU acceleration.
+CachyOS ships `ollama`, `ollama-rocm`, and `ollama-vulkan`. See [`../../05-ai/ollama/README.md`](../../05-ai/ollama/README.md) for the complete benchmarked setup.
 
 ```bash
-sudo pacman -S ollama-rocm
-sudo usermod -aG render,video $USER
-
-# Create GPU override for RX 6700 XT:
-sudo mkdir -p /etc/systemd/system/ollama.service.d/
-sudo tee /etc/systemd/system/ollama.service.d/override.conf << 'EOF'
-[Service]
-Environment="HSA_OVERRIDE_GFX_VERSION=10.3.0"
-EOF
+sudo pacman -S --needed ollama ollama-rocm ollama-vulkan
+sudo install -Dm644 05-ai/ollama/systemd/backend-rocm.conf \
+  /etc/systemd/system/ollama.service.d/backend.conf
+sudo install -Dm644 05-ai/ollama/systemd/claude-code.conf \
+  /etc/systemd/system/ollama.service.d/claude-code.conf
+sudo install -Dm755 05-ai/ollama/bin/ollama-backend \
+  /usr/local/sbin/ollama-backend
+sudo install -Dm644 05-ai/ollama/systemd/ollama-setcap.hook \
+  /etc/pacman.d/hooks/ollama-setcap.hook
+sudo setcap cap_perfmon+ep /usr/bin/ollama
 sudo systemctl daemon-reload
 sudo systemctl enable --now ollama.service
 ```
@@ -486,7 +482,7 @@ uv add weaviate-client
 **pgvector** (PostgreSQL extension — vector search in your existing Postgres):
 
 ```bash
-paru -S pgvector
+sudo pacman -S pgvector
 # In psql: CREATE EXTENSION vector;
 uv add pgvector psycopg2-binary
 ```
@@ -583,7 +579,7 @@ sudo -iu postgres psql -c "CREATE USER devuser WITH ENCRYPTED PASSWORD 'devpass'
 sudo -iu postgres psql -c "CREATE DATABASE devdb OWNER devuser;"
 
 # Enable pgvector:
-paru -S pgvector
+sudo pacman -S pgvector
 sudo -iu postgres psql devdb -c "CREATE EXTENSION vector;"
 ```
 
@@ -592,8 +588,8 @@ sudo -iu postgres psql devdb -c "CREATE EXTENSION vector;"
 ```bash
 sudo pacman -S mariadb
 sudo mariadb-install-db --user=mysql --basedir=/usr --datadir=/var/lib/mysql
+sudo install -Dm644 01-system/cachyos/mariadb-local.cnf /etc/my.cnf.d/90-local-dev.cnf
 sudo systemctl enable --now mariadb
-sudo mariadb-secure-installation
 ```
 
 ### 6.3 MongoDB
@@ -617,10 +613,10 @@ mongosh   # Verify
 
 ### 6.4 Redis (Valkey)
 
-CachyOS/Arch ships `valkey` (the Redis open-source fork) as the `redis` package:
+CachyOS/Arch ships `valkey` (the Redis open-source fork):
 
 ```bash
-sudo pacman -S redis   # Installs valkey, creates redis.service alias
+sudo pacman -S valkey
 sudo systemctl enable --now valkey.service
 valkey-cli ping   # → PONG
 ```
@@ -697,27 +693,33 @@ az login   # Opens browser for interactive auth
 
 ```bash
 sudo pacman -S nginx
-sudo systemctl enable --now nginx
 # Config:    /etc/nginx/nginx.conf
 # Test:      sudo nginx -t
-# This host's MIME table needs a larger type hash. Keep the adjustment in a
-# drop-in instead of editing the package-owned nginx.conf:
-sudo install -Dm644 04-networking/nginx/conf.d/00-types-hash.conf /etc/nginx/conf.d/00-types-hash.conf
-sudo nginx -t && sudo systemctl reload nginx
+# This host's MIME table needs a larger type hash. Install the tracked drop-in
+# and ensure /etc/nginx/nginx.conf includes conf.d/*.conf inside http {}:
+sudo install -Dm644 07-networking/nginx/conf.d/00-types-hash.conf /etc/nginx/conf.d/00-types-hash.conf
+if ! sudo grep -q 'conf\.d/\*\.conf' /etc/nginx/nginx.conf; then
+  sudo sed -i '/include[[:space:]]\+mime\.types;/a\    include       conf.d/*.conf;' /etc/nginx/nginx.conf
+fi
+sudo nginx -t
+# Enable only when needed: sudo systemctl enable --now nginx
 ```
 
 ---
 
 ## 8. Docker & Kubernetes
 
-### 8.1 Docker + Docker Compose
+### 8.1 Docker + Docker Compose (Rootless)
+
+This workstation runs rootless Docker via `docker-rootless-extras` so the user
+account does not need the root-equivalent `docker` group:
 
 ```bash
-sudo pacman -S docker docker-compose docker-buildx
-sudo systemctl enable --now docker.service
-sudo usermod -aG docker $USER
-newgrp docker   # Apply immediately (or reboot)
-docker run hello-world   # Verify
+sudo pacman -S docker docker-compose docker-buildx rootlesskit slirp4netns
+paru -S docker-rootless-extras
+systemctl --user enable --now docker.service
+docker context use rootless
+docker run --rm hello-world   # Verify
 ```
 
 **Enable native overlay diff** (performance fix for Arch):
@@ -860,14 +862,14 @@ tofu -v
 ### 9.3 Ansible
 
 ```bash
-uv tool install ansible
+sudo pacman -S ansible
 ansible --version
 ```
 
 ### 9.4 Pulumi (IaC with real programming languages)
 
 ```bash
-paru -S pulumi-bin
+sudo pacman -S pulumi
 pulumi new python   # Create Python IaC project
 ```
 
@@ -973,19 +975,11 @@ uv add "dask[complete]"   # Parallel computing — scales Pandas to larger-than-
 ### 11.1 Node.js via NVM
 
 ```bash
-# Install NVM (if not via pacman):
-curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.0/install.sh | bash
-
-# Or via pacman:
 sudo pacman -S nvm
 ```
 
-Add to `~/.zshrc`:
-
-```bash
-export NVM_DIR="$HOME/.nvm"
-[[ -s "$NVM_DIR/nvm.sh" ]] && source "$NVM_DIR/nvm.sh"
-```
+`03-terminal/zsh/.zshrc` automatically sources `/usr/share/nvm/init-nvm.sh`
+when installed via pacman:
 
 ```bash
 nvm install --lts && nvm use --lts
@@ -995,9 +989,7 @@ node -v && npm -v
 ### 11.2 Package Managers
 
 ```bash
-corepack enable
-corepack prepare pnpm@latest --activate    # pnpm (recommended — fastest, disk-efficient)
-corepack prepare yarn@stable --activate    # Yarn 4+
+sudo pacman -S pnpm yarn
 ```
 
 ### 11.3 React + Vite
@@ -1095,7 +1087,7 @@ VS Code fork with deep Claude/GPT-4 integration for code generation, editing, an
 ### 12.3 Zed (Modern GPU-Accelerated Editor)
 
 ```bash
-paru -S zed
+sudo pacman -S zed
 ```
 
 Built in Rust, extremely fast, built-in AI assistant, multiplayer editing.
@@ -1452,10 +1444,10 @@ sudo pacman -S discord telegram-desktop thunderbird
 paru -S slack-desktop zoom
 ```
 
-**Wayland screen sharing fix for Zoom:**
+**Wayland screen sharing portals (Hyprland):**
 
 ```bash
-sudo pacman -S xdg-desktop-portal xdg-desktop-portal-kde pipewire-v4l2
+sudo pacman -S xdg-desktop-portal xdg-desktop-portal-hyprland xdg-desktop-portal-gtk
 ```
 
 ### 18.2 Email — Thunderbird
@@ -1483,12 +1475,14 @@ Syncs clipboard, notifications, files, and SMS between phone and desktop.
 ### 19.1 Firewall — UFW
 
 ```bash
-sudo pacman -S ufw
+sudo pacman -S ufw ufw-extras
 sudo ufw default deny incoming
 sudo ufw default allow outgoing
-sudo ufw allow ssh
-sudo ufw allow 1714:1764/udp   # KDE Connect
-sudo ufw allow 1714:1764/tcp
+# Local workstation profile keeps zero inbound allow rules.
+# Add SSH or KDE Connect rules only if explicitly needed on a trusted LAN:
+# sudo ufw allow ssh
+# sudo ufw allow 1714:1764/udp
+# sudo ufw allow 1714:1764/tcp
 sudo ufw --force enable
 sudo systemctl enable --now ufw.service
 ```
@@ -1566,7 +1560,7 @@ require_dnssec = true
 require_nolog = true
 ```
 
-> **Note on CachyOS:** `dnsmasq` occupies port 53 by default. Configure dnscrypt-proxy on port 5300 and point dnsmasq to forward to it.
+> **Note on DNS services:** On this CachyOS profile, `systemd-resolved` is active by default while `dnsmasq` and `dnscrypt-proxy` are installed but disabled until explicitly enabled (for example, when using [`06-tools/focus/`](../../06-tools/focus/README.md) or forwarding `dnsmasq` to `dnscrypt-proxy` on port `5300`).
 
 ```bash
 sudo systemctl enable --now dnscrypt-proxy.service
@@ -1739,14 +1733,13 @@ sudo pacman -S gimp inkscape
 ### 21.3 Office Suite
 
 ```bash
-sudo pacman -S libreoffice-fresh      # Latest features
-paru -S onlyoffice-bin                 # Better MS Office compatibility
+sudo pacman -S libreoffice-fresh onlyoffice-bin
 ```
 
 ### 21.4 Music
 
 ```bash
-yay -S spotify                  # Streaming
+paru -S spotify                 # Streaming
 sudo pacman -S strawberry       # Local music (FLAC, MP3, gapless playback)
 ```
 
@@ -1760,21 +1753,23 @@ sudo pacman -S dolphin kdegraphics-thumbnailers ffmpegthumbs
 ### 21.6 Archive Manager
 
 ```bash
-sudo pacman -S ark p7zip unrar
+sudo pacman -S ark 7zip unrar
 ```
 
 ---
 
 ## 22. Baseline package installation
 
-The baseline is managed in these package manifests:
+The baseline and optional profiles are managed in these package manifests:
 
-- `01-system/cachyos/packages/desktop.txt` — Hyprland, Noctalia, and desktop helpers.
-- `01-system/cachyos/packages/system.txt` — CachyOS Snapper support and package-transaction snapshots.
-- `01-system/cachyos/packages/fonts.txt` — fonts referenced by the configs.
-- `01-system/cachyos/packages/cli.txt` — shell, terminal, and developer utilities.
-- `06-tools/focus/packages.txt` — dependencies for the optional focus DNS filter.
-- `01-system/cachyos/packages/ai.txt` — optional Ollama/ROCm packages for the matching AMD GPU.
+- `01-system/cachyos/packages/desktop.txt` — Hyprland, Noctalia, greetd, portals, and desktop applications.
+- `01-system/cachyos/packages/system.txt` — CachyOS Snapper support, UFW, power profiles, and security packages.
+- `01-system/cachyos/packages/fonts.txt` — fonts referenced by the desktop, terminal, and editor configs.
+- `01-system/cachyos/packages/cli.txt` — shell, terminal, and command-line utilities.
+- `01-system/cachyos/packages/developer.txt` — optional full-stack developer, database, container, and cloud profile (see [`dev-stack.md`](dev-stack.md)).
+- `01-system/cachyos/packages/claude-code-tools.txt` — optional CLI tools for token-efficient Claude Code workflows.
+- `01-system/cachyos/packages/ai.txt` — optional Ollama/ROCm/Vulkan packages for the matching AMD GPU.
+- `06-tools/focus/packages.txt` — dependencies for the optional focus DNS/firewall blocker.
 
 Use the interactive installation command in the repository [README](../../README.md#install).
 AUR packages are marked `(AUR)` and must be reviewed and built with an installed

@@ -48,7 +48,7 @@ sudo ollama-backend rocm   # or: sudo ollama-backend vulkan, to switch back
 ```
 - Live config: `OLLAMA_VULKAN=0`, `HSA_OVERRIDE_GFX_VERSION=10.3.0` (this card's gfx1031 reports as its supported sibling gfx1030 — without this, ROCm does not initialize on this GPU at all).
 - Verified: `ollama ps` shows **100% GPU**, clean load, no error. First real generation: 33.6 tok/s decode, 135 tok/s prefill, on a trivial prompt.
-- **Large-prompt stress test — passed.** The same test that reproduced the Vulkan crash (a ~30k-token prompt built from the Python stdlib, 3 cold-load runs, `ccb-gemma4-12b`, `num_ctx=65536`) was run against ROCm: **3/3 runs succeeded**, `prompt_eval_count: 33849` each time (squarely inside the 24,576–32,771 range that crashed Vulkan twice), `eval_count: 200`, no errors, `ollama.service` still active afterward. Raw results: `~/ollama-setup/rocm_crashtest_gemma4-12b.json`.
+- **Large-prompt stress test — passed.** The same test that reproduced the Vulkan crash (a ~30k-token prompt built from the Python stdlib, 3 cold-load runs, `ccb-gemma4-12b`, `num_ctx=65536`) was run against ROCm: **3/3 runs succeeded**, `prompt_eval_count: 33849` each time (squarely inside the 24,576–32,771 range that crashed Vulkan twice), `eval_count: 200`, no errors, `ollama.service` still active afterward. Raw results: `results/rocm_crashtest_gemma4-12b.json`.
 - The spec's own known risk (`HSA_OVERRIDE_GFX_VERSION` + ROCm ≥ 6.4.3 reported to SIGSEGV on gfx1031) has **not** reproduced on this box's ROCm 7.2.4, now including at realistic Claude-Code-sized prompts. ROCm clears gate G4 where Vulkan did not — this is the backend going forward.
 
 ---
@@ -101,7 +101,7 @@ Grading, when the end-to-end stage runs, will be independent of the agent's own 
 | Script | Status |
 |---|---|
 | `discovery.md` | done — full Phase 1 |
-| `root-steps.sh`, `root-steps-backend-switch.sh`, `root-steps-fix-helper.sh` | all run successfully (the third fixes a real bug in the second — see §7) |
+| `root-steps/01-vulkan-and-base-config.sh`, `root-steps/02-backend-switch-helper.sh`, `root-steps/03-fix-helper-bug.sh` | all run successfully (the third fixes a real bug in the second — see §7) |
 | `bench.py` (Stage 1 throughput) | written, dependency-checked, **not yet run for real** |
 | `run_e2e.py` (Stage 3 agentic) | written, **not yet run** |
 | `results.jsonl`, `e2e_results.jsonl` | **do not exist yet** — this is why there's no results table below |

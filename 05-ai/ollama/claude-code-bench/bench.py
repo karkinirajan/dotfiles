@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Stage 0 (calibration) and Stage 1 (throughput) benchmark harness.
 
-Run with the venv: ~/ollama-setup/.venv/bin/python ~/ollama-setup/bench.py
+Run with python3: python3 ~/dotfiles/05-ai/ollama/claude-code-bench/bench.py
 
 Resumable and append-only: every measured cell is written to results.jsonl
 immediately after it completes. On rerun, cells already present (matched by
@@ -36,7 +36,7 @@ logging.basicConfig(
 )
 log = logging.getLogger("bench")
 
-SETUP_DIR = Path.home() / "ollama-setup"
+SETUP_DIR = Path(__file__).resolve().parent
 RESULTS_JSONL = SETUP_DIR / "results.jsonl"
 
 VRAM_SAMPLE_INTERVAL_S = 0.25
@@ -347,8 +347,17 @@ def run_and_record(
         return None
 
     ps = ollama_ps(client)
-    proc = ps[0].get("processor", "") if ps else ""
-    ctxv = ps[0].get("context", 0) if ps else 0
+    proc = ""
+    ctxv = 0
+    if ps:
+        m0 = ps[0]
+        if "processor" in m0:
+            proc = str(m0["processor"])
+        else:
+            sz = m0.get("size", 0) or 0
+            vram = m0.get("size_vram", 0) or 0
+            proc = f"{round(100 * vram / sz)}% GPU" if sz > 0 else ""
+        ctxv = int(m0.get("context_length", m0.get("context", 0)) or 0)
 
     cell = Cell(
         model=model, stage=stage, size=size, run_kind=run_kind, run_index=run_index,

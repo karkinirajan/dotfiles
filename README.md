@@ -21,6 +21,7 @@ own README. Start at Part 00 and go in order, or jump to the part you need.
 | **04** | [`04-editors/`](04-editors/README.md) | VS Code, Zed, Sublime |
 | **05** | [`05-ai/`](05-ai/README.md) | Claude Code, local LLMs (Ollama), and AI resources |
 | **06** | [`06-tools/`](06-tools/README.md) | standalone utilities: the focus site-blocker |
+| **07** | [`07-networking/`](07-networking/README.md) | SSH helpers and Nginx configuration |
 | **99** | [Appendix](#99--appendix) | reference material and the links behind it |
 
 ### 00 · Start here
@@ -36,8 +37,7 @@ own README. Start at Part 00 and go in order, or jump to the part you need.
 
 | Chapter | Path |
 |---------|------|
-| CachyOS setup walkthrough (AMD GPU, toolchains, Kubernetes, Terraform) | [`01-system/cachyos/setup.md`](01-system/cachyos/setup.md) |
-| Package lists and current system snapshot | [`01-system/cachyos/packages/`](01-system/cachyos/packages/), [`system-summary.md`](system-summary.md) |
+| CachyOS setup, dev stack, packages, and local AUR recipes | [`01-system/cachyos/`](01-system/cachyos/README.md), [`setup.md`](01-system/cachyos/setup.md), [`dev-stack.md`](01-system/cachyos/dev-stack.md), [`packages/`](01-system/cachyos/packages/) |
 | Snapshot options (Timeshift alternative; current host uses Snapper) | [`01-system/timeshift/`](01-system/timeshift/README.md) |
 | topgrade — update everything | [`01-system/topgrade/`](01-system/topgrade/README.md) |
 
@@ -47,25 +47,25 @@ own README. Start at Part 00 and go in order, or jump to the part you need.
 |---------|------|
 | Hyprland compositor, Noctalia shell, keybinds, scripts | [`02-desktop/hyprland/`](02-desktop/hyprland/README.md) |
 | Plasma removal log | [`02-desktop/hyprland/KDE-REMOVAL.md`](02-desktop/hyprland/KDE-REMOVAL.md) |
-| Font rendering rules | [`02-desktop/fonts/`](02-desktop/fonts/fontconfig/fonts.conf) |
+| Font rendering rules | [`02-desktop/fonts/`](02-desktop/fonts/README.md) |
 
 ### 03 · Terminal — [`03-terminal/`](03-terminal/README.md)
 
 | Chapter | Path |
 |---------|------|
-| zsh (starship/p10k toggle, deferred plugins) | [`03-terminal/zsh/`](03-terminal/zsh/.zshrc) |
-| bash | [`03-terminal/bash/`](03-terminal/bash/.bashrc) |
-| kitty (with catppuccin and gruvbox themes) | [`03-terminal/kitty/`](03-terminal/kitty/kitty.conf) |
-| Alacritty | [`03-terminal/alacritty/`](03-terminal/alacritty/SHORTCUTS.md) |
-| starship prompt | [`03-terminal/starship/`](03-terminal/starship/starship.toml) |
+| zsh (Oh My Zsh, Starship, FZF, developer & AI helpers) | [`03-terminal/zsh/`](03-terminal/zsh/README.md) |
+| bash | [`03-terminal/bash/`](03-terminal/bash/README.md) |
+| kitty (with catppuccin and gruvbox themes) | [`03-terminal/kitty/`](03-terminal/kitty/README.md) |
+| Alacritty | [`03-terminal/alacritty/`](03-terminal/alacritty/README.md) |
+| starship prompt | [`03-terminal/starship/`](03-terminal/starship/README.md) |
 
 ### 04 · Editors — [`04-editors/`](04-editors/README.md)
 
 | Chapter | Path |
 |---------|------|
-| VS Code | [`04-editors/vscode/`](04-editors/vscode/) |
+| VS Code | [`04-editors/vscode/`](04-editors/vscode/README.md) |
 | Zed | [`04-editors/zed/`](04-editors/zed/README.md) |
-| Sublime Text | [`04-editors/sublime/`](04-editors/sublime/) |
+| Sublime Text | [`04-editors/sublime/`](04-editors/sublime/README.md) |
 
 ### 05 · AI — [`05-ai/`](05-ai/README.md)
 
@@ -80,6 +80,13 @@ own README. Start at Part 00 and go in order, or jump to the part you need.
 | Chapter | Path |
 |---------|------|
 | focus: dnsmasq + nftables site blocker with schedule and lock mode | [`06-tools/focus/`](06-tools/focus/README.md) and [`packages.txt`](06-tools/focus/packages.txt) |
+
+### 07 · Networking — [`07-networking/`](07-networking/README.md)
+
+| Chapter | Path |
+|---------|------|
+| SSH connection helper | [`07-networking/ssh/README.md`](07-networking/ssh/README.md) |
+| Nginx MIME types hash config | [`07-networking/nginx/README.md`](07-networking/nginx/README.md) |
 
 ### 99 · Appendix
 

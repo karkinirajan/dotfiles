@@ -5,23 +5,31 @@
 
 # Official repositories
 act
+amdgpu_top
 ansible
 aws-cli-v2
 azure-cli
+brave-bin
 claude-code
 claude-desktop
+cpu-x
 dbeaver
 docker
 docker-buildx
 docker-compose
 docker-machine
 gitlab-runner
+glances
 helm
 inxi
 k9s
+kdiskmark
 kubectl
+lact
 lm_sensors
 mariadb
+meld
+micro
 mission-center
 minikube
 ncdu
@@ -31,11 +39,15 @@ nodejs
 npm
 nvm
 nvtop
+openai-codex
+opentofu
 pgvector
 pnpm
 postgresql
-pulumi
 prometheus
+proton-vpn-gtk-app
+pulumi
+pycharm-community-edition
 python
 radeontop
 rocm-smi-lib
@@ -44,20 +56,15 @@ rustup
 slirp4netns
 sqlite
 stress-ng
+syncthing
 terraform
 valkey
 vim
-openai-codex
 yarn
 zed
-pycharm-community-edition
-proton-vpn-gtk-app
-syncthing
 
 # AUR packages
-amdgpu_top  (AUR)
 anytype-bin  (AUR)
-brave-bin  (AUR)
 docker-rootless-extras  (AUR)
 logseq-desktop-bin  (AUR)
 mongodb-bin  (AUR)
@@ -70,5 +77,3 @@ sublime-text-4  (AUR)
 todoist-appimage  (AUR)
 visual-studio-code-bin  (AUR)
 zoom  (AUR)
-
-# Other explicit host tools in this full profile

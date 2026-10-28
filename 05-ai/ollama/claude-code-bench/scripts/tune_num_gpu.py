@@ -20,7 +20,7 @@ import requests
 logging.basicConfig(level=logging.INFO, format="%(asctime)s %(levelname)-7s %(message)s", datefmt="%H:%M:%S")
 log = logging.getLogger("tune")
 
-SETUP_DIR = Path.home() / "ollama-setup"
+SETUP_DIR = Path(__file__).resolve().parent.parent
 OUT = SETUP_DIR / "tune_results.json"
 
 PROMPT = (
@@ -49,12 +49,21 @@ def vram_used_gb() -> float:
 
 
 def try_num_gpu(host: str, model: str, num_gpu: int, num_ctx: int) -> TuneStep:
+    # Unload first so the upcoming request loads with the new num_gpu value
+    try:
+        requests.post(
+            f"http://{host}/api/generate",
+            json={"model": model, "keep_alive": 0},
+            timeout=30,
+        )
+    except requests.RequestException:
+        pass
     payload = {
         "model": model,
         "prompt": PROMPT,
         "stream": False,
         "options": {"num_ctx": num_ctx, "num_gpu": num_gpu},
-        "keep_alive": "0",  # force a fresh load each step so num_gpu actually re-applies
+        "keep_alive": "30s",  # keep loaded briefly so vram_used_gb() measures loaded VRAM
     }
     try:
         r = requests.post(f"http://{host}/api/generate", json=payload, timeout=300)
@@ -64,11 +73,20 @@ def try_num_gpu(host: str, model: str, num_gpu: int, num_ctx: int) -> TuneStep:
         return TuneStep(num_gpu=num_gpu, ok=False, error=str(exc))
     if "error" in d:
         return TuneStep(num_gpu=num_gpu, ok=False, error=d["error"])
+    vram = vram_used_gb()
+    try:
+        requests.post(
+            f"http://{host}/api/generate",
+            json={"model": model, "keep_alive": 0},
+            timeout=30,
+        )
+    except requests.RequestException:
+        pass
     ec, ed = d.get("eval_count", 0), d.get("eval_duration", 1) / 1e9
     return TuneStep(
         num_gpu=num_gpu, ok=True,
         decode_tok_s=(ec / ed if ed > 0 else 0.0),
-        vram_used_gb=vram_used_gb(),
+        vram_used_gb=vram,
     )
 
 

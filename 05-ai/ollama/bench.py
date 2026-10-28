@@ -36,7 +36,8 @@ def placement(since):
 def vram_gb():
     import glob
     for f in glob.glob("/sys/class/drm/card*/device/mem_info_vram_used"):
-        return int(open(f).read()) / 2**30
+        with open(f) as fh:
+            return int(fh.read()) / 2**30
     return float("nan")
 
 
@@ -47,12 +48,22 @@ def bench(model, ctx=None):
     payload = {"model": model, "prompt": PROMPT, "stream": False}
     if ctx:
         payload["options"] = {"num_ctx": ctx}
-    d = json.loads(post(payload))
+    raw = post(payload)
+    if not raw.strip():
+        print(f"{model:<18} ERROR: empty response from {API}")
+        return
+    try:
+        d = json.loads(raw)
+    except json.JSONDecodeError as exc:
+        print(f"{model:<18} ERROR: invalid JSON response ({exc})")
+        return
     if "error" in d:
         print(f"{model:<18} ERROR: {d['error']}")
         return
-    gen = d["eval_count"] / (d["eval_duration"] / 1e9)
-    pro = d["prompt_eval_count"] / (d["prompt_eval_duration"] / 1e9)
+    eval_dur = d.get("eval_duration", 0)
+    prompt_dur = d.get("prompt_eval_duration", 0)
+    gen = d.get("eval_count", 0) / (eval_dur / 1e9) if eval_dur else 0.0
+    pro = d.get("prompt_eval_count", 0) / (prompt_dur / 1e9) if prompt_dur else 0.0
     print(f"{model:<18} ctx={ctx or 'default':<8} gen={gen:6.1f} tok/s  "
           f"prompt={pro:6.0f} tok/s  load={d.get('load_duration',0)/1e9:5.1f}s  "
           f"gpu={placement(since):<8} vram={vram_gb():.2f}GB")
@@ -65,5 +76,5 @@ if __name__ == "__main__":
         i = args.index("--ctx")
         ctx = int(args[i + 1])
         del args[i:i + 2]
-    for m in args or ["glm-4.7-flash", "qwen3.5:9b"]:
+    for m in args or ["gemma4:12b", "qwen3-coder:30b", "gpt-oss:20b"]:
         bench(m, ctx)

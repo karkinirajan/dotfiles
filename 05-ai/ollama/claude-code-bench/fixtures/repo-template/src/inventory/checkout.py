@@ -1,12 +1,4 @@
-"""Order checkout: ties catalog lookup and pricing together.
-
-This is module A — where the bug's failing test lives — but the actual
-defect is in pricing.apply_bulk_discount (module B). An agent that only
-reads this file's traceback and "fixes" compute_order_total to hardcode a
-different threshold would be patching the symptom, not the cause, and
-would not generalize (a second test at a different quantity boundary would
-still fail).
-"""
+"""Order checkout: ties catalog lookup and pricing together."""
 
 from __future__ import annotations
 

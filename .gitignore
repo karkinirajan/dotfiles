@@ -17,8 +17,9 @@ references/
 # includes it last so it wins; tracking it would fight the generator.
 03-terminal/kitty/current-theme.conf
 
-# Backups install.sh writes before replacing a real file with a symlink.
+# Backups install.sh or kit migrations write before replacing a file.
 *.bak-*
+*.pre-*
 
 # Local session/plugin state, never shared.
 .remember/

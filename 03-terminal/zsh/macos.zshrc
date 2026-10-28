@@ -147,15 +147,12 @@ alias postgres='sudo -u postgres psql'
 alias myip='curl -s ifconfig.me'
 alias localip='ipconfig getifaddr en0'
 alias ports='lsof -i -P -n | grep LISTEN'
-alias spb='cat ~/.ssh/id_rsa.pub'
-alias spv='cat ~/.ssh/id_rsa'
+alias spb='cat ~/.ssh/id_ed25519.pub 2>/dev/null || cat ~/.ssh/id_rsa.pub'
 alias flush-dns='sudo dscacheutil -flushcache; sudo killall -HUP mDNSResponder'
 
 # ==================================
 # Custom Functions
 # ==================================
-mkcd() { mkdir -p "$1" && cd "$1"; }
-
 hgrep() { history | grep "$1"; }
 
 extract() {
