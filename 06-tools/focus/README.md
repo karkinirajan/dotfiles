@@ -26,6 +26,16 @@ apps ─▶│ /etc/resolv │──▶ 127.0.0.1 ──▶ dnsmasq ──▶ ad
 
 ## Install
 
+Install the listed dependencies first:
+
+```bash
+sudo pacman -S --needed bind dnsmasq nftables
+```
+
+This only installs the programs. The steps below change NetworkManager's DNS
+behavior and route system DNS through local dnsmasq. Keep a rollback ready and
+verify ordinary name resolution before enabling the focus services.
+
 ```bash
 cp -r scripts ~/focus/
 cp allow.list block.list schedule.conf ~/focus/

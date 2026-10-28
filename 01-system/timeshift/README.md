@@ -1,23 +1,28 @@
 # Timeshift
 
-Daily btrfs snapshots of `/`, keeping exactly one. Each new daily snapshot
-replaces the previous one (`count_daily: 1` in `/etc/timeshift/timeshift.json`).
+This directory documents Timeshift as an alternative snapshot setup. On
+CachyOS, check whether `cachyos-snapper-support` is installed before choosing
+Timeshift: the two packages conflict and cannot be installed together. Configure
+Timeshift's snapshot policy and create an initial snapshot before enabling the
+daily timer. The timer only runs `timeshift --check`; Timeshift's own
+configuration controls whether that check creates a snapshot and retention.
+Install Timeshift only after choosing it instead of the Snapper packages:
+`sudo pacman -S timeshift`.
 
-Snapshots are btrfs subvolumes on the same partition as `/`
-(`/dev/nvme0n1p5`), so they protect against bad updates and config mistakes,
-not against disk failure. `/home` is excluded.
+On a Btrfs root, snapshots are subvolumes on the same filesystem. They can help
+recover from bad updates and config mistakes, but do not protect against disk
+failure. Choose whether to include `/home` in Timeshift's setup.
 
 ## Files
 
 - `timeshift-daily.service` / `timeshift-daily.timer` — runs `timeshift --check`
-  once a day. Timeshift's own schedule (`schedule_daily`) does the real work;
-  the timer only triggers it. Root-owned, so copied by hand (not linked by
-  `install.sh`).
+  once a day. Root-owned, so copied by hand (not linked by `install.sh`).
 
 ## Install
 
 ```sh
-sudo cp tools/timeshift/timeshift-daily.service tools/timeshift/timeshift-daily.timer /etc/systemd/system/
+sudo install -Dm644 01-system/timeshift/timeshift-daily.service /etc/systemd/system/timeshift-daily.service
+sudo install -Dm644 01-system/timeshift/timeshift-daily.timer /etc/systemd/system/timeshift-daily.timer
 sudo systemctl daemon-reload
 sudo systemctl enable --now timeshift-daily.timer
 ```

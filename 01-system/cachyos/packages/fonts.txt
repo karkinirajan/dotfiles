@@ -4,8 +4,8 @@
 # and every one of them is a package away. This list is the reproducible part.
 # Lines marked (AUR) are not in the official repos and need an AUR helper.
 #
-#   repo:  sudo pacman -S --needed $(grep -v '^#' 01-system/cachyos/packages/fonts.txt | awk '{print $1}')
-#   AUR:   paru        -S --needed $(grep    '(AUR)' 01-system/cachyos/packages/fonts.txt | awk '{print $1}')
+# Install the combined baseline package lists using the interactive commands
+# in the root README. That flow supports either paru or yay for AUR packages.
 #
 # ── Required by the configs in this repo ─────────────────────────────────────
 #   ttf-firacode-nerd     kitty font_family / bold_font, plus the symbol_map

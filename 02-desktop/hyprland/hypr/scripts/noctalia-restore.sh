@@ -25,7 +25,8 @@
 #   3. It must restart as a plain child of Hyprland, not of whatever shell ran
 #      this script. Apps launched from Noctalia's launcher inherit its cgroup,
 #      and Chromium's sandbox crashes instantly inside a systemd service scope
-#      (see noctalia-watchdog.sh). `hyprctl dispatch exec` gets that right.
+#      (see noctalia-watchdog.sh). `hl.dsp.exec_cmd()` gets that right on
+#      Hyprland 0.55 and newer.
 
 set -uo pipefail
 
@@ -90,7 +91,12 @@ install -m 0644 "$STAGED" "$LIVE.tmp.$$" && mv -f "$LIVE.tmp.$$" "$LIVE"
 info "wrote $LIVE"
 
 # ── 4. Restart as a child of Hyprland, not of this shell ────────────────────
-hyprctl dispatch exec "$WATCHDOG" >/dev/null 2>&1
+LUA_COMMAND=$(python3 - "$WATCHDOG" <<'PY'
+import json, sys
+print(f"hl.dsp.exec_cmd({json.dumps(sys.argv[1], ensure_ascii=False)})")
+PY
+)
+hyprctl dispatch "$LUA_COMMAND" >/dev/null 2>&1
 for _ in $(seq 40); do pgrep -x noctalia >/dev/null && break; sleep 0.25; done
 pgrep -x noctalia >/dev/null || die "Noctalia did not come back up — start $WATCHDOG by hand"
 sleep 3

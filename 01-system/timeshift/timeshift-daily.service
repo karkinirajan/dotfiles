@@ -1,5 +1,5 @@
 [Unit]
-Description=Timeshift scheduled snapshot (one rotating daily, see /etc/timeshift/timeshift.json)
+Description=Run Timeshift's configured snapshot check
 
 [Service]
 Type=oneshot

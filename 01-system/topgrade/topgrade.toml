@@ -6,8 +6,14 @@
 
 
 [misc]
-# antigravity: not used here.
-disable = ["antigravity", "antigravity_cli", "ollama", "helm", "cursor", "containers"]
+# Update every detected step; skip only steps that need special handling.
+# antigravity_cli runs `agy update`, which tries to overwrite /usr/bin/agy and
+# fails (not writable); the binary belongs to the antigravity-cli package,
+# which paru already updates in the system step.
+# Helm's native step errors when Helm is installed but has no repos configured;
+# a conditional custom command below updates repos only when at least one exists.
+disable = ["antigravity", "antigravity_cli", "helm"]
+no_self_update = true
 
 # On Unix systems, Topgrade should not be run as root, it
 # will run commands with sudo or equivalent where needed.
@@ -142,6 +148,7 @@ ask_retry = false
 [commands]
 # "Python Environment" = "~/dev/.env/bin/pip install -i https://pypi.python.org/simple -U --upgrade-strategy eager jupyter"
 # "Custom command using interactive shell (unix)" = "-i vim_upgrade"
+"Helm repositories" = "sh -c 'if command -v helm >/dev/null 2>&1 && helm repo list 2>/dev/null | tail -n +2 | grep -q .; then helm repo update; fi'"
 
 
 [python]
@@ -206,7 +213,7 @@ ask_retry = false
 # Arch Package Manager to use.
 # Allowed values:
 #   autodetect, aura, garuda_update, pacman, pamac, paru, pikaur, shelly, trizen, yay
-# arch_package_manager = "pacman"
+arch_package_manager = "paru"
 
 # Arguments to pass yay (or paru) when updating packages
 # yay_arguments = "--nodevel"

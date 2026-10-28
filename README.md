@@ -30,14 +30,15 @@ own README. Start at Part 00 and go in order, or jump to the part you need.
 | How the repo is wired to your home directory | [`manifest.conf`](manifest.conf) — the map: `<type> <repo path> <live path>` |
 | The installer | [`install.sh`](install.sh) — link, seed, status, pull, restore |
 | Fresh CachyOS setup | [`fresh-setup.md`](fresh-setup.md) — AI-agent playbook with owner checkpoints |
+| Current machine snapshot | [`system-summary.md`](system-summary.md) — hardware, packages, services, defaults, and fresh-setup order |
 
 ### 01 · System — [`01-system/`](01-system/README.md)
 
 | Chapter | Path |
 |---------|------|
 | CachyOS setup walkthrough (AMD GPU, toolchains, Kubernetes, Terraform) | [`01-system/cachyos/setup.md`](01-system/cachyos/setup.md) |
-| Package lists: desktop, fonts, AI stack | [`01-system/cachyos/packages/`](01-system/cachyos/packages/) |
-| Timeshift daily snapshots | [`01-system/timeshift/`](01-system/timeshift/README.md) |
+| Package lists and current system snapshot | [`01-system/cachyos/packages/`](01-system/cachyos/packages/), [`system-summary.md`](system-summary.md) |
+| Snapshot options (Timeshift alternative; current host uses Snapper) | [`01-system/timeshift/`](01-system/timeshift/README.md) |
 | topgrade — update everything | [`01-system/topgrade/`](01-system/topgrade/README.md) |
 
 ### 02 · Desktop — [`02-desktop/`](02-desktop/README.md)
@@ -78,7 +79,7 @@ own README. Start at Part 00 and go in order, or jump to the part you need.
 
 | Chapter | Path |
 |---------|------|
-| focus: dnsmasq + nftables site blocker with schedule and lock mode | [`06-tools/focus/`](06-tools/focus/README.md) |
+| focus: dnsmasq + nftables site blocker with schedule and lock mode | [`06-tools/focus/`](06-tools/focus/README.md) and [`packages.txt`](06-tools/focus/packages.txt) |
 
 ### 99 · Appendix
 
@@ -120,18 +121,43 @@ An existing real file is moved to `<path>.bak-<timestamp>` before it is
 replaced, so a first run on a machine that already has configs is safe.
 A symlink that points somewhere else is skipped unless you pass `--force`.
 
-Install the packages before the configs. The configs name fonts and helper
-binaries and fail quietly without them:
+Install the baseline packages before the configs. The lists cover the desktop,
+system, fonts, CLI tools, and focus dependencies. Installing packages does not enable
+focus DNS filtering or start local services:
 
 ```bash
-mapfile -t repo_packages < <(awk 'NF && $1 !~ /^#/ && $2 != "(AUR)" {print $1}' \
-  01-system/cachyos/packages/desktop.txt 01-system/cachyos/packages/fonts.txt)
-mapfile -t aur_packages < <(awk 'NF && $1 !~ /^#/ && $2 == "(AUR)" {print $1}' \
-  01-system/cachyos/packages/desktop.txt 01-system/cachyos/packages/fonts.txt)
+# Verify this CachyOS install still has its optimized repositories enabled;
+# syncing against only Arch repos can downgrade CachyOS-built packages.
+if ! pacman-conf --repo-list | grep -q '^cachyos'; then
+  echo "CachyOS repositories are missing; restore them before installing packages" >&2
+  exit 1
+fi
+
+# Update the full system first to avoid an unsupported partial upgrade.
+sudo pacman -Syu
+
+package_files=(01-system/cachyos/packages/desktop.txt \
+  01-system/cachyos/packages/system.txt \
+  01-system/cachyos/packages/fonts.txt \
+  01-system/cachyos/packages/cli.txt \
+  06-tools/focus/packages.txt)
+mapfile -t repo_packages < <(awk 'NF && $1 !~ /^#/ && $2 != "(AUR)" {print $1}' "${package_files[@]}")
+mapfile -t aur_packages < <(awk 'NF && $1 !~ /^#/ && $2 == "(AUR)" {print $1}' "${package_files[@]}")
 
 sudo pacman -S --needed "${repo_packages[@]}"
-paru -S --needed "${aur_packages[@]}"
+aur_helper="$(command -v paru || command -v yay || true)"
+if ((${#aur_packages[@]})) && [[ -z "$aur_helper" ]]; then
+  echo "Install paru or yay before installing AUR packages" >&2
+  exit 1
+fi
+if ((${#aur_packages[@]})); then
+  "$aur_helper" -S --needed "${aur_packages[@]}"
+fi
 ```
+
+The local LLM stack is separate because it is GPU- and storage-intensive. If
+you want it, install `01-system/cachyos/packages/ai.txt` in a reviewed
+transaction, then follow [`05-ai/ollama/README.md`](05-ai/ollama/README.md).
 
 Then follow [`02-desktop/hyprland/README.md`](02-desktop/hyprland/README.md)
 for the parts the manifest does not cover (hyprpm plugins, the D-Bus

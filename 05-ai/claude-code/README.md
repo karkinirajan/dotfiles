@@ -21,6 +21,7 @@ claude-code/
     ├── discover/              map an unfamiliar project before changing it
     ├── shipcheck/             run real build/lint/test gates before "done"
     ├── visual-qa/             check rendered UI, not just the source
+    ├── token-efficient-workflow/ keep context focused and inspect usage
     └── …                      stack patterns: FastAPI, Django/DRF, Flask,
                                SQLAlchemy, Pydantic v2, Postgres/MySQL/Mongo/Redis,
                                JWT, OAuth, CORS/CSRF, secrets, Docker, Nginx
@@ -38,6 +39,38 @@ claude-code/
 Claude Code loads skills only from **direct children** of `~/.claude/skills/`.
 Do not nest skills in category folders, or they will not load. Keep the flat
 layout and sort skills by name prefix instead.
+
+The global skills directory is a symlink to this tracked directory, so skills
+are available to new Claude Code sessions without a separate enable step. The
+`token-efficient-workflow` skill is invoked as `/token-efficient-workflow` or
+selected automatically when relevant; its full instructions load only when
+used. Existing sessions may need to be restarted to discover a newly added
+skill.
+
+## Token-efficient setup
+
+`ccusage` is installed per-user with pnpm and reads local Claude Code usage
+records. Run `ccusage claude daily` or `ccusage claude session` to inspect
+historical usage; it reports usage but does not itself reduce it. In a Claude
+Code session, use `/context`, `/usage`, `/cost`, `/compact`, and `/clear` to
+inspect or manage the active context. Use `/token-efficient-workflow` for the
+focused search, output, and session practices in the skill.
+
+The optional supporting packages are listed in
+[`../../01-system/cachyos/packages/claude-code-tools.txt`](../../01-system/cachyos/packages/claude-code-tools.txt).
+They add structural search (`ast-grep`), syntax-aware diffs (`difftastic`),
+shell and workflow validation (`shellcheck`, `shfmt`, `actionlint`), and focused
+diff, watch, and benchmark tools. Install them with pacman after reviewing the
+dependency plan; they are not Claude runtime dependencies.
+
+Install the eight optional packages with:
+
+```sh
+sudo pacman -S --needed ast-grep actionlint difftastic git-delta hyperfine shellcheck shfmt watchexec
+```
+
+`ccusage` is already installed for the current user. The eight pacman packages
+are documented but remain uninstalled until an administrator authenticates.
 
 ## Deliberately not tracked
 

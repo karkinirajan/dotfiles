@@ -1,11 +1,14 @@
-config_version = 15
+config_version = 16
 
 [audio]
 enable_overdrive = true
 sound_volume = 0.99999997764825821
 
 [bar]
-order = [ "kneeraazon" ]
+order = [ "kneeraazon", "default" ]
+
+    [bar.default]
+    enabled = false
 
     [bar.kneeraazon]
     border = "#cba6f7aa"
@@ -13,21 +16,31 @@ order = [ "kneeraazon" ]
     capsule = true
     capsule_border = "#cba6f799"
     capsule_fill = "on_primary"
-    capsule_padding = 8.0
     capsule_radius = 2
     capsule_thickness = 0.71999998763203621
-    center = [ "clock", "summary" ]
+    center = []
     concave_edge_corners = false
     contact_shadow = true
     end = [
+        "audio_visualizer",
+        "clock",
+        "speedtest-widget",
+        "screenshot",
+        "status",
+        "notes",
         "bar",
+        "ai_usage_agy",
+        "ai_usage_codex",
+        "ram",
         "weather",
+        "bar_6",
+        "summary",
         "notifications",
         "clipboard",
         "volume",
+        "brightness",
         "nightlight",
         "network",
-        "bluetooth",
         "control-center",
         "tray",
         "session"
@@ -41,26 +54,17 @@ order = [ "kneeraazon" ]
     radius_bottom_right = 0
     radius_top_left = 0
     radius_top_right = 0
-    start = [ "workspaces", "taskbar", "active_window", "media" ]
+    start = [ "workspaces", "media" ]
     thickness = 42
     widget_spacing = 8
 
-        [[bar.kneeraazon.capsule_group]]
-        accordion = false
-        accordion_direction = "end"
-        border = "#CBA6F799"
-        enabled = true
-        fill = "primary"
-        id = "g1"
-        members = [ "active_window", "media", "audio_visualizer" ]
-        opacity = 0.0
-        padding = 10.0
-        radius = 4.0
-
 [brightness]
 enable_ddcutil = true
-minimum_brightness = 0.99999997764825821
+minimum_brightness = 0.0
 sync_all_monitors = true
+
+    [brightness.monitor.DP-2]
+    backend = "ddcutil"
 
 [calendar]
 enabled = true
@@ -106,7 +110,7 @@ widget_order = [ "lockscreen-login-box@FALLBACK", "lockscreen-login-box@DP-2" ]
     type = "login_box"
 
         [lockscreen_widgets.widget."lockscreen-login-box@DP-2".settings]
-        background_color = "surface_variant"
+        background_color = "surface_container"
         background_opacity = 0.88
         background_radius = 12.0
         center_password_text = false
@@ -133,7 +137,7 @@ widget_order = [ "lockscreen-login-box@FALLBACK", "lockscreen-login-box@DP-2" ]
     type = "login_box"
 
         [lockscreen_widgets.widget."lockscreen-login-box@FALLBACK".settings]
-        background_color = "surface_variant"
+        background_color = "surface_container"
         background_opacity = 0.88
         background_radius = 12.0
         center_password_text = false
@@ -149,14 +153,30 @@ widget_order = [ "lockscreen-login-box@FALLBACK", "lockscreen-login-box@DP-2" ]
         show_weather = true
 
 [nightlight]
-enabled = true
-force = true
+enabled = false
+force = false
 temperature_day = 10000
 temperature_night = 5000
+
+[plugin_settings."davinci13/containers"]
+show_stopped = true
+view_mode = "cards"
+
+[plugin_settings."davemhammer/obsidian"]
+vault_path = "/home/kneeraazon/Documents/kneeraazon"
+vault_name = "kneeraazon"
 
 [plugin_settings."felipeartur/ai-usagebar"]
 panel_open_near_click = false
 refresh_minutes = 120
+
+[plugin_settings."giodamelio/beeminder"]
+goals_open_near_click = false
+menu_open_near_click = false
+
+[plugin_settings."miguelfm/ai-triage"]
+font_scale = "compact"
+panel_open_near_click = false
 
 [plugin_settings."nightwatch75/todo"]
 panel_open_near_click = false
@@ -172,7 +192,21 @@ panel_placement = "attached"
 
 [plugins]
 auto_update = "all"
-enabled = [ "gustav0ar/drive-health", "felipeartur/ai-usagebar", "tmelik/system-monitor" ]
+enabled = [
+    "felipeartur/ai-usagebar",
+    "tmelik/system-monitor",
+    "noctalia/notes",
+    "nilsonlinux/speedtest-meter",
+    "noctalia/timer",
+    "noctalia/translator",
+    "noctalia/wallhaven",
+    "noctalia/wallpaper_depth",
+    "noctalia/umbriel-companion",
+    "azokyen/spotify-media",
+    "davinci13/containers",
+    "goatnath/spotify-lyrics",
+    "davemhammer/obsidian"
+]
 
     [[plugins.source]]
     kind = "git"
@@ -185,8 +219,8 @@ enabled = [ "gustav0ar/drive-health", "felipeartur/ai-usagebar", "tmelik/system-
     name = "community"
 
 [shell]
+app_icon_color = "primary"
 font_family = "DejaVu Sans"
-popup_shadows = false
 settings_window_translucent = true
 
     [shell.animation]
@@ -194,8 +228,8 @@ settings_window_translucent = true
 
     [shell.launcher]
     app_grid = true
+    category_icons_only = true
     compact = true
-    layout = "simple"
     pinned = [
         "google-chrome",
         "code",
@@ -204,7 +238,6 @@ settings_window_translucent = true
         "org.gnome.Nautilus",
         "com.rtosta.zapzap",
         "spotify",
-        "brave-browser",
         "com.stremio.stremio",
         "com.anthropic.Claude",
         "zen",
@@ -212,32 +245,37 @@ settings_window_translucent = true
         "discord",
         "brave-gfgbgjphjkdhefmnmbhogcpckgpapbag-Default",
         "signal",
-        "org.telegram.desktop"
+        "org.telegram.desktop",
+        "brave-browser"
     ]
+    show_app_actions = true
 
     [shell.panel]
     clipboard_placement = "attached"
+    floating_layer = "top"
+    list_item_background = true
+    open_near_click_control_center = false
+    polkit_placement = "attached"
+    transparency_mode = "glass"
 
     [shell.session]
     grid = true
-
-    [shell.shadow]
-    alpha = 0.99999997764825821
 
     [shell.window_switcher]
     mru = true
 
 [theme]
-builtin = "Ayu"
-community_palette = "Catppuccin Mocha Green"
+builtin = "Dracula"
+community_palette = "Paradise"
 custom_palette = "CatppuccinMocha"
 mode = "dark"
 pure_black_dark = true
 source = "custom"
+sync_color_scheme = false
 wallpaper_scheme = "m3-content"
 
     [theme.templates]
-    builtin_ids = [ "alacritty", "gtk4", "starship" ]
+    builtin_ids = [ "alacritty", "btop", "foot", "gtk4", "hyprland", "kitty", "qt", "starship" ]
     community_ids = [
         "antigravity",
         "claude-code",
@@ -263,15 +301,16 @@ wallpaper_scheme = "m3-content"
 
 [wallpaper]
 edge_smoothness = 0.0
+fill_mode = "span"
 
     [wallpaper.default]
-    path = "/home/kneeraazon/.wallpapers/Wallpaper22.png"
+    path = "/home/kneeraazon/Pictures/wallhaven-n6od8x.jpg"
 
     [wallpaper.last]
-    path = "/home/kneeraazon/.wallpapers/Wallpaper22.png"
+    path = "/home/kneeraazon/Pictures/wallhaven-n6od8x.jpg"
 
     [wallpaper.monitors.DP-2]
-    path = "/home/kneeraazon/.wallpapers/Wallpaper22.png"
+    path = "/home/kneeraazon/Pictures/wallhaven-n6od8x.jpg"
 
     [[wallpaper.favorite]]
     builtin_palette = "Catppuccin"
@@ -366,10 +405,35 @@ title_scroll = "on_hover"
 
 [widget.bar]
 anchor = true
+capsule = true
 font_weight = 800
 glyph_position = "after"
+show_name = true
 type = "felipeartur/ai-usagebar:bar"
 vendor = "anthropic"
+
+[widget.ai_usage_agy]
+capsule = true
+show_name = true
+type = "felipeartur/ai-usagebar:bar"
+vendor = "antigravity"
+
+[widget.ai_usage_codex]
+capsule = true
+show_name = true
+type = "felipeartur/ai-usagebar:bar"
+vendor = "openai"
+
+[widget.bar_6]
+type = "davinci13/containers:bar"
+
+[widget.bluetooth]
+enabled = false
+
+[widget.brightness]
+show_glyph = true
+show_label = true
+show_when_unavailable = true
 
 [widget.clipboard]
 capsule = true
@@ -384,6 +448,7 @@ format = "{:%a, %d %b | %H:%M:%S}"
 
 [widget.control-center]
 capsule = true
+enabled = false
 font_weight = 700
 
 [widget."felipeartur/ai-usagebar:bar"]
@@ -414,13 +479,18 @@ icon_color = "#28B8AF"
 show_label = false
 
 [widget.nightlight]
-glyph = "moon-off"
+glyph = "moon-stars"
 icon_color = "#C14E0B"
-tooltip = "Night Light (on/off)"
+tooltip = "Click to toggle · scroll to adjust warmth"
 type = "custom_button"
 
     [widget.nightlight.actions]
     left = "exec /home/kneeraazon/.config/hypr/scripts/nightlight-toggle.sh"
+    scroll_down = "exec /home/kneeraazon/.config/hypr/scripts/nightlight-temperature.sh cooler"
+    scroll_up = "exec /home/kneeraazon/.config/hypr/scripts/nightlight-temperature.sh warmer"
+
+[widget.notes]
+type = "noctalia/notes:notes"
 
 [widget.notifications]
 anchor = true
@@ -429,14 +499,21 @@ color = "hover"
 icon_color = "on_surface"
 
 [widget.session]
-capsule = true
 capsule_padding = 10
-icon_color = "#FF0000"
 
 [widget.settings]
 icon_color = "secondary"
 
+[widget.speedtest-widget]
+capsule_radius = 2
+type = "nilsonlinux/speedtest-meter:speedtest-widget"
+
+[widget.status]
+capsule = true
+type = "davemhammer/obsidian:status"
+
 [widget.summary]
+enabled = false
 show_download = false
 show_upload = false
 type = "tmelik/system-monitor:summary"
@@ -444,9 +521,6 @@ type = "tmelik/system-monitor:summary"
 [widget.sysmon]
 glyph = "cpu"
 visualization = "none"
-
-[widget.taskbar]
-enabled = false
 
 [widget."tmelik/system-monitor:summary"]
 capsule = true
@@ -468,7 +542,9 @@ show_top_processes = false
 show_upload = false
 
 [widget.tray]
-capsule = true
+capsule_radius = 2
+hide_passive = false
+scroll_repeat = "gesture"
 
 [widget.volume]
 capsule = true
@@ -477,7 +553,7 @@ show_label = false
 
 [widget.weather]
 icon_color = "primary"
-show_condition = false
+max_length = 222
 show_temperature = true
 
 [widget.workspaces]

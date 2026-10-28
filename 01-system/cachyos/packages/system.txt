@@ -1,0 +1,13 @@
+# Snapshot, security, and power-management packages explicitly installed on
+# this CachyOS profile. Several optional security daemons remain disabled.
+# Timeshift is an alternative and conflicts with cachyos-snapper-support.
+
+apparmor.d
+cachyos-snapper-support
+dnscrypt-proxy
+fail2ban
+power-profiles-daemon
+snap-pac
+snapper
+ufw
+ufw-extras

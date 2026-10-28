@@ -41,6 +41,9 @@ Also installed and loaded, but with no dedicated keybind by design:
 | `Ctrl + Print` | Screenshot the active window |
 | `Alt + Print` | Screenshot the whole screen |
 
+Every capture is saved to `~/Pictures/Screenshots/`, copied to the clipboard,
+and opened in Swash for annotation.
+
 ## Window State
 
 | Shortcut | Action |

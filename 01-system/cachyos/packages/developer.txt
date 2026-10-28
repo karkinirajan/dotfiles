@@ -1,0 +1,74 @@
+# Optional full development profile installed on the primary CachyOS machine.
+# Lines marked (AUR) are built from the Arch User Repository.
+# Upwork uses the bundled-runtime PKGBUILD at ../aur/upwork/PKGBUILD because
+# the AUR recipe builds a large Electron runtime from Chromium sources.
+
+# Official repositories
+act
+ansible
+aws-cli-v2
+azure-cli
+claude-code
+claude-desktop
+dbeaver
+docker
+docker-buildx
+docker-compose
+docker-machine
+gitlab-runner
+helm
+inxi
+k9s
+kubectl
+lm_sensors
+mariadb
+mission-center
+minikube
+ncdu
+nginx
+node-gyp
+nodejs
+npm
+nvm
+nvtop
+pgvector
+pnpm
+postgresql
+pulumi
+prometheus
+python
+radeontop
+rocm-smi-lib
+rootlesskit
+rustup
+slirp4netns
+sqlite
+stress-ng
+terraform
+valkey
+vim
+openai-codex
+yarn
+zed
+pycharm-community-edition
+proton-vpn-gtk-app
+syncthing
+
+# AUR packages
+amdgpu_top  (AUR)
+anytype-bin  (AUR)
+brave-bin  (AUR)
+docker-rootless-extras  (AUR)
+logseq-desktop-bin  (AUR)
+mongodb-bin  (AUR)
+mongodb-compass-bin  (AUR)
+mullvad-vpn-bin  (AUR)
+notion-app-enhanced  (AUR)
+slack-desktop  (AUR)
+stremio-linux-shell  (AUR)
+sublime-text-4  (AUR)
+todoist-appimage  (AUR)
+visual-studio-code-bin  (AUR)
+zoom  (AUR)
+
+# Other explicit host tools in this full profile

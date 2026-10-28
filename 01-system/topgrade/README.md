@@ -1,19 +1,25 @@
 # Topgrade
 
-One command (`topgrade`) that upgrades every package manager, plugin
-manager, and dev toolchain on this machine in one pass. `topgrade.toml`
-here is tuned to keep package-manager confirmation prompts enabled
-(`assume_yes = false`), so a conflict cannot silently remove a required
-package. Retry prompts are disabled, and steps are disabled only for things
-that aren't actually usable on this machine:
+`topgrade` updates every supported step it detects: system packages, language
+toolchains and package managers, editors, plugins, containers, and other
+installed tools. The Arch system step is explicitly set to `paru`, which uses
+`pacman` for repository packages and handles AUR packages. The Zsh `upgrade`
+command likewise prefers `paru` and falls back to `yay`.
 
-| Step | Why disabled |
-|---|---|
-| `antigravity`, `antigravity_cli` | Not used on this machine |
-| `helm` | Installed but has zero repos configured (`helm repo list` → empty) — nothing to update |
-| `cursor` | Only `cursor-agent` CLI is installed (its own step, `cursor_agent`, stays enabled) — no actual Cursor IDE |
-| `containers` | Docker daemon is intentionally disabled (`systemctl is-enabled docker` → disabled) — not started without being asked |
-| `ollama` | **Only disable this temporarily** while an Ollama benchmark/inference run is in progress — an unexpected `systemctl restart ollama` mid-run corrupts results. Re-enable once the run finishes. |
+There is no `only` list; Topgrade's detection decides which steps apply. The
+Antigravity extension check is disabled because in the installed Topgrade
+version, probing `antigravity --version` opens the IDE and returns no version.
+The Antigravity CLI step is disabled too: it runs `agy update`, which tries to
+overwrite `/usr/bin/agy` and fails because that path is not writable. Both
+binaries come from the `antigravity` and `antigravity-cli` packages, which
+`paru` already updates in the system step. Helm's native step is replaced by a
+conditional custom command: it runs `helm repo update` only when at least one
+Helm repository is configured, so a fresh Helm install does not fail every
+upgrade with “no repositories found.”
+Topgrade's built-in self-updater is disabled because Topgrade itself is
+installed as an AUR package and is updated by `paru` in the system step.
+Confirmation prompts remain enabled
+(`assume_yes = false`), and failed steps do not retry automatically.
 
 ## Install
 

@@ -150,4 +150,7 @@ bindings = [
 
   # Ctrl+L clears the screen but keeps scrollback; this wipes both.
   { key = "L",      mods = "Control|Shift", action = "ClearLogNotice" },
+
+  # Shift+Enter sends ESC+CR (for apps that expect it, e.g. some REPLs)
+  { key = "Return", mods = "Shift", chars = "\u001B\r" },
 ]

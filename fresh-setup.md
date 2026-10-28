@@ -3,20 +3,28 @@
 Use this runbook to rebuild the CachyOS workstation represented by this repo.
 It coordinates the detailed chapter guides; it is not a disk image or an
 instruction to clone this machine's IDs, keys, passwords, or private data.
+The point-in-time hardware, package, service, and runtime inventory is in
+[`system-summary.md`](system-summary.md).
 
 ## Target profile
 
-- UEFI x86-64 CachyOS workstation, AMD Ryzen 5 5600 and Radeon RX 6700 XT
-  (RDNA2/gfx1031), 32 GiB RAM.
-- Btrfs root with Snapper snapshots; GRUB; Windows kept as a boot option when
-  dual-booting. The current installation has a separate CachyOS EFI partition.
-- Hyprland + Noctalia, launched through UWSM from SDDM. No Plasma session and
-  no passwordless autologin. SDDM's greeter uses X11.
+- UEFI x86-64 CachyOS workstation, AMD Ryzen 5 5600 and XFX Radeon RX 6700 XT
+  (RDNA2/gfx1031), 32 GiB DDR4-3600 RAM.
+- One observed 512 GB NVMe with a 4 GiB FAT EFI `/boot` partition and Btrfs
+  root/home/log/cache subvolumes. Limine is the active bootloader. The desired
+  menu is one primary CachyOS kernel entry only; Windows, extra kernels,
+  fallback EFI loaders, and Snapper entries should not appear there. No Windows
+  firmware entry was present in the observed UEFI boot order.
+- Hyprland + Noctalia, launched through UWSM from greetd with the Noctalia
+  greeter. SDDM is installed but inactive. No Plasma session.
 - Zsh, Kitty, Starship, development tooling, and an AMD ROCm-backed Ollama
   configuration. See the package lists and chapter guides for the exact scope.
-- Current locale is `en_US.UTF-8` (`LC_TIME=C.UTF-8`) and timezone is
+- Configured locale is `en_US.UTF-8` (`LC_TIME=en_US.UTF-8`) and timezone is
   `Asia/Kathmandu`; confirm these with the owner instead of assuming they fit
   a new machine.
+- UFW is active with deny-incoming/allow-outgoing policy and no allow rules.
+  The Proton VPN daemon is active without a tunnel; Mullvad is installed but
+  disabled. Local databases and Ollama listen on loopback.
 
 This is a rolling distribution. Reproduce the profile and configuration, then
 install compatible current package versions from the configured CachyOS/Arch
@@ -102,14 +110,12 @@ versions written in older notes.
    LUKS layer. Ask whether to match that or intentionally change it. LUKS must
    be selected during installation; do not improvise it after the OS is
    installed.
-5. Select GRUB for this profile. Secure Boot had to be disabled to install on
-   the current setup, then was re-enabled with owner-enrolled custom keys and
-   a signed GRUB binary. Have the owner handle the firmware/key enrollment
-   screens and follow the current
-   [CachyOS Secure Boot guide](https://wiki.cachyos.org/configuration/secure_boot_setup/).
-   Generate new keys for the new machine; never copy signing private keys from
-   another host. If the owner does not want to do this now, leave Secure Boot
-   in its agreed state and document that difference.
+5. Select Limine, which is the bootloader used on this profile. Secure Boot is
+   disabled on the current host. Match that state unless the owner explicitly
+   chooses otherwise; if enabling it, follow the current
+   [CachyOS Secure Boot guide](https://wiki.cachyos.org/configuration/secure_boot_setup/)
+   and create new keys for this machine. Never copy signing private keys from
+   another host.
 6. Set the user name, password, keyboard, locale, and timezone with the owner.
    Do not set autologin. Finish the installer and let the owner perform the
    first boot.
@@ -135,41 +141,56 @@ versions written in older notes.
    ```
 
    Do not start a second package manager while this transaction is active.
-3. Set up `paru` using a current, reviewed CachyOS/Arch-supported method.
+3. Set up an AUR helper (`paru` or `yay`) using a current, reviewed
+   CachyOS/Arch-supported method.
    AUR packages are community build recipes: inspect the selected package and
    build prompts. Keep Hyprland and its runtime libraries on compatible stable
    packages. In particular, do not install `aquamarine-git`,
    `hyprgraphics-git`, `hyprutils-git`, or `hyprlang-git` alongside stable
    Hyprland; that combination produced the dependency warnings this guide is
    intended to prevent.
-4. Install the repository's core desktop and font package lists. The commands
-   below separate official-repository packages from AUR packages, including
-   entries marked `(AUR)` in the files. Review the plan and confirm each
-   transaction with the owner. If the checkout is not present yet, clone it
-   after agreeing on the remote and authentication method, then enter it:
+4. Install the repository's desktop, system, font, CLI, and focus dependency lists.
+   The commands below separate official-repository packages from AUR
+   packages, including entries marked `(AUR)` in the files. Review the plan
+   and confirm each transaction with the owner. If the checkout is not present
+   yet, clone it after agreeing on the remote and authentication method:
 
    ```bash
    git clone git@github.com:karkinirajan/dotfiles.git ~/dotfiles
    cd ~/dotfiles
-   mapfile -t repo_packages < <(awk 'NF && $1 !~ /^#/ && $2 != "(AUR)" {print $1}' \
-     01-system/cachyos/packages/desktop.txt 01-system/cachyos/packages/fonts.txt)
-   mapfile -t aur_packages < <(awk 'NF && $1 !~ /^#/ && $2 == "(AUR)" {print $1}' \
-     01-system/cachyos/packages/desktop.txt 01-system/cachyos/packages/fonts.txt)
+   package_files=(01-system/cachyos/packages/desktop.txt \
+     01-system/cachyos/packages/system.txt \
+     01-system/cachyos/packages/fonts.txt \
+     01-system/cachyos/packages/cli.txt \
+     06-tools/focus/packages.txt)
+   mapfile -t repo_packages < <(awk 'NF && $1 !~ /^#/ && $2 != "(AUR)" {print $1}' "${package_files[@]}")
+   mapfile -t aur_packages < <(awk 'NF && $1 !~ /^#/ && $2 == "(AUR)" {print $1}' "${package_files[@]}")
    sudo pacman -S --needed "${repo_packages[@]}"
    if ((${#aur_packages[@]})); then
-     paru -S --needed "${aur_packages[@]}"
+     aur_helper="$(command -v paru || command -v yay || true)"
+     if [[ -z "$aur_helper" ]]; then
+       echo "Install paru or yay before installing AUR packages" >&2
+       exit 1
+     fi
+     "$aur_helper" -S --needed "${aur_packages[@]}"
    fi
    ```
 
 5. For the full developer/AI workstation, review the complete package and
    service choices in `01-system/cachyos/setup.md` chapter by chapter. To
+   reproduce the optional full-stack profile, use
+   [`01-system/cachyos/dev-stack.md`](01-system/cachyos/dev-stack.md) and its
+   `packages/developer.txt` list. Keep project frameworks in project-local
+   environments, initialize databases before use, and run Docker rootless.
+   The Upwork package is built from the tracked bundled-runtime PKGBUILD; its
+   screenshot time tracking requires a supported Xorg session rather than
+   Wayland. To
    match the local AI part of this profile, include
    `01-system/cachyos/packages/ai.txt` for the Ollama/ROCm stack; it is
    GPU- and disk-intensive. Ask before downloading large models. The guide's
-   historical bulk command has `--noconfirm`, stale package names, optional
-   applications, and a blanket service enable list: **do not run it as
-   written**. Translate current, owner-selected packages to interactive
-   transactions and initialize each chosen database/service as its own step.
+   package catalog includes optional applications and services. Use the
+   package manifests for the baseline; choose optional packages individually
+   and initialize each selected database/service as its own step.
 
    After confirming that the GPU matches the RX 6700 XT profile, install its
    listed repository packages interactively:
@@ -243,41 +264,30 @@ versions written in older notes.
    before considering the login setup complete. Do not troubleshoot a session
    crash by deleting user state or disabling security modules without evidence.
 
-### GRUB, Windows, and snapshots
+### Limine, CachyOS, and snapshots
 
-1. Install the tracked defaults and inspect the bootloader before regenerating
-   the menu:
-
-   ```sh
-   cd ~/dotfiles
-   sudo pacman -S --needed linux-cachyos linux-cachyos-lts
-   sudo install -Dm644 01-system/cachyos/grub/default /etc/default/grub
-   ```
-
-   Preserve Windows detection only if Windows exists. Ensure the Btrfs
-   snapshot tooling is installed/configured per setup.md. The target menu is
-   three top-level choices (CachyOS main kernel, CachyOS LTS kernel, and
-   Windows when installed) plus one `CachyOS Snapshots (Recovery)` submenu.
-   There should be no duplicate snapshot menu or extra Advanced Options
-   submenu. If `/etc/grub.d/41_snapshots-btrfs` creates duplicate snapshot
-   entries, inspect it and disable that duplicate generator only; keep the
-   CachyOS snapshot proxy.
-2. Generate and validate the GRUB menu before rebooting:
-
-   ```sh
-   sudo grub-mkconfig -o /boot/grub/grub.cfg
-   sudo grub-script-check /boot/grub/grub.cfg
-   ```
-
-   Review the generated menu entries and `GRUB_DEFAULT`, timeout, boot-next,
-   and submenu settings. Do not run `grub-install`, edit EFI variables, or
-   change Secure Boot state without a separate owner checkpoint and a recovery
-   route. Use the current CachyOS boot-manager guide if firmware/install
-   details have changed.
-3. Configure Snapper and the pacman/GRUB hook described in
+1. Use Limine as the only boot manager. Keep one top-level CachyOS entry for
+   the primary `linux-cachyos` kernel. Do not install secondary kernels or add
+   Windows, generic fallback EFI loaders, or Snapper snapshot entries to this
+   machine's menu. Snapper may retain snapshots for rollback without adding
+   them as boot choices.
+2. Before editing a live Limine menu, back up `/boot/limine.conf` and inspect
+   it with `sudo limine-list`. Check the effective settings in
+   `/etc/default/limine` and `/etc/limine-entry-tool.conf`; turn off fallback
+   loader discovery and disable `limine-snapper-sync.service` when the menu is
+   intentionally single-entry. Use `limine-entry-tool` to remove specific
+   stale paths, preserve the currently booted CachyOS kernel and its initramfs,
+   then run `sudo limine-update` and confirm `sudo limine-list` shows exactly
+   the primary CachyOS entry before rebooting.
+3. Do not alter UEFI NVRAM entries or overwrite `EFI/BOOT/BOOTX64.EFI` as part
+   of menu cleanup. The current firmware has a Limine entry and a generic UEFI
+   OS fallback entry, with no Windows entry observed. Confirm the owner wants
+   firmware-level entries removed before changing them.
+3. Configure Snapper and its current Limine integration as described in
    `01-system/cachyos/setup.md` only after checking the actual filesystem
-   layout and current package hooks. Take and verify a snapshot before large
-   system changes. Never run `btrfs check --repair` as routine maintenance.
+   layout and current package hooks. Keep snapshot entries out of the target
+   single-entry boot menu. Take and verify a snapshot before large system
+   changes. Never run `btrfs check --repair` as routine maintenance.
 
 ## Phase 6 — Privileged integrations and user services
 
@@ -348,9 +358,9 @@ the setup finished:
   network, database, GPU, and desktop service is intentional and starts cleanly.
 - SDDM presents the managed UWSM Hyprland session, autologin is off, Hyprland
   has no config errors, and the portal/lock/polkit/session services work.
-- `sudo grub-script-check /boot/grub/grub.cfg` succeeds. The menu has the
-  intended kernel entries, optional Windows entry, and one recovery submenu;
-  Secure Boot state is what the owner selected.
+- `sudo limine-list` shows exactly one primary CachyOS kernel entry. The
+  generated config points to existing kernel/initramfs files; there are no
+  Windows, secondary-kernel, fallback-loader, or snapshot entries.
 - AMD driver and Vulkan are recognized. For an AMD AI setup, `rocminfo` sees
   the GPU and Ollama actually places layers on the GPU before any large-model
   download.
@@ -365,5 +375,5 @@ the setup finished:
   application-specific warnings with their log evidence.
 
 Only after the checklist passes should the owner approve rebooting into the
-installed system and testing another login. Confirm that recovery/Windows
-entries remain available where applicable.
+installed system and testing another login. Confirm Snapper rollback remains
+available independently of the boot menu.
