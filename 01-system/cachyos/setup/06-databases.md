@@ -28,6 +28,8 @@ Local development databases. Every service binds to loopback only; none of them 
 
 PostgreSQL <!-- v:postgresql -->18.6<!-- /v --> (PG18 GA 2025-09-25, supported until 2030-11-14; PG19 is a release candidate). `initdb` must run before the service starts, and **its default authentication method is `trust`**, so always pass the two auth flags: they give peer authentication on the socket and SCRAM over TCP. In PostgreSQL 18 `--data-checksums` is already the default (use `--no-data-checksums` to opt out); keeping the flag is explicit and avoids a mismatch with an older cluster when you `pg_upgrade`.
 
+Run these as your normal user from the repository root (`cd ~/dotfiles`), not as root: `$USER` becomes the database role. Blank machine only; `initdb` refuses a non-empty data directory, and an existing cluster must not be re-initialized.
+
 ```bash
 sudo pacman -S --needed postgresql pgvector
 sudo install -d -o postgres -g postgres -m 700 /var/lib/postgres/data
@@ -52,10 +54,12 @@ Good to know on 18: asynchronous I/O (`io_method` = `worker` by default; `io_uri
 
 Arch `mariadb` is **13.0**, a *rolling* release whose Community support ends in Q4 2026 (13.1 is rolling too). For a stable development server use the long-term series **`mariadb-lts`** (<!-- v:mariadb-lts -->12.3.3<!-- /v -->, supported until 2029-06-12). The two packages conflict. Switching is dump-free on an empty data directory; a 13.0 data directory cannot be downgraded to 12.3.
 
+Blank machine only. The commands are chained so MariaDB never starts without the loopback drop-in; if the data directory already holds a database, do not run `mariadb-install-db`, and never answer `y` to a "`mariadb-lts` and `mariadb` are in conflict, remove?" prompt:
+
 ```bash
-sudo pacman -S --needed mariadb-lts
-sudo mariadb-install-db --user=mysql --basedir=/usr --datadir=/var/lib/mysql
-sudo install -Dm644 01-system/cachyos/mariadb-local.cnf /etc/my.cnf.d/90-local-dev.cnf
+sudo pacman -S --needed mariadb-lts &&
+sudo mariadb-install-db --user=mysql --basedir=/usr --datadir=/var/lib/mysql &&
+sudo install -Dm644 "$HOME/dotfiles/01-system/cachyos/mariadb-local.cnf" /etc/my.cnf.d/90-local-dev.cnf &&
 sudo systemctl enable --now mariadb
 ```
 
@@ -74,6 +78,7 @@ MongoDB is licensed SSPL, so it is **AUR-only** (`mongodb-bin`, <!-- v:mongodb -
 
 ```bash
 paru -S --needed mongodb-bin       # depends on mongosh-bin; optional mongodb-tools
+systemctl list-unit-files --no-legend | rg 'mongo(d|db)\.service'   # confirm the unit name before enabling
 sudo systemctl enable --now mongodb
 mongosh --quiet --eval 'db.runCommand({ping:1})'
 ```
@@ -90,6 +95,8 @@ The AUR package uses `mongodb.service` and `/etc/mongodb.conf` (`bindIp: 127.0.0
 > EOF2
 > sudo systemctl daemon-reload && sudo systemctl restart mongodb
 > ```
+>
+> The drop-in assumes a `mongodb` user and group exist (`id mongodb`). <!-- UNVERIFIED: the permission problem and this fix are recorded from this host only -->
 
 mongosh is <!-- v:mongosh -->2.14.0<!-- /v -->.
 
@@ -111,6 +118,7 @@ Elasticsearch 9.5.5 is current; 8.x is in maintenance until 2027-01-15 and 9.3 i
 
 ```bash
 sudo sysctl -w vm.max_map_count=1048576
+echo 'vm.max_map_count = 1048576' | sudo tee /etc/sysctl.d/99-elasticsearch.conf   # survive a reboot
 docker run -d --name elasticsearch \
   -p 127.0.0.1:9200:9200 \
   -e "discovery.type=single-node" \

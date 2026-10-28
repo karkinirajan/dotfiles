@@ -4,14 +4,15 @@
 # desktop baseline. ollama-rocm provides the AMD ROCm backend, while
 # ollama-vulkan + vulkan-radeon provide an alternate backend. See
 # 05-ai/ollama/README.md before installing: the Vulkan backend is unstable on
-# some gfx1031 workloads. Install only the backend packages you intend to use.
+# some gfx1031 workloads. Keep ROCm as the live backend.
 #
 # Do NOT use the upstream install.sh: it installs under /usr/local or /usr without checking for a
 # packaged install, deletes $OLLAMA_INSTALL_DIR/lib/ollama, and creates its own user and unit
 # (see 05-ai/ollama/README.md).
 #
-#   Review and install selected packages individually; this list includes
-#   mutually exclusive Ollama backend variants and is not a bulk install set.
+#   ollama, ollama-rocm and ollama-vulkan install side by side (the two backends
+#   depend on ollama); which backend is live is chosen by the systemd drop-in
+#   backend.conf (05-ai/ollama/README.md), so the list is safe to install in one transaction.
 # ─────────────────────────────────────────────────────────────────────────────
 ollama
 ollama-rocm

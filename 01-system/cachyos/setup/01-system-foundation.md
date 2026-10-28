@@ -86,7 +86,7 @@ Label: `machine-only`.
 sudo btrfs subvolume create /swap
 sudo btrfs filesystem mkswapfile --size 8G /swap/swapfile
 sudo swapon /swap/swapfile
-echo '/swap/swapfile none swap defaults 0 0' | sudo tee -a /etc/fstab
+grep -q '^/swap/swapfile' /etc/fstab || echo '/swap/swapfile none swap defaults 0 0' | sudo tee -a /etc/fstab
 sudo snapper -c root create -d swap-test      # must succeed with swap active
 ```
 

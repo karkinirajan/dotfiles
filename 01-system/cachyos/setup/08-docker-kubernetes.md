@@ -22,7 +22,7 @@ Rootless Docker for local development, a Compose template for a typical Django s
 ## Prerequisites
 
 - cgroup v2 and kernel 5.11 or newer (rootless `overlay2`); kernel <!-- v:cachyos-kernel -->7.3.0<!-- /v --> qualifies.
-- At least 65536 subordinate IDs for your user: `grep "^$USER:" /etc/subuid /etc/subgid`.
+- At least 65536 subordinate IDs for your user: `grep "^$USER:" /etc/subuid /etc/subgid`; if there is no line, add the range with `sudo usermod --add-subuids 100000-165535 --add-subgids 100000-165535 "$USER"`.
 
 ## 8.1 Docker and Compose, rootless
 
@@ -108,8 +108,8 @@ volumes:
 Why these choices:
 
 - An omitted host IP in `ports:` binds **all interfaces**; `127.0.0.1:` keeps services off the LAN, matching the loopback policy of this machine.
-- `postgres:18-alpine` and `valkey/valkey:9.1-alpine` tags exist (checked on the Docker Hub registry on 2026-10-28). `redis:7` is no longer BSD licensed; Valkey is the drop-in the host already runs, and `redis-py` and Celery's Redis transport work with it.
-- Elasticsearch 9.5.5 is current (8.x is in maintenance until 2027-01-15; 9.3 is end of life). It requires `vm.max_map_count` of 1048576 or more on the host (`sudo sysctl -w vm.max_map_count=1048576`, persist in `/etc/sysctl.d/`). OpenSearch 3.9 is the alternative (`DISABLE_SECURITY_PLUGIN=true` for dev, `vm.max_map_count=262144`). <!-- UNVERIFIED: the exact map count Elasticsearch needs for one node -->
+- `postgres:18-alpine` and `valkey/valkey:9.1-alpine` are the tags used here; the Docker Hub tag list was not re-read in this research pass. <!-- UNVERIFIED: both image tags --> `redis:7` is no longer BSD licensed; Valkey is the drop-in the host already runs, and `redis-py` and Celery's Redis transport work with it.
+- Elasticsearch 9.5.5 is current (8.x is in maintenance until 2027-01-15; 9.3 is end of life). It requires `vm.max_map_count` of 1048576 or more on the host (`sudo sysctl -w vm.max_map_count=1048576`, persisted with a file in `/etc/sysctl.d/`; chapter 06 shows the command). OpenSearch 3.9 is the alternative (`DISABLE_SECURITY_PLUGIN=true` for dev, `vm.max_map_count=262144`). <!-- UNVERIFIED: the exact map count Elasticsearch needs for one node -->
 
 Label: `machine-only` except the schema validation.
 
@@ -117,11 +117,11 @@ Label: `machine-only` except the schema validation.
 
 ```bash
 sudo pacman -S --needed kubectl minikube helm k9s
-minikube start --driver=docker --container-runtime=containerd --memory=4096 --cpus=2
+minikube start --driver=docker --container-runtime=containerd --memory=4096   # add --cpus=2 only after delegating the cpu controller (below)
 ```
 
 - kubectl <!-- v:kubectl -->1.37.1<!-- /v --> (1.37 is supported until 2027-10-28; stay within one minor of the API server). minikube <!-- v:minikube -->1.38.1<!-- /v --> in Arch (upstream 1.39.0, default Kubernetes 1.37 and containerd runtime, a breaking change); Helm <!-- v:helm -->4.3.0<!-- /v --> (server-side apply by default, post-renderers are plugins, `--atomic` is `--rollback-on-failure`, `--force` is `--force-replace`); k9s <!-- v:k9s -->0.51.0<!-- /v -->.
-- On rootless Docker, minikube also needs cgroup v2 delegation; `--cpus` only works if the cpu controller is delegated. `kind` (in extra) works the same way with `DOCKER_HOST` exported.
+- On rootless Docker, minikube also needs cgroup v2 delegation; `--cpus` only works if the cpu controller is delegated: create `/etc/systemd/system/user@.service.d/delegate.conf` with `[Service]` and `Delegate=cpu cpuset io memory pids`, run `sudo systemctl daemon-reload`, and log out and back in. `kind` (in extra) works the same way with `DOCKER_HOST` exported.
 - **k3s** (`curl -sfL https://get.k3s.io | sh -`; read the script first) is still the documented install, but it listens on 6443, 10250 and 8472/udp and its docs recommend turning UFW off. That conflicts with this machine's deny-incoming policy, so prefer minikube or kind locally; the AUR `k3s` is 1.35 and flagged out of date.
 
 | Tool | Purpose |
