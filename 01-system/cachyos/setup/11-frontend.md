@@ -15,7 +15,6 @@ sources:
 
 # 11 Frontend Development
 
-
 ## 11.1 Node.js via NVM
 
 Node 26 "Lithium" became LTS on 2026-10-28 (v26.13.0, bundled npm 11.20.0); Node 24 "Krypton" moved to Maintenance on 2026-10-20 (supported to 2028-04-30); Node 22 ends 2027-04-30. Arch `nodejs` is <!-- v:nodejs -->26.12.1<!-- /v --> (without npm) and Arch `npm` is <!-- v:npm -->12.2.1<!-- /v -->, which blocks dependency install scripts by default (`allowScripts`) and sets `allow-git`/`allow-remote` to `none`. `nvm` shadows the system `node` in interactive shells; non-interactive scripts see the pacman Node.

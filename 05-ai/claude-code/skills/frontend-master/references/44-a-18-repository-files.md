@@ -176,4 +176,3 @@ down:
     supabase stop
     docker stop {{redis}}
 ```
-

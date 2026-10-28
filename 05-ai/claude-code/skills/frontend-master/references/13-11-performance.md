@@ -18,4 +18,3 @@
 - PERF-16 (MUST): No leaks. Clean up effects and subscriptions, abort superseded fetches with `AbortController`, avoid holding large objects in module scope.
 
 ---
-

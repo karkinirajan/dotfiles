@@ -6,6 +6,7 @@
 **Spec version:** v2 (pasted 2026-09-23 13:45, supersedes the v1 spec started ~13:28 same day)
 
 ## Key differences from v1 that change already-completed work
+
 - v1 set `OLLAMA_CONTEXT_LENGTH=65536` globally (inherited from a PRE-EXISTING
   drop-in from an earlier, unrelated session, confirmed via `systemctl show
   ollama -p Environment` during v1 Phase 1). v2 explicitly forbids this
@@ -29,22 +30,25 @@
   re-verifying, gemma4:26b is new.
 
 ## Background work still running from v1, being kept (data still useful)
+
 - `ollama pull qwen3-coder:30b` into the REAL store (/var/lib/ollama):
   COMPLETE, 18.5GB, capabilities=[completion, tools] confirmed via API.
 - `ollama pull gemma4:12b / devstral:24b / gpt-oss:20b` into the REAL store:
   in progress in background (task bf6j60i0m).
 - `scripts/phase2_backend_compare.py` (ROCm-spoof / ROCm-native / Vulkan,
   simultaneous 3-way): in progress in background (task bj51y9ht3). Useful as
-  extra evidence even though v2's procedure is staged, not simultaneous  - 
+  extra evidence even though v2's procedure is staged, not simultaneous  -
   will fold its Vulkan and ROCm-native numbers in as a cross-check, not as
   the primary decision mechanism.
 - Isolated test-model store at ~/ollama-setup/test-models has gemma4:12b
   (7.6GB), reusable for any further non-root backend testing.
 
 ## Current phase
+
 Phase 1 discovery (v2), in progress.
 
 ## v1 3-way backend smoke test result (gemma4:12b, single short prompt, decode only)
+
 All three started cleanly, no crash, decode tok/s within noise of each other:
   rocm_spoof_gfx1030   compute=gfx1030   32.79 tok/s
   rocm_native_gfx1031  compute=gfx1031   32.85 tok/s
@@ -58,6 +62,7 @@ S/M/L, energy, VRAM sampling) still needs to run properly per the new spec.
 Phase 1 (v2) complete: ~/ollama-setup/discovery.md (523 lines).
 
 root-steps.sh is written and ready at ~/ollama-setup/root-steps.sh. It:
+
 1. Replaces the two existing broken drop-ins with one consolidated
    claude-code.conf: FLASH_ATTENTION=1, KV_CACHE_TYPE=q8_0, NUM_PARALLEL=1,
    MAX_LOADED_MODELS=1, KEEP_ALIVE=30m, OLLAMA_LLM_LIBRARY=vulkan.
@@ -84,6 +89,7 @@ devstral:24b, currently pulling, is NOT on the v2 list; devstral-small-2 is.
 Needs checking once background pulls are dealt with, may need to swap.)
 
 ## User decision: hold candidates to 3 for now
+
 Confirmed: gemma4:12b, qwen3-coder:30b, gpt-oss:20b only. NOT pulling
 gemma4:26b or devstral-small-2:24b at this time (would exceed 60GB cap).
 Revisit after Stage-1 results if the 3-model set doesn't produce a clear
@@ -94,13 +100,14 @@ still live, no OLLAMA_LLM_LIBRARY=vulkan, no setcap, no pacman hook). Still
 waiting.
 
 ## Prep completed while waiting on root-steps.sh + gpt-oss:20b pull
+
 - ccb-gemma4-12b, ccb-qwen3-coder-30b Modelfile aliases created (num_ctx
   65536 only, per spec). Zero extra disk cost, Ollama shares weight layers.
 - `ollama show` captured for both into model-info/ollama-show.txt.
   gemma4:12b: dense 11.9B, context 262144, capabilities incl. thinking
   (default true), thinking tokens will count in eval_count/decode timing,
   worth remembering when comparing raw decode tok/s across models.
-  qwen3-coder:30b: qwen3moe, 30.5B, context 262144, default temp=0.7  - 
+  qwen3-coder:30b: qwen3moe, 30.5B, context 262144, default temp=0.7  -
   bench.py explicitly overrides to temperature=0/seed=42 for Stage 1
   determinism (not baked into the Modelfile, which per spec holds only
   num_ctx).
@@ -132,11 +139,13 @@ waiting.
   separate args (confirmed empirically, not comma-joined).
 
 ## Still blocked
+
 - root-steps.sh not yet run by the user (systemctl show still shows the OLD
   OLLAMA_CONTEXT_LENGTH=65536, no OLLAMA_LLM_LIBRARY=vulkan).
 - gpt-oss:20b pull: 68% as of this note (~3min left per its own ETA).
 
 ## All 3 held-to candidates fully ready
+
 gemma4:12b (7.6GB, dense, ctx 262144, thinking default=true) /
 qwen3-coder:30b (18.6GB, MoE, ctx 262144) / gpt-oss:20b (13.8GB, MoE, ctx
 131072, thinking default=medium). Real store total: 39.9GB. All three have
@@ -146,6 +155,7 @@ layers). ollama show output for all 3 captured in model-info/ollama-show.txt.
 Genuinely idle now on anything non-root. Waiting purely on root-steps.sh.
 
 ## Phase 2 Step 1 (Vulkan): VERIFIED, root-steps.sh run successfully
+
 User ran root-steps.sh at 14:12:17. Independently re-verified (not just
 trusting the script's own echo):
   getcap: cap_perfmon=ep on /usr/bin/ollama, confirmed
@@ -164,13 +174,14 @@ trusting the script's own echo):
     29%/71% CPU/GPU split, real, measured partial offload, no crash.
 
 Phase 2 Step 1 goal met: GPU confirmed doing inference, via journalctl AND
-ollama ps, on all 3 candidates, on Vulkan. ROCm stays deferred per spec  - 
+ollama ps, on all 3 candidates, on Vulkan. ROCm stays deferred per spec  -
 not tested yet, only revisited in Phase 5 Stage 1 if Vulkan's numbers
 warrant a challenge.
 
 Moving to Stage 0 calibration now.
 
 ## Real Vulkan crash observed: recorded honestly, not silently retried away
+
 During the FIRST Stage 0 calibration attempt, a direct streaming call to
 ccb-gemma4-12b hit a genuine Vulkan crash:
   `vk::Queue::submit: ErrorDeviceLost` -> journalctl confirmed
@@ -182,8 +193,9 @@ loads/unloads during the no-crash sanity checks (gemma4:12b ->
 qwen3-coder:30b -> gpt-oss:20b in quick succession).
 
 Two follow-up tests, both clean:
-  - 3 immediate streaming retries: 3/3 succeeded normally.
-  - A properly structured test matching the brief's own ROCm crash-test
+
+- 3 immediate streaming retries: 3/3 succeeded normally.
+- A properly structured test matching the brief's own ROCm crash-test
     rigor (cold `ollama stop`, then generate 200 tokens, 3 times): 3/3
     succeeded, eval_count=200 every time, no error.
 
@@ -197,6 +209,7 @@ happened. If it recurs during the real Stage 1 run, that changes this
 assessment and Vulkan would need to be reconsidered.
 
 ## VULKAN FAILS G4 (no crash) at realistic context depth: real, reproduced
+
 Stage 0 calibration against ccb-gemma4-12b, using the REAL Claude Code
 request (full system prompt + built-in tool schemas), failed twice
 identically: `ggml_vulkan: device lost on Vulkan0` ->
@@ -224,6 +237,7 @@ itself calls for (needed for switching now, and any future switch, in one
 root ask rather than a fresh script each time).
 
 ## ollama-backend helper bug, fix, and ROCm switch: VERIFIED
+
 root-steps-backend-switch.sh (installs the helper, cleans
 OLLAMA_LLM_LIBRARY=vulkan out of claude-code.conf, invokes `ollama-backend
 rocm`) FAILED on its final step: `${1:?usage: ollama-backend
@@ -245,6 +259,7 @@ Quick ROCm sanity check (small prompt): `ollama ps` 100% GPU, 33.6 tok/s
 decode, 135 tok/s prefill, no crash.
 
 ## ROCm large-prompt stress test: PASSED, ROCm clears G4 where Vulkan didn't
+
 Ran the same class of test that broke Vulkan: ~30k-token prompt (built via
 bench.py's build_prompt_from_python_stdlib, same generator used for the real
 Stage 1 harness), 3 cold-load runs against ccb-gemma4-12b, num_ctx=65536,

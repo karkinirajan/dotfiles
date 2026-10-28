@@ -14,6 +14,7 @@ Source code correctness doesn't prove the UI looks or behaves right. This skill 
 ## Always, mockup or not
 
 Check the actual rendered app (dev server up, real interaction) for:
+
 - Both themes if the project has light/dark: not just whichever one happened to be active.
 - All four states for anything async: loading, loaded, error, empty.
 - Responsive behavior at mobile/tablet/desktop breakpoints, not just resizing a desktop browser slightly.

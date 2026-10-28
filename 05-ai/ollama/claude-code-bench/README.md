@@ -23,7 +23,7 @@ on prompts in the 24k-33k token range, which is exactly the size of Claude
 Code's own real first request (66,609 raw tokens, truncated to Ollama's
 context budget). A short/simple crash test would have missed this; it only
 showed up once tested at realistic size. **ROCm passed the same stress
-test** (3/3 clean runs at ~34k prompt tokens) and is the backend now live  - 
+test** (3/3 clean runs at ~34k prompt tokens) and is the backend now live  -
 see `../systemd/backend-rocm.conf` (active) vs
 `../systemd/backend-vulkan.conf.example` (kept as a documented rollback,
 not currently used).

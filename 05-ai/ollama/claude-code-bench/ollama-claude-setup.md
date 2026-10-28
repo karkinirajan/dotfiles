@@ -35,20 +35,24 @@ The spec called for Vulkan first (preferred), with ROCm deferred as a challenger
 - Installed cleanly, `setcap cap_perfmon+ep` applied, discovery confirmed (`library=Vulkan`).
 - A short/simple crash test (200 tokens, 3 cold-load runs) passed 3/3 with no issue.
 - **But** the real Claude Code request, full system prompt + built-in tool schemas, **66,609 tokens** before truncation, reproduced a hard crash **twice in a row**:
+
   ```text
   ggml_vulkan: device lost on Vulkan0
   decode() failed: vk::Queue::submit: ErrorDeviceLost
   llama-server terminated, signal: aborted (core dumped)
   ```
+
   Both failures landed at 24,576–32,771 tokens into the prompt. The daemon itself survived (the crash is in the per-model runner subprocess), but the request always failed.
 - **Conclusion:** the short crash test gave a false pass, it never stressed a large enough prompt to hit this. At the prompt sizes Claude Code actually sends, Vulkan does not currently pass the "no crash" gate on this card. Not discarding it permanently, a driver/Mesa update could change this, but it is not viable today.
 
 ### ROCm: now live, verified, initial checks pass
 
 Switched to via a small helper installed for exactly this purpose:
+
 ```bash
 sudo ollama-backend rocm   # or: sudo ollama-backend vulkan, to switch back
 ```
+
 - Live config: `OLLAMA_VULKAN=0`, `HSA_OVERRIDE_GFX_VERSION=10.3.0` (this card's gfx1031 reports as its supported sibling gfx1030). `[2026-10-29]` The repo's own `discovery.md` journal (2026-09-23 13:21) and `STATE.md` show ROCm also initializes natively as gfx1031 without the override (32.85 tok/s native against 32.79 spoofed), so the override is a fallback here, not a requirement.
 - Verified: `ollama ps` shows **100% GPU**, clean load, no error. First real generation: 33.6 tok/s decode, 135 tok/s prefill, on a trivial prompt.
 - **Large-prompt stress test, passed.** The same test that reproduced the Vulkan crash (a ~30k-token prompt built from the Python stdlib, 3 cold-load runs, `ccb-gemma4-12b`, `num_ctx=65536`) was run against ROCm: **3/3 runs succeeded**, `prompt_eval_count: 33849` each time (squarely inside the 24,576–32,771 range that crashed Vulkan twice), `eval_count: 200`, no errors, `ollama.service` still active afterward. Raw results: `results/rocm_crashtest_gemma4-12b.json`.

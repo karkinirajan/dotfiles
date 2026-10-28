@@ -43,5 +43,6 @@ worse than an absent one, re-add them with real credentials only when
 actually needed for a specific project. Also removed an empty `your_agent`
 custom-agent stub (`"command": "path_to_executable"`, never filled in), and
 enabled `inlay_hints.enabled` (the sub-options, type/parameter/other hints
- -  were all already `true` but silently inactive because the master switch
+
+- were all already `true` but silently inactive because the master switch
 was `false`, almost certainly an oversight rather than intentional).

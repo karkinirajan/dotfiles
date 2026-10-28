@@ -42,4 +42,3 @@
 - NEXT-21 (SHOULD): Deployment: Vercel (zero-config, PPR with Cache Components), or `output: 'standalone'` in Docker for AWS ECS or any container host. The stable Adapter API (16.2) is the integration point for other platforms; use only an adapter that passes the Next.js adapter test suite (a verified adapter). Record the choice and its cost model in an ADR.
 
 ---
-

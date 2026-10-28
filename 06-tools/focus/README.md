@@ -124,7 +124,7 @@ ignore the canary.
   `~/.focus/scripts` for the `focus` CLI's global availability). Also fixed
   a pre-existing bug in `focus status`'s "dns blocks" line: zsh prints a
   redirection-setup failure (`<file` on a missing file) straight to the
-  real stderr regardless of a `2>/dev/null` on the same simple command  - 
+  real stderr regardless of a `2>/dev/null` on the same simple command  -
   it's a shell-level failure, not the invoked command's own error, so the
   suppression never worked. Fixed by piping through `cat` instead, whose
   own (redirectable) error is what actually gets suppressed. Verified with

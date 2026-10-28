@@ -818,4 +818,3 @@ select is((select count(*)::int from public.audit_log where action = 'project.re
 select * from finish();
 rollback;
 ```
-

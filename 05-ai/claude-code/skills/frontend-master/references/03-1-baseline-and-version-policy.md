@@ -36,7 +36,6 @@ TypeScript 7.0 is the native compiler. It ships no JavaScript API, drops `baseUr
 
 Neither option uses `baseUrl`; the `@/*` alias is a `paths` entry (A.1). Re-evaluate when `typescript-eslint` supports TypeScript 7.
 
-
 #### 1.1.2 Newer registry versions not adopted (2026-10-29)
 
 | Package | Pin above | Registry | Why held |
@@ -72,4 +71,3 @@ An `npm audit` bulk query over the 57 pinned packages on 2026-10-29 returned adv
 - Historical lessons that shaped rules below: CVE-2025-29927 (middleware authorization bypass, March 2025), CVE-2025-55182 "React2Shell" (unauthenticated RCE in React Server Components, CVSS 10, December 2025), CVE-2025-55183 (Server Function source exposure), CVE-2025-55184 and CVE-2025-67779 (RSC denial of service).
 
 ---
-

@@ -8,7 +8,7 @@ Every chapter in reading order. Regenerate with `python3 tools/gen_index.py`.
 |---|---|---|---|
 | [Developer stack on CachyOS](01-system/cachyos/dev-stack.md) | `01-system/cachyos/dev-stack.md` | 2026-10-29 | current |
 | [Host package snapshot](01-system/cachyos/host-snapshot/README.md) | `01-system/cachyos/host-snapshot/README.md` | 2026-10-28 | reference |
-| [CachyOS setup guide (moved)](01-system/cachyos/setup.md) | `01-system/cachyos/setup.md` | 2026-10-06 | archived |
+| [CachyOS setup guide (moved)](01-system/cachyos/setup.md) | `01-system/cachyos/setup.md` | 2026-10-29 | archived |
 | [01 System Foundation and Optimization](01-system/cachyos/setup/01-system-foundation.md) | `01-system/cachyos/setup/01-system-foundation.md` | 2026-10-29 | current |
 | [02 AMD GPU Drivers and ROCm](01-system/cachyos/setup/02-amd-gpu-rocm.md) | `01-system/cachyos/setup/02-amd-gpu-rocm.md` | 2026-10-29 | current |
 | [03 Python Environment with uv](01-system/cachyos/setup/03-python-uv.md) | `01-system/cachyos/setup/03-python-uv.md` | 2026-10-29 | current |

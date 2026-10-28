@@ -11,7 +11,6 @@ sources: []
 
 # 23 Zsh Configuration
 
-
 The canonical shell config is [`03-terminal/zsh/.zshrc`](../../../03-terminal/zsh/.zshrc).
 It is linked by `manifest.conf` and should not be copied from a second example
 in this guide. Install the packages in `01-system/cachyos/packages/cli.txt`,

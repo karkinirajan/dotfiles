@@ -47,11 +47,13 @@ before and after every transaction).
 
    **Fix**: mark those explicit *before* removing the meta-package, so
    pacman's orphan detection leaves them alone:
+
    ```sh
    sudo pacman -D --asexplicit xorg-xhost xdg-desktop-portal-hyprland uwsm \
      satty nwg-look xcur2png gnome-text-editor gnome-calculator \
      cachyos-alacritty-config brightnessctl adw-gtk-theme
    ```
+
    Always dry-run first (`pacman -Rsp <targets>`) and grep the output against
    this protect-list before actually removing anything.
 
@@ -61,6 +63,7 @@ before and after every transaction).
 
    **Fix**: switch to SDDM (already installed, just disabled) *before*
    removing anything, and verify a real reboot + login actually works:
+
    ```sh
    sudo mkdir -p /etc/sddm.conf.d
    # content: sddm/hyprland.conf in this repo
@@ -68,6 +71,7 @@ before and after every transaction).
    sudo systemctl enable sddm.service
    sudo systemctl disable plasmalogin.service
    ```
+
    **Gotcha hit here**: if `/etc/systemd/system/display-manager.service`
    already exists as a symlink to the old display manager,
    `systemctl enable sddm.service` fails *silently in effect*, it errors
@@ -99,7 +103,7 @@ kdegraphics thumbnailers, etc.), none of it had any dependent outside this
 graph.
 
 **Pass 2** (52 packages): a handful of Qt/KDE framework libraries that
-survived pass 1 because something else still needed them  - 
+survived pass 1 because something else still needed them  -
 `hyprqt6engine` ("QT6 Theme Provider for Hyprland", genuinely part of this
 Hyprland setup, not KDE) was still pulling in `kiconthemes` →
 `kwindowsystem`/`kwallet`/`kio` and their own dependents (`kcalc`,
@@ -136,6 +140,7 @@ behind: `dolphinrc`, `konsolerc`, `kwinrc`, `plasma*rc`, `~/.config/kdeglobals`,
 None of it is needed once the software is gone.
 
 **Two categories needed a judgment call, not a blind `rm -rf`:**
+
 - `~/.local/share/kwalletd` (KWallet's encrypted secret store), could hold
   real saved credentials (wifi passwords, app secrets). Only delete this if
   you're sure nothing there needs recovering; the data becomes unusable the
@@ -146,7 +151,7 @@ None of it is needed once the software is gone.
   assuming it's just default first-run scaffolding.
 
 **A stale process gotcha, same shape as the Hyprland-restart issue above**:
-`kwalletd6` was still running *after* the `kwallet` package was removed  - 
+`kwalletd6` was still running *after* the `kwallet` package was removed  -
 its binary was deleted from disk but the already-running process kept going
 (and kept re-touching its own state directory, meaning `rm -rf
 ~/.local/share/kwalletd` looked like it silently came back). `pkill
@@ -155,15 +160,18 @@ kwalletd6` (or just reboot) before doing a final check.
 **Two `exec-once` lines in `autostart.conf` silently die once their
 packages are gone**, and are easy to miss since Hyprland doesn't error
 loudly on a failed exec-once:
+
 - `polkit-kde-authentication-agent-1` → replaced with **hyprpolkitagent**
   (already installed as a dependency of something else, just never
   autostarted), enabled as its own systemd `--user` service instead of
   another `exec-once`, since it ships one and isn't a launcher whose
   children would inherit a service's cgroup (unlike the Noctalia case this
   same repo works around with `noctalia-watchdog.sh`):
+
   ```sh
   systemctl --user enable --now hyprpolkitagent.service
   ```
+
 - `kwalletd6` + `pam_kwallet_init` (KWallet PAM auto-unlock), just deleted
   outright once `kwallet` itself is gone; nothing to replace it with unless
   you specifically want a secret-storage daemon again (`gnome-keyring` is
@@ -195,7 +203,8 @@ looks like it's regenerating on its own, check `pgrep -af <name>` and
 cleanup didn't work.
 
 `/etc/pam.d/sddm` still references `pam_kwallet5.so`/`pam_gnome_keyring.so`
- -  left as-is deliberately: both lines are marked `optional` with a leading
+
+- left as-is deliberately: both lines are marked `optional` with a leading
 `-`, so PAM silently skips them now that the module is gone rather than
 breaking login, and it's a package-shipped file (editing it just creates a
 `.pacnew` conflict on the next `sddm` update for no real benefit).

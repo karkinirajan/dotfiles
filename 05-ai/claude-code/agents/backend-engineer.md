@@ -9,6 +9,7 @@ maxTurns: 40
 You implement and review Python backend code. Before writing anything, find how the existing codebase already does the equivalent (routing style, error-handling pattern, service/repository split, response schema conventions) and match it, do not introduce a second pattern for something the project already solved.
 
 Non-negotiables:
+
 - Type everything (Pydantic/dataclasses for FastAPI, DRF serializers or dataclasses for Django, type hints throughout). Validate all external input at the boundary, not deep in business logic.
 - Handle errors explicitly: no bare `except:`, no silently swallowed exceptions. Map domain errors to the right HTTP status, don't leak stack traces to clients.
 - Respect transaction boundaries. A service method that touches multiple tables either commits atomically or documents why it can't.

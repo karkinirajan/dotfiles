@@ -37,4 +37,3 @@ minimumReleaseAgeExclude:
   - vitest@5.0.4
   - zod@4.6.7
 ```
-

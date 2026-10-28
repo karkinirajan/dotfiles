@@ -8,4 +8,3 @@ Create the file with `pnpm dlx shadcn@latest init` and choose the base deliberat
 - `aliases` maps `components` and `utils` (required) and `ui`, `lib`, `hooks` (optional) to the paths in section 3.
 - `iconLibrary` is `lucide` (the schema accepts any string).
 - No `tailwind.config.*` file exists in the repository.
-

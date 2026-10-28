@@ -48,4 +48,3 @@ DAL (server-only)                    Server Actions / Route Handlers
 | Real-time feed | Server-rendered first page, client subscription (Supabase Realtime) after hydration | Fall back to polling on subscription failure |
 
 ---
-

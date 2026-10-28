@@ -15,4 +15,3 @@
 - TS-13 (MUST): Dates cross boundaries as ISO strings, money as integer minor units plus currency code, IDs as strings. No floats for money.
 
 ---
-

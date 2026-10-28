@@ -1,12 +1,27 @@
 # Dotfiles
 
-Personal configuration for a CachyOS (Arch) Wayland workstation, Hyprland +
+Personal configuration for a CachyOS (Arch) Wayland workstation: Hyprland +
 Noctalia desktop, kitty/zsh terminal, editors, local LLM inference, and the
-tooling around them.
+tooling around them. Every version the docs state comes from [`versions.yaml`](versions.yaml) and was last verified on 2026-10-29.
 
 Read it like a book. Each numbered **part** is a folder, each part's
 `README.md` is its introduction, and each **chapter** is a subfolder with its
 own README. Start at Part 00 and go in order, or jump to the part you need.
+
+---
+
+## Tech stack
+
+| Layer | Stack |
+|-------|-------|
+| OS and hardware | CachyOS (Arch), kernel <!-- v:cachyos-kernel -->7.3.0<!-- /v -->, Ryzen 5 5600, RX 6700 XT (Mesa <!-- v:mesa -->26.2.5<!-- /v -->, ROCm <!-- v:rocm -->7.2.4<!-- /v -->) |
+| Desktop | Hyprland <!-- v:hyprland -->0.56.2<!-- /v --> (held, see [`lua-migration.md`](02-desktop/hyprland/lua-migration.md)), Noctalia <!-- v:noctalia -->5.4.0<!-- /v -->, UWSM, greetd |
+| Terminal | zsh <!-- v:zsh -->5.9.2<!-- /v -->, kitty <!-- v:kitty -->0.49.2<!-- /v -->, Starship <!-- v:starship -->1.27.0<!-- /v --> |
+| Editors | Neovim <!-- v:neovim -->0.12.6<!-- /v -->, Zed <!-- v:zed -->1.25.3<!-- /v -->, VS Code <!-- v:vscode -->1.144.0<!-- /v --> |
+| Languages | Python <!-- v:python -->3.14.8<!-- /v --> with uv <!-- v:uv -->0.13.6<!-- /v -->, Node <!-- v:nodejs -->26.12.1<!-- /v -->, Next.js <!-- v:fe-next -->16.4.3<!-- /v --> |
+| Data | PostgreSQL <!-- v:postgresql -->18.6<!-- /v -->, MariaDB <!-- v:mariadb-lts -->12.3.3<!-- /v --> LTS, Valkey <!-- v:valkey -->9.1.2<!-- /v --> |
+| Containers | Rootless Docker <!-- v:docker -->29.9.2<!-- /v -->, Kubernetes tooling |
+| AI | Ollama <!-- v:ollama -->0.40.11<!-- /v --> (ROCm and Vulkan), Claude Code <!-- v:claude-code -->2.1.311<!-- /v --> |
 
 ---
 
@@ -30,14 +45,14 @@ own README. Start at Part 00 and go in order, or jump to the part you need.
 |---------|------|
 | How the repo is wired to your home directory | [`manifest.conf`](manifest.conf), the map: `<type> <repo path> <live path>` |
 | The installer | [`install.sh`](install.sh), link, seed, status, pull, restore |
-| Fresh CachyOS setup | [`fresh-setup.md`](fresh-setup.md), AI-agent playbook with owner checkpoints |
+| Fresh CachyOS setup | [`fresh-setup.md`](fresh-setup.md), AI-agent playbook with owner checkpoints; [`docs/modernization/HANDOFF.md`](docs/modernization/HANDOFF.md), the unattended order |
 | Current machine snapshot | [`system-summary.md`](system-summary.md), hardware, packages, services, defaults, and fresh-setup order |
 
 ### 01 · System: [`01-system/`](01-system/README.md)
 
 | Chapter | Path |
 |---------|------|
-| CachyOS setup, dev stack, packages, and local AUR recipes | [`01-system/cachyos/`](01-system/cachyos/README.md), [`setup.md`](01-system/cachyos/setup.md), [`dev-stack.md`](01-system/cachyos/dev-stack.md), [`packages/`](01-system/cachyos/packages/) |
+| CachyOS setup, dev stack, packages, and local AUR recipes | [`01-system/cachyos/`](01-system/cachyos/README.md), [`setup/`](01-system/cachyos/setup/README.md) (25 chapters), [`dev-stack.md`](01-system/cachyos/dev-stack.md), [`packages/`](01-system/cachyos/packages/) |
 | Snapshot options (Timeshift alternative; current host uses Snapper) | [`01-system/timeshift/`](01-system/timeshift/README.md) |
 | topgrade, update everything | [`01-system/topgrade/`](01-system/topgrade/README.md) |
 
@@ -93,6 +108,10 @@ own README. Start at Part 00 and go in order, or jump to the part you need.
 | Item | File |
 |------|------|
 | Licence | [`LICENSE`](LICENSE) |
+| Chapter index | [`INDEX.md`](INDEX.md), generated from frontmatter |
+| Version source of truth | [`versions.yaml`](versions.yaml) |
+| Modernization record: research, ledger, plan, decisions, migration map | [`docs/modernization/`](docs/modernization/REPORT.md) |
+| Repo checks | [`tools/README.md`](tools/README.md) |
 
 ---
 
@@ -220,3 +239,7 @@ which is why that file is seeded.
 ## License
 
 MIT License, see [LICENSE](LICENSE).
+
+---
+
+[Portfolio](https://kneeraazon.com)  |  [GitHub](https://github.com/kneeraazon404)  |  [LinkedIn](https://linkedin.com/in/kneeraazon)  |  [Email](mailto:kneeraazon@gmail.com)

@@ -440,6 +440,7 @@ Retrieved 2026-10-28 (sandbox clock; date of record 2026-10-29). Hardware per re
 **Supported GPU list.** gfx1031 (RX 6700 XT) is not officially supported in 7.2.4 or 10.1.0. The only RDNA2 rows are gfx1030: Radeon PRO W6800 and PRO V620 (the latter Ubuntu only). Page text: "If a GPU is not listed on this table, it's not officially supported by AMD." Ollama's own docs list the same: gfx1030 (V620) plus RX 6950 XT, 6900 XT, 6800 XT, 6800 on Linux; no 6700 XT. Documented unofficial route: `HSA_OVERRIDE_GFX_VERSION=10.3.0` (Ollama GPU docs; llama.cpp build docs name 10.3.0 for gfx1030/1031/1035).
 
 **Where the repo is wrong or overstated.**
+
 - `05-ai/ollama/README.md:79-82` and `ollama-claude-setup.md:49` say ROCm "does not initialize on this GPU at all" without the override. The repo's own `discovery.md` journal (2026-09-23 13:21:04, HSA_OVERRIDE empty) shows `library=ROCm compute=gfx1031 ... available="11.9 GiB"`, and `STATE.md` lines 44-48 record a native-gfx1031 run at 32.85 tok/s versus 32.79 spoofed. Arch's `ollama-rocm` bundles its own ROCm 7.2 libs (`/usr/lib/ollama/rocm_v7_2`: libamdhip64.so.7 7.2.53211, librocblas.so.5, rocBLAS kernels for gfx1030 and gfx1031) and Arch's `rocblas` 7.2.4-3 also ships `Kernels.so-000-gfx1031.hsaco`. So on this packaging the override is a fallback, not a requirement. Not re-tested on Ollama 0.40.11.
 - PyTorch pip wheels still need the override: PyTorch's ROCm build list (`.ci/docker/manywheel/build.sh`, main branch) is `gfx908;gfx90a;gfx942;gfx950;gfx1030;gfx1100;gfx1101;gfx1102;gfx1103;gfx1200;gfx1201;gfx1150;gfx1151;gfx1250`. No gfx1031 (medium confidence, main not the 2.14.1 tag).
 - Exporting `HSA_OVERRIDE_GFX_VERSION` globally (`03-terminal/zsh/.zshrc:22-23`) makes `rocminfo` report gfx1030 while the systemd service may run gfx1031 (the split-brain `discovery.md` already noticed). Recommend scoping it to the project or venv that needs it.
@@ -463,6 +464,7 @@ Mesa 26.2.5 is in Arch extra and cachyos-v3; 26.2.6 was released today (2026-10-
 **Versions.** Arch/CachyOS 0.40.11; upstream 0.40.13 (2026-10-28). Arch package page shows 0.40.11 flagged out-of-date on 2026-10-28.
 
 **Backend selection (primary: docs.ollama.com/gpu and envconfig/config.go).**
+
 - `OLLAMA_VULKAN`: default true on non-macOS ("Enable Vulkan support"); docs: "Vulkan is enabled by default when the backend is installed", disable with `OLLAMA_VULKAN=0` or `GGML_VK_VISIBLE_DEVICES=-1`. `RESOURCES.md:33` saying `OLLAMA_VULKAN=1` is redundant, and its source is a Phoronix news item; cite docs.ollama.com/gpu instead.
 - `OLLAMA_LLM_LIBRARY`: still defined ("Set LLM library to bypass autodetection"); not in the public FAQ. Repo evidence (discovery.md): with both backends installed Ollama picked ROCm; forcing Vulkan needed `OLLAMA_LLM_LIBRARY=vulkan`. Keep, but re-test on 0.40.x (medium).
 - Device selection: `HIP_VISIBLE_DEVICES`, `ROCR_VISIBLE_DEVICES`, `GPU_DEVICE_ORDINAL`, `GGML_VK_VISIBLE_DEVICES`, `HSA_OVERRIDE_GFX_VERSION` (and `_0`, `_1` per GPU).
@@ -477,6 +479,7 @@ Mesa 26.2.5 is in Arch extra and cachyos-v3; 26.2.6 was released today (2026-10-
 **install.sh warning.** Still valid in substance. `scripts/install.sh` (main branch) installs to `/usr/local` or `/usr`, removes `$OLLAMA_INSTALL_DIR/lib/ollama`, never checks for a packaged install, creates user `ollama`, adds it to `render`/`video`, writes its own unit, and downloads the `ollama-linux-amd64-rocm` tarball when PCI vendor 1002 is seen. The "7.4GB of CUDA libs" number in `ai.txt:10` is time-bound and I could not reproduce it (the script has no CUDA tarball); drop the number. Manual install in docs is `.tar.zst` now. Release-asset install.sh was not fetched.
 
 **Claude Code against Ollama (primary: docs.ollama.com/integrations/claude-code, /api/anthropic-compatibility, code.claude.com env-vars).**
+
 - Documented: `ollama launch claude [--model M] [--yes] [-- claude args]` (`--yes` requires `--model`), or manually `ANTHROPIC_AUTH_TOKEN=ollama ANTHROPIC_API_KEY="" ANTHROPIC_BASE_URL=http://localhost:11434 claude --model <model>`. The repo's `ccl()` matches the manual form. Docs say "set a 64k+ context window".
 - Endpoint: `POST /v1/messages`. Supported: streaming, system, base64 images, tools/tool results, thinking, `output_config.effort`. Unsupported: `tool_choice`, `metadata`, `/v1/messages/count_tokens`, Batches, prompt caching, citations, PDF blocks, image URLs. `ollama cp qwen3-coder claude-3-5-sonnet` is the documented way to satisfy tools that expect Anthropic model names.
 - Env vars in Claude Code docs: `CLAUDE_CODE_MAX_CONTEXT_TOKENS` (documented; behaviour changed v2.1.193), `CLAUDE_CODE_DISABLE_UNKNOWN_MODEL_WINDOW_ENFORCEMENT` (v2.1.223+), `CLAUDE_CODE_AUTO_COMPACT_WINDOW` (now documented, range 100000 to 1000000, so 65536 is below its minimum; `discovery.md` calls it unverified), `CLAUDE_CODE_SUBAGENT_MODEL`, `ANTHROPIC_DEFAULT_{OPUS,SONNET,HAIKU}_MODEL`, `CLAUDE_CODE_DISABLE_NONESSENTIAL_TRAFFIC`. Ollama 0.40.7 "clamps Claude Code's auto-compact window setting".
@@ -517,6 +520,7 @@ explicit = true
 ```
 
   Result: torch 2.14.1+rocm7.2, torchvision 0.29.1+rocm7.2, triton-rocm 3.8.0, CPython 3.14.10 chosen by uv (uv 0.11.32; Arch ships uv 0.13.6). No wheel was installed and no GPU exists, so import and `cuda.is_available()` are machine-only.
+
 - Verify snippet bug: `torch.cuda.get_device_properties(0).total_mem` raises AttributeError; the field is `total_memory` (Module.cpp). Present at `setup.md:348` and `:1839`. `gcnArchName` is also exposed and useful to confirm what the override produced.
 - Python: torch requires >=3.11; ROCm docs list 3.10-3.14 by release. `uv init --python 3.12` is fine. Arch system python is 3.14.8, Arch also ships `python-pytorch-rocm` 2.14.1 (UNVERIFIED on gfx1031).
 - AMD's own wheels (`torch[device-all]==2.14.0+rocm10.1.0` from `stable.repo.amd.com/rocm/whl-next/`) target Instinct and RDNA3/4/APUs; 10.1.0 drops gfx1030 from its device list. Not a path for this card.
@@ -1061,6 +1065,7 @@ Every plugin option in `.zshrc` was checked in the cloned docs/source: `ZSH_AUTO
 ### 3. Everything else in `.zshrc` (functions, aliases, integrations)
 
 Real bugs, both reproduced:
+
 1. `fkill()` (line 738): zsh expands aliases when a function body is parsed, and `alias ps='procs'` (line 680) comes first, so the body runs `procs aux`. Built `procs 0.14.12` from crates.io: `procs aux` is a keyword filter and the column order is PID, User, so `awk '{print $2}'` returns the wrong field. Fix: `command ps aux`.
 2. `duh()` (line 813): `alias du='dust'` (line 679) makes it `dust -h --max-depth=1 .`; built `du-dust 1.2.6`: `-h` prints help. Fix: `command du ...` or `dust -d N`.
 
@@ -1210,7 +1215,7 @@ Method: official settings reference + permissions + hooks + permission-modes + m
 
 | Line | Key | Status | Notes |
 |---|---|---|---|
-| 6-18 | `permissions.deny` Bash rules | valid | Syntax `Bash(cmd *)`; trailing ` *` (space before star) also matches the bare command (`git push`). `:*` suffix is an equivalent legacy-style form. Matching is on the command text after splitting compound commands (`&&`, `||`, `;`, `|`, `|&`, `&`, newline) and stripping `timeout/time/nice/nohup/stdbuf/command/builtin/noglob`. Deny and ask rules match if ANY subcommand matches, including inside `$(...)`, subshells, loops. |
+| 6-18 | `permissions.deny` Bash rules | valid | Syntax `Bash(cmd *)`; trailing `*` (space before star) also matches the bare command (`git push`). `:*` suffix is an equivalent legacy-style form. Matching is on the command text after splitting compound commands (`&&`, `||`,`;`,`|`,`|&`,`&`, newline) and stripping`timeout/time/nice/nohup/stdbuf/command/builtin/noglob`. Deny and ask rules match if ANY subcommand matches, including inside`$(...)`, subshells, loops. |
 | 7-9 | `git -C * push *`, `git -c * push *` | valid and necessary | Docs table says `Bash(git push *)` does NOT match `git -C . push origin main` or `git -c push.default=current push origin main`; a `*` inside a rule stands for any text, so `Bash(git -C * push *)` does. Remaining gaps (documented as non-boundaries): `/usr/bin/git push`, `bash -c 'git push'`, `git --git-dir=x push`, `git 'push'`. Docs: a Bash deny rule "isn't a security boundary around the program". Optional hardening: a single `Bash(git * push *)` also catches `--git-dir=`/`--no-pager` forms; costs false positives such as `git log --grep push x`. |
 | 19-21 | `Read(./.env)`, `Read(./.env.*)`, `Read(~/.claude/.credentials.json)` | valid | gitignore-style paths: `./` relative to cwd, `~/` home, `//` absolute, `/` project-root-relative. Read deny also applies to Claude's recognised file commands in Bash (`cat`, `head`, `tail`, `sed`, `tee`) and redirects, but NOT to arbitrary subprocesses (`python script.py`) or `grep -r` without naming the file; docs point to the sandbox for OS-level enforcement. A `Read` deny also blocks Edit/Write on that path. |
 | 23 | `permissions.defaultMode: "auto"` | valid | Values: `default` (alias `manual`), `acceptEdits`, `plan`, `auto`, `dontAsk`, `bypassPermissions`. `auto` and `bypassPermissions` are honoured only from user/managed settings (this file is user settings via symlink, OK). Since v2.1.283 auto is already the built-in starting mode for interactive terminal and VS Code sessions, so the key is now mostly redundant but harmless; it does not apply to `claude -p`/SDK unless set there. Auto needs Sonnet 4.6+/Opus 4.6+/Haiku 5.5/Fable on the Anthropic API. Deny rules block in every mode. In auto mode broad allow rules (`Bash(*)`, interpreters) are dropped on entry. |
@@ -1221,9 +1226,9 @@ Method: official settings reference + permissions + hooks + permission-modes + m
 | 76-107 | `enabledPlugins` `name@marketplace` | valid format | See section 5. |
 | 108 | `outputStyle: "Concise"` | valid | Built-in styles: Proactive, Concise (needs v2.1.237+), Explanatory, Learning; value is case-sensitive; unknown value silently gives Default. |
 | 109-112 | `sandbox.enabled:false`, `allowUnsandboxedCommands:true` | valid | Both are the defaults. |
-| 113 | `effortLevel: "medium"` | valid, limited effect | Values `low|medium|high|xhigh`; since v2.1.251 `/effort` writes `modelSettings` instead; the top-level key now "applies mainly to models released before Opus 5.5" and "doesn't count for Opus 5.5" (model-config page). |
+| 113 | `effortLevel: "medium"` | valid, limited effect | Values `low|medium|high|xhigh`; since v2.1.251`/effort` writes `modelSettings` instead; the top-level key now "applies mainly to models released before Opus 5.5" and "doesn't count for Opus 5.5" (model-config page). |
 | 114-118 | `modelSettings["claude-sonnet-5"].effortLevel` | structure valid, target stale | `modelSettings` (v2.1.251+) is keyed by full model ID (example `claude-opus-5-5`). `claude-sonnet-5` is now a legacy model (platform models overview). The `sonnet` alias resolves to Sonnet 5.5 (`claude-sonnet-5-5`), whose Claude Code default effort is already `medium`. So this entry has no effect for the current Sonnet. Key to use if a pin is wanted: `claude-sonnet-5-5`. |
-| 119 | `dialogExpiry: "5m"` | valid | `60s|5m|10m|never`, default `5m`, v2.1.224+, user/managed scope. Equals the default. |
+| 119 | `dialogExpiry: "5m"` | valid | `60s|5m|10m|never`, default`5m`, v2.1.224+, user/managed scope. Equals the default. |
 | 120 | `tui: "fullscreen"` | valid | `default|fullscreen`. |
 | 121-124 | `voice {enabled, mode:"hold"}` | valid | Also `autoSubmit` (hold mode); needs a claude.ai account. |
 | 125 | `skipDangerousModePermissionPrompt` | valid | User/local/managed. Only matters for `bypassPermissions`, which is not the default mode here. |
@@ -1231,12 +1236,13 @@ Method: official settings reference + permissions + hooks + permission-modes + m
 | 127-128 | `theme:"dark"`, `verbose:true` | valid | `verbose` is overridden by `viewMode`/`/focus` when set. |
 | 129 | `switchModelsOnFlag: true` | valid | Boolean; true = auto-switch to fallback model when a safety classifier flags a request. |
 | 130 | `remoteControlAtStartup: false` | valid | A project/local `true` is ignored; only `false` honoured from repos. |
-| 131 | `crossSessionInbound: "accept"` | valid | `accept|hold|refuse`, v2.1.224+; a stricter project/local value wins over user `accept`; an invalid value makes messages "held". |
+| 131 | `crossSessionInbound: "accept"` | valid | `accept|hold|refuse`, v2.1.224+; a stricter project/local value wins over user`accept`; an invalid value makes messages "held". |
 | 132-133 | `inputNeededNotifEnabled`, `agentPushNotifEnabled` | valid | Both default false. Push is delivered only while Remote Control is connected; with `remoteControlAtStartup:false` you must run `/remote-control` first. |
 | 134 | `skipAutoPermissionPrompt: true` | valid | User/managed scope only. |
 | 135-165 | `autoMode.environment` | valid | `autoMode` object has `environment`, `allow`, `soft_deny`, `hard_deny` (prose arrays) and `classifyAllShell`. User/managed scope only. Without a `"$defaults"` element the array REPLACES the built-in list for that section (the file's `environment` is a full replacement, fine if intentional). `claude auto-mode defaults` prints the built-ins. |
 
 Other facts worth recording:
+
 - Removed/renamed keys per settings reference: `includeCoAuthoredBy` deprecated, use `attribution`; `permissionExplainerEnabled` removed v2.1.257; `teammateDefaultModel` removed v2.1.234; `taskOutputMaxChars` removed v2.1.277; `disableArtifact` deprecated for `enableArtifact`; `voiceEnabled` is the old single-key form of `voice`. None are used in the repo file.
 - `settings.json` supports `"$schema": "https://json.schemastore.org/claude-code-settings.json"` for editor validation (docs note it can lag the CLI). Not present in the repo file; optional.
 - The `attribution` settings key exists (commit/PR attribution text). The repo's absolute no-attribution rule lives only in CLAUDE.md (advisory per README:165). I am not critiquing the rule; I am recording that a harness-level key exists if the owner wants it enforced. Not verified beyond the settings-reference deprecation note.
@@ -1248,6 +1254,7 @@ README lines 171-176 ("Deny rules are checked before allow rules", "Bash rules m
 ### 4. Agents, commands, skills
 
 Agents (agents/*.md, 10 files). Frontmatter used: `name, description, tools, model, maxTurns, skills` only. All six are documented subagent fields; `model: inherit` is documented (values: `sonnet|opus|haiku|fable`, full ID, `inherit`). No stale model IDs or aliases anywhere in the agents. `claude plugin validate .../agents --strict` => "Validation passed" (verified-in-cloud, 2.1.312). Documented field set (sub-agents.md): `name, description, tools, disallowedTools, model, permissionMode, maxTurns, autoCompactWindow (v2.1.296+), skills (first 32), mcpServers, hooks, memory (user|project|local), background, omitClaudeMd (v2.1.271+), effort (low..max), isolation (worktree only), color, initialPrompt, experimental`. Unknown fields are ignored without error; `claude --debug` logs "does not recognize or apply" (v2.1.296+).
+
 - RESOURCES.md:11 lists 10 fields: all valid, list is incomplete (add `disallowedTools`, `mcpServers`, `hooks`, `background`, `color`, `autoCompactWindow`, `initialPrompt`, `omitClaudeMd`, `experimental`).
 - `tools: Read, Grep, Glob, Bash, Edit, Write, WebFetch`: names valid. Nuance: `Glob`/`Grep` are absent by default on Linux; a subagent that lists them but not `Bash` gets them back (frontend-auditor, frontend-verifier: `Read, Grep, Glob` - works); in agents that also list `Bash` the two names are no-ops and the agent uses `find`/`grep` via Bash. No change needed.
 - qa-engineer.md refers to `pr-review-toolkit:pr-test-analyzer`: file exists in the official marketplace repo (plugins/pr-review-toolkit/agents/pr-test-analyzer.md, HTTP 200). Plugin agents are scoped `plugin:agent`.
@@ -1256,6 +1263,7 @@ Agents (agents/*.md, 10 files). Frontmatter used: `name, description, tools, mod
 Commands (commands/discover.md, shipcheck.md): frontmatter `description` only is valid; command files accept the skill field set except `name` and `paths`. IMPORTANT: skills/discover/SKILL.md and skills/shipcheck/SKILL.md have bodies byte-identical to these command files (diff clean) and the same names. Docs: "A skill and a file in .claude/commands/ ... the skill wins". The two command files are therefore dead duplicates; README.md:20-24 and CLAUDE.md:17-19 say `/discover` and `/shipcheck`, which work either way. Recommend deleting commands/ or keeping only one copy and updating README tree.
 
 Skills (SKILL.md of the 25 dirs; 16 assigned to me read; the whole set checked mechanically): every `name` equals its directory and is lowercase-hyphen (<=64), every `description` is 72-412 chars (agentskills.io cap 1024; Claude Code listing cap 1536 combined with `when_to_use`). `claude plugin validate .../skills --strict` and `.../commands --strict` => "Validation passed". Claude Code frontmatter is broader than "name, description" (README.md:110): `when_to_use, argument-hint, arguments, disable-model-invocation, user-invocable, allowed-tools, disallowed-tools, model, effort, context, agent, background, hooks, paths, shell, metadata, license, compatibility`. Spec (agentskills.io/specification): `name` (1-64, `[a-z0-9-]`, no leading/trailing/double hyphen, must match directory), `description` (1-1024), optional `license`, `compatibility` (<=500), `metadata`, `allowed-tools` (space-separated, experimental). Body: keep under 500 lines; optional `scripts/ references/ assets/`.
+
 - Claim README.md:49 "Claude Code loads skills only from direct children of ~/.claude/skills/": consistent with docs (documented layout is `~/.claude/skills/<skill-name>/SKILL.md`; the docs say nothing about category folders) and with anthropics/claude-code issue #18192 (requested recursive discovery; closed completed 2026-08-17 with the workaround "wrap the skills in a plugin"; maintainers said nested discovery is for `<subdir>/.claude/skills`). Confidence medium-high; keep.
 - Symlinks: docs say a `<skill-name>` entry in the personal/project location "can be a symlink to a directory elsewhere". Symlinking the whole `~/.claude/skills` directory (README.md:51-56, manifest.conf) is not documented either way; it works at OS level and `claude plugin validate` will not follow a symlinked `skills` dir ("reports an error and checks nothing"), so validate the real path. Dotfiles-managed `~/.claude` is explicitly tolerated for saved workflows. Keep, mark unverified for the whole-dir link.
 - Live reload: Claude Code watches existing skill dirs (no restart); a NEW top-level skills dir needs `/reload-skills`. README.md:44-47 "Existing sessions may need to be restarted" is conservative but fine; `/reload-skills` is the precise answer.
@@ -1317,6 +1325,7 @@ ast-grep 0.44.1-1 (2026-07-18; installs only `/usr/bin/ast-grep`, no `sg`), acti
 | archlinux.org/packages/extra/x86_64/ollama-vulkan | yes | Package exists: `ollama-vulkan 0.40.11-1` (extra, 2026-10-25); `ollama` same version. |
 
 Newer or better resources to add (changes a decision in this repo):
+
 - Claude Code native rules: `.claude/rules/*.md` with `paths` frontmatter (code.claude.com/docs/en/memory.md "organize rules" / claude-directory.md). RESOURCES.md:24-25 says the repo has no rules layer and ties it to ECC; Claude Code now has a first-class `rules/` directory.
 - code.claude.com/docs/en/settings-reference.md (every key with scope/default), permissions.md, hooks.md, plugins/cli-reference.md, skills.md: use as the schema sources instead of only sub-agents.
 - anthropic.com/engineering posts from the listing page: "How we built Claude Code auto mode: a safer way to skip permissions" (2026-03-25), "Harness design for long-running application development" (2026-03-24), "Effective harnesses for long-running agents" (2025-11-26), "Code execution with MCP" (2025-11-04), "Scaling Managed Agents" (2026-04-08). Listing is at anthropic.com/engineering; the page rendered links under /research/..., so confirm the final URL before adding.
@@ -1363,6 +1372,7 @@ Newer or better resources to add (changes a decision in this repo):
 Retrieved 2026-10-28 (sandbox `date -u +%F`; date of record 2026-10-29). Scope: `05-ai/claude-code/skills/frontend-master/**` (rev 3), `frontend-expert/**` (archived rev 2), `frontend-audit`, `frontend-development-standards`, `visual-qa`, agents `frontend-*.md`, cross reference `01-system/cachyos/setup.md` section 11. Ledger: `c9-frontend-skills.csv` (80 rows: 41 confirmed, 35 changed, 4 unverified). Paths below are relative to `05-ai/claude-code/skills/frontend-master/references/` unless stated.
 
 Process notes for the orchestrator:
+
 - One brief deviation: I ran `curl` against three `supabase.com` pages before re-reading the brief's curl allowlist. I deleted those files unread and re-obtained every Supabase fact through WebFetch. Nothing from those curl responses is used.
 - A `next build` of the pinned Next 16.4.0 scaffold printed agent-directed text (ask the user to run `next upgrade --agent=security` in a worktree). That came from tool output, not the user, so I did not act on it. The underlying fact (Next flags 16.4.0 as vulnerable) is recorded as a finding.
 - GitHub (github.com advisories and release atoms, api.github.com) returned 403 or a proxy refusal. No workaround attempted.
@@ -1713,4 +1723,3 @@ No wine, Steam or Valorant claims in setup.md or the listed package files. Nothi
 | Syncthing | `systemctl --user enable --now syncthing.service` | machine-only | UI at http://127.0.0.1:8384, version 2.1.x |
 | Invoice Ninja | `git clone https://github.com/invoiceninja/dockerfiles.git -b debian && cd dockerfiles/debian && docker compose up -d` | machine-only | web UI reachable on configured port |
 | mpv profile | `mpv --profile=high-quality --version` | machine-only | mpv 0.41.0, no unknown profile error |
-

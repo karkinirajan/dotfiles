@@ -60,4 +60,3 @@
 - STR-09 (MAY): Move to a Turborepo monorepo (`apps/web`, `packages/ui`, `packages/config`, `packages/db`) only when a second deployable app or a shared design system package exists. Never at kickoff by default.
 
 ---
-
