@@ -1,3 +1,10 @@
+---
+title: KDE and Plasma removal log
+topic: kde-removal
+last_verified: 2026-10-29
+status: archived
+---
+
 # KDE/Plasma Removal Notes
 
 This machine originally ran CachyOS with a full KDE Plasma install alongside
@@ -5,6 +12,17 @@ Hyprland (dual-DE setup, common on CachyOS installs). This document records
 how it was fully removed, keeping Hyprland/Noctalia intact, for anyone
 following these dotfiles onto a similar dual-DE CachyOS install — or for
 re-doing this after a fresh CachyOS-with-Plasma install.
+
+> **Status note, 2026-10-29.** This log records the removal as it was done and
+> is kept as written. Since then the machine has gained KDE *applications*
+> again, not the desktop: Dolphin, Ark, Okular, KOrganizer and KDE Connect are
+> in `packages/desktop.txt`, and `cachyos-hypr-noctalia` 1.2.6-1 (which still
+> depends on `dolphin`) is installed, so "zero KDE/Plasma-tagged packages
+> remain" described the state on the removal date, not today. `swash`
+> replaced `satty` as the screenshot editor. The orphan-sweep warning below
+> still holds. The January 2026 CachyOS ISO moved Plasma installs to
+> `plasma-login-manager`; that is consistent with the SDDM switchover
+> described here.
 
 **Result**: 205 packages removed across three passes, zero KDE/Plasma-tagged
 packages remain, Hyprland and Noctalia untouched throughout (same PIDs
