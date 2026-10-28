@@ -17,7 +17,7 @@ from pathlib import Path
 
 from _lib import LOG, load_versions, markdown_files, repo_root, setup_logging, split_frontmatter
 
-EM_DASH = "—"
+EM_DASH = "\u2014"
 ALLOWED_STATUS = {"current", "reference", "archived", "draft"}
 FENCE_RE = re.compile(r"^(\s*)(`{3,}|~{3,})(.*)$")
 # Generated or imported text that is not authored here.
