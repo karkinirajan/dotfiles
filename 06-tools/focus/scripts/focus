@@ -63,6 +63,11 @@ _cmd_on() {
   echo "[ON] enabling focus mode"
   print -r -- "on" > "$STATE_FILE"
   sudo systemctl start dnsmasq
+  if ! sudo systemctl is-active --quiet dnsmasq; then
+    echo "[ON] dnsmasq failed to start; leaving DNS untouched" >&2
+    print -r -- "off" > "$STATE_FILE"
+    return 1
+  fi
   sudo systemctl start focus-page
   sudo chattr -i /etc/resolv.conf 2>/dev/null || true
   # /etc/resolv.conf must be a real file, not NetworkManager's symlink into

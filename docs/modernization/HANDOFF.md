@@ -154,7 +154,7 @@ cd ~/dotfiles
 zsh -n ~/.zshrc
 ```
 
-Expected: the dry run lists only changes; `status` ends with every entry `ok` (a `seed` entry may report `DRIFT`, that is the live file moving ahead and is not an error; run `./install.sh pull` only if the owner wants it captured). A real file in the way is moved to `<path>.bak-<timestamp>`. `zsh -n` prints nothing.
+Expected: the dry run lists only changes; `status` ends with every entry `ok` (it exits 0 even with drift or missing entries, so read its output, not its exit code) (a `seed` entry may report `DRIFT`, that is the live file moving ahead and is not an error; run `./install.sh pull` only if the owner wants it captured). A real file in the way is moved to `<path>.bak-<timestamp>`. `zsh -n` prints nothing.
 
 ### S07. Reload the compositor config
 
@@ -231,7 +231,8 @@ Expected: `active` for each service and the user Docker unit; `rootless` for the
 
 - Run `initdb`, `mariadb-install-db` or any database initialization: the data directories exist. The scripts in chapter 06 and `dev-stack.md` are for a blank machine. On a fresh machine PostgreSQL 18 needs `--auth-local=peer --auth-host=scram-sha-256`, because its `initdb` default is `trust`.
 - Switch MariaDB, Mullvad or Logseq packages (see the defaults table).
-- Enable `docker.socket`, `mullvad-daemon`, `mullvad-early-boot-blocking`, focus services, Nginx or Fail2ban.
+- Enable `docker.socket`, `mullvad-daemon`, `mullvad-early-boot-blocking`, focus services, Nginx or Fail2ban. The focus scripts and units hardcode `/home/kneeraazon`; they are root-run and would create that path on a differently named account.
+- Run the AppArmor kernel-parameter step (chapter 19.7) or the Limine single-entry procedure (chapter 20.1); both edit the boot command line and are out of scope for a convergence run.
 - Install the upstream Ollama script, the ROCm Core SDK, or `reflector`.
 - Run the Hyprland Lua port or `hyprpm update` against a newer Hyprland.
 

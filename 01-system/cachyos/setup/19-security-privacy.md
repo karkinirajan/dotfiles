@@ -38,12 +38,12 @@ sudo systemctl enable --now ufw.service
 sudo ufw status verbose
 ```
 
-The local-workstation profile keeps zero inbound allow rules. Add rules only for a service that must be reachable on a trusted LAN, and remove them afterwards:
+The local-workstation profile keeps zero inbound allow rules. These are optional examples, not part of the baseline: add one only for a service that must be reachable on a trusted LAN, scope it to that network (replace `192.168.0.0/16` with your subnet), and remove it afterwards:
 
 ```bash
-sudo ufw allow ssh                  # only if sshd is enabled on purpose
-sudo ufw allow kdeconnect           # ufw-extras profile, TCP and UDP 1714-1764; only if KDE Connect is used (chapter 18)
-sudo ufw allow syncthing            # profile shipped by the syncthing package, see 19.9
+sudo ufw allow from 192.168.0.0/16 to any port 22 proto tcp   # only if sshd is enabled on purpose
+sudo ufw allow from 192.168.0.0/16 to any app kdeconnect      # TCP and UDP 1714-1764; only if KDE Connect is used (chapter 18)
+sudo ufw allow from 192.168.0.0/16 to any app syncthing       # profile shipped by the syncthing package, see 19.9
 ```
 
 Run `sudo ufw status verbose` after every reboot: Launchpad has open reports of a failed reload writing `ENABLED=no` and of kernel freezes with UFW logging on kernel 7.2. Expected: `Status: active`, `Default: deny (incoming), allow (outgoing)`. Label: `machine-only`.
@@ -97,12 +97,15 @@ PubkeyAuthentication yes
 AuthenticationMethods publickey
 X11Forwarding no
 MaxAuthTries 3
-AllowUsers yourusername
+AllowUsers <your-login-name>
 ```
+
+Replace `<your-login-name>` with the account's login (`id -un`) before saving; the literal placeholder locks everyone out. Do this only after a key is installed and a key login works (`ssh -o PreferredAuthentications=publickey localhost`).
 
 ```bash
 sudo sshd -t                         # no output means the configuration parses
-sudo systemctl restart sshd
+sudo sshd -T | rg -i 'allowusers|passwordauthentication'
+systemctl is-active --quiet sshd && sudo systemctl reload sshd   # on a host where sshd is disabled, nothing to reload
 ```
 
 Keep an existing session open while testing a second login. Label: `machine-only`.
@@ -126,7 +129,7 @@ dnscrypt-proxy <!-- v:dnscrypt-proxy -->2.1.20<!-- /v -->. All keys below exist 
 sudo pacman -S --needed dnscrypt-proxy
 ```
 
-`/etc/dnscrypt-proxy/dnscrypt-proxy.toml`:
+Set these four keys in the existing `/etc/dnscrypt-proxy/dnscrypt-proxy.toml` (back it up first and do not replace the file: the packaged one carries the `[sources.*]` tables the resolver list needs):
 
 ```toml
 server_names = ['cloudflare', 'quad9-dnscrypt-ip4-nofilter-pri']
@@ -158,10 +161,11 @@ The tracked `06-tools/focus/dnsmasq/dnsmasq.conf` currently forwards to the plai
 Mullvad is in Arch extra (`mullvad-vpn` <!-- v:mullvad-vpn -->2026.5<!-- /v -->, daemon split into `mullvad-vpn-daemon`); Mullvad itself documents it as "available in the official repository (not maintained by us)". The AUR `mullvad-vpn-bin` conflicts with it and is no longer needed. The package install may enable `mullvad-daemon.service` and `mullvad-early-boot-blocking.service`; this machine keeps both disabled while Proton VPN is the active client. Use one VPN client at a time.
 
 ```bash
-# Mullvad (no email, no account, anonymous payment)
+# Mullvad (no email, no account, anonymous payment). Alternative to Proton VPN:
+# do NOT run these lines on this host while Proton VPN is the active client.
 sudo pacman -S --needed mullvad-vpn
 sudo systemctl enable --now mullvad-daemon.service
-mullvad account login <ACCOUNT_NUMBER>
+read -rsp 'Mullvad account number: ' MULLVAD_ACCOUNT && echo && mullvad account login "$MULLVAD_ACCOUNT"
 mullvad connect
 
 # Proton VPN (free tier available): needs NetworkManager and a Secret Service provider
@@ -184,12 +188,17 @@ Add `lsm=landlock,lockdown,yama,integrity,apparmor,bpf` to the kernel command li
 KERNEL_CMDLINE[default]+=" lsm=landlock,lockdown,yama,integrity,apparmor,bpf"
 ```
 
-`+=` only appends when the base parameters (`root=`, `rootflags=`) already live in `/etc/default/limine`. Apply and inspect the generated line **before** rebooting:
+`+=` only appends when the base parameters (`root=`, `rootflags=`) already live in `/etc/default/limine`; on a file that holds only `BOOT_ORDER` and `FIND_BOOTLOADERS` a lone `+=` line can drop `root=` and leave an unbootable entry. This step edits the boot command line: skip it in unattended runs, take backups first, and gate on the result before rebooting:
 
 ```bash
+sudo cp -a /etc/default/limine /etc/default/limine.bak
+sudo cp -a /boot/limine.conf /boot/limine.conf.bak
 sudo limine-update
-grep -n 'cmdline:' /boot/limine.conf     # must still contain root= and rootflags= plus the lsm= string
-sudo systemctl enable apparmor.service
+if grep -E '^\s*cmdline:' /boot/limine.conf | rg -q 'root=' && rg -q 'rootflags=' /boot/limine.conf && rg -q 'lsm=' /boot/limine.conf; then
+  sudo systemctl enable apparmor.service
+else
+  echo 'cmdline lost root= or rootflags=: restore the .bak files and DO NOT reboot' >&2
+fi
 ```
 
 CachyOS also recommends a policy cache in `/etc/apparmor/parser.conf`:
@@ -223,7 +232,8 @@ Syncthing <!-- v:syncthing -->2.1.7<!-- /v -->. Version 2 migrated the database 
 sudo pacman -S --needed syncthing
 systemctl --user enable --now syncthing.service     # user unit, starts at login
 # or: sudo systemctl enable --now syncthing@$USER.service
-sudo ufw allow syncthing                            # TCP 22000, UDP 22000 (QUIC), UDP 21027; do not add syncthing-gui
+# optional, LAN-scoped (opens TCP 22000, UDP 22000 (QUIC), UDP 21027; do not add syncthing-gui):
+sudo ufw allow from 192.168.0.0/16 to any app syncthing
 ```
 
 The web UI is `http://127.0.0.1:8384` (loopback by default). Label: `machine-only`.

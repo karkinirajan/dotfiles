@@ -43,11 +43,11 @@ For a plain Arch install without `cachyos-snapper-support`, create the config fi
 
 Limine entries live in `/boot/limine.conf`; `limine-entry-tool` manages them and `/etc/default/limine` overrides its options. To get a single-entry menu:
 
-1. Back up `/boot/limine.conf`, then inspect the exact entry paths with `sudo limine-list`.
+1. Back up `/boot/limine.conf` and `/etc/default/limine` (`sudo cp -a`), note the booted kernel with `uname -r`, then inspect the exact entry paths with `sudo limine-list`.
 2. Remove the other kernel packages (`linux-cachyos-lts`, `linux-rt`, and their headers) so their entries are not regenerated. The installer ships the Stable and LTS kernels, so removing LTS leaves no fallback kernel; `linux-cachyos-lts` stays available in the repo if one is wanted.
 3. Set `FIND_BOOTLOADERS="no"` in `/etc/default/limine` to stop discovery of other EFI loaders. `BOOT_ORDER` only orders entries (default `"*, *fallback, Snapshots"`, sorting applies only when `ENABLE_SORT=yes`); it is not documented as a filter. <!-- UNVERIFIED: whether BOOT_ORDER hides unlisted entries -->
 4. Disable `limine-snapper-sync.service` so snapshot entries stay absent.
-5. Remove any remaining stale path with `limine-entry-tool --remove-entry <path>`, run `sudo limine-update`, and confirm `sudo limine-list` shows the single entry. Never remove the booted kernel or its initramfs.
+5. Remove any remaining stale path with `limine-entry-tool --remove-entry <path>`, run `sudo limine-update`, and confirm `sudo limine-list` shows the single entry. Never remove the booted kernel (compare with `uname -r`) or its initramfs, and double-check the argument: `--remove-entry` with position 0 removes every match.
 
 Limine 12.9.5 changed `default_entry:` numbering (a number now starts at 1) and 12.9.6 requires global options before the first entry. The path form `default_entry: CachyOS/linux-cachyos` and `remember_last_entry: no` are unaffected. Whether manual `default_entry` edits survive `limine-update` is not documented: re-check after each kernel update. <!-- UNVERIFIED -->
 
@@ -76,6 +76,8 @@ sudo pacman -S --needed btop nvtop mission-center ncdu
 | `ncdu` | Interactive disk usage browser |
 | `dust` | Proportional disk usage (in the CLI package list) |
 | `amdgpu_top` | TUI with per-process GPU usage |
+
+`prometheus` is in `packages/developer.txt` but is not enabled. Its default listen address is `0.0.0.0:9090`, so bind it to loopback before enabling it: in `/etc/conf.d/prometheus` set `PROMETHEUS_ARGS="--web.listen-address=127.0.0.1:9090"`. <!-- UNVERIFIED: the Arch unit reads /etc/conf.d/prometheus (Arch package files were only readable through old snippets) -->
 
 ## 20.3 Package cache cleanup
 

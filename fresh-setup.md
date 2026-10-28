@@ -29,7 +29,10 @@ The point-in-time hardware, package, service, and runtime inventory is in
 This is a rolling distribution. Reproduce the profile and configuration, then
 install compatible current package versions from the configured CachyOS/Arch
 repositories. Do not pin the historical kernel, library, ROCm, Node, or app
-versions written in older notes.
+versions written in older notes. One exception: hold `hyprland` and
+`hyprpm` with `IgnorePkg = hyprland hyprpm` in `/etc/pacman.conf` before the
+first `pacman -Syu`, because Hyprland 0.57 no longer reads the `.conf` tree
+(see [`lua-migration.md`](02-desktop/hyprland/lua-migration.md)).
 
 ## Agent rules and owner checkpoints
 
@@ -139,8 +142,13 @@ versions written in older notes.
    #   set ENABLE_ENROLL_LIMINE_CONFIG=yes in /etc/default/limine, append the
    #   splash hash (b2sum /boot/limine-splash.png) after '#', then:
    sudo limine-enroll-config && sudo limine-update
-   sudo sbctl status && sudo sbctl verify          # only the Limine EFI binary needs signing
+   sudo sbctl status && sudo sbctl verify          # lists the unsigned files; only the Limine EFI binary needs signing
+   # sign what 'sbctl verify' lists for Limine, e.g.: sudo sbctl sign -s <that path>
    ```
+
+   Order matters: the firmware must be in Setup Mode before `enroll-keys`, and
+   Secure Boot is switched on in firmware only after `sbctl verify` shows the
+   Limine EFI binary signed. Enabling it earlier gives a machine that does not boot.
 
    CachyOS-Settings documents `sbctl-batch-sign` as incompatible with Limine;
    follow the Limine section of the guide, not the generic flow.
@@ -357,6 +365,9 @@ Install only after their package and firewall/service plans are reviewed:
   section 19.5 of `01-system/cachyos/setup/19-security-privacy.md`. Review NetworkManager,
   dnsmasq, dnscrypt-proxy, `/etc/resolv.conf`, and local listening ports as one
   plan before changing DNS; test name resolution and have a rollback ready.
+  The focus scripts and units hardcode `/home/kneeraazon`; edit the paths first
+  on an account with a different name (the units run as root and would create
+  that directory).
 - **SSH:** install the user unit from
   [`07-networking/ssh/README.md`](07-networking/ssh/README.md) only if the
   owner has configured its host alias in `~/.ssh/config`. The private key is
