@@ -823,10 +823,11 @@ entries:
     source: registry
   fe-typescript-eslint:
     name: typescript-eslint
-    target: 8.72.1
+    target: 8.71.1
     source: registry
     npm: typescript-eslint
     support: peers typescript <6.1.0
+    hold: template pin; registry has 8.72.1 and A.14 ran on it, see frontend-master 1.1.2
   fe-tailwindcss:
     name: Tailwind CSS
     target: 4.3.3
@@ -834,14 +835,16 @@ entries:
     npm: tailwindcss
   fe-shadcn:
     name: shadcn CLI
-    target: 4.23.0
+    target: 4.21.4
     source: registry
     npm: shadcn
+    hold: template pinned at 4.21.4; registry has 4.23.0 (2026-10-29), see frontend-master 1.1.2
   fe-supabase-js:
     name: supabase-js
-    target: 2.118.0
+    target: 2.117.3
     source: registry
     npm: '@supabase/supabase-js'
+    hold: template pinned at 2.117.3; registry has 2.118.0 (2026-10-29), see frontend-master 1.1.2
   fe-supabase-ssr:
     name: '@supabase/ssr'
     target: 0.12.7
@@ -849,10 +852,11 @@ entries:
     npm: '@supabase/ssr'
   fe-prisma:
     name: Prisma client and adapter-pg
-    target: 7.10.1
+    target: 7.10.0
     source: registry
     npm: '@prisma/client'
     support: 'Pin prisma@7: npm latest is 8.0.0-rc.28 whose CLI does not read schema.prisma'
+    hold: template pinned at 7.10.0; registry has 7.10.1 (2026-10-29), see frontend-master 1.1.2
   fe-zod:
     name: Zod
     target: 4.6.7
@@ -860,9 +864,10 @@ entries:
     npm: zod
   fe-tanstack-query:
     name: TanStack Query
-    target: 5.105.0
+    target: 5.104.2
     source: registry
     npm: '@tanstack/react-query'
+    hold: template pinned at 5.104.2; registry has 5.105.0 (2026-10-29), see frontend-master 1.1.2
   fe-tanstack-table:
     name: TanStack Table
     target: 9.3.1
@@ -875,14 +880,16 @@ entries:
     npm: '@tanstack/react-form'
   fe-tanstack-virtual:
     name: TanStack Virtual
-    target: 3.14.23
+    target: 3.14.17
     source: registry
     npm: '@tanstack/react-virtual'
+    hold: template pinned at 3.14.17; registry has 3.14.23 (2026-10-29), see frontend-master 1.1.2
   fe-react-hook-form:
     name: react-hook-form
-    target: 7.91.0
+    target: 7.90.0
     source: registry
     npm: react-hook-form
+    hold: template pinned at 7.90.0; registry has 7.91.0 (2026-10-29), see frontend-master 1.1.2
   fe-hookform-resolvers:
     name: '@hookform/resolvers'
     target: 5.9.1
@@ -892,9 +899,10 @@ entries:
     support: 6.x is a new major and was not evaluated
   fe-vitest:
     name: Vitest
-    target: 5.0.5
+    target: 5.0.4
     source: registry
     npm: vitest
+    hold: template pinned at 5.0.4; registry has 5.0.5 (2026-10-29), see frontend-master 1.1.2
   fe-testing-library-react:
     name: Testing Library React
     target: 16.3.3
@@ -902,14 +910,16 @@ entries:
     npm: '@testing-library/react'
   fe-user-event:
     name: user-event
-    target: 14.6.8
+    target: 14.6.7
     source: registry
     npm: '@testing-library/user-event'
+    hold: template pinned at 14.6.7; registry has 14.6.8 (2026-10-29), see frontend-master 1.1.2
   fe-playwright:
     name: Playwright
-    target: 1.64.1
+    target: 1.64.0
     source: registry
     npm: '@playwright/test'
+    hold: template pinned at 1.64.0; registry has 1.64.1 (2026-10-29), see frontend-master 1.1.2
   fe-next-playwright:
     name: '@next/playwright'
     target: 16.4.3
@@ -922,14 +932,16 @@ entries:
     npm: msw
   fe-axe-playwright:
     name: axe-core Playwright
-    target: 4.14.0
+    target: 4.13.0
     source: registry
     npm: '@axe-core/playwright'
+    hold: template pinned at 4.13.0; registry has 4.14.0 (2026-10-29), see frontend-master 1.1.2
   fe-eslint:
     name: ESLint
-    target: 10.13.0
+    target: 10.12.0
     source: registry
     npm: eslint
+    hold: template pinned at 10.12.0; registry has 10.13.0 (2026-10-29), see frontend-master 1.1.2
   fe-eslint-config-next:
     name: eslint-config-next
     target: 16.4.3
@@ -963,9 +975,10 @@ entries:
     npm: next-themes
   fe-lucide:
     name: lucide-react
-    target: 1.63.0
+    target: 1.55.0
     source: registry
     npm: lucide-react
+    hold: template pinned at 1.55.0; registry has 1.63.0 (2026-10-29), see frontend-master 1.1.2
   fe-tw-animate:
     name: tw-animate-css
     target: 1.4.0
@@ -983,14 +996,16 @@ entries:
     npm: shiki
   fe-motion:
     name: motion
-    target: 14.7.1
+    target: 14.1.0
     source: registry
     npm: motion
+    hold: template pinned at 14.1.0; registry has 14.7.1 (2026-10-29), see frontend-master 1.1.2
   fe-zustand:
     name: zustand
-    target: 5.0.16
+    target: 5.0.15
     source: registry
     npm: zustand
+    hold: template pinned at 5.0.15; registry has 5.0.16 (2026-10-29), see frontend-master 1.1.2
   fe-nuqs:
     name: nuqs
     target: 2.10.2
@@ -998,40 +1013,47 @@ entries:
     npm: nuqs
   fe-sentry:
     name: '@sentry/nextjs'
-    target: 11.10.0
+    target: 11.7.0
     source: registry
     npm: '@sentry/nextjs'
+    hold: template pinned at 11.7.0; registry has 11.10.0 (2026-10-29), see frontend-master 1.1.2
   fe-pnpm:
     name: pnpm (project packageManager pin)
-    target: 12.16.1
+    target: 12.11.2
     source: registry
     npm: pnpm
     support: Host pnpm is the distro build; projects pin their own
+    hold: template packageManager pin; registry has 12.16.1 and the templates ran on it, see frontend-master 1.1.2
   fe-geist:
     name: geist
-    target: 1.8.2
+    target: 1.7.2
     source: registry
     npm: geist
+    hold: template pinned at 1.7.2; registry has 1.8.2 (2026-10-29), see frontend-master 1.1.2
   fe-commitlint:
     name: commitlint
-    target: 21.2.4
+    target: 21.2.3
     source: registry
     npm: '@commitlint/cli'
+    hold: template pinned at 21.2.3; registry has 21.2.4 (2026-10-29), see frontend-master 1.1.2
   fe-dependency-cruiser:
     name: dependency-cruiser
-    target: 18.7.0
+    target: 18.6.0
     source: registry
     npm: dependency-cruiser
+    hold: template pinned at 18.6.0; registry has 18.7.0 (2026-10-29), see frontend-master 1.1.2
   fe-jsdom:
     name: jsdom
-    target: 30.1.3
+    target: 30.1.2
     source: registry
     npm: jsdom
+    hold: template pinned at 30.1.2; registry has 30.1.3 (2026-10-29), see frontend-master 1.1.2
   fe-knip:
     name: knip
-    target: 6.43.0
+    target: 6.41.0
     source: registry
     npm: knip
+    hold: template pinned at 6.41.0; registry has 6.43.0 (2026-10-29), see frontend-master 1.1.2
   fe-lefthook:
     name: lefthook
     target: 2.2.1

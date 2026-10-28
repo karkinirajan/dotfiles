@@ -41,9 +41,9 @@ claude-code/
 | Piece | Loaded when | Format |
 |-------|-------------|--------|
 | `CLAUDE.md` | every session, at start | plain Markdown |
-| `commands/*.md` | you run `/command-name` explicitly | Markdown prompt |
+| `commands/*.md` | you run `/command-name` explicitly | Markdown prompt. `discover.md` and `shipcheck.md` are shadowed by the same-named skills (a skill wins over a command), so the skill copy is the one that runs; keep the two bodies identical or delete the command copy |
 | `agents/*.md` | a task matches the agent's `description`, or you name it | YAML frontmatter + system prompt. Fields are checked against the [subagent schema](https://code.claude.com/docs/en/sub-agents) |
-| `skills/*/SKILL.md` | a task matches the skill's `description` | YAML frontmatter (`name`, `description`) + instructions. Supporting files sit beside it |
+| `skills/*/SKILL.md` | a task matches the skill's `description` | YAML frontmatter (`name`, `description`; optional `when_to_use`, `allowed-tools`, `disable-model-invocation`, `paths`, `model`, `effort`, `context` and others, unknown fields are ignored) + instructions. Supporting files sit beside it |
 | `settings.json` | every session, at start | JSON. Hooks run the commands listed under each event |
 
 Claude Code loads skills only from **direct children** of `~/.claude/skills/`.
@@ -54,8 +54,7 @@ The global skills directory is a symlink to this tracked directory, so skills
 are available to new Claude Code sessions without a separate enable step. The
 `token-efficient-workflow` skill is invoked as `/token-efficient-workflow` or
 selected automatically when relevant; its full instructions load only when
-used. Existing sessions may need to be restarted to discover a newly added
-skill.
+used. Edits to a skill in an existing directory are picked up live; a new top-level skills directory needs `/reload-skills`.
 
 ## Token-efficient setup
 
