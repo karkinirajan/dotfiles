@@ -4,8 +4,8 @@ part: "01"
 chapter: "23"
 topic: zsh-configuration
 versions: []
-last_verified: 2026-10-06
-status: draft
+last_verified: 2026-10-29
+status: current
 sources: []
 ---
 
