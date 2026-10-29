@@ -1,7 +1,7 @@
 # versions.yaml: single source of truth for every version the docs state.
 #
 # Prose references these through markers, never by retyping the number:
-#   <!-- v:hyprland -->0.56.2<!-- /v -->        (field `target`)
+#   <!-- v:hyprland -->0.57.0<!-- /v -->        (field `target`)
 #   <!-- v:hyprland:upstream -->0.57.0<!-- /v -->
 # `python tools/render_versions.py` rewrites marker text from this file and
 # `python tools/check_versions.py` fails CI if they differ. `check_versions.py
@@ -83,12 +83,11 @@ entries:
     package: hyprland
     source: cachyos
     arch: 0.57.0-1
-    cachyos: 0.56.2-4.1
-    target: 0.56.2
-    hold: 0.57.0 removes hyprlang .conf; stay on the CachyOS build until hyprland.lua is validated (constraint hyprland-hold)
+    cachyos: 0.57.0-1.1
+    target: 0.57.0
     verify: hyprctl version
-    expect: 0.56.2
-    support: 'Held at the distro version: 0.57.0 removed the hyprlang .conf parser'
+    expect: 0.57.0
+    support: 'Lua config only (hyprland.lua, constraint hyprland-lua); 0.57.0 removed the hyprlang .conf parser'
     upstream: 0.57.0
   hypridle:
     name: hypridle
@@ -1124,12 +1123,12 @@ entries:
     verify: brave --version
     expect: 1.98.62
 constraints:
-- id: hyprland-hold
-  text: Hyprland stays on the CachyOS-delivered 0.56.2 until a Lua config is validated; 0.57.0 ignores hyprland.conf
+- id: hyprland-lua
+  text: Hyprland 0.57 and later read only hyprland.lua; manifest.conf links the tracked Lua port, and the .conf tree is kept for 0.56.x
   requires:
   - key: hyprland
-    op: <=
-    value: 0.56.2
+    op: '>='
+    value: 0.57.0
 - id: rocm-pytorch-index
   text: PyTorch wheel index must match the ROCm legacy train
   requires:
