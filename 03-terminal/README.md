@@ -1,10 +1,18 @@
+---
+title: Part 03 Terminal
+part: "03"
+topic: terminal
+last_verified: 2026-10-29
+status: current
+---
+
 # 03 · Terminal
 
 Shells, terminal emulators and the prompt.
 
 | Chapter | Path | Purpose |
 |---------|------|---------|
-| zsh | [`zsh/`](zsh/README.md) | Oh My Zsh, deferred plugin loading, Starship prompt, local LLM helpers (`ccl`/`cclf`) |
+| zsh | [`zsh/`](zsh/README.md) | Oh My Zsh, deferred plugin loading, Starship prompt, tool integrations |
 | bash | [`bash/`](bash/README.md) | Bash reference config for subshells or hosts without zsh |
 | kitty | [`kitty/`](kitty/README.md) | `kitty.conf` plus Catppuccin Mocha & Gruvbox Dark Hard themes |
 | Alacritty | [`alacritty/`](alacritty/README.md) | Primary terminal config (`alacritty.toml`) and [`SHORTCUTS.md`](alacritty/SHORTCUTS.md) |

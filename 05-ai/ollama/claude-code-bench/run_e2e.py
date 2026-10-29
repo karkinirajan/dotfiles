@@ -3,7 +3,7 @@
 
 For each model, clones a fresh copy of the fixture repo, runs `claude -p`
 against it pointed at the local Ollama server (via env vars set only in the
-subprocess's own environment — never exported into this process or the
+subprocess's own environment - never exported into this process or the
 parent shell), and grades the result independently:
 
   - `python3 -m pytest -q` rerun from scratch: must be exactly 5 passed,
@@ -207,7 +207,7 @@ def run_once(model: str, run_index: int, host: str, num_ctx: int, timeout_s: int
         "ANTHROPIC_DEFAULT_HAIKU_MODEL": model,
         "CLAUDE_CODE_SUBAGENT_MODEL": model,
         "CLAUDE_CODE_DISABLE_NONESSENTIAL_TRAFFIC": "1",
-        # Confirmed via live CLI warning text in Phase 1 discovery — this is
+        # Confirmed via live CLI warning text in Phase 1 discovery: this is
         # the real, working lever for this Claude Code build, NOT the
         # CLAUDE_CODE_AUTO_COMPACT_WINDOW string found in ollama's binary
         # (that one is unverified for this Claude Code version).
@@ -268,7 +268,7 @@ def run_once(model: str, run_index: int, host: str, num_ctx: int, timeout_s: int
     )
     if result.truncation_risk:
         log.warning(
-            "model=%s run=%d: TRUNCATION RISK — max single-request input_tokens=%d >= 0.9*num_ctx(%d)",
+            "model=%s run=%d: TRUNCATION RISK - max single-request input_tokens=%d >= 0.9*num_ctx(%d)",
             model, run_index, result.max_single_request_input_tokens, num_ctx,
         )
     return result

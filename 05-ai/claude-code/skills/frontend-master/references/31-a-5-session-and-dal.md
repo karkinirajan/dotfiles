@@ -85,4 +85,3 @@ export const getProject = cache(async (id: string): Promise<ProjectDTO | null> =
 ```
 
 When the data access model is Prisma (PRISMA-01 option B), RLS does not apply. Add the ownership predicate to the query (`where: { id, ownerId: session.userId }`) and keep the `verifySession` result in use.
-

@@ -10,7 +10,7 @@ timing fields.
 
 The number that matters is the generation rate. Placement is read back from
 the server log because a model that quietly spilled half its layers into
-system RAM looks identical from the client side — on a 12GB card that is the
+system RAM looks identical from the client side - on a 12GB card that is the
 difference between 26 tok/s and 10 tok/s.
 """
 import json, subprocess, sys, time

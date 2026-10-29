@@ -3,23 +3,25 @@
 OS-level documentation, package manifests, database loopback drop-ins, and
 reproducible local PKGBUILDs for this CachyOS (Arch) workstation.
 
-```
+```text
 01-system/cachyos/
 ├── README.md                 ← you are here
-├── setup.md                  # full system walkthrough & historical reference catalog
+├── setup/                    # 25 numbered chapters (the setup walkthrough)
+├── setup.md                  # redirect stub for old links into setup/
+├── host-snapshot/            # point-in-time package inventories (pacman -Qe, -Qm)
 ├── dev-stack.md              # reproducible developer & database stack runbook
 ├── mariadb-local.cnf         # /etc/my.cnf.d/90-local-dev.cnf (loopback 127.0.0.1 bind)
 ├── aur/
 │   └── upwork/
 │       ├── README.md         # why Upwork is built from the bundled .deb
-│       └── PKGBUILD          # local PKGBUILD (5.8.0.41)
+│       └── PKGBUILD          # local PKGBUILD (5.8.0.41; vendor .deb with bundled runtime)
 └── packages/
     ├── desktop.txt           # Hyprland, Noctalia, greetd, portals, audio, GUI apps
     ├── system.txt            # Snapper, UFW, power profiles, security daemons
     ├── fonts.txt             # all font families referenced by desktop/terminal/editor configs
     ├── cli.txt               # Zsh, Starship, Kitty, Alacritty, Rust CLI utilities, uv, paru
     ├── developer.txt         # languages, databases, containers, Kubernetes, cloud & IaC
-    ├── ai.txt                # Ollama + AMD ROCm/Vulkan stack (RX 6700 XT / gfx1030)
+    ├── ai.txt                # Ollama + AMD ROCm/Vulkan stack (RX 6700 XT / gfx1031)
     └── claude-code-tools.txt # optional CLI tools for token-efficient Claude Code workflows
 ```
 

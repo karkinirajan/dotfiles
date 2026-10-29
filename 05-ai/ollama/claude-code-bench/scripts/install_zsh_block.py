@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """Phase 7: idempotently install the ccl/cclf zsh block into the real
-.zshrc target (following any symlink — this system's ~/.zshrc is a symlink
+.zshrc target (following any symlink - this system's ~/.zshrc is a symlink
 into a dotfiles repo, and writing through a symlink target rather than
 replacing the link itself is the only way that doesn't break the dotfiles
 setup)."""
@@ -42,7 +42,7 @@ alias ccl-bench='python3 ~/dotfiles/05-ai/ollama/claude-code-bench/bench.py'
 def find_real_target(path: Path) -> Path:
     """Resolve through a symlink chain to the real file to edit, WITHOUT
     resolving via realpath (which would also normalize away any intentional
-    relative structure) — just repeatedly follow single-level symlinks."""
+    relative structure) - just repeatedly follow single-level symlinks."""
     p = path
     seen = set()
     while p.is_symlink():

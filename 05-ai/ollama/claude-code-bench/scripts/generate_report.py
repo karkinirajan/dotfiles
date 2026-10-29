@@ -2,7 +2,7 @@
 """Reads results.jsonl (or results.json), e2e_results.jsonl (or e2e_results.json),
 phase2_results.json and tune_results.json (whichever exist) and produces the
 scored results table for REPORT.md. Every number here is read straight from
-those files — this script computes gates/ranking, it never fabricates a
+those files - this script computes gates/ranking, it never fabricates a
 measurement.
 """
 
@@ -163,7 +163,7 @@ def main() -> None:
     print(f"Winner (ranked, passing gates): {out['winner']}")
     print(f"Fast pick (100% GPU, passing gates): {out['fast_pick']}")
     if not passing:
-        print("\nNO MODEL PASSED ALL GATES. Do not silently lower the gates — report this plainly.")
+        print("\nNO MODEL PASSED ALL GATES. Do not silently lower the gates - report this plainly.")
 
 
 if __name__ == "__main__":

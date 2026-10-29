@@ -49,4 +49,3 @@ Only relevant if "Prism" meant Prism.js.
 - CODE-03 (MUST): HTML produced by a highlighter is generated server-side from escaped source. Never pass user-supplied HTML to `dangerouslySetInnerHTML`.
 
 ---
-

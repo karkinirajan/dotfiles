@@ -2,7 +2,7 @@
 
 Primary GPU-accelerated terminal emulator (`$terminal = alacritty` in Hyprland).
 
-```
+```text
 03-terminal/alacritty/
 ├── README.md         ← you are here
 ├── alacritty.toml    → ~/.config/alacritty/alacritty.toml (linked via manifest.conf)

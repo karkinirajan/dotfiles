@@ -6,7 +6,7 @@
 # ON  (hyprsunset running, warm)  -> gruvbox-dark-hard (warmer palette)
 # OFF (hyprsunset stopped, cool)  -> catppuccin-mocha  (cooler palette)
 #
-# Called from nightlight-toggle.sh right after it flips state — reads the
+# Called from nightlight-toggle.sh right after it flips state: reads the
 # same state file rather than re-deriving it, so the two scripts can never
 # disagree about current state.
 

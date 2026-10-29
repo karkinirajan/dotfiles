@@ -1,10 +1,18 @@
+---
+title: Host system summary
+topic: system-summary
+last_verified: 2026-10-29
+status: reference
+---
+
 # Current System Summary
 
-**Snapshot:** 2026-10-28, Asia/Kathmandu (full repository audit & host reconciliation)  
+<!-- snapshot: 2026-10-28 -->
+**Snapshot:** 2026-10-28, Asia/Kathmandu (full repository audit and host reconciliation)  
 **Host:** CachyOS x86-64, user `kneeraazon`  
-**Purpose:** current host inventory and the ordered procedure to reproduce its configured development workstation from this repository.
+**Purpose:** inventory of the primary workstation as it was on the snapshot date. The ordered procedure to reproduce it lives in [`fresh-setup.md`](fresh-setup.md), [`01-system/cachyos/dev-stack.md`](01-system/cachyos/dev-stack.md) and [`docs/modernization/HANDOFF.md`](docs/modernization/HANDOFF.md).
 
-This file records the machine as it is, including enabled services, package versions, and local defaults. It intentionally omits passwords, network addresses, disk UUIDs, serial numbers, and other machine-specific identifiers. Package versions are a point-in-time snapshot; use current CachyOS/Arch and AUR packages during a fresh setup.
+This file records the machine as it was, including enabled services, package versions, and local defaults. It intentionally omits passwords, network addresses, disk UUIDs, serial numbers, and other machine-specific identifiers. Every version below is a dated observation, not a target: the targets are in [`versions.yaml`](versions.yaml), and a fresh setup installs current CachyOS/Arch and AUR packages. Statements about behavior (why a service is off, which package a unit comes from) were re-checked on 2026-10-29 and corrected where wrong.
 
 ## At a glance
 
@@ -42,7 +50,7 @@ This file records the machine as it is, including enabled services, package vers
 | Kernels | `linux-cachyos` 7.3.0-4 is the only installed CachyOS kernel package; LTS and RT kernels were removed to prevent menu regeneration |
 | Snapshots | Snapper root snapshots remain enabled; `limine-snapper-sync.service` is disabled/inactive and snapshots are hidden from Limine |
 | Other menu entries | Windows Boot Manager and the Limine EFI fallback entry were removed from `/boot/limine.conf`; EFI fallback files and firmware entries were preserved |
-| Limine policy | `/etc/default/limine`: `BOOT_ORDER="linux-cachyos"`, `FIND_BOOTLOADERS="no"`; `/boot/limine.conf`: default `CachyOS/linux-cachyos`, `remember_last_entry: no` |
+| Limine policy | `/etc/default/limine`: `BOOT_ORDER="linux-cachyos"` (ordering only; it is not documented as hiding entries), `FIND_BOOTLOADERS="no"` (stops discovery of other loaders); `/boot/limine.conf`: default `CachyOS/linux-cachyos`, `remember_last_entry: no`. The single-entry menu comes from removing the other kernel packages and disabling `limine-snapper-sync`. Whether manual `default_entry` edits survive `limine-update` is undocumented upstream: re-run `sudo limine-list` after each kernel update. <!-- UNVERIFIED --> |
 
 Only the primary `linux-cachyos` kernel package remains installed. The running kernel is `7.3.0-4-cachyos`.
 
@@ -99,9 +107,9 @@ The account is in the `openrazer` supplementary group (`id` includes `953(openra
 
 ### JavaScript and TypeScript
 
-- System Node: 26.12.1; NVM's default LTS in the interactive user shell: Node 24.22.1 and npm 11.19.1.
+- System Node: 26.12.1; NVM's default LTS in the interactive user shell at the snapshot: Node 24.22.1 and npm 11.19.1. Node 26 became LTS on 2026-10-28 and moved Node 24 to Maintenance on 2026-10-20, so `nvm install --lts` now resolves to 26.x.
 - pnpm 12.15.0; Yarn 1.22.22.
-- Global user tools: TypeScript 7, TypeScript language server, ESLint, Prettier, and Tailwind CSS language server.
+- Global user tools: TypeScript 7, TypeScript language server, ESLint, Prettier, and Tailwind CSS language server. Caveat found on 2026-10-29: TypeScript 7.0.2 ships no JS API and no `tsserver.js`, so `typescript-language-server` fails to start unless `typescript@6` (Arch `typescript`) is installed beside it, and `typescript-eslint` rejects TypeScript 7.
 - Create frontend projects with `pnpm create vite`; keep framework versions and project dependencies in the project manifest.
 
 ### Rust
@@ -145,7 +153,7 @@ UFW is enabled and active: default incoming deny, outgoing allow, routed traffic
 | Proton VPN | Package installed; `proton.VPN.service` active; no VPN tunnel/interface in the active network connections. |
 | Mullvad | Package installed; daemon and early-boot blocker disabled/inactive. Its package hook had enabled them during installation; they were explicitly disabled afterward. |
 | OpenRazer | Razer Viper Mini connected. User is in `openrazer` group; user unit `openrazer-daemon.service` is enabled and active. |
-| AppArmor | `apparmor.d` profiles installed and kernel module reports loaded, but `aa-status` says the AppArmor filesystem is not mounted. Do not treat profile enforcement as active. |
+| AppArmor | `apparmor.d` profiles installed. `linux-cachyos` is built with AppArmor (`CONFIG_SECURITY_APPARMOR=y`) but its default `CONFIG_LSM` is `landlock,lockdown,yama,integrity,bpf`, so `aa-status` reports the module loaded and the filesystem not mounted until the boot command line carries `lsm=landlock,lockdown,yama,integrity,apparmor,bpf`. Not enforcing. See [chapter 19](01-system/cachyos/setup/19-security-privacy.md) for the enablement steps; apparmor.d does not list greetd or Hyprland among supported desktops. |
 | Fail2ban | Installed, service not enabled. |
 | DNSCrypt/dnsmasq | Installed, services not enabled. DNS/network-manager configuration was left intact. |
 | Syncthing | Installed, service not enabled. |
@@ -165,106 +173,18 @@ Other notable active services include NetworkManager, systemd-resolved, systemd-
 
 ## Fresh setup order
 
-The following rebuilds this workstation's profile. Keep package versions rolling; do not copy this machine's IDs, filesystem UUIDs, credentials, or private data. Restore personal data and secrets separately from backups.
+The ordered, unattended procedure for rebuilding this workstation lives in [`docs/modernization/HANDOFF.md`](docs/modernization/HANDOFF.md) (full-auto order of operations with expected output per step). The explanations behind each step are in the setup chapters, and the interactive checkpoints in [`fresh-setup.md`](fresh-setup.md). Keep package versions rolling; do not copy this machine's IDs, filesystem UUIDs, credentials or private data, and restore personal data and secrets separately from backups.
 
-### 1. Inspect the target and install the CachyOS baseline
-
-Confirm UEFI mode, disks, GPU, network access, and available backups before running the installer. Do not format or repartition to match the snapshot. Clone the public repository and follow the package command in the root README:
-
-```sh
-git clone https://github.com/karkinirajan/dotfiles.git ~/dotfiles
-cd ~/dotfiles
-sudo pacman -Syu
-```
-
-Install the tracked desktop, system, font, CLI, and focus package lists using the README's repository/AUR split. The baseline includes the active greetd/Noctalia greeter and UFW packages. Review the package plan, especially AUR packages.
-
-### 2. Install the optional developer and application profile
-
-Follow `01-system/cachyos/dev-stack.md` to install `packages/developer.txt` and the optional AUR applications. Build Upwork from the tracked local PKGBUILD, not the AUR recipe that compiles Electron/Chromium. After the Mullvad package finishes, keep both Mullvad services disabled unless choosing Mullvad as the active VPN.
-
-### 3. Apply the dotfiles and refresh session environment
-
-Preview, install, and check the managed links:
-
-```sh
-./install.sh --dry-run
-./install.sh
-./install.sh status
-zsh -n ~/.zshrc
-```
-
-The user environment file selects `BROWSER=brave` and configures NVM. Sign out and back in after environment changes so Hyprland and user systemd services inherit the updated values.
-
-### 4. Initialize local databases
-
-Initialize PostgreSQL only if `/var/lib/postgres/data/PG_VERSION` does not exist. Keep the database bound to localhost:
-
-```sh
-sudo install -d -o postgres -g postgres -m 700 /var/lib/postgres/data
-sudo -u postgres initdb --locale=C.UTF-8 -E UTF8 \
-  -D /var/lib/postgres/data --data-checksums \
-  --auth-local=peer --auth-host=scram-sha-256
-sudo systemctl enable --now postgresql
-sudo -u postgres createuser --createdb "$USER"
-sudo -u postgres createdb -O "$USER" dev
-sudo -u postgres psql -d dev -c 'CREATE EXTENSION vector'
-```
-
-For MariaDB, initialize its data directory only if it is empty, install the tracked local bind configuration, and start the service:
-
-```sh
-sudo mariadb-install-db --user=mysql --basedir=/usr --datadir=/var/lib/mysql
-sudo install -Dm644 01-system/cachyos/mariadb-local.cnf \
-  /etc/my.cnf.d/90-local-dev.cnf
-sudo systemctl enable --now mariadb
-```
-
-Then, using the local root socket, create database `dev`, create the matching Unix-socket user, and grant that user access to `dev`. Start MongoDB and Valkey only after confirming their loopback bindings. No service in this profile needs a public listener.
-
-### 5. Enable rootless Docker
-
-The CachyOS package `docker-rootless-extras` installs a user unit. Enable it, create/select the rootless context if needed, and run the smoke test:
-
-```sh
-systemctl --user enable --now docker
-```
-
-If the context is missing, create it with `docker context create rootless --docker "host=unix:///run/user/$(id -u)/docker.sock"`, then run `docker context use rootless` and `docker run --rm hello-world`. Do not add the user to the root-equivalent `docker` group. Lingering is not enabled on this host.
-
-### 6. Enable the AMD Ollama backend
-
-Check that the target GPU is the RX 6700 XT before using this host-specific override. Install the package set from `01-system/cachyos/packages/ai.txt`, copy the tracked ROCm and Claude Code drop-ins, backend helper, and pacman hook as described in `05-ai/ollama/README.md`, then:
-
-```sh
-sudo setcap cap_perfmon+ep /usr/bin/ollama
-sudo systemctl daemon-reload
-sudo systemctl enable --now ollama
-journalctl -u ollama -b --no-pager | rg 'inference compute'
-```
-
-Do not download a large model during setup. Choose a small model for an inference smoke test and confirm actual GPU layer placement before scaling up.
-
-### 7. Restore firewall and Razer behavior
-
-For a local workstation, reproduce UFW's deny-incoming/allow-outgoing policy after confirming no remote SSH session depends on inbound access. Do not add inbound database rules. Add the account to `openrazer`, sign out/in, then confirm the Razer Viper Mini daemon starts. Leave VPN services disconnected until the user signs in to the selected VPN provider.
-
-### 8. Verify the resulting host
-
-```sh
-systemctl is-active postgresql mongodb mariadb valkey ollama ufw
-systemctl --user is-active docker openrazer-daemon
-psql -d dev -c 'select current_user, current_database()'
-mongosh --quiet --eval 'db.runCommand({ping:1})'
-mariadb --protocol=socket -u "$USER" dev -e 'select database()'
-valkey-cli ping
-docker context show
-docker run --rm hello-world
-zramctl
-./install.sh status
-```
-
-Also verify that database and Ollama TCP listeners use loopback, XDG defaults are Brave/Zed/Swash, the user environment has `BROWSER=brave`, and the OpenRazer user service is active after the login refresh.
+| Step | Where it is documented |
+|---|---|
+| 1. Inspect the target, install the CachyOS baseline, refresh mirrors | [`fresh-setup.md`](fresh-setup.md), [chapter 01](01-system/cachyos/setup/01-system-foundation.md) |
+| 2. Install the desktop, system, font, CLI and focus package lists | [chapter 22](01-system/cachyos/setup/22-baseline-packages.md), root [`README.md`](README.md#install) |
+| 3. Install the developer and application profile (Upwork from the tracked PKGBUILD) | [`dev-stack.md`](01-system/cachyos/dev-stack.md) section 1 |
+| 4. Apply the dotfiles (`./install.sh`) and refresh the session environment | root [`README.md`](README.md#install) |
+| 5. Initialize local databases (PostgreSQL 18 needs the `initdb` auth flags) | [`dev-stack.md`](01-system/cachyos/dev-stack.md) section 3, [chapter 06](01-system/cachyos/setup/06-databases.md) |
+| 6. Enable rootless Docker | [`dev-stack.md`](01-system/cachyos/dev-stack.md) section 4, [chapter 08](01-system/cachyos/setup/08-docker-kubernetes.md) |
+| 7. Enable the AMD Ollama backend (ROCm, Vulkan, LACT) | [`dev-stack.md`](01-system/cachyos/dev-stack.md) section 5, [`05-ai/ollama/README.md`](05-ai/ollama/README.md), [chapter 02](01-system/cachyos/setup/02-amd-gpu-rocm.md) |
+| 8. Restore firewall and Razer behavior, verify the host | [`dev-stack.md`](01-system/cachyos/dev-stack.md) sections 3 to 4 and Verify |
 
 ## Beyond the base setup
 
@@ -278,375 +198,12 @@ Also verify that database and Ollama TCP listeners use loopback, XDG defaults ar
 
 ## Complete explicit package snapshot
 
-The following is the sorted live `pacman -Qe` output captured on 2026-10-28. It records explicitly installed package names and versions; dependency packages are omitted. The second list records packages not present in enabled sync repositories (`pacman -Qm`).
+The files below are the sorted live `pacman -Qe` output captured on 2026-10-28 (explicitly installed names and versions; dependencies omitted) and the `pacman -Qm` output (packages not present in enabled sync repositories).
 
-<details>
-<summary>Explicitly installed packages (pacman -Qe)</summary>
+Package snapshots (captured 2026-10-28):
 
-```text
-accountsservice 26.27.3-1.1
-act 0.2.89-1.1
-ai-usagebar-bin 1.45.0-1
-alacritty 0.17.0-1.2
-alsa-firmware 1.2.4-4
-alsa-plugins 1:1.2.12-6.1
-alsa-utils 1.2.16-1.1
-amd-ucode 1:20261019-1
-amdgpu_top 0.11.5-1.1
-ansible 14.5.0-1
-antigravity 2.26.0-1
-antigravity-cli 1.4.9_4962164969177088-1
-antigravity-ide 2.6.0-1
-anytype-bin 0.57.4-1
-apparmor.d 0.4915.0-1
-ark 26.08.2-1.1
-atuin 18.24.2-1.1
-awesome-terminal-fonts 1.1.0-5
-aws-cli-v2 2.37.9-1
-azure-cli 2.90.0-1
-base 3-3
-base-devel 1-2
-bash-completion 2.18.0-1
-bind 9.20.30-1.1
-bitwarden 2026.3.1-2.1
-bluez 5.87-2.1
-bluez-hid2hci 5.87-2.1
-bluez-libs 5.87-2.1
-bluez-obex 5.87-2.1
-bluez-utils 5.87-2.1
-bpftune-git r764.4712347-1
-brave-bin 1:1.98.60-1
-btop 1.4.7-1.1
-btrfs-assistant 3.0.0-1.1
-btrfs-progs 7.3-1
-cachyos-benchmarker 0.8.0-2
-cachyos-drm-awaiter 7-1
-cachyos-fish-config 16-1
-cachyos-hello 0.28.1-1
-cachyos-hooks 2026.10.23-1
-cachyos-hypr-noctalia 1.2.6-1
-cachyos-kernel-manager 1.19.0-1
-cachyos-keyring 20240331-1
-cachyos-micro-settings 1.0.0-1
-cachyos-mirrorlist 27-1
-cachyos-packageinstaller 1.6.2-1
-cachyos-plymouth-bootanimation 2-4
-cachyos-plymouth-theme 1-2
-cachyos-rate-mirrors 25-1
-cachyos-settings 1:1.4.1-1
-cachyos-snapper-support 1.0.2-1
-cachyos-v3-mirrorlist 27-1
-cachyos-v4-mirrorlist 27-1
-cachyos-wallpapers r23.964263e-1
-cachyos-zsh-config 1.0.3-1
-cantarell-fonts 1:0.311-1
-chwd 1.25.0-1
-claude-code 2.1.311-1
-claude-desktop 3.6556.2-1
-cliphist 1:0.7.0-2.1
-copyq 16.0.0-1.1
-cpu-x 5.4.1-1.1
-cpupower 7.3-1
-cryptsetup 2.8.8-1.1
-dbeaver 26.2.2-1.1
-deluge-gtk 1:2.2.0-8.1
-device-mapper 2.03.43-2.1
-diffutils 3.12-2.1
-direnv 2.38.2-1.1
-discord 1:1.0.167-1
-dmemcg-booster 0.1.3-1
-dmidecode 3.7-1
-dmraid 1.0.0.rc16.3-15.1
-dnscrypt-proxy 2.1.20-1.1
-dnsmasq 2.93-1.1
-docker 1:29.9.2-1.1
-docker-buildx 0.38.1-1.1
-docker-compose 5.6.1-1.1
-docker-machine 0.16.2-6
-docker-rootless-extras 29.9.2-1
-dolphin 26.08.2-1.1
-dosfstools 4.2-5.1
-duf 0.9.1-1.1
-dust 1.2.6-1.1
-e2fsprogs 1.47.4-1.1
-efibootmgr 18-4.1
-efitools 1.9.2-7.1
-ethtool 1:7.2-1.1
-exfatprogs 1.4.3-1.1
-f2fs-tools 1.17.0-1.1
-fail2ban 1.1.1-1
-fastfetch 2.70.0-1.1
-ffmpegthumbnailer 2.3.1-1.1
-ffmpegthumbs 26.08.2-1.1
-firefox 159.0-1.1
-flameshot 14.0.0-1.1
-fsarchiver 0.8.9-1.1
-gimp 3.2.6-2.1
-git 2.56.0-1.1
-gitlab-runner 19.5.1-1.1
-glances 4.5.8-1
-gparted 1.8.1-2.1
-gst-libav 1.28.8-1
-gst-plugin-pipewire 1:1.6.10-1
-gst-plugin-va 1.28.8-1
-gst-plugins-bad 1.28.8-1
-gst-plugins-ugly 1.28.8-1
-hdparm 9.65-3.1
-helm 4.3.0-1.1
-hip-runtime-amd 7.2.4-1.1
-hipblas 7.2.4-1.1
-hwdetect 2026.10.01.1149-1
-hwinfo 26.0-1.1
-hyfetch 2.1.0-1.1
-hypridle 0.1.8-2.1
-hyprland 0.56.2-4.1
-hyprlock 0.9.6-3.1
-hyprpm 0.56.2-4.1
-hyprpolkitagent 0.2.0-1.1
-hyprsunset 0.4.0-3.1
-hyprwayland-scanner 0.4.6-1.1
-inetutils 2.8-1.1
-inkscape 1.4.4-7.1
-inotify-tools 4.26.270-1.1
-inter-font 4.1-1
-iwd 3.12-2.1
-jfsutils 1.1.15-9.1
-just 1.59.0-1.1
-k9s 0.51.0-1.1
-kdeconnect 26.08.2-1.1
-kdegraphics-thumbnailers 26.08.2-1.1
-kdiskmark 3.3.0-1.1
-keepassxc 2.8.0-3.1
-kitty 0.49.2-1.1
-korganizer 26.08.2-1
-kubectl 1.37.1-1
-lact 0.10.1-1.1
-lazygit 0.66.2-1.1
-less 1:710-1.1
-lib32-mesa 3:26.2.5-1
-lib32-opencl-mesa 3:26.2.5-1
-lib32-vulkan-radeon 3:26.2.5-1
-libdvdcss 1.6.0-1.1
-libgsf 1.14.60-1.1
-libmythes 1:1.2.6-1.1
-libopenraw 0.3.7-2.1
-libreoffice-fresh 26.8.1-2.1
-limine 12.9.4-1
-limine-mkinitcpio-hook 1.40.0-1
-limine-snapper-sync 1.32.1-1
-linux-cachyos 7.3.0-4
-linux-cachyos-headers 7.3.0-4
-linux-firmware 1:20261019-1
-logrotate 3.22.0-1.1
-logseq-desktop-bin 0.10.15-1
-lsb-release 2.0.r55.a25a4fc-1
-lsscsi 0.32-2.2
-lvm2 2.03.43-2.1
-macchina 6.4.0-3.1
-mailspring 1.26.2-1
-man-db 2.13.1-2.1
-man-pages 6.19-1
-mariadb 13.0.2-2.1
-mdadm 4.6-2
-meld 3.24.1-1
-mesa-utils 9.0.0-7.1
-micro 2.0.15-3.1
-minikube 1.38.1-2.1
-mission-center 1.2.0-1.1
-mkinitcpio 42.2-1
-modemmanager 1.24.2-2.1
-mongodb-bin 8.3.9-1
-mongodb-compass-bin 1.53.2-1
-mpv 1:0.41.0-6.1
-mtools 1:4.0.49-1.1
-mullvad-vpn-bin 2026.5-1
-nano 9.2-1.1
-nano-syntax-highlighting 2025.07.01.r0.g256995b-2
-ncdu 2.9.2-1.1
-neofetch 7.1.0-2
-neovim 0.12.6-1.1
-netctl 1.29-2
-networkmanager 1.58.1-2
-networkmanager-openvpn 1.12.5-2.1
-nfs-utils 3.1.1-1.1
-nginx 1.30.6-2.1
-nilfs-utils 2.3.1-1.1
-noctalia-greeter 1.7.0-1.1
-notion-app-enhanced 2.0.18-1
-noto-fonts 1:2026.10.01-1
-noto-fonts-cjk 20240730-1
-noto-fonts-emoji 1:2.057-1
-nss-mdns 0.15.1-3.1
-nvm 0.40.8-1
-nvtop 3.3.2-1.1
-obs-studio 33.0.0-1.1
-obsidian 1.14.5-1
-okular 26.08.2-1.1
-ollama 0.40.11-1.1
-ollama-rocm 0.40.11-1.1
-ollama-vulkan 0.40.11-1.1
-onlyoffice-bin 10.0.0-1
-openai-codex 0.165.0-1.1
-opencl-mesa 3:26.2.5-1
-opendesktop-fonts 1.4.2-7
-openrazer-daemon 3.12.4-1
-openssh 10.6p1-2.1
-opentofu 1.13.2-1.1
-os-prober 1.85-1.1
-otf-font-awesome 7.3.1-1
-otf-fragment-mono 1.21-1
-pacman-contrib 1.13.1-1.2
-paru 2.1.0-3
-pavucontrol 1:6.2-2.1
-perl 5.44.0-1.1
-pgvector 0.8.7-1.1
-pipewire-alsa 1:1.6.10-1
-pipewire-pulse 1:1.6.10-1
-pkgfile 27-1.1
-playerctl 2.4.1-5.1
-plocate 1.1.25-1.1
-plymouth 26.134.222-5
-pnpm 12.15.0-1.1
-poppler-glib 26.10.0-1.1
-postgresql 18.6-4.1
-power-profiles-daemon 0.30-3
-procs 0.14.12-1.1
-prometheus 3.15.1-1.1
-proton-vpn-gtk-app 4.18.7-1
-pulumi 3.272.0-1.1
-pv 1.12.0-1.1
-pycharm-community-edition 2026.2.3-1.1
-python 3.14.8-1
-python-defusedxml 0.7.1-8
-python-packaging 26.3-1
-radeontop 1.4-3.1
-realtime-privileges 5-1
-rebuild-detector 4.4.5-1
-reflector 2023-5
-ripgrep 15.2.0-1
-rocblas 7.2.4-3
-rocm-smi-lib 7.2.0-2.1
-rocminfo 7.2.4-1.1
-rocsolver 7.2.4-1
-rootlesskit 3.3.0-1.1
-rsync 3.5.1-3.1
-rustup 1.29.2-1
-s-nail 14.9.25-1.1
-satty 0.22.0-1.1
-sccache 0.19.0-1.1
-sddm 0.21.0-8
-sg3_utils 1.49-1.1
-shelly 3.1.9-2
-signal-desktop 8.32.0-1
-slack-desktop 4.52.182-1
-slirp4netns 1.3.6-1.1
-smartmontools 7.5-2.1
-snapper 0.13.2-1.1
-sof-firmware 2026.09.2-1
-speedtest-cli 2.1.3-11
-spotify 1:1.3.4.258-2
-starship 1.27.0-1
-strawberry 1.2.31-1.1
-stremio-linux-shell 1:1.2.2-1
-sublime-text-4 4.4215-1
-sudo 1.9.17.p2-6.1
-swappy 1.8.0-1.1
-syncthing 2.1.7-1.1
-sysfsutils 2.1.1-2.2
-telegram-desktop 7.3.3-1.1
-terraform 1.15.9-1.1
-texinfo 7.3-3.1
-thunderbird 158.0.1-1.1
-tmux 3.8-1.1
-todoist-appimage 9.32.0-1
-topgrade-bin 17.14.1-1
-ttf-bitstream-vera 1.10-16
-ttf-dejavu 2.37+18+g9b5d1b2f-8
-ttf-fira-code 6.2-4
-ttf-firacode-nerd 3.5.1-2
-ttf-fragment-mono 1.21-1
-ttf-jetbrains-maple-mono-nf-xx-xx 1.2304.76-1
-ttf-jetbrains-maple-mono-xx-xx-ht 1.2304.73-1
-ttf-jetbrains-mono 2.304-2
-ttf-jetbrains-mono-nerd 3.5.1-2
-ttf-liberation 2.1.5-2
-ttf-meslo-nerd 3.5.1-2
-ttf-opensans 3.003-1
-ttf-roboto 3.016-1
-ttf-weather-icons 2.0.12-1
-ufw 0.36.2-7
-ufw-extras 1.3.0-1
-unrar 1:7.3.2-1.1
-unzip 6.0-23.1
-upower 1.91.5-1.1
-upwork 5.8.0.41-6
-usb_modeswitch 2.6.2.20251207-1.1
-usbutils 020-1.1
-uv 0.13.6-1.1
-valkey 9.1.2-1.1
-vim 9.2.1178-1.1
-visual-studio-code-bin 1.143.1-1
-vlc 3.0.24-1.1
-vlc-plugins-all 3.0.24-1.1
-vulkan-radeon 3:26.2.5-1
-waybar 0.15.0-3.1
-wget 1.25.0-6.1
-which 2.25-1.1
-wireplumber 0.5.18-1.1
-wpa_supplicant 2:2.12-1.1
-xdg-user-dirs 0.20-1.1
-xf86-video-amdgpu 25.0.0-1.1
-xfsprogs 7.2.1-1.1
-xl2tpd 1.3.20-1.1
-xorg-fonts-alias-misc 1.0.6-1
-xorg-fonts-misc 1.0.4-2
-xorg-server 21.1.25-2.1
-yarn 1.22.22-2
-yay 13.0.1-1
-yazi 26.9.1-2.1
-zapzap 7.5.1-1
-zed 1.25.3-1
-zoom 7.2.1-1
-zoxide 0.10.0-1.1
-```
-</details>
-
-<details>
-<summary>Foreign packages (pacman -Qm)</summary>
-
-```text
-ai-usagebar-bin 1.45.0-1
-antigravity 2.26.0-1
-antigravity-cli 1.4.9_4962164969177088-1
-antigravity-ide 2.6.0-1
-anytype-bin 0.57.4-1
-appimagelauncher 3.0.0_beta_3-1
-docker-rootless-extras 29.9.2-1
-logseq-desktop-bin 0.10.15-1
-mongodb-bin 8.3.9-1
-mongodb-compass-bin 1.53.2-1
-mongosh-bin 2.14.0-1
-mullvad-vpn-bin 2026.5-1
-mullvad-vpn-daemon-bin 2026.5-1
-neofetch 7.1.0-2
-notion-app-enhanced 2.0.18-1
-otf-fragment-mono 1.21-1
-slack-desktop 4.52.182-1
-spotify 1:1.3.4.258-2
-stremio-linux-shell 1:1.2.2-1
-sublime-text-4 4.4215-1
-todoist-appimage 9.32.0-1
-topgrade-bin 17.14.1-1
-ttf-fragment-mono 1.21-1
-ttf-jetbrains-maple-mono-nf-xx-xx 1.2304.76-1
-ttf-jetbrains-maple-mono-xx-xx-ht 1.2304.73-1
-ttf-weather-icons 2.0.12-1
-upwork 5.8.0.41-6
-visual-studio-code-bin 1.143.1-1
-zapzap 7.5.1-1
-zoom 7.2.1-1
-```
-</details>
+- [`01-system/cachyos/host-snapshot/pacman-explicit.txt`](01-system/cachyos/host-snapshot/pacman-explicit.txt): `pacman -Qe`, name and version, sorted.
+- [`01-system/cachyos/host-snapshot/pacman-foreign.txt`](01-system/cachyos/host-snapshot/pacman-foreign.txt): `pacman -Qm`, packages not in an enabled sync repository.
 
 ## Claude Code update (2026-10-28)
 

@@ -7,7 +7,9 @@ pkgdesc='Official Upwork Desktop App for Linux'
 arch=('x86_64')
 url='https://www.upwork.com/ab/downloads/?os=linux'
 license=('LicenseRef-Upwork-EULA')
-depends=('libxcrypt-compat' 'libxss' 'libappindicator-gtk3')
+# libappindicator replaces the old libappindicator-gtk3 name (still satisfied via provides).
+# The deb's control Depends could not be read; run namcap on the built package for the rest.
+depends=('libxcrypt-compat' 'libxss' 'libappindicator')
 makedepends=('binutils' 'libarchive')
 source=(
   "https://upwork-usw2-desktopapp.upwork.com/binaries/v5_8_0_41_f0de03505cc349f2/upwork_${pkgver}_amd64.deb"

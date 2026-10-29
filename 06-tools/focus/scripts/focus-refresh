@@ -19,13 +19,13 @@ _focus_is_on() {
   if [[ -f "$STATE_FILE" ]]; then
     [[ "$(<"$STATE_FILE")" == "on" ]]
   else
-    # No state file yet — infer from whether the system actually points at us.
+    # No state file yet: infer from whether the system actually points at us.
     grep -q '^nameserver 127\.0\.0\.1' /etc/resolv.conf 2>/dev/null
   fi
 }
 
 if ! _focus_is_on; then
-  echo "[skip] focus is off — leaving DNS/firewall untouched @ $(date '+%H:%M:%S')" \
+  echo "[skip] focus is off - leaving DNS/firewall untouched @ $(date '+%H:%M:%S')" \
     | tee -a "$LOG"
   exit 0
 fi
@@ -35,26 +35,26 @@ trap 'rm -f "$DNSMASQ_TMP"' EXIT
 
 sudo install -d -m 755 /etc/dnsmasq.d 2>/dev/null || true
 
-# Ensure inet filter table and sets exist before flushing/populating
+# Ensure inet focus table and sets exist before flushing/populating
 # (all four sets: hosts bootstrapped before the IPv6 sets existed lack them)
 _missing_set=0
 for _set in blocked_ips allowed_ips blocked_ips6 allowed_ips6; do
-  sudo nft list set inet filter "$_set" &>/dev/null || _missing_set=1
+  sudo nft list set inet focus "$_set" &>/dev/null || _missing_set=1
 done
 if (( _missing_set )); then
   [[ -f "$NFT_BOOTSTRAP" ]] && sudo nft -f "$NFT_BOOTSTRAP" 2>/dev/null || true
 fi
 
 # Reset nft sets
-sudo nft flush set inet filter blocked_ips 2>/dev/null || true
-sudo nft flush set inet filter allowed_ips 2>/dev/null || true
-sudo nft flush set inet filter blocked_ips6 2>/dev/null || true
-sudo nft flush set inet filter allowed_ips6 2>/dev/null || true
+sudo nft flush set inet focus blocked_ips 2>/dev/null || true
+sudo nft flush set inet focus allowed_ips 2>/dev/null || true
+sudo nft flush set inet focus blocked_ips6 2>/dev/null || true
+sudo nft flush set inet focus allowed_ips6 2>/dev/null || true
 
 # Upstream resolver used for IP discovery. MUST bypass the local dnsmasq:
 # during focus mode /etc/resolv.conf points at 127.0.0.1, so resolving a
 # blocked domain through it returns the block-page IP (127.0.0.1) rather than
-# the real addresses — which meant blocked_ips only ever collected 127.0.0.1
+# the real addresses: which meant blocked_ips only ever collected 127.0.0.1
 # and the IP-level layer never blocked anything.
 UPSTREAM_DNS="${FOCUS_UPSTREAM_DNS:-1.1.1.1}"
 
@@ -89,11 +89,11 @@ while IFS= read -r domain; do
   [[ -z "$domain" || "$domain" == \#* ]] && continue
   for ip in $(resolve_ips "$domain"); do
     [[ -n "$ip" ]] && ALLOW_MAP[$ip]=1
-    sudo nft add element inet filter allowed_ips "{ $ip }" 2>/dev/null || true
+    sudo nft add element inet focus allowed_ips "{ $ip }" 2>/dev/null || true
   done
   for ip6 in $(resolve_ips6 "$domain"); do
     [[ -n "$ip6" ]] && ALLOW_MAP6[$ip6]=1
-    sudo nft add element inet filter allowed_ips6 "{ $ip6 }" 2>/dev/null || true
+    sudo nft add element inet focus allowed_ips6 "{ $ip6 }" 2>/dev/null || true
   done
 done < "$ALLOW_FILE"
 
@@ -111,13 +111,13 @@ while IFS= read -r domain; do
   for ip in $(resolve_ips "$domain"); do
     [[ -z "$ip" ]] && continue
     if [[ -z "${ALLOW_MAP[$ip]}" ]]; then
-      sudo nft add element inet filter blocked_ips "{ $ip }" 2>/dev/null || true
+      sudo nft add element inet focus blocked_ips "{ $ip }" 2>/dev/null || true
     fi
   done
   for ip6 in $(resolve_ips6 "$domain"); do
     [[ -z "$ip6" ]] && continue
     if [[ -z "${ALLOW_MAP6[$ip6]}" ]]; then
-      sudo nft add element inet filter blocked_ips6 "{ $ip6 }" 2>/dev/null || true
+      sudo nft add element inet focus blocked_ips6 "{ $ip6 }" 2>/dev/null || true
     fi
   done
 
@@ -126,7 +126,7 @@ done < "$BLOCK_FILE"
 sort -u "$DNSMASQ_TMP" | sudo tee "$DNSMASQ_BLOCK" > /dev/null
 
 # MUST be restart, not reload. dnsmasq's SIGHUP handler clears the cache and
-# re-reads /etc/hosts, but does NOT re-read /etc/dnsmasq.d/*.conf — so new
+# re-reads /etc/hosts, but does NOT re-read /etc/dnsmasq.d/*.conf: so new
 # address=/domain/ entries silently never take effect on a reload.
 sudo systemctl restart dnsmasq 2>/dev/null || true
 

@@ -3,7 +3,7 @@
 request option (layers to place on GPU) to see if more of the model can be
 pushed onto the card without OOM, and re-measure decode tok/s at each step.
 
-num_gpu is a per-request /api/generate option, not a server config — no
+num_gpu is a per-request /api/generate option, not a server config - no
 root needed, and no systemd restart between steps.
 """
 
