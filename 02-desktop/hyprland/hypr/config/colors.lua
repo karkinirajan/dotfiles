@@ -12,7 +12,7 @@ local c = {}
 c.rosewater = "rgba(FFF7F2ff)"
 c.flamingo  = "rgba(FFF7F2ff)"
 c.pink      = "rgba(E25F4Bff)"
-c.mauve     = "rgba(e95678ff)"
+c.mauve     = "rgba(bd93f9ff)"
 c.red       = "rgba(ff3370ff)"
 c.maroon    = "rgba(ff3370ff)"
 c.peach     = "rgba(FF6600ff)"
@@ -22,7 +22,7 @@ c.teal      = "rgba(80d4b5ff)"
 c.sky       = "rgba(80d4b5ff)"
 c.sapphire  = "rgba(00a86bff)"
 c.blue      = "rgba(00a86bff)"
-c.lavender  = "rgba(fab795ff)"
+c.lavender  = "rgba(ff79c6ff)"
 
 c.text      = "rgba(e6f6f0ff)"
 c.subtext1  = "rgba(c4d4ceff)"
@@ -38,7 +38,7 @@ c.mantle    = "rgba(000806ff)"
 c.crust     = "rgba(000000ff)"
 
 -- Dimmed accent for floating-window borders (same accent, low alpha)
-c.blue_dim  = "rgba(e9567826)"
+c.blue_dim  = "rgba(bd93f926)"
 
 -- Primary accent used everywhere: active workspace, active border, power button
 c.ctp_accent = c.mauve

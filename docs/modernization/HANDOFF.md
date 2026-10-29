@@ -2,10 +2,12 @@
 title: Handoff for the machine session
 topic: handoff
 last_verified: 2026-10-29
-status: current
+status: archived
 ---
 
 # Handoff for the machine session
+
+> **Completed 2026-10-29; kept as a record.** Every step ran on the machine. Do not re-run S02: the Hyprland hold was lifted the same day, when the machine moved to 0.57.0 on the Lua config ([`lua-migration.md`](../../02-desktop/hyprland/lua-migration.md)).
 
 This file lets a separate session apply the modernized repo to the owner's existing CachyOS machine in full-auto mode. The cloud session that wrote it changed nothing on the machine and checked nothing against it. Every step below is `machine-only`: it has not been run on the host.
 

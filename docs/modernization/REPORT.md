@@ -138,13 +138,13 @@ Applied: MariaDB and Mullvad conflict guards in the runbook; the chained loopbac
 Left open (low or owner-scope), none blocks the handoff:
 
 - Fixed after the run: `install.sh status` now exits 1 on link drift, missing entries or errors (seed drift stays 0); `pull` copies before replacing the repo file; the script refuses to run as root.
-- `focus off` writes plain-DNS `/etc/resolv.conf`, bypassing the encrypted DNS of chapter 19 even with focus off; `focus-page` dies if nginx holds port 80; the focus scripts hardcode `/home/kneeraazon`; `gnome-keyring` (needed by Proton VPN) is in no package list.
+- `focus off` writes plain-DNS `/etc/resolv.conf`, bypassing the encrypted DNS of chapter 19 even with focus off; the focus scripts hardcode `/home/kneeraazon`. Fixed after the run: `focus-page` falls back to 8080 when nginx holds port 80; `gnome-keyring` is in `desktop.txt` and unlocks at login (chapter 02.3).
 - Fixed after the run: the chapter 08 compose Elasticsearch publishes 9201, beside the chapter 06 node on 9200. Still open: `redis/redisinsight:latest` is unpinned.
 - `fresh-setup.md` stops the running display manager from inside its own session.
 
 ## Owner decisions still open
 
-The Hyprland 0.57 upgrade (the Lua port is ready; Hyprspace does not build on 0.57.0); the Zed default-model replacement (`deepseek-v4-flash:cloud` was retired 2026-09-25); the `claude-brain` hooks (private tool, cannot be verified from public sources); whether to switch MariaDB to the LTS series by dump and re-initialize; the Logseq and Mullvad package variants; whether `paru --skipreview` is acceptable for the unattended run; lifting the `CLAUDE.md` rules against `sudo` and `git fetch` for that session.
+Hyprspace for Hyprland 0.57 (the machine runs 0.57.0 on the Lua port since 2026-10-29; Hyprspace does not build there yet and its hyprpm repo was removed); the Zed default-model replacement (`deepseek-v4-flash:cloud` was retired 2026-09-25); the `claude-brain` hooks (private tool, cannot be verified from public sources); whether to switch MariaDB to the LTS series by dump and re-initialize; the Logseq and Mullvad package variants; whether `paru --skipreview` is acceptable for the unattended run; lifting the `CLAUDE.md` rules against `sudo` and `git fetch` for that session.
 
 ## Risks
 
