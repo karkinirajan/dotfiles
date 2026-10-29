@@ -2,7 +2,7 @@
 
 ### 3.1 Single app layout (default)
 
-```
+```text
 .
 ├── AGENTS.md                     # agent instructions, points to FRONTEND-MASTER.md
 ├── FRONTEND-MASTER.md            # this file
@@ -60,4 +60,3 @@
 - STR-09 (MAY): Move to a Turborepo monorepo (`apps/web`, `packages/ui`, `packages/config`, `packages/db`) only when a second deployable app or a shared design system package exists. Never at kickoff by default.
 
 ---
-

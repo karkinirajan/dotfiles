@@ -1,5 +1,5 @@
 #!/usr/bin/env zsh
-# focus — system-level distraction blocker
+# focus: system-level distraction blocker
 # Manages DNS + firewall blocking, scheduling, locking, and stats.
 
 ALLOW_FILE="/home/kneeraazon/focus/allow.list"
@@ -13,11 +13,11 @@ DNSMASQ_LOG="/var/log/dnsmasq.log"
 
 mkdir -p /home/kneeraazon/focus/logs /home/kneeraazon/focus/stats
 
-# Create the list files only if they are missing — do NOT touch existing ones.
+# Create the list files only if they are missing: do NOT touch existing ones.
 # focus-refresh.path watches these with PathModified, so an unconditional
 # `touch` made every `focus` invocation (even `focus off` or `focus status`)
 # fire focus-refresh.service, which restarted dnsmasq and re-armed the nft
-# sets — silently undoing `focus off` a second after it ran.
+# sets: silently undoing `focus off` a second after it ran.
 for _f in "$ALLOW_FILE" "$BLOCK_FILE" "$LOG_FW"; do
   [[ -e "$_f" ]] || : > "$_f" 2>/dev/null || true
 done
@@ -63,6 +63,11 @@ _cmd_on() {
   echo "[ON] enabling focus mode"
   print -r -- "on" > "$STATE_FILE"
   sudo systemctl start dnsmasq
+  if ! sudo systemctl is-active --quiet dnsmasq; then
+    echo "[ON] dnsmasq failed to start; leaving DNS untouched" >&2
+    print -r -- "off" > "$STATE_FILE"
+    return 1
+  fi
   sudo systemctl start focus-page
   sudo chattr -i /etc/resolv.conf 2>/dev/null || true
   # /etc/resolv.conf must be a real file, not NetworkManager's symlink into
@@ -89,10 +94,10 @@ _cmd_off() {
   sudo systemctl stop dnsmasq
   sudo systemctl stop focus-page 2>/dev/null || true
   sudo rm -f /etc/dnsmasq.d/focus-block.conf
-  sudo nft flush set inet filter blocked_ips 2>/dev/null || true
-  sudo nft flush set inet filter allowed_ips 2>/dev/null || true
-  sudo nft flush set inet filter blocked_ips6 2>/dev/null || true
-  sudo nft flush set inet filter allowed_ips6 2>/dev/null || true
+  sudo nft flush set inet focus blocked_ips 2>/dev/null || true
+  sudo nft flush set inet focus allowed_ips 2>/dev/null || true
+  sudo nft flush set inet focus blocked_ips6 2>/dev/null || true
+  sudo nft flush set inet focus allowed_ips6 2>/dev/null || true
   [[ -L /etc/resolv.conf ]] && sudo rm -f /etc/resolv.conf
   printf 'nameserver 1.1.1.1\nnameserver 9.9.9.9\n' | sudo tee /etc/resolv.conf > /dev/null
   echo "[OFF] focus mode disabled"
@@ -102,7 +107,7 @@ _cmd_off() {
 _cmd_status() {
   local dns_state nft_state lock_state page_state
   systemctl is-active dnsmasq &>/dev/null && dns_state="active" || dns_state="inactive"
-  sudo nft list table inet filter &>/dev/null && nft_state="loaded" || nft_state="missing"
+  sudo nft list table inet focus &>/dev/null && nft_state="loaded" || nft_state="missing"
   systemctl is-active focus-page &>/dev/null && page_state="active" || page_state="inactive"
   _is_locked && lock_state="LOCKED (until $(cat $LOCK_FILE))" || lock_state="unlocked"
 
@@ -114,7 +119,7 @@ _cmd_status() {
   echo "  lock:       $lock_state"
   echo "  allowed:    $(wc -l < $ALLOW_FILE) domains"
   echo "  blocked:    $(wc -l < $BLOCK_FILE) domains"
-  echo "  blocked IPs: $(sudo nft list set inet filter blocked_ips 2>/dev/null | grep -o '[0-9]\+\.[0-9]\+\.[0-9]\+\.[0-9]\+' | wc -l)"
+  echo "  blocked IPs: $(sudo nft list set inet focus blocked_ips 2>/dev/null | grep -o '[0-9]\+\.[0-9]\+\.[0-9]\+\.[0-9]\+' | wc -l)"
   echo "  dns blocks: $(cat /etc/dnsmasq.d/focus-block.conf 2>/dev/null | wc -l)"
 
   if [[ -f "$SCHEDULE_FILE" ]]; then
@@ -188,9 +193,9 @@ _cmd_test() {
   echo "  DNS →   ${ip:-NXDOMAIN}"
   if [[ -z "$ip" || "$ip" == "0.0.0.0" || "$ip" == "127.0.0.1" ]]; then
     echo "  result: BLOCKED (DNS)"
-  elif sudo nft list set inet filter blocked_ips 2>/dev/null | grep -q "$ip"; then
+  elif sudo nft list set inet focus blocked_ips 2>/dev/null | grep -q "$ip"; then
     echo "  result: BLOCKED (firewall)"
-  elif sudo nft list set inet filter allowed_ips 2>/dev/null | grep -q "$ip"; then
+  elif sudo nft list set inet focus allowed_ips 2>/dev/null | grep -q "$ip"; then
     echo "  result: ALLOWED (explicit whitelist)"
   else
     echo "  result: ALLOWED (default)"
@@ -249,7 +254,7 @@ _cmd_schedule() {
       ;;
     enable)
       sudo systemctl enable --now focus-schedule-on.timer focus-schedule-off.timer
-      echo "[schedule] enabled — focus on at $(source $SCHEDULE_FILE 2>/dev/null; echo ${SCHEDULE_START:-09:00}), off at $(source $SCHEDULE_FILE 2>/dev/null; echo ${SCHEDULE_END:-18:00})"
+      echo "[schedule] enabled - focus on at $(source $SCHEDULE_FILE 2>/dev/null; echo ${SCHEDULE_START:-09:00}), off at $(source $SCHEDULE_FILE 2>/dev/null; echo ${SCHEDULE_END:-18:00})"
       ;;
     disable)
       _lock_guard
@@ -339,7 +344,7 @@ _cmd_logs() { tail -f "$LOG_FW"; }
 # ── help ──────────────────────────────────────────────────────────────────
 _cmd_help() {
   cat << 'HELP'
-focus — system-level distraction blocker
+focus - system-level distraction blocker
 
   Core
     focus on                   Enable focus mode (DNS + firewall blocking)

@@ -20,4 +20,3 @@ Hosting options (decide per project, record in an ADR):
 | VPS with Docker and Nginx | Lowest cost | Patch SLA (SEC-20) is entirely on you, no managed rollbacks | Small internal tools with a maintenance agreement |
 
 ---
-

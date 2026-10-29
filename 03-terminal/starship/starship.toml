@@ -1,6 +1,6 @@
 palette = "noctalia"
 # =============================================================================
-#  ~/.config/starship.toml — kneeraazon
+#  ~/.config/starship.toml: kneeraazon
 #  Gruvbox Dark Hard · Single-line powerline left/right prompt
 #  Note: Module styles use explicit Gruvbox hex values; [palettes.noctalia] at
 #  the bottom is updated by Noctalia's built-in starship template.
@@ -228,7 +228,7 @@ symbol            = "󰍛 "
 style             = "fg:#fb4934"
 format            = "[$symbol${ram}]($style) "
 
-# ── Item 9: direnv — shows lock icon when .envrc is active/blocked ────────────
+# ── Item 9: direnv: shows lock icon when .envrc is active/blocked ────────────
 [direnv]
 disabled          = false
 loaded_msg        = "󱄑"

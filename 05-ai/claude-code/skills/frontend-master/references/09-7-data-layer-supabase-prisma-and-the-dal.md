@@ -2,7 +2,7 @@
 
 ### 7.1 Supabase
 
-- SB-01 (MUST): Row Level Security is enabled on every table in an exposed schema, with explicit policies per operation (`select`, `insert`, `update`, `delete`) scoped `to authenticated` or `to anon` deliberately. A table without RLS is a public table.
+- SB-01 (MUST): Row Level Security is enabled on every table in an exposed schema, with explicit policies per operation (`select`, `insert`, `update`, `delete`) scoped `to authenticated` or `to anon` deliberately. A table without RLS is a public table. From 2026-10-30 (new projects since 2026-05-30) tables in `public` are also not exposed to the Data API until you grant privileges, so every migration that creates a table grants the roles it needs (`grant select, insert, update, delete on public.t to authenticated;`, plus `service_role`) next to its policies; existing tables keep their grants. The Security Advisor flags affected tables.
 - SB-02 (MUST): Only the publishable key (`sb_publishable_...`) reaches the browser. Secret keys (`sb_secret_...`) and legacy `service_role` stay in server-only env and server-only modules. The legacy `anon` and `service_role` keys are deprecated at the end of 2026 and stay valid until you disable them in the dashboard; migrate off them now. Send the new keys on the `apikey` header only, never as a Bearer token.
 - SB-03 (MUST): Server code verifies identity with `supabase.auth.getClaims()` or `getUser()`. `getClaims()` verifies the JWT signature locally against the project's cached JWKS when the project uses asymmetric signing keys, and calls the Auth server when it uses a symmetric secret. `getUser()` always calls the Auth server. Never trust `getSession()` on the server; it does not revalidate the token.
 - SB-04 (MUST): Three clients, three files. Browser client (`createBrowserClient`, publishable key). Server client (`createServerClient` with the `next/headers` cookie adapter), created per request and never at module scope. Admin client (secret key, `import 'server-only'`, used only by trusted jobs, webhooks, and admin tooling, never to serve user requests). With `HttpOnly` cookies (SEC-10) the browser client holds no session and acts as `anon`.
@@ -108,4 +108,3 @@ Default recommendation: A for most client apps, B when the domain logic justifie
 - DAL-06 (MUST): Log with a request id. `proxy.ts` gives every request an `x-request-id` (an inbound id is kept only when it matches `^[A-Za-z0-9_-]{8,64}$`), and server code logs through `requestLogger()` (A.15), which stamps each line with it. Never log tokens, cookies, passwords, or personal data.
 
 ---
-

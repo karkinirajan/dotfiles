@@ -8,3 +8,9 @@ hyperfine
 shellcheck
 shfmt
 watchexec
+
+# Language servers for the enabled pyright-lsp and typescript-lsp Claude Code plugins.
+# typescript 6.x is required: TypeScript 7 ships no tsserver.js and typescript-language-server exits without it.
+pyright
+typescript
+typescript-language-server

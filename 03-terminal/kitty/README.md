@@ -4,7 +4,7 @@ Secondary GPU-accelerated terminal emulator configuration (Alacritty is the
 primary terminal bound to `Super+Return`; Kitty remains installed and configured
 in parity).
 
-```
+```text
 03-terminal/kitty/
 ├── README.md                 ← you are here
 ├── kitty.conf                → ~/.config/kitty/kitty.conf (linked)

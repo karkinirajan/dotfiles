@@ -13,8 +13,6 @@
 #                         Also the Noctalia system-monitor widget.
 #   ttf-jetbrains-mono    Noctalia bar font_family ("JetBrains Mono" and
 #                         "JetBrains Mono Medium").
-#   ttf-jetbrains-maple-mono-xx-xx-ht   (AUR)
-#                         Noctalia clock widget ("JetBrains Maple Mono").
 #   ttf-dejavu            Hyprland misc.font_family, groupbar and splash.
 #   noto-fonts-emoji      emoji in notifications, tooltips and the terminal.
 #   ttf-weather-icons     (AUR) Noctalia weather widget glyphs.
@@ -38,8 +36,6 @@ ttf-fantasque-nerd
 ttf-fira-code
 ttf-firacode-nerd
 ttf-fragment-mono  (AUR)
-ttf-jetbrains-maple-mono-nf-xx-xx  (AUR)
-ttf-jetbrains-maple-mono-xx-xx-ht  (AUR)
 ttf-jetbrains-mono
 ttf-jetbrains-mono-nerd
 ttf-liberation

@@ -65,4 +65,3 @@ export const db = globalForPrisma.prisma ?? createPrismaClient();
 
 if (serverEnv.NODE_ENV !== 'production') globalForPrisma.prisma = db;
 ```
-

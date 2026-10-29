@@ -6,11 +6,12 @@ and the update routine.
 | Chapter | Path | Purpose |
 |---------|------|---------|
 | CachyOS profile | [`cachyos/`](cachyos/README.md) | Overview of OS configs, `mariadb-local.cnf`, and local PKGBUILDs |
-| Setup walkthrough | [`cachyos/setup.md`](cachyos/setup.md) | Full install narrative: GPU drivers, toolchains, Kubernetes, Terraform |
+| Setup walkthrough | [`cachyos/setup/`](cachyos/setup/README.md) | 25 numbered chapters: foundation, GPU drivers, toolchains, databases, Kubernetes, editors, apps, security. `cachyos/setup.md` is a redirect stub for old links |
 | Packages | [`cachyos/packages/`](cachyos/packages/) | Desktop, system, font, CLI, developer, Claude Code, and local-AI package lists |
 | Full developer profile | [`cachyos/dev-stack.md`](cachyos/dev-stack.md) | Optional toolchains, local databases, rootless Docker, and host-specific setup |
+| Host snapshot | [`cachyos/host-snapshot/`](cachyos/host-snapshot/README.md) | Point-in-time `pacman -Qe` and `pacman -Qm` output (2026-10-28) |
 | Snapshots (archived) | [`timeshift/`](timeshift/README.md) | Archived Timeshift alternative; current CachyOS host uses Snapper |
-| Updates | [`topgrade/`](topgrade/README.md) | `topgrade.toml` — which update steps run, which are disabled and why |
+| Updates | [`topgrade/`](topgrade/README.md) | `topgrade.toml`, which update steps run, which are disabled and why |
 
 Packages are not installed by `install.sh`, which runs unprivileged. Install
 them with the commands in the root [README](../README.md#install). Focus mode

@@ -3,13 +3,22 @@
 # Upwork uses the bundled-runtime PKGBUILD at ../aur/upwork/PKGBUILD because
 # the AUR recipe builds a large Electron runtime from Chromium sources.
 
-# Official repositories
+# Official repositories (CachyOS repos first, then Arch)
+#
+# Notes:
+#   lact           enable its daemon for the GUI to apply settings: systemctl enable --now lactd
+#   mullvad-vpn    Arch extra; the AUR mullvad-vpn-bin is no longer needed. Its install may
+#                  enable mullvad-daemon and the early-boot blocker: disable both while Proton VPN is in use
+#   docker-machine was removed: archived upstream in 2025-07
+#   mariadb-lts    the long-term series (12.3, supported to 2029-06); Arch's `mariadb` is the rolling 13.0
+#                  series with Community support ending in Q4 2026. The two packages conflict.
 act
 amdgpu_top
 ansible
 aws-cli-v2
 azure-cli
 brave-bin
+# claude-code and claude-desktop come from the CachyOS repo; on plain Arch they are AUR-only.
 claude-code
 claude-desktop
 cpu-x
@@ -17,7 +26,6 @@ dbeaver
 docker
 docker-buildx
 docker-compose
-docker-machine
 gitlab-runner
 glances
 helm
@@ -27,11 +35,12 @@ kdiskmark
 kubectl
 lact
 lm_sensors
-mariadb
+mariadb-lts
 meld
 micro
 mission-center
 minikube
+mullvad-vpn
 ncdu
 nginx
 node-gyp
@@ -64,13 +73,15 @@ yarn
 zed
 
 # AUR packages
+#   stremio-linux-shell: upstream distributes Stremio as a Flatpak (flatpak install com.stremio.Stremio);
+#   the AUR package is a thin community build with one vote.
+#   logseq-og-bin: the file-graph (Markdown) app after the 2026-04 split; logseq-desktop-bin is out of date.
+#   notion-app-enhanced was dropped: it repackages a 2022 Electron 18 build and there is no Linux app; use Notion in the browser.
 anytype-bin  (AUR)
 docker-rootless-extras  (AUR)
-logseq-desktop-bin  (AUR)
+logseq-og-bin  (AUR)
 mongodb-bin  (AUR)
 mongodb-compass-bin  (AUR)
-mullvad-vpn-bin  (AUR)
-notion-app-enhanced  (AUR)
 slack-desktop  (AUR)
 stremio-linux-shell  (AUR)
 sublime-text-4  (AUR)

@@ -560,4 +560,3 @@ test('signing out ends the session', async ({ page, context }) => {
   await expect(page).toHaveURL(/\/login/);
 });
 ```
-

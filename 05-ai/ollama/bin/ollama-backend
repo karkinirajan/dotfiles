@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# ollama-backend {vulkan|rocm} — swaps the GPU-backend drop-in and restarts
+# ollama-backend {vulkan|rocm}: swaps the GPU-backend drop-in and restarts
 # ollama. Tracked in ~/dotfiles/05-ai/ollama/bin/ollama-backend; part of the
 # Claude-Code-over-Ollama benchmark setup. Must be run as root.
 set -euo pipefail
@@ -38,6 +38,6 @@ systemctl daemon-reload
 systemctl restart ollama
 sleep 2
 systemctl is-active --quiet ollama && echo "ollama.service active, backend=$BACKEND" || {
-    echo "ollama.service failed to start after switching to $BACKEND — check: journalctl -u ollama -n 50" >&2
+    echo "ollama.service failed to start after switching to $BACKEND - check: journalctl -u ollama -n 50" >&2
     exit 1
 }

@@ -15,7 +15,9 @@ addrs=$(hyprctl clients -j | jq -r '.[] | select(.workspace.name == "special:min
 for addr in $addrs; do
     origin=$(awk -F'\t' -v a="$addr" '$1 == a { print $2; exit }' "$state_file")
     target="${origin:-$current_ws}"
-    hyprctl dispatch "hl.dsp.window.move({ workspace = \"$target\", window = \"address:$addr\" })" >/dev/null
+    "$(dirname "${BASH_SOURCE[0]}")/hypr-dispatch.sh" \
+        "hl.dsp.window.move({ workspace = \"$target\", window = \"address:$addr\" })" \
+        "movetoworkspacesilent $target,address:$addr" >/dev/null
     grep -v "^${addr}	" "$state_file" > "${state_file}.tmp" || true
     mv "${state_file}.tmp" "$state_file"
 done

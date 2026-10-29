@@ -1,6 +1,6 @@
 {
   // ═══════════════════════════════════════════════════════════
-  // EDITOR — Core Behaviour
+  // EDITOR, Core Behaviour
   // ═══════════════════════════════════════════════════════════
   "editor.fontFamily": "JetBrains Mono, 'Fira Code', 'Cascadia Code', Consolas, monospace",
   "editor.fontLigatures": true,
@@ -29,7 +29,7 @@
   "editor.allowVariableFontsInAccessibilityMode": true,
 
   // ═══════════════════════════════════════════════════════════
-  // EDITOR — Bracket & Guide Settings
+  // EDITOR, Bracket & Guide Settings
   // ═══════════════════════════════════════════════════════════
   "editor.bracketPairColorization.enabled": true,
   "editor.bracketPairColorization.independentColorPoolPerBracketType": true,
@@ -40,7 +40,7 @@
   "editor.linkedEditing": true,
 
   // ═══════════════════════════════════════════════════════════
-  // EDITOR — IntelliSense & Suggestions
+  // EDITOR, IntelliSense & Suggestions
   // ═══════════════════════════════════════════════════════════
   "editor.inlineSuggest.enabled": true,
   "editor.inlineSuggest.showToolbar": "onHover",
@@ -70,7 +70,7 @@
   "editor.acceptSuggestionOnEnter": "smart",
 
   // ═══════════════════════════════════════════════════════════
-  // EDITOR — Format & Code Actions on Save
+  // EDITOR, Format & Code Actions on Save
   // ═══════════════════════════════════════════════════════════
   "editor.formatOnSave": true,
   "editor.formatOnSaveMode": "file",
@@ -82,16 +82,15 @@
   },
 
   // ═══════════════════════════════════════════════════════════
-  // EDITOR — Multi-cursor & Selection
+  // EDITOR, Multi-cursor & Selection
   // ═══════════════════════════════════════════════════════════
   "editor.multiCursorModifier": "ctrlCmd",
   "editor.columnSelection": false,
   "editor.selectionHighlight": true,
   "editor.occurrencesHighlight": "singleFile",
-  "editor.findMatchHighlightLimit": 300,
 
   // ═══════════════════════════════════════════════════════════
-  // WORKBENCH — Theme & Icons
+  // WORKBENCH, Theme & Icons
   // ═══════════════════════════════════════════════════════════
   "workbench.preferredHighContrastColorTheme": "Monokai",
   "workbench.iconTheme": "material-icon-theme",
@@ -113,7 +112,7 @@
   "workbench.experimental.share.enabled": true,
 
   // ═══════════════════════════════════════════════════════════
-  // WORKBENCH — Layout & Panels
+  // WORKBENCH, Layout & Panels
   // ═══════════════════════════════════════════════════════════
   "workbench.sideBar.location": "left",
   "workbench.panel.defaultLocation": "bottom",
@@ -355,12 +354,12 @@
   },
   "typescript.inlayHints.parameterNames.enabled": "literals",
   "typescript.inlayHints.variableTypes.enabled": true,
-  "typescript.inlayHints.returnTypes.enabled": true,
+  "js/ts.inlayHints.functionLikeReturnTypes.enabled": true,
   "typescript.preferences.importModuleSpecifier": "relative",
   "typescript.suggest.autoImports": true,
   "javascript.suggest.autoImports": true,
 
-  // Tailwind CSS v4 — pick up class-list props in cva()/clsx()/cn() helpers
+  // Tailwind CSS v4, pick up class-list props in cva()/clsx()/cn() helpers
   "tailwindCSS.experimental.classRegex": [
     ["cva\\(([^)]*)\\)", "[\"'`]([^\"'`]*).*?[\"'`]"],
     ["cn\\(([^)]*)\\)", "[\"'`]([^\"'`]*).*?[\"'`]"],
@@ -431,7 +430,7 @@
   },
 
   // ═══════════════════════════════════════════════════════════
-  // EXTENSIONS — GitLens (AI backend: GitKraken, matches the GitKraken MCP wired up 2026-08-21)
+  // EXTENSIONS, GitLens (AI backend: GitKraken, matches the GitKraken MCP wired up 2026-08-21)
   // ═══════════════════════════════════════════════════════════
   "gitlens.ai.model": "gitkraken",
   "gitlens.ai.vscode.model": "copilot:gpt-4.1",
@@ -441,7 +440,7 @@
   "gitlens.codeLens.enabled": false,
 
   // ═══════════════════════════════════════════════════════════
-  // EXTENSIONS — Kubernetes / Docker
+  // EXTENSIONS, Kubernetes / Docker
   // ═══════════════════════════════════════════════════════════
   "vs-kubernetes": {
     "vscode-kubernetes.helm-path-linux": "/home/kneeraazon/.local/state/vs-kubernetes/tools/helm/linux-amd64/helm",
@@ -450,17 +449,17 @@
   },
 
   // ═══════════════════════════════════════════════════════════
-  // EXTENSIONS — MongoDB
+  // EXTENSIONS, MongoDB
   // ═══════════════════════════════════════════════════════════
   "mdb.mcp.server": "prompt",
 
   // ═══════════════════════════════════════════════════════════
-  // EXTENSIONS — Project Manager
+  // EXTENSIONS, Project Manager
   // ═══════════════════════════════════════════════════════════
   "projectManager.git.baseFolders": [],
 
   // ═══════════════════════════════════════════════════════════
-  // EXTENSIONS — Misc
+  // EXTENSIONS, Misc
   // ═══════════════════════════════════════════════════════════
   "vsicons.dontShowNewVersionMessage": true,
   "redhat.telemetry.enabled": true,

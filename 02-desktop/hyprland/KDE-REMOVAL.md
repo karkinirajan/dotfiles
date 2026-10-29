@@ -1,10 +1,28 @@
+---
+title: KDE and Plasma removal log
+topic: kde-removal
+last_verified: 2026-10-29
+status: archived
+---
+
 # KDE/Plasma Removal Notes
 
 This machine originally ran CachyOS with a full KDE Plasma install alongside
 Hyprland (dual-DE setup, common on CachyOS installs). This document records
 how it was fully removed, keeping Hyprland/Noctalia intact, for anyone
-following these dotfiles onto a similar dual-DE CachyOS install — or for
+following these dotfiles onto a similar dual-DE CachyOS install, or for
 re-doing this after a fresh CachyOS-with-Plasma install.
+
+> **Status note, 2026-10-29.** This log records the removal as it was done and
+> is kept as written. Since then the machine has gained KDE *applications*
+> again, not the desktop: Dolphin, Ark, Okular, KOrganizer and KDE Connect are
+> in `packages/desktop.txt`, and `cachyos-hypr-noctalia` 1.2.6-1 (which still
+> depends on `dolphin`) is installed, so "zero KDE/Plasma-tagged packages
+> remain" described the state on the removal date, not today. `swash`
+> replaced `satty` as the screenshot editor. The orphan-sweep warning below
+> still holds. The January 2026 CachyOS ISO moved Plasma installs to
+> `plasma-login-manager`; that is consistent with the SDDM switchover
+> described here.
 
 **Result**: 205 packages removed across three passes, zero KDE/Plasma-tagged
 packages remain, Hyprland and Noctalia untouched throughout (same PIDs
@@ -12,14 +30,14 @@ before and after every transaction).
 
 ## Two landmines found before removing anything
 
-1. **`dolphin` was a hard dependency of `cachyos-hypr-noctalia`** — the
+1. **`dolphin` was a hard dependency of `cachyos-hypr-noctalia`**: the
    meta-package CachyOS uses to bundle this exact Hyprland+Noctalia setup.
    `pacman -Qi dolphin` showed `Required By: cachyos-hypr-noctalia
    dolphin-plugins`. Removing Dolphin meant also removing that meta-package.
 
    Checking `cachyos-hypr-noctalia`'s own dependency list
    (`pacman -Qi cachyos-hypr-noctalia`) showed it depends on Hyprland/Noctalia
-   (not the other way around) and nothing requires it — so removing *it* is
+   (not the other way around) and nothing requires it, so removing *it* is
    safe. But several of *its* other dependencies (things it merely bundles,
    not KDE at all) had no other anchor and would have been swept away as
    orphans in the same transaction:
@@ -29,11 +47,13 @@ before and after every transaction).
 
    **Fix**: mark those explicit *before* removing the meta-package, so
    pacman's orphan detection leaves them alone:
+
    ```sh
    sudo pacman -D --asexplicit xorg-xhost xdg-desktop-portal-hyprland uwsm \
      satty nwg-look xcur2png gnome-text-editor gnome-calculator \
      cachyos-alacritty-config brightnessctl adw-gtk-theme
    ```
+
    Always dry-run first (`pacman -Rsp <targets>`) and grep the output against
    this protect-list before actually removing anything.
 
@@ -43,6 +63,7 @@ before and after every transaction).
 
    **Fix**: switch to SDDM (already installed, just disabled) *before*
    removing anything, and verify a real reboot + login actually works:
+
    ```sh
    sudo mkdir -p /etc/sddm.conf.d
    # content: sddm/hyprland.conf in this repo
@@ -50,13 +71,14 @@ before and after every transaction).
    sudo systemctl enable sddm.service
    sudo systemctl disable plasmalogin.service
    ```
+
    **Gotcha hit here**: if `/etc/systemd/system/display-manager.service`
    already exists as a symlink to the old display manager,
-   `systemctl enable sddm.service` fails *silently in effect* — it errors
+   `systemctl enable sddm.service` fails *silently in effect*, it errors
    with `File ... already exists and is a symlink to
    .../plasmalogin.service`, and if you then disable the old one without
    noticing that error, the symlink gets removed entirely and **neither**
-   display manager is enabled — worse than before, since now nothing starts
+   display manager is enabled, worse than before, since now nothing starts
    graphically at all. Check `readlink -f
    /etc/systemd/system/display-manager.service` points at `sddm.service`
    after enabling, not just that the enable command didn't visibly explode.
@@ -70,34 +92,34 @@ Each pass: build the target list from `pacman -Qe | grep -iE
 adjust, re-dry-run, then execute for real with `pacman -Rs`.
 
 **Pass 1** (148 packages): the meta-package plus the whole explicit-install
-KDE/Plasma surface — `plasma-desktop`, `plasma-workspace` (pulled in once
+KDE/Plasma surface, `plasma-desktop`, `plasma-workspace` (pulled in once
 its last two anchors, `powerdevil` and `xdg-desktop-portal-kde`, were added
 to the target list), `kwin`, `dolphin`, `okular`, `ark`, `spectacle`,
 `partitionmanager`, `kwallet-pam`, `kwalletmanager`, `bluedevil`,
 `kinfocenter`, the three `cachyos-*-kde-theme` packages, `qt6ct-kde`, and
 everything else only *they* depended on (kdeclarative, kio, kwindowsystem's
 whole dependent tree, baloo, signon/kaccounts stack, poppler/ghostscript for
-kdegraphics thumbnailers, etc.) — none of it had any dependent outside this
+kdegraphics thumbnailers, etc.), none of it had any dependent outside this
 graph.
 
 **Pass 2** (52 packages): a handful of Qt/KDE framework libraries that
-survived pass 1 because something else still needed them —
+survived pass 1 because something else still needed them  -
 `hyprqt6engine` ("QT6 Theme Provider for Hyprland", genuinely part of this
 Hyprland setup, not KDE) was still pulling in `kiconthemes` →
 `kwindowsystem`/`kwallet`/`kio` and their own dependents (`kcalc`,
 `kvantum-theme-nordic-git`, `crow-translate`, `plymouth-kcm`,
 `kdenetwork-filesharing` → `samba`, etc.). This was an explicit choice, not
-automatic — removing `hyprqt6engine` trades away consistent Qt-app
+automatic, removing `hyprqt6engine` trades away consistent Qt-app
 icon-theming under Hyprland for a truly KDE-free system. Verified `samba`
 was `disabled`/`inactive` (installed only for KDE's file-sharing GUI, never
 actually running) before including it.
 
 **Pass 3** (4 packages): `pacman -Qtdq` after pass 2 listed 37 orphans, but
-**most of that list was not KDE** — `mako`, `grimblast-git`, `wob`,
+**most of that list was not KDE**, `mako`, `grimblast-git`, `wob`,
 `wlogout`, `pamixer`, `network-manager-applet`, various unrelated `python-*`
 packages, fonts, vulkan libs. Blanket-removing "all orphans" would have
 broken things this setup actively depends on (`mako`'s package is kept
-deliberately — see the main README's D-Bus override note — and
+deliberately, see the main README's D-Bus override note, and
 `grimblast-git`/`wob` are wired into `keybinds.conf`/`autostart.conf`
 directly). Only `kdoctools` (+ its own now-orphaned deps `karchive`,
 `docbook-xsl`, `docbook-xml`) was actually KDE; removed that one
@@ -105,12 +127,12 @@ specifically, left the rest of the orphan list alone.
 
 **Lesson for next time**: never run `pacman -Rns $(pacman -Qtdq)` blind on a
 system with a curated Hyprland setup like this one. Always read the orphan
-list before touching it — most of what shows up there long after a big
+list before touching it, most of what shows up there long after a big
 removal has nothing to do with what you just removed.
 
 ## Leftover home-directory config/cache (packages ≠ user data)
 
-`pacman -Rs` only removes the packages — it never touches `~/.config`,
+`pacman -Rs` only removes the packages, it never touches `~/.config`,
 `~/.local/share`, or `~/.cache`. A KDE-heavy home directory leaves a *lot*
 behind: `dolphinrc`, `konsolerc`, `kwinrc`, `plasma*rc`, `~/.config/kdeglobals`,
 `~/.local/share/{plasma,dolphin,baloo,akonadi,kwalletd,kwin}`,
@@ -118,17 +140,18 @@ behind: `dolphinrc`, `konsolerc`, `kwinrc`, `plasma*rc`, `~/.config/kdeglobals`,
 None of it is needed once the software is gone.
 
 **Two categories needed a judgment call, not a blind `rm -rf`:**
-- `~/.local/share/kwalletd` (KWallet's encrypted secret store) — could hold
+
+- `~/.local/share/kwalletd` (KWallet's encrypted secret store), could hold
   real saved credentials (wifi passwords, app secrets). Only delete this if
   you're sure nothing there needs recovering; the data becomes unusable the
   moment the `kwallet` package is gone anyway, since nothing can read it.
-- `~/.local/share/akonadi` (KDE PIM backend — email/contacts/calendar,
-  ~100MB+, mostly its own embedded MySQL/MariaDB instance) — check
+- `~/.local/share/akonadi` (KDE PIM backend, email/contacts/calendar,
+  ~100MB+, mostly its own embedded MySQL/MariaDB instance), check
   `~/.config/akonadi_*resource*rc` for real configured accounts before
   assuming it's just default first-run scaffolding.
 
 **A stale process gotcha, same shape as the Hyprland-restart issue above**:
-`kwalletd6` was still running *after* the `kwallet` package was removed —
+`kwalletd6` was still running *after* the `kwallet` package was removed  -
 its binary was deleted from disk but the already-running process kept going
 (and kept re-touching its own state directory, meaning `rm -rf
 ~/.local/share/kwalletd` looked like it silently came back). `pkill
@@ -137,16 +160,19 @@ kwalletd6` (or just reboot) before doing a final check.
 **Two `exec-once` lines in `autostart.conf` silently die once their
 packages are gone**, and are easy to miss since Hyprland doesn't error
 loudly on a failed exec-once:
+
 - `polkit-kde-authentication-agent-1` → replaced with **hyprpolkitagent**
   (already installed as a dependency of something else, just never
-  autostarted) — enabled as its own systemd `--user` service instead of
+  autostarted), enabled as its own systemd `--user` service instead of
   another `exec-once`, since it ships one and isn't a launcher whose
   children would inherit a service's cgroup (unlike the Noctalia case this
   same repo works around with `noctalia-watchdog.sh`):
+
   ```sh
   systemctl --user enable --now hyprpolkitagent.service
   ```
-- `kwalletd6` + `pam_kwallet_init` (KWallet PAM auto-unlock) — just deleted
+
+- `kwalletd6` + `pam_kwallet_init` (KWallet PAM auto-unlock), just deleted
   outright once `kwallet` itself is gone; nothing to replace it with unless
   you specifically want a secret-storage daemon again (`gnome-keyring` is
   the usual non-KDE choice).
@@ -154,11 +180,11 @@ loudly on a failed exec-once:
 ## Final audit pass
 
 A second, fully recursive sweep (not just top-level `~/.config`/`~/.local`)
-turned up more: `~/.config/kate` (stale — `kate` itself was never even
+turned up more: `~/.config/kate` (stale, `kate` itself was never even
 installed), `~/.config/session/{dolphin,kwin}*` (KDE session-restore
 files), two **genuinely broken launcher entries** in
 `~/.local/share/applications/` (`org.kde.partitionmanager.desktop`,
-`org.kde.plasma-systemmonitor.desktop` — pointing at binaries that no
+`org.kde.plasma-systemmonitor.desktop`, pointing at binaries that no
 longer exist, the exact same class of bug as the stale-Chrome-launcher
 issue elsewhere in this session), `~/.local/share/{kscreen,knewstuff3,
 kpeoplevcard}`, a full KDE-specific icon theme (`~/.local/share/icons/
@@ -170,14 +196,15 @@ Secret Service daemon, a *different* binary from `kwalletd6`, launched by
 SDDM's own `pam_kwallet5.so` PAM hook during the login-manager test earlier
 in this doc) was still running with its binary already deleted, and kept
 silently recreating `~/.local/share/kwalletd` as an empty directory every
-time it was removed — looked like the directory "wouldn't stay deleted"
+time it was removed, looked like the directory "wouldn't stay deleted"
 until the actual process was found and killed. If something like this
 looks like it's regenerating on its own, check `pgrep -af <name>` and
 `ls -la /proc/<pid>/exe` for a `(deleted)` suffix before assuming the
 cleanup didn't work.
 
 `/etc/pam.d/sddm` still references `pam_kwallet5.so`/`pam_gnome_keyring.so`
-— left as-is deliberately: both lines are marked `optional` with a leading
+
+- left as-is deliberately: both lines are marked `optional` with a leading
 `-`, so PAM silently skips them now that the module is gone rather than
 breaking login, and it's a package-shipped file (editing it just creates a
 `.pacnew` conflict on the next `sddm` update for no real benefit).
@@ -185,7 +212,7 @@ breaking login, and it's a package-shipped file (editing it just creates a
 **Two large generic icon packs** (`Fluent`, `shelly-icons`) contain
 individual icons *named* after KDE apps (`kdeconnect.svg`, `dolphin.png`,
 etc.) purely because those packs cover icons for apps across every desktop
-environment — not KDE-specific themes themselves. Left untouched, same
+environment, not KDE-specific themes themselves. Left untouched, same
 reasoning as the `python-keyring` backend module and Brave extension
 internals noted above: matching on a substring inside an unrelated,
 still-wanted asset collection isn't the same as it being KDE's own file.

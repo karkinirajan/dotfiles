@@ -7,7 +7,7 @@ x.com
 twitter.com
 t.co
 
-# Asset/CDN hosts — a cached service-worker shell will still try to pull
+# Asset/CDN hosts: a cached service-worker shell will still try to pull
 # content from these, so block them too. Deliberately NOT blocking fbcdn.net:
 # it is shared with WhatsApp/Messenger, which are meant to stay reachable.
 cdninstagram.com
