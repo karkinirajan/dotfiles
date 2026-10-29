@@ -54,7 +54,7 @@ sudo ufw allow from 192.168.0.0/16 to any port 1714:1764 proto tcp
 
 The package ships a ufw application profile (`/etc/ufw/applications.d/kdeconnect`), an XDG autostart entry, a D-Bus service and `kdeconnect-indicator` for the tray, and no systemd unit. The rules are scoped to the LAN because the firewall profile in chapter 19 keeps no unconditional inbound allows; use your own subnet, or the unscoped `ufw allow 1714:1764/udp` and `/tcp` from KDE UserBase if the phone is on a changing network.
 
-Whether the Hyprland/uwsm session runs XDG autostart and Noctalia shows the tray item was not testable here. After login, check `pgrep kdeconnectd` and `kdeconnect-cli -l`. <!-- UNVERIFIED: KDE Connect autostart under Hyprland --> Label: `machine-only`.
+Checked on the host (Hyprland 0.57 under uwsm): `kdeconnectd` starts from `/etc/xdg/autostart/org.kde.kdeconnect.daemon.desktop` at login. List paired devices with `kdeconnect-cli -l`. Label: `machine-only`.
 
 ## Sources
 

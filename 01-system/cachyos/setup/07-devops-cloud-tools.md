@@ -60,7 +60,7 @@ sudo nginx -t
 # Enable only when needed: sudo systemctl enable --now nginx
 ```
 
-`types_hash_max_size` defaults to 1024 and `types_hash_bucket_size` to 64; the drop-in raises the maximum to 4096, which is what the Arch wiki's sample config uses. Label: `machine-only`. Proof: `nginx -t` reports "syntax is ok" with no `types_hash` warning. <!-- UNVERIFIED: the stock nginx.conf text, because the Arch package source host was not reachable -->
+`types_hash_max_size` defaults to 1024 and `types_hash_bucket_size` to 64; the drop-in raises the maximum to 4096, which is what the Arch wiki's sample config uses. Label: `machine-only`. Proof: `nginx -t` reports "syntax is ok" with no `types_hash` warning. Checked on the host: the stock `/etc/nginx/nginx.conf` includes `modules.d/*.conf` and `mime.types` but not `conf.d/*.conf`, and after the drop-in `nginx -t` prints no `types_hash` warning.
 
 Reverse-proxy hardening that applies to nginx 1.30 (the `nginx-reverse-proxy-patterns` skill carries the detail):
 

@@ -257,10 +257,11 @@ former `ImanolBarba/Hyprspace` fork head) is now an ancestor of `KZDKM/Hyprspace
 main, so the fork is no longer needed and `hyprpm add` uses upstream with the
 same pin. **Hyprspace does not compile on Hyprland 0.57.0**: that release
 removed `m_renderPass` and `m_renderData` from `CHyprRenderer`, and upstream has
-no fix yet. That is a second reason to hold Hyprland at 0.56.2, or to drop the
-overview plugin before moving to 0.57. `dynamic-cursors` uses hyprpm's own
-0.56.2 pin; its `HEAD` is Lua-only. hyprpm has no 0.57 pin for any plugin.
-<!-- UNVERIFIED: plugin compile results on 0.57.0 (no compositor headers in the research sandbox) -->
+no fix yet. Checked on this machine on 2026-10-29 after the move to 0.57.0:
+`hyprpm update` fails on Hyprspace and stops before the other plugins, so the
+Hyprspace repo was removed (`hyprpm remove Hyprspace`); `dynamic-cursors` then
+built, loads, and reads its Lua config (`hyprctl getoption
+plugin:dynamic-cursors:mode` prints `tilt`).
 The `hy3` plugin is optional and not installed by the baseline.
 
 `hyprexpo` and `hyprgrass` were evaluated and dropped: the hyprexpo forks

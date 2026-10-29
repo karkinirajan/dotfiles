@@ -83,7 +83,7 @@ sudo systemctl enable --now mongodb
 mongosh --quiet --eval 'db.runCommand({ping:1})'
 ```
 
-The AUR package uses `mongodb.service` and `/etc/mongodb.conf` (`bindIp: 127.0.0.1`; the default `net.bindIp` is `localhost`); upstream packages use `mongod.service` and `/etc/mongod.conf`. Those AUR names come from this host's record only. <!-- UNVERIFIED: AUR service and config names (AUR pages were unreachable) --> Authentication is off, which is acceptable only while the instance stays on loopback behind UFW; to turn it on create an admin user in `admin`, set `security.authorization: enabled`, restart, and connect with `mongosh -u USER -p --authenticationDatabase admin`. <!-- UNVERIFIED: exact steps, only the overview page was readable -->
+The AUR package uses `mongodb.service` and `/etc/mongodb.conf` (`bindIp: 127.0.0.1`; the default `net.bindIp` is `localhost`); upstream packages use `mongod.service` and `/etc/mongod.conf`. Checked with `pacman -Ql mongodb-bin` on the host: the package ships `/usr/lib/systemd/system/mongodb.service` and `/etc/mongodb.conf`. Authentication is off, which is acceptable only while the instance stays on loopback behind UFW; to turn it on create an admin user in `admin`, set `security.authorization: enabled`, restart, and connect with `mongosh -u USER -p --authenticationDatabase admin`. <!-- UNVERIFIED: exact steps, only the overview page was readable -->
 
 > **CachyOS note:** if MongoDB fails to start with `Permission denied`, the data directory is owned by root. Create a systemd override that fixes it on every start; the `+` prefix runs the command as root regardless of the service user:
 >
