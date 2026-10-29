@@ -64,7 +64,7 @@ Only the primary `linux-cachyos` kernel package remains installed. The running k
 ## Operating system and desktop
 
 - `/etc/os-release`: CachyOS Linux, rolling release.
-- Active session: Hyprland `0.56.2`, Wayland; Noctalia Shell `5.4.0`.
+- Active session: Hyprland `0.57.0` (Lua config), Wayland; Noctalia Shell `5.4.0`.
 - Active login manager: `greetd` with `/usr/bin/noctalia-greeter-session`. SDDM remains installed but disabled and inactive.
 - Limine exposes only `CachyOS → linux-cachyos`; Snapper snapshots remain available for rollback but are hidden from the boot menu.
 - Locale configuration: `en_US.UTF-8`, including `LC_TIME=en_US.UTF-8`. Timezone: `Asia/Kathmandu`; system clock sync is enabled.

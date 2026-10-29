@@ -15,7 +15,7 @@ own README. Start at Part 00 and go in order, or jump to the part you need.
 | Layer | Stack |
 |-------|-------|
 | OS and hardware | CachyOS (Arch), kernel <!-- v:cachyos-kernel -->7.3.0<!-- /v -->, Ryzen 5 5600, RX 6700 XT (Mesa <!-- v:mesa -->26.2.5<!-- /v -->, ROCm <!-- v:rocm -->7.2.4<!-- /v -->) |
-| Desktop | Hyprland <!-- v:hyprland -->0.56.2<!-- /v --> (held, see [`lua-migration.md`](02-desktop/hyprland/lua-migration.md)), Noctalia <!-- v:noctalia -->5.4.0<!-- /v -->, UWSM, greetd |
+| Desktop | Hyprland <!-- v:hyprland -->0.57.0<!-- /v --> (Lua config, see [`lua-migration.md`](02-desktop/hyprland/lua-migration.md)), Noctalia <!-- v:noctalia -->5.4.0<!-- /v -->, UWSM, greetd |
 | Terminal | zsh <!-- v:zsh -->5.9.2<!-- /v -->, kitty <!-- v:kitty -->0.49.2<!-- /v -->, Starship <!-- v:starship -->1.27.0<!-- /v --> |
 | Editors | Neovim <!-- v:neovim -->0.12.6<!-- /v -->, Zed <!-- v:zed -->1.25.3<!-- /v -->, VS Code <!-- v:vscode -->1.144.0<!-- /v --> |
 | Languages | Python <!-- v:python -->3.14.8<!-- /v --> with uv <!-- v:uv -->0.13.6<!-- /v -->, Node <!-- v:nodejs -->26.12.1<!-- /v -->, Next.js <!-- v:fe-next -->16.4.3<!-- /v --> |

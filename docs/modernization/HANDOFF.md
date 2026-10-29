@@ -34,7 +34,7 @@ Versions come from [`versions.yaml`](../../versions.yaml); the plain numbers bel
 
 | Constraint | Meaning for this run |
 |---|---|
-| `hyprland-hold` | Hyprland 0.57.0 (Arch `extra`) removed the hyprlang `.conf` parser; with only `hyprland.conf` it ignores `hypr/config/` and writes a default Lua config. CachyOS repos, which come first in pacman's order, still carry 0.56.2. Hold `hyprland` and `hyprpm` with `IgnorePkg` (S02) until a Lua config is validated ([`lua-migration.md`](../../02-desktop/hyprland/lua-migration.md)) |
+| `hyprland-hold` (replaced by `hyprland-lua` after the run) | Hyprland 0.57.0 (Arch `extra`) removed the hyprlang `.conf` parser; with only `hyprland.conf` it ignores `hypr/config/` and writes a default Lua config. CachyOS repos, which come first in pacman's order, still carry 0.56.2. Hold `hyprland` and `hyprpm` with `IgnorePkg` (S02) until a Lua config is validated ([`lua-migration.md`](../../02-desktop/hyprland/lua-migration.md)) |
 | `rocm-pytorch-index` | ROCm is the legacy 7.2 train (7.2.4). PyTorch wheels must come from the `rocm7.2` index. Upstream's new "ROCm Core SDK" 10.1.0 is not packaged by Arch; do not install it |
 | `pgvector-pg18` | pgvector 0.8 supports PostgreSQL 18 |
 | `ts-eslint` | Use TypeScript 6.x for tooling; `typescript@latest` is 7.0.2 and `typescript-eslint` rejects it |

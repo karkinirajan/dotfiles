@@ -29,10 +29,9 @@ The point-in-time hardware, package, service, and runtime inventory is in
 This is a rolling distribution. Reproduce the profile and configuration, then
 install compatible current package versions from the configured CachyOS/Arch
 repositories. Do not pin the historical kernel, library, ROCm, Node, or app
-versions written in older notes. One exception: hold `hyprland` and
-`hyprpm` with `IgnorePkg = hyprland hyprpm` in `/etc/pacman.conf` before the
-first `pacman -Syu`, because Hyprland 0.57 no longer reads the `.conf` tree
-(see [`lua-migration.md`](02-desktop/hyprland/lua-migration.md)).
+versions written in older notes. Hyprland 0.57 and later read only
+`hyprland.lua`, which `./install.sh` links; no hold is needed (see
+[`lua-migration.md`](02-desktop/hyprland/lua-migration.md)).
 
 ## Agent rules and owner checkpoints
 
