@@ -40,6 +40,7 @@ Every chapter in reading order. Regenerate with `python3 tools/gen_index.py`.
 | [Hyprland and Noctalia](02-desktop/hyprland/README.md) | `02-desktop/hyprland/README.md` | 2026-10-29 | current |
 | [Hyprland keyboard shortcuts](02-desktop/hyprland/hyprland-shortcuts.md) | `02-desktop/hyprland/hyprland-shortcuts.md` | 2026-10-29 | reference |
 | [Hyprland Lua config migration](02-desktop/hyprland/lua-migration.md) | `02-desktop/hyprland/lua-migration.md` | 2026-10-29 | current |
+| [Login keyring](02-desktop/keyring/README.md) | `02-desktop/keyring/README.md` | 2026-10-29 | current |
 | [Part 03 Terminal](03-terminal/README.md) | `03-terminal/README.md` | 2026-10-29 | current |
 | [Starship prompt](03-terminal/starship/README.md) | `03-terminal/starship/README.md` | 2026-10-29 | current |
 | [Zsh](03-terminal/zsh/README.md) | `03-terminal/zsh/README.md` | 2026-10-29 | current |
