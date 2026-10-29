@@ -22,53 +22,6 @@
     ],
     "defaultMode": "auto"
   },
-  "hooks": {
-    "SessionStart": [
-      {
-        "hooks": [
-          {
-            "type": "command",
-            "command": "claude-brain hook session-start 2>/dev/null || true",
-            "timeout": 10
-          }
-        ]
-      }
-    ],
-    "UserPromptSubmit": [
-      {
-        "hooks": [
-          {
-            "type": "command",
-            "command": "claude-brain hook prompt 2>/dev/null || true",
-            "timeout": 8
-          }
-        ]
-      }
-    ],
-    "SessionEnd": [
-      {
-        "hooks": [
-          {
-            "type": "command",
-            "command": "claude-brain hook session-end 2>/dev/null || true",
-            "timeout": 20
-          }
-        ]
-      }
-    ],
-    "PreToolUse": [
-      {
-        "matcher": "Read|Grep|Glob|Bash",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "claude-brain hook pre-tool 2>/dev/null || true",
-            "timeout": 5
-          }
-        ]
-      }
-    ]
-  },
   "worktree": {
     "baseRef": "head"
   },
