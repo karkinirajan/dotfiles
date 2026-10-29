@@ -20,7 +20,7 @@ Branch `modernize/2026-10`, date of record 2026-10-29. Author `karkinirajan`. Ev
 
 ## Findings that change what you should do
 
-1. **Hyprland 0.57.0 (Arch `extra`) removed the hyprlang `.conf` parser.** With only `hyprland.conf` it ignores the whole `hypr/config/` tree. CachyOS and the machine are on 0.56.2. The repo holds `hyprland` and `hyprpm` with `IgnorePkg` until a Lua config is written and validated on a live compositor ([`lua-migration.md`](../../02-desktop/hyprland/lua-migration.md)). The Lua port itself was not written here.
+1. **Hyprland 0.57.0 (Arch `extra`) removed the hyprlang `.conf` parser.** With only `hyprland.conf` it ignores the whole `hypr/config/` tree. CachyOS and the machine are on 0.56.2. The repo held `hyprland` and `hyprpm` with `IgnorePkg` until a Lua config was validated. After the run the Lua port was written and validated (`--verify-config` on 0.56.2 and 0.57.0, plus a nested 0.57.0 compositor); see [`lua-migration.md`](../../02-desktop/hyprland/lua-migration.md). Lifting the hold is the owner's upgrade step.
 2. **PostgreSQL 18 `initdb` defaults to `trust` authentication.** The `--auth-local=peer --auth-host=scram-sha-256` flags are now mandatory in every doc that initializes a cluster.
 3. **Next.js 16.4.0 is vulnerable** (two Critical RCEs, one High); the frontend templates now pin 16.4.3 and React 19.3.1.
 4. **MariaDB 13.0 is a rolling release;** `mariadb-lts` 12.3.3 is the stable series. The machine runs 13.0.2 and cannot downgrade, so the handoff keeps it.
@@ -74,7 +74,7 @@ The GitHub API and `github.com` advisory and release pages, the Arch wiki and `g
 
 ## Unverified items
 
-50 inline tags in the docs and 66 ledger rows with status `unverified`. The inline tags:
+46 inline tags in the docs and 66 ledger rows with status `unverified`. The inline tags:
 
 | Where | What is unverified |
 |---|---|
@@ -120,10 +120,6 @@ The GitHub API and `github.com` advisory and release pages, the Arch wiki and `g
 | `fresh-setup.md:118` | exact installer menu label; the wording comes from the release blog |
 | `system-summary.md:53` | whether `BOOT_ORDER` acts as a filter (see chapter 20.1) |
 | `04-editors/zed/README.md:30` | the replacement model tag |
-| `02-desktop/hyprland/lua-migration.md:36` | converter output quality |
-| `02-desktop/hyprland/lua-migration.md:69` | whether hyprctl eval can address a named rule handle |
-| `02-desktop/hyprland/lua-migration.md:71` | the Lua form of the theme-border script's rule updates |
-| `02-desktop/hyprland/lua-migration.md:72` | the source-read mapping for one handler (medium confidence) |
 | `02-desktop/hyprland/README.md:263` | plugin compile results on 0.57.0 (no compositor headers in the research sandbox) |
 | `02-desktop/hyprland/README.md:269` | the claim that every hyprexpo fork is broken |
 | `02-desktop/hyprland/README.md:311` | bug status on 5.4.0 |
@@ -148,7 +144,7 @@ Left open (low or owner-scope), none blocks the handoff:
 
 ## Owner decisions still open
 
-The Hyprland Lua config port; the Zed default-model replacement (`deepseek-v4-flash:cloud` was retired 2026-09-25); the `claude-brain` hooks (private tool, cannot be verified from public sources); whether to switch MariaDB to the LTS series by dump and re-initialize; the Logseq and Mullvad package variants; whether `paru --skipreview` is acceptable for the unattended run; lifting the `CLAUDE.md` rules against `sudo` and `git fetch` for that session.
+The Hyprland 0.57 upgrade (the Lua port is ready; Hyprspace does not build on 0.57.0); the Zed default-model replacement (`deepseek-v4-flash:cloud` was retired 2026-09-25); the `claude-brain` hooks (private tool, cannot be verified from public sources); whether to switch MariaDB to the LTS series by dump and re-initialize; the Logseq and Mullvad package variants; whether `paru --skipreview` is acceptable for the unattended run; lifting the `CLAUDE.md` rules against `sudo` and `git fetch` for that session.
 
 ## Risks
 

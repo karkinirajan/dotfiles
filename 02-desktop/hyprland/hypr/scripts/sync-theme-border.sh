@@ -123,6 +123,17 @@ new_dim = f"$blue_dim  = rgba({primary.lstrip('#')}26)"
 conf_text = re.sub(r'^\$blue_dim\s*=.*$', new_dim, conf_text, flags=re.M)
 write_atomic(colors_conf, conf_text)
 
+# Lua twin (Hyprland 0.57+): colors.lua derives the border gradients from
+# mauve and lavender, so only the three palette lines change.
+colors_lua = colors_conf.with_suffix(".lua")
+if colors_lua.exists():
+    lua_text = colors_lua.read_text()
+    lua_text = re.sub(r'^c\.mauve\s*=.*$', f'c.mauve     = "rgba({primary.lstrip("#")}ff)"', lua_text, flags=re.M)
+    if secondary:
+        lua_text = re.sub(r'^c\.lavender\s*=.*$', f'c.lavender  = "rgba({secondary.lstrip("#")}ff)"', lua_text, flags=re.M)
+    lua_text = re.sub(r'^c\.blue_dim\s*=.*$', f'c.blue_dim  = "rgba({primary.lstrip("#")}26)"', lua_text, flags=re.M)
+    write_atomic(colors_lua, lua_text)
+
 variables_path = pathlib.Path(colors_conf_path).parent / "variables.conf"
 var_text = variables_path.read_text()
 end_hex = (secondary or primary).lstrip('#')

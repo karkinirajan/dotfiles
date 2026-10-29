@@ -91,7 +91,7 @@ install -m 0644 "$STAGED" "$LIVE.tmp.$$" && mv -f "$LIVE.tmp.$$" "$LIVE"
 info "wrote $LIVE"
 
 # ── 4. Restart as a child of Hyprland, not of this shell ────────────────────
-hyprctl dispatch exec "$WATCHDOG" >/dev/null 2>&1 \
+"$HOME/.config/hypr/scripts/hypr-dispatch.sh" "hl.dsp.exec_cmd(\"$WATCHDOG\")" "exec $WATCHDOG" >/dev/null 2>&1 \
     || die "Hyprland could not launch $WATCHDOG"
 for _ in $(seq 40); do pgrep -x noctalia >/dev/null && break; sleep 0.25; done
 pgrep -x noctalia >/dev/null || die "Noctalia did not come back up - start $WATCHDOG by hand"

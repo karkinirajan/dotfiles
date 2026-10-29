@@ -16,7 +16,7 @@ sources:
 
 ## Purpose
 
-Hyprland 0.57.0 (Arch `extra`, 2026-10-28) removed the hyprlang parser: only `~/.config/hypr/hyprland.lua` loads. The tracked tree is hyprlang (`hyprland.conf` plus `config/*.conf`), so it works on the Hyprland the machine runs, <!-- v:hyprland -->0.56.2<!-- /v -->, and breaks on 0.57. This page is the plan and the mapping for moving to Lua. It is **not applied**: no `hyprland.lua` is tracked, because it could not be tested without a running compositor (research had source access only). Until it is applied and checked, Hyprland and hyprpm are held at 0.56.2 (see the version and config-format hold in [`README.md`](README.md)).
+Hyprland 0.57.0 (Arch `extra`, 2026-10-28) removed the hyprlang parser: only `~/.config/hypr/hyprland.lua` loads. The tracked tree is hyprlang (`hyprland.conf` plus `config/*.conf`), so it works on the Hyprland the machine runs, <!-- v:hyprland -->0.56.2<!-- /v -->, and breaks on 0.57. This page is the plan and the mapping for moving to Lua. **The port is written:** [`hypr/hyprland.lua`](hypr/hyprland.lua) requires the modules `config/look.lua`, `config/autostart.lua`, `config/keybinds.lua`, `config/rules.lua`, `config/plugins.lua`, `config/colors.lua` and `config/defaults.lua`, and `manifest.conf` links it to `~/.config/hypr/hyprland.lua`. The `.conf` tree stays for 0.56.x. Checked on 2026-10-29: `Hyprland --verify-config` prints `config ok` on 0.56.2 and on the 0.57.0 binary from Arch `extra` (signature verified), and a nested 0.57.0 compositor loaded it with no `configerrors` and the same 94 key, modifier, submap and flag combinations as the live 0.56.2 session. Not yet checked in a full 0.57 login: hypridle DPMS, minimize and restore, the launcher, the bar toggle and the plugins (see Steps 4 and 5).
 
 ## Prerequisites
 
@@ -33,7 +33,7 @@ Hyprland 0.57.0 (Arch `extra`, 2026-10-28) removed the hyprlang parser: only `~/
 5. Rebuild plugins for the version you run (`hyprpm update`, then enable). `dynamic-cursors` at its newest commit configures through Lua (`hl.config { plugin = { dynamic_cursors = ... } }` inside `if hl.plugin.dynamic_cursors then`); Hyprspace configures through `hl.config({ plugin = { overview = {...} } })` and toggles with `hl.plugin.overview.toggle()`. Hyprspace does not compile on 0.57.0 (see the README).
 6. Only then remove the `IgnorePkg` line and update to 0.57.
 
-An unattended converter exists on PyPI (`hyprconf2lua`, third party, MIT; `--check` flags directives it cannot map). It was read but **not run** here, so there is no machine-converted draft. <!-- UNVERIFIED: converter output quality -->
+The port was written by hand from the v0.57.0 Lua bindings source (`src/config/lua/bindings/`), not with the third-party `hyprconf2lua` converter.
 
 ## Mapping from the tracked hyprlang files
 
@@ -64,12 +64,12 @@ Bind flags available: `locked release click drag long_press repeating non_consum
 | Where | Today | After |
 |---|---|---|
 | `hypridle.conf`, `minimize.sh`, `restore.sh`, `launcher-open.sh` | via `scripts/hypr-dispatch.sh` (Lua form, then legacy form) | unchanged; the Lua form is accepted first |
-| `keybinds.conf:15` | `hyprctl dispatch overview:toggle` | a Lua function bind calling `hl.plugin.overview.toggle()` |
-| `keybinds.conf:34-35` | `hyprctl --batch "keyword general:gaps_out ..."` | `hyprctl eval 'hl.config({ general = { gaps_out = 0, gaps_in = 0 } })'`. `hyprctl keyword` is not registered in 0.57 |
-| `scripts/toggle-bar.sh` | `hyprctl keyword layerrule ...` | named layer rules toggled with `set_enabled()`. <!-- UNVERIFIED: whether hyprctl eval can address a named rule handle --> |
-| `scripts/noctalia-restore.sh:94` | `hyprctl dispatch exec "$WATCHDOG"` | `hyprctl dispatch 'hl.dsp.exec_cmd("...")'` |
-| `scripts/sync-theme-border.sh` | rewrites `colors.conf` and `variables.conf`, then `hyprctl reload` | rewrite a `colors.lua` module the same way, or set the border with `hyprctl eval`. Colour gradients are `{ colors = {"rgba(...)", "rgba(...)"}, angle = 45 }` for window rules; the form for `general.col.active_border` is <!-- UNVERIFIED --> |
-| `config/windowrules.conf:27,29` | `move 25%- 25%-` | likely not a valid expression, so the rule is dropped. <!-- UNVERIFIED: medium confidence, source-read --> Re-derive the position with `(monitor_w*0.25)` style expressions |
+| `keybinds.conf:15` | `hyprctl dispatch overview:toggle` | done: a Lua function bind calling `hl.plugin.overview.toggle()` when the plugin is loaded |
+| `keybinds.conf:34-35` | `hyprctl --batch "keyword general:gaps_out ..."` | done: Lua function binds calling `hl.config(...)`; `hyprctl keyword` is not registered in 0.57 |
+| `scripts/toggle-bar.sh` | `hyprctl keyword layerrule ...` | done: `rules.lua` keeps the bar rules in the global `noctalia_bar_rules`, and the script runs `hyprctl eval '... r:set_enabled(false) ...'` (answered `ok` on nested 0.57.0), falling back to `keyword` on hyprlang |
+| `scripts/noctalia-restore.sh:94` | `hyprctl dispatch exec "$WATCHDOG"` | done: goes through `hypr-dispatch.sh` with `hl.dsp.exec_cmd(...)` first |
+| `scripts/sync-theme-border.sh` | rewrites `colors.conf` and `variables.conf`, then `hyprctl reload` | done: also rewrites the `mauve`, `lavender` and `blue_dim` lines of `colors.lua`, from which the border gradients are derived |
+| `config/windowrules.conf:27,29` | `move 25%- 25%-` | done: `move = "(monitor_w*0.25) (monitor_h*0.25)"`, accepted by `--verify-config` on 0.57.0 |
 | `config/autostart.conf` | `dbus-update-activation-environment` exec-once | drop it: Hyprland does this itself and uwsm does it under systemd |
 | `hyprland-shortcuts.md` | "Quick tips" describe `bindd` field order and `hyprctl binds -j` | rewrite after the port |
 
