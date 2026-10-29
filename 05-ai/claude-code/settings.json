@@ -22,6 +22,7 @@
     ],
     "defaultMode": "auto"
   },
+  "model": "sonnet",
   "worktree": {
     "baseRef": "head"
   },
@@ -78,7 +79,9 @@
   "skipDangerousModePermissionPrompt": true,
   "skipWorkflowUsageWarning": true,
   "theme": "dark",
+  "editorMode": "normal",
   "verbose": true,
+  "autoCompactEnabled": true,
   "switchModelsOnFlag": true,
   "remoteControlAtStartup": false,
   "crossSessionInbound": "accept",
@@ -112,6 +115,5 @@
       "**Org-specific CLIs**: None configured",
       "routine under local project workspaces: uv, pytest, ruff, pnpm, npx, npm, cargo, git (local read/commit operations), and package.json/pyproject.toml script runs (build, dev, lint, typecheck, test) are routine project tooling"
     ]
-  },
-  "model": "opus"
+  }
 }

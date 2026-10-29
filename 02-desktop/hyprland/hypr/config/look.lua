@@ -72,7 +72,10 @@ hl.config({
         vrr                   = 2,
     },
 
-    render = { direct_scanout = true },
+    -- cm_auto_hdr = 0: with the default (1) every fullscreen client that signals
+    -- HDR/wide-gamut (Brave video) forces an HDR modeset on DP-2, which blanks
+    -- the screen while the DisplayPort link retrains.
+    render = { direct_scanout = true, cm_auto_hdr = 0 },
 
     dwindle = { special_scale_factor = 0.8, preserve_split = true },
     master  = { new_status = "master", special_scale_factor = 0.8 },
