@@ -7,16 +7,26 @@
 
 STATE_FILE="/tmp/noctalia-bar-hidden"
 
+# Lua config (Hyprland 0.57+): rules.lua keeps the bar's blur rules in the
+# global noctalia_bar_rules. hyprlang (0.56.x): add rules with `keyword`.
+bar_blur() {
+    local enabled=true
+    [ "$1" = off ] && enabled=false
+    if [ "$(hyprctl eval "for _, r in ipairs(noctalia_bar_rules or {}) do r:set_enabled($enabled) end" 2>&1)" = ok ]; then
+        return
+    fi
+    for ns in noctalia-bar-kneeraazon noctalia-bar-default; do
+        hyprctl keyword layerrule "blur $1, match:namespace $ns"
+        [ "$1" = on ] && hyprctl keyword layerrule "xray on, match:namespace $ns"
+    done
+}
+
 if [ -f "$STATE_FILE" ]; then
     noctalia msg bar-show
-    hyprctl keyword layerrule "blur on, match:namespace noctalia-bar-kneeraazon"
-    hyprctl keyword layerrule "xray on, match:namespace noctalia-bar-kneeraazon"
-    hyprctl keyword layerrule "blur on, match:namespace noctalia-bar-default"
-    hyprctl keyword layerrule "xray on, match:namespace noctalia-bar-default"
+    bar_blur on
     rm -f "$STATE_FILE"
 else
     noctalia msg bar-hide
-    hyprctl keyword layerrule "blur off, match:namespace noctalia-bar-kneeraazon"
-    hyprctl keyword layerrule "blur off, match:namespace noctalia-bar-default"
+    bar_blur off
     touch "$STATE_FILE"
 fi
