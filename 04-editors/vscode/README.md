@@ -2,7 +2,7 @@
 
 User settings, keybindings, and extension manifest for `visual-studio-code-bin`.
 
-```
+```text
 04-editors/vscode/
 ├── README.md                  ← you are here
 ├── vscode-settings.json       → ~/.config/Code/User/settings.json (seeded)

@@ -1,7 +1,7 @@
 # Timeshift (Archived)
 
 > [!IMPORTANT]
-> **Archived — not the active snapshot system.** This CachyOS workstation uses
+> **Archived, not the active snapshot system.** This CachyOS workstation uses
 > Snapper (`snapper`, `cachyos-snapper-support`, `snap-pac`) for Btrfs root
 > snapshots. `timeshift` conflicts with `cachyos-snapper-support` and is not
 > installed on the live host. Do not install or enable anything in this
@@ -22,7 +22,7 @@ failure. Choose whether to include `/home` in Timeshift's setup.
 
 ## Files
 
-- `timeshift-daily.service` / `timeshift-daily.timer` — runs `timeshift --check`
+- `timeshift-daily.service` / `timeshift-daily.timer`, runs `timeshift --check`
   once a day. Root-owned, so copied by hand (not linked by `install.sh`).
 
 ## Install

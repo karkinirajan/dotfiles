@@ -30,4 +30,3 @@
 | Postponing a Critical Next.js patch | Active exploitation window | Ship within 24 hours | SEC-20 |
 
 ---
-

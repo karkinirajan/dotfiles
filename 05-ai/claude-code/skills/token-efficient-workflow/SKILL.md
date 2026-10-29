@@ -10,7 +10,7 @@ Keep the active context narrowly tied to the task. Do not trade away required ve
 ## Start and scope
 
 - For a new task, use `/clear` when the prior conversation is unrelated; use `/compact` when its decisions still matter.
-- Use `/context` to inspect a large session before adding more material. Use `/usage` for plan/API usage and `/cost` when API billing applies.
+- Use `/context` to inspect a large session before adding more material. `/cost` and `/stats` are aliases of `/usage`.
 - Search filenames and symbols first (`rg --files`, `rg -n`); read only the matching files and relevant sections. Avoid loading whole directories, lockfiles, generated output, vendored code, or large logs.
 - Prefer a path and a focused question over pasting file contents. Avoid `@file` unless the whole file is needed.
 - Ask for a concise plan before cross-cutting edits; then execute the agreed scope without repeatedly restating repository context.
@@ -25,7 +25,7 @@ Keep the active context narrowly tied to the task. Do not trade away required ve
 
 ## Session discipline
 
-- Use Sonnet for routine implementation and Haiku for simple mechanical tasks when available; reserve Opus for genuinely difficult analysis or architecture.
+- Use Sonnet (`sonnet` = Sonnet 5.5) for routine implementation and Haiku (`haiku` = Haiku 5.5) for simple mechanical tasks when available; reserve Opus (`opus` = Opus 5.5) for genuinely difficult analysis or architecture, and Fable (`fable` = Fable 5.1) for the hardest work.
 - Keep durable repository facts in concise `CLAUDE.md`; put task-specific procedures in skills or nested instructions so they load only when relevant.
 - Prefer one focused subtask per subagent and request short findings; do not parallelize work that shares files or needs the full conversation.
 - When a task is complete, summarize decisions and verification briefly, then start a clean session for unrelated work.

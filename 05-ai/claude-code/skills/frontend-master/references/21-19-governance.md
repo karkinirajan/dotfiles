@@ -7,4 +7,3 @@
 - GOV-05 (SHOULD): Monthly review: read release notes for Next.js, React, Tailwind, shadcn/ui, Supabase, and Prisma. Re-read every version in section 1.1 against the registry, update section 1, retire or add rules, and append to the changelog.
 
 ---
-

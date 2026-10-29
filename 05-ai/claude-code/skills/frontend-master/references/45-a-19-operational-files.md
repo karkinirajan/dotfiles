@@ -573,10 +573,12 @@ export default config;
 
 ```text
 # Advisories we accept, each with an expiry (GOV-04). Remove the entry when a patched version exists.
-[[IgnoredVulns]]
-id = "GHSA-vfj7-8cjw-p6xm"
-ignoreUntil = 2026-12-31
-reason = "braces 3.0.3 is reached only through eslint-config-next (dev dependency); no patched release exists (A.13)."
+# None are accepted today: the braces advisory GHSA-vfj7-8cjw-p6xm was withdrawn on 2026-10-23.
+# Example entry:
+# [[IgnoredVulns]]
+# id = "GHSA-xxxx-xxxx-xxxx"
+# ignoreUntil = 2026-12-31
+# reason = "why the advisory does not apply (A.13)."
 ```
 
 `CLAUDE.md`
@@ -689,6 +691,11 @@ create policy projects_delete_own on public.projects
   for delete to authenticated
   using ((select auth.uid()) = owner_id);
 
+-- Since 2026-10-30 Supabase no longer exposes new public tables to the Data API automatically
+-- (projects created from 2026-05-30 already behave this way): grant each role explicitly.
+grant select, insert, update, delete on public.projects to authenticated;
+grant select, insert, update, delete on public.projects to service_role;
+
 create index projects_owner_id_idx on public.projects (owner_id);
 
 -- Audit log: append-only, written through a function, readable by admins only (OBS-07).
@@ -701,6 +708,10 @@ create table public.audit_log (
 );
 
 alter table public.audit_log enable row level security;
+
+-- Read access only; writes go through record_audit_event below.
+grant select on public.audit_log to authenticated;
+grant select, insert on public.audit_log to service_role;
 
 -- The role comes from app_metadata, which users cannot edit (SB-07).
 create policy audit_log_select_admin on public.audit_log
@@ -752,7 +763,11 @@ select is(
 
 -- anon
 set local role anon;
-select is((select count(*)::int from public.projects), 0, 'anon cannot read projects');
+-- anon has no grant on projects, so the read is refused outright (an older project with default grants would return 0 rows).
+select throws_ok(
+  $$select count(*) from public.projects$$,
+  '42501', null, 'anon cannot read projects'
+);
 
 -- user A
 set local role authenticated;
@@ -803,4 +818,3 @@ select is((select count(*)::int from public.audit_log where action = 'project.re
 select * from finish();
 rollback;
 ```
-

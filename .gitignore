@@ -8,7 +8,7 @@ UPDATES.md
 references/
 
 # Exception: frontend-master's references/ is the skill's actual body, not a
-# disposable cheatsheet — SKILL.md reads every file under it by path.
+# disposable cheatsheet: SKILL.md reads every file under it by path.
 !05-ai/claude-code/skills/frontend-master/references/
 !05-ai/claude-code/skills/frontend-master/references/**
 
@@ -25,8 +25,12 @@ references/
 .remember/
 
 # Local scratch area for the Ollama benchmark runs. Holds raw logs, transcripts,
-# model blobs and a claude.json backup with credentials — never committed.
+# model blobs and a claude.json backup with credentials: never committed.
 /ollama-setup/
 
-# Claude Desktop's import-memory sync target — regenerated content, not authored
+# Claude Desktop's import-memory sync target: regenerated content, not authored
 05-ai/claude-code/skills/synced/
+
+# Python bytecode
+__pycache__/
+*.pyc

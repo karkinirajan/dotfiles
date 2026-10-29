@@ -1,0 +1,21 @@
+# Markdown lint for the docs. Rules relaxed where the repo's own conventions differ.
+config:
+  default: true
+  MD013: false          # prose lines are not wrapped to a fixed width
+  MD024:
+    siblings_only: true # repeated headings under different parents are fine
+  MD033: false          # inline HTML: version markers, <details>, anchors
+  MD025: false          # frontmatter title plus body H1, and skill files with several top-level sections
+  MD034: false          # bare URLs in source lists are fine
+  MD036: false          # bold lines used as labels
+  MD041: false          # generated pages start with a comment
+  MD051: false          # anchor fragments are checked by tools/check_links.py
+  MD060: false          # table column style
+globs:
+  - "**/*.md"
+ignores:
+  - "docs/modernization/inventory*.md"
+  - "05-ai/ollama/claude-code-bench/fixtures/**"
+  - "05-ai/claude-code/CLAUDE.md"   # the owner's standing-instructions file is not reformatted
+  - "docs/modernization/RESEARCH.md" # generated report; cells contain literal pipes
+  - "node_modules/**"

@@ -56,4 +56,3 @@ Next.js reads the nonce from the request header `Content-Security-Policy`, so `p
 - SEC-25 (SHOULD): Automated security checks in CI: ESLint security rules, Semgrep or CodeQL, RLS pgTAP suite, and an OWASP ZAP baseline against the preview URL for public-facing apps.
 
 ---
-

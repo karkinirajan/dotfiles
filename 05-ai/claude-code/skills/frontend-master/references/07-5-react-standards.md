@@ -58,4 +58,3 @@
 - RQ-08 (SHOULD): Use `useSuspenseQuery` with a `Suspense` boundary and `QueryErrorResetBoundary` so loading and error UI live in boundaries, not in every component.
 
 ---
-

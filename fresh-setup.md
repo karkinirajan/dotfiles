@@ -1,4 +1,4 @@
-# Fresh CachyOS Setup — AI-Agent Playbook
+# Fresh CachyOS Setup: AI-Agent Playbook
 
 Use this runbook to rebuild the CachyOS workstation represented by this repo.
 It coordinates the detailed chapter guides; it is not a disk image or an
@@ -29,13 +29,16 @@ The point-in-time hardware, package, service, and runtime inventory is in
 This is a rolling distribution. Reproduce the profile and configuration, then
 install compatible current package versions from the configured CachyOS/Arch
 repositories. Do not pin the historical kernel, library, ROCm, Node, or app
-versions written in older notes.
+versions written in older notes. One exception: hold `hyprland` and
+`hyprpm` with `IgnorePkg = hyprland hyprpm` in `/etc/pacman.conf` before the
+first `pacman -Syu`, because Hyprland 0.57 no longer reads the `.conf` tree
+(see [`lua-migration.md`](02-desktop/hyprland/lua-migration.md)).
 
 ## Agent rules and owner checkpoints
 
 1. Start by reading this file, [`README.md`](README.md),
    [`manifest.conf`](manifest.conf),
-   [`01-system/cachyos/setup.md`](01-system/cachyos/setup.md),
+   [`01-system/cachyos/setup/`](01-system/cachyos/setup/README.md),
    [`01-system/cachyos/packages/`](01-system/cachyos/packages/),
    [`02-desktop/hyprland/README.md`](02-desktop/hyprland/README.md),
    [`05-ai/ollama/README.md`](05-ai/ollama/README.md), and
@@ -65,7 +68,7 @@ versions written in older notes.
    have changed, adapt and explain the difference instead of forcing stale
    instructions.
 
-## Phase 1 — Prepare and inventory
+## Phase 1: Prepare and inventory
 
 1. Ask whether this is a blank target or a dual-boot replacement, which disk
    is the target, whether existing Windows/data must remain, whether full-disk
@@ -89,17 +92,30 @@ versions written in older notes.
    network. The AMD ROCm override in this repo is specific to the RX 6700 XT;
    do not apply it to a different GPU without checking its supported target.
 
-## Phase 2 — Install CachyOS (owner at the machine)
+## Phase 2: Install CachyOS (owner at the machine)
 
-1. Download the current Desktop ISO from the
-   [official CachyOS download page](https://www.cachyos.org/download/) and
-   verify its published checksum/signature using the
+1. Download the current Desktop ISO (release <!-- v:cachyos-iso -->260809<!-- /v -->) from the
+   [official CachyOS download page](https://www.cachyos.org/download/) together
+   with its `.sha256` and `.sig` files, then verify them as in the
    [official validation guide](https://wiki.cachyos.org/cachyos_basic/download/).
    Do not use an ISO with a failed or unverified signature/hash.
-2. Boot the installer in UEFI mode. For this profile, choose one desktop
-   environment only: Hyprland if offered, otherwise the minimal option and
-   install the repo's Hyprland packages later. Do not install Plasma alongside
-   Hyprland just to remove it afterward.
+
+   ```sh
+   sha256sum -c cachyos-desktop-linux-<ISO release>.iso.sha256     # expect: <file>: OK
+   gpg --keyserver hkps://keys.openpgp.org --recv-key F3B607488DB35A47
+   gpg --verify cachyos-desktop-linux-<ISO release>.iso.sig cachyos-desktop-linux-<ISO release>.iso
+   ```
+
+   Expect `Good signature` from "CachyOS" with the primary key fingerprint
+   `882D CFE4 8E20 51D4 8E25 62AB F3B6 0748 8DB3 5A47`. gpg also prints that
+   the key is not certified; that warning is expected.
+2. Boot the installer in UEFI mode. For this profile, choose the single
+   "CachyOS Hyprland Noctalia" desktop option (added in the June 2026 release;
+   the August 2026 release configures `noctalia-greeter` for it). The installer
+   allows one desktop environment per install. If the option is absent, pick
+   the minimal option and install the repo's Hyprland packages afterward. Do
+   not install Plasma alongside Hyprland just to remove it later.
+   <!-- UNVERIFIED: exact installer menu label; the wording comes from the release blog -->
 3. Prefer manual partitioning. The owner selects the target disk and confirms
    every partition to create, reuse, preserve, or format. For a Windows
    dual-boot, preserve Windows partitions and its EFI partition; install
@@ -110,17 +126,37 @@ versions written in older notes.
    LUKS layer. Ask whether to match that or intentionally change it. LUKS must
    be selected during installation; do not improvise it after the OS is
    installed.
-5. Select Limine, which is the bootloader used on this profile. Secure Boot is
-   disabled on the current host. Match that state unless the owner explicitly
-   chooses otherwise; if enabling it, follow the current
+5. Select Limine, which is the bootloader used on this profile (the installer
+   default since the January 2026 release; the boot partition needs at least
+   4 GiB). Secure Boot is disabled on the current host. Match that state unless
+   the owner explicitly chooses otherwise; if enabling it, follow the current
    [CachyOS Secure Boot guide](https://wiki.cachyos.org/configuration/secure_boot_setup/)
    and create new keys for this machine. Never copy signing private keys from
-   another host.
+   another host. The Limine-specific points of that guide:
+
+   ```sh
+   sudo pacman -S sbctl
+   sudo sbctl create-keys
+   sudo sbctl enroll-keys --microsoft            # Gigabyte boards (this host is a B550 GAMING X V2); other boards: add --firmware-builtin
+   # Limine 11.2 and newer enforce BLAKE2B hashes of the config and paths:
+   #   set ENABLE_ENROLL_LIMINE_CONFIG=yes in /etc/default/limine, append the
+   #   splash hash (b2sum /boot/limine-splash.png) after '#', then:
+   sudo limine-enroll-config && sudo limine-update
+   sudo sbctl status && sudo sbctl verify          # lists the unsigned files; only the Limine EFI binary needs signing
+   # sign what 'sbctl verify' lists for Limine, e.g.: sudo sbctl sign -s <that path>
+   ```
+
+   Order matters: the firmware must be in Setup Mode before `enroll-keys`, and
+   Secure Boot is switched on in firmware only after `sbctl verify` shows the
+   Limine EFI binary signed. Enabling it earlier gives a machine that does not boot.
+
+   CachyOS-Settings documents `sbctl-batch-sign` as incompatible with Limine;
+   follow the Limine section of the guide, not the generic flow.
 6. Set the user name, password, keyboard, locale, and timezone with the owner.
    Do not set autologin. Finish the installer and let the owner perform the
    first boot.
 
-## Phase 3 — First boot and base system
+## Phase 3: First boot and base system
 
 1. Verify network access, the root filesystem, boot mode, and that the owner
    can log in from a TTY or the installer-selected desktop. Record:
@@ -141,10 +177,13 @@ versions written in older notes.
    ```
 
    Do not start a second package manager while this transaction is active.
-3. Set up an AUR helper (`paru` or `yay`) using a current, reviewed
-   CachyOS/Arch-supported method.
+3. Set up an AUR helper. The June 2026 installer no longer ships `paru`
+   (it recommends Shelly), so a fresh install has none:
+   `sudo pacman -S paru` installs the CachyOS build
+   (<!-- v:paru -->2.1.0<!-- /v -->). `yay` is the fallback.
    AUR packages are community build recipes: inspect the selected package and
-   build prompts. Keep Hyprland and its runtime libraries on compatible stable
+   build prompts, and review every PKGBUILD and install-script change. Arch
+   news of 2026-06-12 reports an incident with malicious AUR packages. Keep Hyprland and its runtime libraries on compatible stable
    packages. In particular, do not install `aquamarine-git`,
    `hyprgraphics-git`, `hyprutils-git`, or `hyprlang-git` alongside stable
    Hyprland; that combination produced the dependency warnings this guide is
@@ -177,7 +216,7 @@ versions written in older notes.
    ```
 
 5. For the full developer/AI workstation, review the complete package and
-   service choices in `01-system/cachyos/setup.md` chapter by chapter. To
+   service choices in `01-system/cachyos/setup/` chapter by chapter. To
    reproduce the optional full-stack profile, use
    [`01-system/cachyos/dev-stack.md`](01-system/cachyos/dev-stack.md) and its
    `packages/developer.txt` list. Keep project frameworks in project-local
@@ -201,7 +240,7 @@ versions written in older notes.
    sudo pacman -S --needed "${ai_packages[@]}"
    ```
 
-## Phase 4 — Apply Dotfiles
+## Phase 4: Apply Dotfiles
 
 1. Use the checkout created in Phase 3. If its remote is private, have the
    owner provide authentication; do not put credentials in commands, shell
@@ -230,17 +269,31 @@ versions written in older notes.
    old `os/cachyos/packages/` paths. Test plugins against the installed
    Hyprland version before enabling them.
 
-## Phase 5 — Boot, login, and recovery configuration
+## Phase 5: Boot, login, and recovery configuration
 
 ### Display manager (`greetd` + Noctalia greeter) and optional SDDM preset
 
 1. The active profile uses **`greetd` with `noctalia-greeter`**, launching
    Hyprland through UWSM (`uwsm start -- hyprland.desktop`). Confirm `greetd`,
    `noctalia-greeter`, `uwsm`, Hyprland, and `xdg-desktop-portal-hyprland` are
-   installed and that `display-manager.service` points to `greetd.service`:
+   installed. The greeter wiring (from the
+   [Noctalia greeter docs](https://docs.noctalia.dev/greeter/installation/)):
+   greetd must launch `noctalia-greeter-session` (not `noctalia-greeter`).
+   Merge, do not overwrite, `/etc/greetd/config.toml`:
+
+   ```toml
+   [default_session]
+   command = "/usr/bin/noctalia-greeter-session"
+   user = "greeter"
+   ```
 
    ```sh
-   readlink -f /etc/systemd/system/display-manager.service
+   sudo systemd-tmpfiles --create noctalia-greeter.conf
+   sudo noctalia-greeter-apply-appearance --setup-system
+   systemctl status display-manager.service        # name the current display manager
+   sudo systemctl disable --now sddm.service        # or whichever unit the line above names
+   sudo systemctl enable --now greetd.service
+   readlink -f /etc/systemd/system/display-manager.service   # expect .../greetd.service
    ```
 
 2. SDDM is installed as an **inactive fallback**. The tracked SDDM preset under
@@ -273,22 +326,29 @@ versions written in older notes.
 2. Before editing a live Limine menu, back up `/boot/limine.conf` and inspect
    it with `sudo limine-list`. Check the effective settings in
    `/etc/default/limine` and `/etc/limine-entry-tool.conf`; turn off fallback
-   loader discovery and disable `limine-snapper-sync.service` when the menu is
-   intentionally single-entry. Use `limine-entry-tool` to remove specific
+   loader discovery (`FIND_BOOTLOADERS="no"`; `BOOT_ORDER` only orders entries,
+   it does not hide them) and disable `limine-snapper-sync.service` when the
+   menu is intentionally single-entry. Use `limine-entry-tool` to remove specific
    stale paths, preserve the currently booted CachyOS kernel and its initramfs,
    then run `sudo limine-update` and confirm `sudo limine-list` shows exactly
-   the primary CachyOS entry before rebooting.
+   the primary CachyOS entry before rebooting. Also read the generated
+   `cmdline:` line in `/boot/limine.conf`: it must still carry `root=` and
+   `rootflags=` (and `lsm=` if AppArmor is enabled), because
+   `KERNEL_CMDLINE[default]+=` in `/etc/default/limine` replaces the
+   inherited command line when no base line is defined there. Limine 12.9.5
+   changed `default_entry:` numbering (entries start at 1); the path form
+   `default_entry: CachyOS/linux-cachyos` is unaffected.
 3. Do not alter UEFI NVRAM entries or overwrite `EFI/BOOT/BOOTX64.EFI` as part
    of menu cleanup. The current firmware has a Limine entry and a generic UEFI
    OS fallback entry, with no Windows entry observed. Confirm the owner wants
    firmware-level entries removed before changing them.
 4. Configure Snapper and its current Limine integration as described in
-   `01-system/cachyos/setup.md` only after checking the actual filesystem
+   `01-system/cachyos/setup/20-maintenance-monitoring.md` only after checking the actual filesystem
    layout and current package hooks. Keep snapshot entries out of the target
    single-entry boot menu. Take and verify a snapshot before large system
    changes. Never run `btrfs check --repair` as routine maintenance.
 
-## Phase 6 — Privileged integrations and user services
+## Phase 6: Privileged integrations and user services
 
 Install only after their package and firewall/service plans are reviewed:
 
@@ -302,9 +362,12 @@ Install only after their package and firewall/service plans are reviewed:
   `include conf.d/*.conf;` inside `http { ... }`, run `sudo nginx -t`, then
   enable/reload only if nginx is intended to run on the new machine.
 - **DNS filtering/encrypted DNS:** follow `06-tools/focus/README.md` and
-  section 19.5 of `01-system/cachyos/setup.md`. Review NetworkManager,
+  section 19.5 of `01-system/cachyos/setup/19-security-privacy.md`. Review NetworkManager,
   dnsmasq, dnscrypt-proxy, `/etc/resolv.conf`, and local listening ports as one
   plan before changing DNS; test name resolution and have a rollback ready.
+  The focus scripts and units hardcode `/home/kneeraazon`; edit the paths first
+  on an account with a different name (the units run as root and would create
+  that directory).
 - **SSH:** install the user unit from
   [`07-networking/ssh/README.md`](07-networking/ssh/README.md) only if the
   owner has configured its host alias in `~/.ssh/config`. The private key is
@@ -319,9 +382,9 @@ Do not copy the old DNSCrypt `.pacnew` over the working file without comparing
 it. Preserve the selected upstream servers, local port, and dnsmasq forwarding
 relationship when configuring a new machine.
 
-## Phase 7 — Applications, development tools, and updates
+## Phase 7: Applications, development tools, and updates
 
-1. Use the app chapters in `01-system/cachyos/setup.md` as the catalog for the
+1. Use the app chapters in `01-system/cachyos/setup/` as the catalog for the
    full profile: Python/uv, Node/pnpm, editors, browsers, databases, Docker and
    Kubernetes, cloud CLIs, media and office apps. Show the owner a grouped
    install plan. Resolve renamed/unavailable packages through current official
@@ -346,7 +409,7 @@ relationship when configuring a new machine.
    files. Do not log into personal accounts or sync private browser, cloud,
    password-manager, IDE, or AI-provider state without the owner present.
 
-## Phase 8 — Final acceptance checklist
+## Phase 8: Final acceptance checklist
 
 Have the owner participate in the final login/reboot checkpoint. Before that,
 collect evidence for each item and report any mismatch instead of declaring

@@ -9,4 +9,3 @@
 - DEL-03 (SHOULD): Milestone acceptance criteria reference Definition of Done IDs from section 20. Distinguish "demo-ready" from "production-ready" in the contract.
 
 ---
-

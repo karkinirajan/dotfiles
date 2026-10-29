@@ -44,4 +44,3 @@ If `tsc` reports a typed-route error for a page that exists, delete `.next`: a s
   "exclude": ["node_modules"]
 }
 ```
-

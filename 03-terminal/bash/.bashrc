@@ -1,5 +1,5 @@
 
-# ~/.bashrc — Arch Linux Bash Configuration
+# ~/.bashrc: Arch Linux Bash Configuration
 # ============================================================
 # NOTE: Git global settings belong in ~/.gitconfig, not here.
 #       Run `git config --global ...` once in your terminal
@@ -46,7 +46,7 @@ bind '"\e[A": history-search-backward'
 bind '"\e[B": history-search-forward'
 
 # ==================================
-# NVM — Node Version Manager
+# NVM: Node Version Manager
 # ==================================
 export NVM_DIR="$HOME/.config/nvm"   # must match .zshrc; nvm lives under XDG config
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
@@ -81,7 +81,7 @@ alias ...='cd ../..'
 alias ....='cd ../../..'
 
 # ==================================
-# System — Package Management (Arch)
+# System: Package Management (Arch)
 # ==================================
 alias update='sudo pacman -Syu'
 alias install='sudo pacman -S'
@@ -93,7 +93,7 @@ alias clean='sudo pacman -Sc'
 alias search-pkg='pacman -Ss'
 alias show-pkg='pacman -Qi'
 
-# Yay (AUR helper) — only if installed
+# Yay (AUR helper): only if installed
 if command -v yay &>/dev/null; then
   alias aur-update='yay -Syu'
   alias aur-install='yay -S'
@@ -110,14 +110,14 @@ alias pstat='systemctl status'
 alias watchers='echo fs.inotify.max_user_watches=524288 | sudo tee -a /etc/sysctl.conf && sudo sysctl -p'
 
 # ==================================
-# Development — Editors
+# Development: Editors
 # ==================================
 alias c='code .'
 alias nv='nvim'
 alias v='vim'
 
 # ==================================
-# Development — Git
+# Development: Git
 # ==================================
 alias ga='git add'
 alias gaa='git add .'
@@ -139,7 +139,7 @@ alias gst='git stash'
 alias gstp='git stash pop'
 
 # ==================================
-# Development — Python / Django
+# Development: Python / Django
 # ==================================
 alias venv='source ./venv/bin/activate'
 alias runserver='python manage.py runserver'
@@ -149,7 +149,7 @@ alias createsuperuser='python manage.py createsuperuser'
 alias collectstatic='python manage.py collectstatic'
 
 # ==================================
-# Development — JavaScript / Node.js
+# Development: JavaScript / Node.js
 # ==================================
 alias ns='npm start'
 alias nr='npm run'

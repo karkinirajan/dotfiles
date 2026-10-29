@@ -22,18 +22,28 @@
 #                                                (the widget renders only a glyph
 #                                                without this CLI on PATH)
 #
+# Dependencies that are not listed on purpose: hyprcursor, hyprgraphics, hyprlang, hyprutils and
+# hyprwayland-scanner arrive through hyprland, hyprlock and hyprpm.
+#   ddcutil qt6ct       settings.toml [brightness] uses ddcutil; uwsm/env sets QT_QPA_PLATFORMTHEME=qt6ct
+#   xdg-desktop-portal-gtk   hyprland-portals.conf prefers hyprland;gtk (file chooser)
+#   bibata-cursor-theme (AUR) the cursor theme named in uwsm/env and environment.conf
+#   swash, onlyoffice-bin    CachyOS repo or AUR only; they are not in Arch extra
+#   mailspring              CachyOS repo has an older build than the AUR; check the version you want
+#
 # waybar is installed for host parity, though Noctalia replaced it as the
 # active bar. Remove it only if intentionally trimming this workstation set.
 # OpenRazer runs for the connected Viper Mini; add the user to the `openrazer`
 # group and start a fresh login session before enabling its user service.
 # ─────────────────────────────────────────────────────────────────────────────
 ai-usagebar-bin  (AUR)
+bibata-cursor-theme  (AUR)
 alacritty
 ark
 bitwarden
 bluez
 bluez-utils
 brightnessctl
+ddcutil
 cachyos-wallpapers
 cliphist
 copyq
@@ -51,18 +61,13 @@ korganizer
 keepassxc
 libreoffice-fresh
 libnotify
-hyprcursor
-hyprgraphics
 hypridle
 hyprland
-hyprlang
 hyprlock
 hyprpicker
 hyprpolkitagent
 hyprpm
 hyprsunset
-hyprutils
-hyprwayland-scanner
 kitty
 mailspring
 mpv
@@ -77,6 +82,7 @@ openrazer-driver-dkms
 pipewire
 pipewire-pulse
 playerctl
+qt6ct
 signal-desktop
 sddm
 slurp
@@ -90,6 +96,7 @@ vlc
 vlc-plugins-all
 wl-clipboard
 xorg-server
+xdg-desktop-portal-gtk
 xdg-desktop-portal-hyprland
 uwsm
 spotify  (AUR)

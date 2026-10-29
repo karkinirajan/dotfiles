@@ -264,7 +264,6 @@
         "inline_blame": {
             "enabled": true,
         },
-        "git_fetch": "auto",
     },
     "telemetry": {
         "metrics": false,

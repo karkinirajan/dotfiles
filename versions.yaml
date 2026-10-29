@@ -1,0 +1,1179 @@
+# versions.yaml: single source of truth for every version the docs state.
+#
+# Prose references these through markers, never by retyping the number:
+#   <!-- v:hyprland -->0.56.2<!-- /v -->        (field `target`)
+#   <!-- v:hyprland:upstream -->0.57.0<!-- /v -->
+# `python tools/render_versions.py` rewrites marker text from this file and
+# `python tools/check_versions.py` fails CI if they differ. `check_versions.py
+# --live` compares targets with Arch, CachyOS, AUR, npm and PyPI each week.
+# Frozen history (snapshots, benchmark records) is marked <!-- snapshot: DATE -->
+# and is exempt.
+
+schema: 1
+as_of: '2026-10-29'
+policy: Latest stable that Arch/CachyOS repos or the official installer can deliver. CachyOS repos come first in pacman order, so the CachyOS version wins when both exist. Upstream is recorded alongside.
+  Security fixes override the distro lag (see entry support notes).
+entries:
+  cachyos-kernel:
+    name: linux-cachyos kernel
+    package: linux-cachyos
+    source: cachyos
+    cachyos: 7.3.0-4
+    aur: 7.3.0-3
+    target: 7.3.0
+    verify: uname -r
+    expect: 7.3.0
+    support: Upstream 7.3 released 2026-10-18 (non-LTS); LTS 6.18 to 2028-12-31
+  limine:
+    name: Limine bootloader
+    package: limine
+    source: cachyos
+    arch: 12.9.6-1
+    cachyos: 12.9.4-1
+    target: 12.9.4
+    hold: Arch extra is ahead of the CachyOS build the host uses; CachyOS repo wins in pacman order
+    verify: limine --version
+    expect: 12.9.4
+    upstream: 12.9.6
+  snapper:
+    name: Snapper
+    package: snapper
+    source: cachyos
+    arch: 0.13.2-1
+    cachyos: 0.13.2-1.1
+    target: 0.13.2
+    verify: snapper --version
+    expect: 0.13.2
+  btrfs-progs:
+    name: btrfs-progs
+    package: btrfs-progs
+    source: arch
+    arch: 7.3-1
+    target: '7.3'
+    verify: btrfs --version
+    expect: '7.3'
+  greetd:
+    name: greetd
+    package: greetd
+    source: cachyos
+    arch: 0.10.3-2
+    cachyos: 0.10.3-2.1
+    target: 0.10.3
+    verify: greetd --version
+    expect: 0.10.3
+  noctalia-greeter:
+    name: noctalia-greeter
+    package: noctalia-greeter
+    source: cachyos
+    arch: 1.7.0-1
+    cachyos: 1.7.0-1.1
+    target: 1.7.0
+    verify: pacman -Q noctalia-greeter
+    expect: 1.7.0
+  uwsm:
+    name: uwsm
+    package: uwsm
+    source: arch
+    arch: 0.27.1-1
+    target: 0.27.1
+    verify: uwsm --version
+    expect: 0.27.1
+  hyprland:
+    name: Hyprland
+    package: hyprland
+    source: cachyos
+    arch: 0.57.0-1
+    cachyos: 0.56.2-4.1
+    target: 0.56.2
+    hold: 0.57.0 removes hyprlang .conf; stay on the CachyOS build until hyprland.lua is validated (constraint hyprland-hold)
+    verify: hyprctl version
+    expect: 0.56.2
+    support: 'Held at the distro version: 0.57.0 removed the hyprlang .conf parser'
+    upstream: 0.57.0
+  hypridle:
+    name: hypridle
+    package: hypridle
+    source: cachyos
+    arch: 0.1.8-2
+    cachyos: 0.1.8-2.1
+    target: 0.1.8
+    verify: hypridle --version
+    expect: 0.1.8
+  hyprlock:
+    name: hyprlock
+    package: hyprlock
+    source: cachyos
+    arch: 0.9.6-3
+    cachyos: 0.9.6-3.1
+    target: 0.9.6
+    verify: hyprlock --version
+    expect: 0.9.6
+  hyprsunset:
+    name: hyprsunset
+    package: hyprsunset
+    source: cachyos
+    arch: 0.4.0-3
+    cachyos: 0.4.0-3.1
+    target: 0.4.0
+    verify: hyprsunset --version
+    expect: 0.4.0
+  noctalia:
+    name: Noctalia shell
+    package: noctalia
+    source: cachyos
+    arch: 5.4.0-1
+    cachyos: 5.4.0-1.1
+    target: 5.4.0
+    verify: noctalia --version
+    expect: 5.4.0
+  mesa:
+    name: Mesa (RADV)
+    package: mesa
+    source: cachyos
+    arch: 26.2.5-1
+    cachyos: 3:26.2.5-1
+    target: 26.2.5
+    verify: vulkaninfo --summary
+    expect: 26.2.5
+    upstream: 26.2.6
+  rocm:
+    name: ROCm (legacy 7.2 train)
+    package: rocm-core
+    source: cachyos
+    arch: 7.2.4-1
+    cachyos: 7.2.4-1.1
+    target: 7.2.4
+    verify: pacman -Q rocm-core
+    expect: 7.2.4
+    support: Core SDK 10.1.0 is a separate train and does not list gfx1031
+  ollama:
+    name: Ollama
+    package: ollama
+    source: cachyos
+    arch: 0.40.11-1
+    cachyos: 0.40.11-1.1
+    target: 0.40.11
+    verify: ollama --version
+    expect: 0.40.11
+    upstream: 0.40.13
+  llama-cpp:
+    name: llama.cpp (Arch package)
+    package: llama-cpp
+    source: cachyos
+    arch: 0.6.0-1
+    cachyos: 0.6.0-1.1
+    target: 0.6.0
+    verify: llama-cli --version
+    expect: 0.6.0
+  pgvector:
+    name: pgvector
+    package: pgvector
+    source: cachyos
+    arch: 0.8.7-1
+    cachyos: 0.8.7-1.1
+    target: 0.8.7
+    verify: pacman -Q pgvector
+    expect: 0.8.7
+  python:
+    name: Python
+    package: python
+    source: cachyos
+    arch: 3.14.8-1
+    cachyos: 3.14.8-1
+    target: 3.14.8
+    verify: python --version
+    expect: 3.14.8
+    support: '3.14: bugfix until 2027-10, security until 2030-10 (PEP 745); free-threaded build comes from uv, not the Arch package'
+    upstream: 3.14.10
+  uv:
+    name: uv
+    package: uv
+    source: cachyos
+    arch: 0.13.6-1
+    cachyos: 0.13.6-1.1
+    target: 0.13.6
+    verify: uv --version
+    expect: 0.13.6
+    upstream: 0.13.6
+  rustup:
+    name: rustup
+    package: rustup
+    source: arch
+    arch: 1.29.2-1
+    target: 1.29.2
+    verify: rustup --version
+    expect: 1.29.2
+  nodejs:
+    name: Node.js (Arch current)
+    package: nodejs
+    source: cachyos
+    arch: 26.12.1-2
+    cachyos: 26.12.1-2
+    target: 26.12.1
+    verify: node --version
+    expect: 26.12.1
+    support: v26 is LTS from 2026-10-28; v24 is in maintenance
+    upstream: 26.13.0
+  nvm:
+    name: nvm
+    package: nvm
+    source: arch
+    arch: 0.40.8-1
+    target: 0.40.8
+    verify: pacman -Q nvm
+    expect: 0.40.8
+  pnpm:
+    name: pnpm
+    package: pnpm
+    source: cachyos
+    arch: 12.15.0-1
+    cachyos: 12.15.0-1.1
+    target: 12.15.0
+    verify: pnpm --version
+    expect: 12.15.0
+    upstream: 12.16.1
+  npm:
+    name: npm (Arch package)
+    package: npm
+    source: arch
+    arch: 12.2.1-1
+    target: 12.2.1
+    verify: npm --version
+    expect: 12.2.1
+  yarn:
+    name: Yarn Classic
+    package: yarn
+    source: arch
+    arch: 1.22.22-2
+    target: 1.22.22
+    verify: yarn --version
+    expect: 1.22.22
+    support: Classic 1.x only
+  typescript:
+    name: TypeScript (Arch package)
+    package: typescript
+    source: arch
+    arch: 6.0.3-1
+    target: 6.0.3
+    verify: tsc --version
+    expect: 6.0.3
+  git:
+    name: Git
+    package: git
+    source: cachyos
+    arch: 2.56.0-1
+    cachyos: 2.56.0-1.1
+    target: 2.56.0
+    verify: git --version
+    expect: 2.56.0
+  github-cli:
+    name: GitHub CLI
+    package: github-cli
+    source: cachyos
+    arch: 2.102.1-1
+    cachyos: 2.102.1-1.1
+    target: 2.102.1
+    verify: gh --version
+    expect: 2.102.1
+  lazygit:
+    name: lazygit
+    package: lazygit
+    source: cachyos
+    arch: 0.66.2-1
+    cachyos: 0.66.2-1.1
+    target: 0.66.2
+    verify: lazygit --version
+    expect: 0.66.2
+  docker:
+    name: Docker Engine
+    package: docker
+    source: cachyos
+    arch: 29.9.2-1
+    cachyos: 1:29.9.2-1.1
+    target: 29.9.2
+    verify: docker --version
+    expect: 29.9.2
+  docker-compose:
+    name: Docker Compose
+    package: docker-compose
+    source: cachyos
+    arch: 5.6.1-1
+    cachyos: 5.6.1-1.1
+    target: 5.6.1
+    verify: docker compose version
+    expect: 5.6.1
+  docker-buildx:
+    name: Docker Buildx
+    package: docker-buildx
+    source: cachyos
+    arch: 0.38.1-1
+    cachyos: 0.38.1-1.1
+    target: 0.38.1
+    verify: docker buildx version
+    expect: 0.38.1
+  docker-rootless-extras:
+    name: docker-rootless-extras (AUR only)
+    package: docker-rootless-extras
+    aur: 29.9.2-1
+    source: aur
+    target: 29.9.2
+    verify: pacman -Q docker-rootless-extras
+    expect: 29.9.2
+  kubectl:
+    name: kubectl
+    package: kubectl
+    source: arch
+    arch: 1.37.1-1
+    target: 1.37.1
+    verify: kubectl version --client
+    expect: 1.37.1
+  minikube:
+    name: minikube
+    package: minikube
+    source: cachyos
+    arch: 1.38.1-2
+    cachyos: 1.38.1-2.1
+    target: 1.38.1
+    verify: minikube version
+    expect: 1.38.1
+  helm:
+    name: Helm
+    package: helm
+    source: cachyos
+    arch: 4.3.0-1
+    cachyos: 4.3.0-1.1
+    target: 4.3.0
+    verify: helm version --short
+    expect: 4.3.0
+  k9s:
+    name: k9s
+    package: k9s
+    source: cachyos
+    arch: 0.51.0-1
+    cachyos: 0.51.0-1.1
+    target: 0.51.0
+    verify: k9s version --short
+    expect: 0.51.0
+  terraform:
+    name: Terraform
+    package: terraform
+    source: cachyos
+    arch: 1.15.9-1
+    cachyos: 1.15.9-1.1
+    target: 1.15.9
+    verify: terraform version
+    expect: 1.15.9
+    support: BUSL licensed; Arch lags upstream
+  opentofu:
+    name: OpenTofu
+    package: opentofu
+    source: cachyos
+    arch: 1.13.2-1
+    cachyos: 1.13.2-1.1
+    target: 1.13.2
+    verify: tofu version
+    expect: 1.13.2
+  ansible:
+    name: Ansible
+    package: ansible
+    source: arch
+    arch: 14.5.0-1
+    target: 14.5.0
+    verify: ansible --version
+    expect: 14.5.0
+  pulumi:
+    name: Pulumi
+    package: pulumi
+    source: cachyos
+    arch: 3.272.0-1
+    cachyos: 3.272.0-1.1
+    target: 3.272.0
+    verify: pulumi version
+    expect: 3.272.0
+  act:
+    name: act
+    package: act
+    source: cachyos
+    arch: 0.2.89-1
+    cachyos: 0.2.89-1.1
+    target: 0.2.89
+    verify: act --version
+    expect: 0.2.89
+  gitlab-runner:
+    name: GitLab Runner
+    package: gitlab-runner
+    source: cachyos
+    arch: 19.5.1-1
+    cachyos: 19.5.1-1.1
+    target: 19.5.1
+    verify: gitlab-runner --version
+    expect: 19.5.1
+  aws-cli:
+    name: AWS CLI v2
+    package: aws-cli-v2
+    source: arch
+    arch: 2.37.9-1
+    target: 2.37.9
+    verify: aws --version
+    expect: 2.37.9
+  azure-cli:
+    name: Azure CLI
+    package: azure-cli
+    source: arch
+    arch: 2.90.0-1
+    target: 2.90.0
+    verify: az version
+    expect: 2.90.0
+  nginx:
+    name: nginx (stable)
+    package: nginx
+    source: cachyos
+    arch: 1.30.6-2
+    cachyos: 1.30.6-2.1
+    target: 1.30.6
+    verify: nginx -v
+    expect: 1.30.6
+    support: stable branch; nginx-mainline is separate
+  postgresql:
+    name: PostgreSQL
+    package: postgresql
+    source: cachyos
+    arch: 18.6-4
+    cachyos: 18.6-4.1
+    target: '18.6'
+    verify: psql --version
+    expect: '18.6'
+  mariadb-lts:
+    name: MariaDB LTS
+    package: mariadb-lts
+    source: cachyos
+    arch: 12.3.3-2
+    cachyos: 12.3.3-2.1
+    target: 12.3.3
+    verify: mariadb --version
+    expect: 12.3.3
+    support: Recommended dev server; mariadb 13.0 is a rolling series
+  mongodb:
+    name: MongoDB Community (AUR mongodb-bin)
+    package: mongodb-bin
+    aur: 8.3.9-1
+    source: aur
+    target: 8.3.9
+    verify: mongod --version
+    expect: 8.3.9
+    support: 8.3.0 to 8.3.12 is inside advisory SERVER-131805; fixed in 8.3.13
+    upstream: 9.0 (current major); 8.3.13 fixes SERVER-131805
+  valkey:
+    name: Valkey
+    package: valkey
+    source: cachyos
+    arch: 9.1.2-1
+    cachyos: 9.1.2-1.1
+    target: 9.1.2
+    verify: valkey-cli --version
+    expect: 9.1.2
+  sqlite:
+    name: SQLite
+    package: sqlite
+    source: cachyos
+    arch: 3.54.0-1
+    cachyos: 3.54.0-1
+    target: 3.54.0
+    verify: sqlite3 --version
+    expect: 3.54.0
+  neovim:
+    name: Neovim
+    package: neovim
+    source: cachyos
+    arch: 0.12.6-1
+    cachyos: 0.12.6-1.1
+    target: 0.12.6
+    verify: nvim --version
+    expect: 0.12.6
+  kitty:
+    name: kitty
+    package: kitty
+    source: cachyos
+    arch: 0.49.2-1
+    cachyos: 0.49.2-1.1
+    target: 0.49.2
+    verify: kitty --version
+    expect: 0.49.2
+  alacritty:
+    name: Alacritty
+    package: alacritty
+    source: cachyos
+    arch: 0.17.0-1
+    cachyos: 0.17.0-1.2
+    target: 0.17.0
+    verify: alacritty --version
+    expect: 0.17.0
+  starship:
+    name: Starship
+    package: starship
+    source: arch
+    arch: 1.27.0-1
+    target: 1.27.0
+    verify: starship --version
+    expect: 1.27.0
+  zsh:
+    name: zsh
+    package: zsh
+    source: cachyos
+    arch: 5.9.2-1
+    cachyos: 5.9.2-1.1
+    target: 5.9.2
+    verify: zsh --version
+    expect: 5.9.2
+  fzf:
+    name: fzf
+    package: fzf
+    source: cachyos
+    arch: 0.74.5-1
+    cachyos: 0.74.5-1.1
+    target: 0.74.5
+    verify: fzf --version
+    expect: 0.74.5
+  tmux:
+    name: tmux
+    package: tmux
+    source: cachyos
+    arch: 3.8-1
+    cachyos: 3.8-1.1
+    target: '3.8'
+    verify: tmux -V
+    expect: '3.8'
+  vscode:
+    name: Visual Studio Code (AUR visual-studio-code-bin)
+    package: visual-studio-code-bin
+    aur: 1.144.0-1
+    source: aur
+    target: 1.144.0
+    verify: code --version
+    expect: 1.144.0
+  zed:
+    name: Zed
+    package: zed
+    source: arch
+    arch: 1.25.3-1
+    target: 1.25.3
+    verify: zed --version
+    expect: 1.25.3
+  pycharm:
+    name: PyCharm Community (Arch pycharm-community-edition)
+    package: pycharm-community-edition
+    source: cachyos
+    arch: 2026.2.3-1
+    cachyos: 2026.2.3-1.1
+    target: 2026.2.3
+    verify: pacman -Q pycharm-community-edition
+    expect: 2026.2.3
+  ufw:
+    name: UFW
+    package: ufw
+    source: arch
+    arch: 0.36.2-7
+    target: 0.36.2
+    verify: ufw version
+    expect: 0.36.2
+  fail2ban:
+    name: Fail2ban
+    package: fail2ban
+    source: arch
+    arch: 1.1.1-1
+    target: 1.1.1
+    verify: fail2ban-client --version
+    expect: 1.1.1
+  openssh:
+    name: OpenSSH
+    package: openssh
+    source: cachyos
+    arch: 10.6p1-2
+    cachyos: 10.6p1-2.1
+    target: 10.6p1
+    verify: ssh -V
+    expect: 10.6p1
+  dnscrypt-proxy:
+    name: dnscrypt-proxy
+    package: dnscrypt-proxy
+    source: cachyos
+    arch: 2.1.20-1
+    cachyos: 2.1.20-1.1
+    target: 2.1.20
+    verify: dnscrypt-proxy -version
+    expect: 2.1.20
+  dnsmasq:
+    name: dnsmasq
+    package: dnsmasq
+    source: cachyos
+    arch: 2.93-1
+    cachyos: 2.93-1.1
+    target: '2.93'
+    verify: dnsmasq --version
+    expect: '2.93'
+  nftables:
+    name: nftables
+    package: nftables
+    source: cachyos
+    arch: 1.1.7-3
+    cachyos: 1:1.1.7-3.1
+    target: 1.1.7
+    verify: nft --version
+    expect: 1.1.7
+  syncthing:
+    name: Syncthing
+    package: syncthing
+    source: cachyos
+    arch: 2.1.7-1
+    cachyos: 2.1.7-1.1
+    target: 2.1.7
+    verify: syncthing --version
+    expect: 2.1.7
+  topgrade:
+    name: topgrade (AUR topgrade-bin)
+    package: topgrade-bin
+    aur: 17.14.1-1
+    source: aur
+    target: 17.14.1
+    verify: topgrade --version
+    expect: 17.14.1
+  mullvad-vpn:
+    name: Mullvad VPN (Arch extra)
+    package: mullvad-vpn
+    source: cachyos
+    arch: 2026.5-1
+    cachyos: 2026.5-1.1
+    target: '2026.5'
+    verify: mullvad --version
+    expect: '2026.5'
+  proton-vpn:
+    name: Proton VPN GTK app
+    package: proton-vpn-gtk-app
+    source: arch
+    arch: 4.18.7-1
+    target: 4.18.7
+    verify: pacman -Q proton-vpn-gtk-app
+    expect: 4.18.7
+  claude-code:
+    name: Claude Code (CachyOS repo)
+    package: claude-code
+    source: cachyos
+    cachyos: 2.1.311-1
+    aur: 2.1.312-1
+    target: 2.1.311
+    verify: claude --version
+    expect: 2.1.311
+    support: AUR and npm already have 2.1.312
+    upstream: 2.1.312
+  openai-codex:
+    name: OpenAI Codex CLI
+    package: openai-codex
+    source: cachyos
+    arch: 0.165.0-1
+    cachyos: 0.165.0-1.1
+    target: 0.165.0
+    verify: codex --version
+    expect: 0.165.0
+  paru:
+    name: paru
+    package: paru
+    source: cachyos
+    cachyos: 2.1.0-3
+    aur: 2.1.0-2
+    target: 2.1.0
+    verify: paru --version
+    expect: 2.1.0
+  ruff:
+    name: Ruff (Arch package)
+    package: ruff
+    source: cachyos
+    arch: 0.17.3-1
+    cachyos: 0.17.3-1.1
+    target: 0.17.3
+    verify: ruff --version
+    expect: 0.17.3
+  fastfetch:
+    name: fastfetch
+    package: fastfetch
+    source: cachyos
+    arch: 2.70.0-1
+    cachyos: 2.70.0-1.1
+    target: 2.70.0
+    verify: fastfetch --version
+    expect: 2.70.0
+  librewolf:
+    name: LibreWolf (Arch extra)
+    package: librewolf
+    source: cachyos
+    arch: 159.0.0_1-1
+    cachyos: 159.0.0_1-1.1
+    target: 159.0.0_1
+    verify: librewolf --version
+    expect: 159.0.0_1
+  swash:
+    name: Swash (CachyOS repo / AUR)
+    package: swash
+    source: cachyos
+    cachyos: 1.5.1-1
+    aur: 1.5.1-1
+    target: 1.5.1
+    verify: pacman -Q swash
+    expect: 1.5.1
+  cachyos-iso:
+    name: CachyOS desktop ISO
+    target: '260809'
+    source: upstream
+    verify: sha256sum -c cachyos-desktop-linux-260809.iso.sha256
+    expect: OK
+    support: Released 2026-08-09; verify the .sig with key F3B607488DB35A47
+  pytorch-rocm-index:
+    name: PyTorch ROCm wheel index
+    target: '7.2'
+    source: registry
+    support: https://download.pytorch.org/whl/rocm7.2 matches Arch ROCm 7.2.4; rocm6.4 is frozen
+  torch:
+    name: torch (rocm7.2 wheel)
+    target: 2.14.1
+    hold: rocm7.2 index tops out at 2.14.1; 2.15.0 is on the rocm7.14 index (Core SDK train)
+    source: registry
+    pypi: torch
+    verify: uv run python -c "import torch;print(torch.__version__)"
+    expect: 2.14.1+rocm7.2
+    support: torch 2.15.0 exists on PyPI but not on the rocm7.2 index
+  triton-rocm:
+    name: triton-rocm (rocm7.2 index)
+    target: 3.8.0
+    source: registry
+    support: Replaces pytorch-triton-rocm; must be a direct dependency with its own uv source
+  torchvision:
+    name: torchvision (rocm7.2 wheel)
+    target: 0.29.1
+    source: registry
+  hyprspace-pin:
+    name: Hyprspace commit for hyprpm
+    target: 0799be7464fac7ea959b7c6c7809dadd6c21c5aa
+    source: upstream
+    support: Works on Hyprland 0.56.2; no build on 0.57.0 (m_renderPass removed). Upstream KZDKM/Hyprspace main contains this commit
+  ruff-pre-commit:
+    name: ruff-pre-commit rev
+    target: v0.17.3
+    source: upstream
+    support: Hook id is ruff-check
+  pre-commit-hooks:
+    name: pre-commit-hooks rev
+    target: v6.0.0
+    source: upstream
+  gha-checkout:
+    name: actions/checkout
+    target: 7.0.1
+    source: upstream
+    support: SHA 3d3c42e5aac5ba805825da76410c181273ba90b1
+  gha-setup-python:
+    name: actions/setup-python
+    target: 7.1.0
+    source: upstream
+    support: SHA 6d4fd22b20465ccc0f7354476588e8df7c9ca0e0
+  gha-setup-node:
+    name: actions/setup-node
+    target: 7.1.0
+    source: upstream
+    support: SHA 949feb2413d6458794dcd2491c4babbbce0c15c1
+  gha-setup-uv:
+    name: astral-sh/setup-uv
+    target: 10.3.3
+    source: upstream
+    support: SHA 68559e99cc807c1eb7e9238fd43a15bba460eec2; no floating major tag
+  gha-upload-artifact:
+    name: actions/upload-artifact
+    target: 7.0.2
+    source: upstream
+    support: SHA cf430e030ddbb5b0abf93d22962f4752f3646cd9
+  fe-next:
+    name: Next.js
+    target: 16.4.3
+    source: registry
+    npm: next
+    support: Active LTS; 16.4.0 is vulnerable (fixed in 16.4.1); monthly security releases, next 2026-11-03
+  fe-react:
+    name: React
+    target: 19.3.1
+    source: registry
+    npm: react
+    support: 19.3.1 and 19.2.9 shipped 2026-10-14
+  fe-react-dom:
+    name: React DOM
+    target: 19.3.1
+    source: registry
+    npm: react-dom
+  fe-react-compiler:
+    name: React Compiler plugin
+    target: 1.0.0
+    source: registry
+    npm: babel-plugin-react-compiler
+  fe-typescript:
+    name: TypeScript for tooling
+    target: 6.0.3
+    hold: typescript-eslint rejects TypeScript 7 until 7.1 support lands (constraint ts-eslint)
+    source: registry
+    npm: typescript
+    support: npm latest is 7.0.2; typescript-eslint rejects TS 7, so keep 6.x for tooling
+  fe-typescript-native:
+    name: TypeScript 7 native type-check (npm alias of typescript)
+    target: 7.0.2
+    source: registry
+  fe-typescript-eslint:
+    name: typescript-eslint
+    target: 8.71.1
+    source: registry
+    npm: typescript-eslint
+    support: peers typescript <6.1.0
+    hold: template pin; registry has 8.72.1 and A.14 ran on it, see frontend-master 1.1.2
+  fe-tailwindcss:
+    name: Tailwind CSS
+    target: 4.3.3
+    source: registry
+    npm: tailwindcss
+  fe-shadcn:
+    name: shadcn CLI
+    target: 4.21.4
+    source: registry
+    npm: shadcn
+    hold: template pinned at 4.21.4; registry has 4.23.0 (2026-10-29), see frontend-master 1.1.2
+  fe-supabase-js:
+    name: supabase-js
+    target: 2.117.3
+    source: registry
+    npm: '@supabase/supabase-js'
+    hold: template pinned at 2.117.3; registry has 2.118.0 (2026-10-29), see frontend-master 1.1.2
+  fe-supabase-ssr:
+    name: '@supabase/ssr'
+    target: 0.12.7
+    source: registry
+    npm: '@supabase/ssr'
+  fe-prisma:
+    name: Prisma client and adapter-pg
+    target: 7.10.0
+    source: registry
+    npm: '@prisma/client'
+    support: 'Pin prisma@7: npm latest is 8.0.0-rc.28 whose CLI does not read schema.prisma'
+    hold: template pinned at 7.10.0; registry has 7.10.1 (2026-10-29), see frontend-master 1.1.2
+  fe-zod:
+    name: Zod
+    target: 4.6.7
+    source: registry
+    npm: zod
+  fe-tanstack-query:
+    name: TanStack Query
+    target: 5.104.2
+    source: registry
+    npm: '@tanstack/react-query'
+    hold: template pinned at 5.104.2; registry has 5.105.0 (2026-10-29), see frontend-master 1.1.2
+  fe-tanstack-table:
+    name: TanStack Table
+    target: 9.3.1
+    source: registry
+    npm: '@tanstack/react-table'
+  fe-tanstack-form:
+    name: TanStack Form
+    target: 1.33.5
+    source: registry
+    npm: '@tanstack/react-form'
+  fe-tanstack-virtual:
+    name: TanStack Virtual
+    target: 3.14.17
+    source: registry
+    npm: '@tanstack/react-virtual'
+    hold: template pinned at 3.14.17; registry has 3.14.23 (2026-10-29), see frontend-master 1.1.2
+  fe-react-hook-form:
+    name: react-hook-form
+    target: 7.90.0
+    source: registry
+    npm: react-hook-form
+    hold: template pinned at 7.90.0; registry has 7.91.0 (2026-10-29), see frontend-master 1.1.2
+  fe-hookform-resolvers:
+    name: '@hookform/resolvers'
+    target: 5.9.1
+    hold: 6.x is a new major, not evaluated
+    source: registry
+    npm: '@hookform/resolvers'
+    support: 6.x is a new major and was not evaluated
+  fe-vitest:
+    name: Vitest
+    target: 5.0.4
+    source: registry
+    npm: vitest
+    hold: template pinned at 5.0.4; registry has 5.0.5 (2026-10-29), see frontend-master 1.1.2
+  fe-testing-library-react:
+    name: Testing Library React
+    target: 16.3.3
+    source: registry
+    npm: '@testing-library/react'
+  fe-user-event:
+    name: user-event
+    target: 14.6.7
+    source: registry
+    npm: '@testing-library/user-event'
+    hold: template pinned at 14.6.7; registry has 14.6.8 (2026-10-29), see frontend-master 1.1.2
+  fe-playwright:
+    name: Playwright
+    target: 1.64.0
+    source: registry
+    npm: '@playwright/test'
+    hold: template pinned at 1.64.0; registry has 1.64.1 (2026-10-29), see frontend-master 1.1.2
+  fe-next-playwright:
+    name: '@next/playwright'
+    target: 16.4.3
+    source: registry
+    npm: '@next/playwright'
+  fe-msw:
+    name: MSW
+    target: 3.0.3
+    source: registry
+    npm: msw
+  fe-axe-playwright:
+    name: axe-core Playwright
+    target: 4.13.0
+    source: registry
+    npm: '@axe-core/playwright'
+    hold: template pinned at 4.13.0; registry has 4.14.0 (2026-10-29), see frontend-master 1.1.2
+  fe-eslint:
+    name: ESLint
+    target: 10.12.0
+    source: registry
+    npm: eslint
+    hold: template pinned at 10.12.0; registry has 10.13.0 (2026-10-29), see frontend-master 1.1.2
+  fe-eslint-config-next:
+    name: eslint-config-next
+    target: 16.4.3
+    source: registry
+    npm: eslint-config-next
+  fe-eslint-react-hooks:
+    name: eslint-plugin-react-hooks
+    target: 7.1.1
+    source: registry
+    npm: eslint-plugin-react-hooks
+  fe-eslint-jsx-a11y:
+    name: eslint-plugin-jsx-a11y
+    target: 6.10.2
+    source: registry
+    npm: eslint-plugin-jsx-a11y
+    support: No ESLint 10 peer declared; lint still passes
+  fe-prettier:
+    name: Prettier
+    target: 3.9.10
+    source: registry
+    npm: prettier
+  fe-prettier-tailwind:
+    name: prettier-plugin-tailwindcss
+    target: 0.8.1
+    source: registry
+    npm: prettier-plugin-tailwindcss
+  fe-next-themes:
+    name: next-themes
+    target: 0.4.6
+    source: registry
+    npm: next-themes
+  fe-lucide:
+    name: lucide-react
+    target: 1.55.0
+    source: registry
+    npm: lucide-react
+    hold: template pinned at 1.55.0; registry has 1.63.0 (2026-10-29), see frontend-master 1.1.2
+  fe-tw-animate:
+    name: tw-animate-css
+    target: 1.4.0
+    source: registry
+    npm: tw-animate-css
+  fe-sonner:
+    name: sonner
+    target: 2.0.8
+    source: registry
+    npm: sonner
+  fe-shiki:
+    name: shiki
+    target: 4.5.0
+    source: registry
+    npm: shiki
+  fe-motion:
+    name: motion
+    target: 14.1.0
+    source: registry
+    npm: motion
+    hold: template pinned at 14.1.0; registry has 14.7.1 (2026-10-29), see frontend-master 1.1.2
+  fe-zustand:
+    name: zustand
+    target: 5.0.15
+    source: registry
+    npm: zustand
+    hold: template pinned at 5.0.15; registry has 5.0.16 (2026-10-29), see frontend-master 1.1.2
+  fe-nuqs:
+    name: nuqs
+    target: 2.10.2
+    source: registry
+    npm: nuqs
+  fe-sentry:
+    name: '@sentry/nextjs'
+    target: 11.7.0
+    source: registry
+    npm: '@sentry/nextjs'
+    hold: template pinned at 11.7.0; registry has 11.10.0 (2026-10-29), see frontend-master 1.1.2
+  fe-pnpm:
+    name: pnpm (project packageManager pin)
+    target: 12.11.2
+    source: registry
+    npm: pnpm
+    support: Host pnpm is the distro build; projects pin their own
+    hold: template packageManager pin; registry has 12.16.1 and the templates ran on it, see frontend-master 1.1.2
+  fe-geist:
+    name: geist
+    target: 1.7.2
+    source: registry
+    npm: geist
+    hold: template pinned at 1.7.2; registry has 1.8.2 (2026-10-29), see frontend-master 1.1.2
+  fe-commitlint:
+    name: commitlint
+    target: 21.2.3
+    source: registry
+    npm: '@commitlint/cli'
+    hold: template pinned at 21.2.3; registry has 21.2.4 (2026-10-29), see frontend-master 1.1.2
+  fe-dependency-cruiser:
+    name: dependency-cruiser
+    target: 18.6.0
+    source: registry
+    npm: dependency-cruiser
+    hold: template pinned at 18.6.0; registry has 18.7.0 (2026-10-29), see frontend-master 1.1.2
+  fe-jsdom:
+    name: jsdom
+    target: 30.1.2
+    source: registry
+    npm: jsdom
+    hold: template pinned at 30.1.2; registry has 30.1.3 (2026-10-29), see frontend-master 1.1.2
+  fe-knip:
+    name: knip
+    target: 6.41.0
+    source: registry
+    npm: knip
+    hold: template pinned at 6.41.0; registry has 6.43.0 (2026-10-29), see frontend-master 1.1.2
+  fe-lefthook:
+    name: lefthook
+    target: 2.2.1
+    hold: 2.2.2 is blocked by the template trustPolicy
+    source: registry
+    npm: lefthook
+    support: 2.2.2 exists but is blocked by the template trustPolicy; keep 2.2.1
+  lact:
+    name: LACT
+    package: lact
+    source: cachyos
+    arch: 0.10.1-1
+    cachyos: 0.10.1-1.1
+    target: 0.10.1
+    verify: lact --version
+    expect: 0.10.1
+    support: Enable lactd.service for the GUI to apply settings
+  mongosh:
+    name: mongosh
+    package: mongosh-bin
+    source: aur
+    aur: 2.14.0-1
+    target: 2.14.0
+    verify: mongosh --version
+    expect: 2.14.0
+  dbeaver:
+    name: DBeaver
+    package: dbeaver
+    source: cachyos
+    arch: 26.2.2-1
+    cachyos: 26.2.2-1.1
+    target: 26.2.2
+    verify: dbeaver --version
+    expect: 26.2.2
+  cursor:
+    name: Cursor (AUR cursor-bin)
+    package: cursor-bin
+    source: aur
+    cachyos: 3.27.14-1
+    aur: 3.28.5-1
+    target: 3.28.5
+    verify: cursor --version
+    expect: 3.28.5
+  firefox:
+    name: Firefox
+    package: firefox
+    source: arch
+    arch: 159.0-1
+    cachyos: 159.0-1.1
+    target: '159.0'
+    verify: firefox --version
+    expect: Mozilla Firefox 159.0
+  obsidian:
+    name: Obsidian
+    package: obsidian
+    source: arch
+    arch: 1.14.5-1
+    target: 1.14.5
+    verify: obsidian --version
+    expect: 1.14.5
+  brave:
+    name: Brave
+    package: brave-bin
+    source: aur
+    cachyos: 1:1.98.60-1
+    aur: 1:1.98.62-1
+    target: 1.98.62
+    verify: brave --version
+    expect: 1.98.62
+constraints:
+- id: hyprland-hold
+  text: Hyprland stays on the CachyOS-delivered 0.56.2 until a Lua config is validated; 0.57.0 ignores hyprland.conf
+  requires:
+  - key: hyprland
+    op: <=
+    value: 0.56.2
+- id: rocm-pytorch-index
+  text: PyTorch wheel index must match the ROCm legacy train
+  requires:
+  - key: rocm
+    op: ==
+    value: '7.2'
+    width: 2
+  - key: pytorch-rocm-index
+    op: ==
+    value: '7.2'
+- id: pgvector-pg18
+  text: pgvector 0.8 line supports PostgreSQL 18
+  requires:
+  - key: pgvector
+    op: '>='
+    value: '0.8'
+    width: 2
+  - key: postgresql
+    op: '>='
+    value: '18'
+    width: 1
+- id: ts-eslint
+  text: typescript-eslint 8.x requires TypeScript below 6.1
+  requires:
+  - key: fe-typescript
+    op: <
+    value: '6.1'
+    width: 2
+- id: next-patched
+  text: Next.js below 16.4.1 is vulnerable to a Critical RCE
+  requires:
+  - key: fe-next
+    op: '>='
+    value: 16.4.1
+- id: node-for-prisma
+  text: Prisma 7 needs Node 20.19 or newer
+  requires:
+  - key: nodejs
+    op: '>='
+    value: '20.19'
+- id: python-uv-managed
+  text: Open WebUI via pip needs Python below 3.13; use uvx --python 3.12
+  requires:
+  - key: python
+    op: '>='
+    value: '3.12'
+    width: 2
