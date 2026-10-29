@@ -3,10 +3,24 @@
 # Settings overlay writes back to the live copy. Everything not set here uses
 # the defaults in /usr/share/ai-usagebar/config.example.toml.
 
-[openai]
-# Codex usage is not shown on the bar.
-enabled = false
+[ui]
+# Panel and overview order: Claude, then Antigravity (Gemini), then Codex.
+# The bar shows only Claude and Antigravity (two capsules in Noctalia).
+overview_vendors = ["anthropic", "antigravity", "openai"]
+
+[anthropic]
+enabled = true
 
 [antigravity]
 # Google Antigravity / `agy`: quota from the local product or `agy -p "/quota"`.
 enabled = true
+
+[openai]
+# Codex: shown in the panel, not on the bar.
+enabled = true
+
+[zai]
+enabled = false
+
+[openrouter]
+enabled = false

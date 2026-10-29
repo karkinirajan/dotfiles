@@ -22,6 +22,7 @@ order = [ "kneeraazon", "default" ]
     concave_edge_corners = false
     contact_shadow = true
     end = [
+        "ai_usage_claude",
         "ai_usage_agy",
         "audio_visualizer",
         "clock",
@@ -398,9 +399,27 @@ title_scroll = "on_hover"
 
 [widget.ai_usage_agy]
 capsule = true
+color_by_usage = true
+extras = "countdown"
+glyph_position = "before"
+show_glyph = true
 show_name = true
+show_value = true
 type = "felipeartur/ai-usagebar:bar"
+visualization = "gauge"
 vendor = "antigravity"
+
+[widget.ai_usage_claude]
+capsule = true
+color_by_usage = true
+extras = "countdown"
+glyph_position = "before"
+show_glyph = true
+show_name = true
+show_value = true
+type = "felipeartur/ai-usagebar:bar"
+visualization = "gauge"
+vendor = "anthropic"
 
 [widget.bar_6]
 type = "davinci13/containers:bar"
