@@ -30,3 +30,6 @@ references/
 
 # Claude Desktop's import-memory sync target — regenerated content, not authored
 05-ai/claude-code/skills/synced/
+
+__pycache__/
+*.pyc

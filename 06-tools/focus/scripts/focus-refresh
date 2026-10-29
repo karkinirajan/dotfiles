@@ -36,7 +36,12 @@ trap 'rm -f "$DNSMASQ_TMP"' EXIT
 sudo install -d -m 755 /etc/dnsmasq.d 2>/dev/null || true
 
 # Ensure inet filter table and sets exist before flushing/populating
-if ! sudo nft list set inet filter blocked_ips &>/dev/null; then
+# (all four sets: hosts bootstrapped before the IPv6 sets existed lack them)
+_missing_set=0
+for _set in blocked_ips allowed_ips blocked_ips6 allowed_ips6; do
+  sudo nft list set inet filter "$_set" &>/dev/null || _missing_set=1
+done
+if (( _missing_set )); then
   [[ -f "$NFT_BOOTSTRAP" ]] && sudo nft -f "$NFT_BOOTSTRAP" 2>/dev/null || true
 fi
 

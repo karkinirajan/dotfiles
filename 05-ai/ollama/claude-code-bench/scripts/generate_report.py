@@ -126,7 +126,6 @@ def main() -> None:
         -r["decode_tok_s"],
     ))
 
-    fast_candidates = [r for r in passing if bench_flat.get(r["model"], {}).get("short_runs", [{}])]
     fast_pick = None
     for r in passing:
         procs = [
