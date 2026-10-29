@@ -159,5 +159,6 @@
       "**Org-specific CLIs**: None configured",
       "routine under local project workspaces: uv, pytest, ruff, pnpm, npx, npm, cargo, git (local read/commit operations), and package.json/pyproject.toml script runs (build, dev, lint, typecheck, test) are routine project tooling"
     ]
-  }
+  },
+  "model": "opus"
 }
