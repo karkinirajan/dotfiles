@@ -26,7 +26,9 @@
 # hyprwayland-scanner arrive through hyprland, hyprlock and hyprpm.
 #   ddcutil qt6ct       settings.toml [brightness] uses ddcutil; uwsm/env sets QT_QPA_PLATFORMTHEME=qt6ct
 #   xdg-desktop-portal-gtk   hyprland-portals.conf prefers hyprland;gtk (file chooser)
-#   bibata-cursor-theme (AUR) the cursor theme named in uwsm/env and environment.conf
+#   bibata-cursor-theme-bin (AUR) the Bibata-Modern-Ice cursor named in uwsm/env and
+#                       environment.conf; the bare name lets paru pick the Material provider
+#   gnome-keyring       Secret Service for Proton VPN and Electron apps (chapter 19.6)
 #   swash, onlyoffice-bin    CachyOS repo or AUR only; they are not in Arch extra
 #   mailspring              CachyOS repo has an older build than the AUR; check the version you want
 #
@@ -36,7 +38,7 @@
 # group and start a fresh login session before enabling its user service.
 # ─────────────────────────────────────────────────────────────────────────────
 ai-usagebar-bin  (AUR)
-bibata-cursor-theme  (AUR)
+bibata-cursor-theme-bin  (AUR)
 alacritty
 ark
 bitwarden
@@ -52,6 +54,7 @@ discord
 dolphin
 firefox
 gimp
+gnome-keyring
 gparted
 greetd
 grim

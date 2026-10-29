@@ -154,7 +154,7 @@ cd ~/dotfiles
 zsh -n ~/.zshrc
 ```
 
-Expected: the dry run lists only changes; `status` ends with every entry `ok` (it exits 0 even with drift or missing entries, so read its output, not its exit code) (a `seed` entry may report `DRIFT`, that is the live file moving ahead and is not an error; run `./install.sh pull` only if the owner wants it captured). A real file in the way is moved to `<path>.bak-<timestamp>`. `zsh -n` prints nothing.
+Expected: the dry run lists only changes; `status` exits 0 with every `link` entry `ok`; it exits 1 on link drift, a missing entry or an error. A `seed` entry may report `DRIFT` (counted as `seed-drift`): that is the live file moving ahead, not an error; run `./install.sh pull` only if the owner wants it captured. A real file in the way is moved to `<path>.bak-<timestamp>`. `zsh -n` prints nothing.
 
 ### S07. Reload the compositor config
 
