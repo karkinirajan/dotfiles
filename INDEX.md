@@ -46,5 +46,6 @@ Every chapter in reading order. Regenerate with `python3 tools/gen_index.py`.
 | [Zsh](03-terminal/zsh/README.md) | `03-terminal/zsh/README.md` | 2026-10-29 | current |
 | [Zed](04-editors/zed/README.md) | `04-editors/zed/README.md` | 2026-10-29 | current |
 | [Ollama on the RX 6700 XT](05-ai/ollama/README.md) | `05-ai/ollama/README.md` | 2026-10-29 | current |
+| [Installed apps and utilities](apps-and-utils.md) | `apps-and-utils.md` | 2026-10-29 | current |
 | [Host system summary](system-summary.md) | `system-summary.md` | 2026-10-29 | reference |
 | [Repo tooling](tools/README.md) | `tools/README.md` | 2026-10-29 | current |
