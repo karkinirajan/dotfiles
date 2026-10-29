@@ -11,10 +11,10 @@ order = [ "kneeraazon", "default" ]
     enabled = false
 
     [bar.kneeraazon]
-    border = "#e95678aa"
+    border = "#bd93f9aa"
     border_width = 1.5
     capsule = true
-    capsule_border = "#e9567899"
+    capsule_border = "#bd93f999"
     capsule_fill = "on_primary"
     capsule_radius = 2
     capsule_thickness = 0.71999998763203621
@@ -22,7 +22,7 @@ order = [ "kneeraazon", "default" ]
     concave_edge_corners = false
     contact_shadow = true
     end = [
-        "ai_usage_codex",
+        "ai_usage_agy",
         "audio_visualizer",
         "clock",
         "speedtest-widget",
@@ -260,12 +260,11 @@ settings_window_translucent = true
     mru = true
 
 [theme]
-builtin = "Ayu"
-community_palette = "Horizon"
+builtin = "Dracula"
+community_palette = "Aura"
 custom_palette = "CatppuccinMocha"
 mode = "dark"
-pure_black_dark = true
-source = "community"
+source = "builtin"
 sync_color_scheme = false
 wallpaper_scheme = "m3-content"
 
@@ -397,11 +396,11 @@ color = "#FFFFFF"
 font_weight = 400
 title_scroll = "on_hover"
 
-[widget.ai_usage_codex]
+[widget.ai_usage_agy]
 capsule = true
 show_name = true
 type = "felipeartur/ai-usagebar:bar"
-vendor = "openai"
+vendor = "antigravity"
 
 [widget.bar_6]
 type = "davinci13/containers:bar"

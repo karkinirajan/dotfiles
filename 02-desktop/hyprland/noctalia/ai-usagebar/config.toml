@@ -1,0 +1,12 @@
+# ai-usagebar (backend of the Noctalia "felipeartur/ai-usagebar" bar widget).
+# Seeded to ~/.config/ai-usagebar/config.toml by manifest.conf; the TUI's
+# Settings overlay writes back to the live copy. Everything not set here uses
+# the defaults in /usr/share/ai-usagebar/config.example.toml.
+
+[openai]
+# Codex usage is not shown on the bar.
+enabled = false
+
+[antigravity]
+# Google Antigravity / `agy`: quota from the local product or `agy -p "/quota"`.
+enabled = true
