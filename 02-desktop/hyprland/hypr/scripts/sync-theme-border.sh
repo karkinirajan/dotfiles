@@ -110,6 +110,14 @@ if not primary:
     print(f"Could not resolve palette primary color for source={source}; leaving colors.conf untouched.", file=sys.stderr)
     sys.exit(0)
 
+# The colours are spliced into colors.conf, colors.lua (which Hyprland runs as
+# code), variables.conf and settings.toml: accept only plain hex.
+HEX = re.compile(r'#?[0-9A-Fa-f]{6}([0-9A-Fa-f]{2})?')
+for label, value in (("primary", primary), ("secondary", secondary)):
+    if value and not HEX.fullmatch(value):
+        print(f"Refusing non-hex {label} color {value!r}; leaving files untouched.", file=sys.stderr)
+        sys.exit(1)
+
 colors_conf = pathlib.Path(colors_conf_path)
 conf_text = colors_conf.read_text()
 new_mauve = f"$mauve     = rgba({primary.lstrip('#')}ff)"
