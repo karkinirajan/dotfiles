@@ -68,7 +68,7 @@ Versions come from [`versions.yaml`](../../versions.yaml); the plain numbers bel
 | Logseq | Keep `logseq-desktop-bin`; do not install `logseq-og-bin` | Both own the same app name; the owner picks |
 | Hyprland Lua port | Not applied | Needs a live compositor; documented only |
 | Zed local model | Not changed | `deepseek-v4-flash:cloud` is retired; choosing a replacement is the owner's call |
-| Starship glyphs | Not changed | Cause unproven; restore the Nerd Font symbols by hand |
+| Starship glyphs | Restored after the run | From `starship preset nerd-font-symbols` and Starship defaults |
 | Limine, Secure Boot | Not touched | Out of scope for a convergence run |
 
 ## 2. Steps
@@ -248,4 +248,4 @@ Expected: `active` for each service and the user Docker unit; `rootless` for the
 
 ## 5. Open items for the owner
 
-These stay open after the run and are listed with the full set in [`REPORT.md`](REPORT.md): the Hyprland Lua config port; the Zed default-model replacement; the Starship Nerd Font glyphs; the `claude-brain` hooks, which cannot be verified from public sources; and the claims tagged `<!-- UNVERIFIED -->` in the chapters.
+These stay open after the run and are listed with the full set in [`REPORT.md`](REPORT.md): the Hyprland Lua config port; the Zed default-model replacement; the `claude-brain` hooks, which cannot be verified from public sources; and the claims tagged `<!-- UNVERIFIED -->` in the chapters.

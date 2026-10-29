@@ -74,7 +74,7 @@ The GitHub API and `github.com` advisory and release pages, the Arch wiki and `g
 
 ## Unverified items
 
-51 inline tags in the docs and 66 ledger rows with status `unverified`. The inline tags:
+50 inline tags in the docs and 66 ledger rows with status `unverified`. The inline tags:
 
 | Where | What is unverified |
 |---|---|
@@ -119,7 +119,6 @@ The GitHub API and `github.com` advisory and release pages, the Arch wiki and `g
 | `05-ai/ollama/README.md:111` | native gfx1031 on Ollama 0.40.11 and kernel 7.3 |
 | `fresh-setup.md:118` | exact installer menu label; the wording comes from the release blog |
 | `system-summary.md:53` | whether `BOOT_ORDER` acts as a filter (see chapter 20.1) |
-| `03-terminal/starship/README.md:40` | cause of the missing glyphs |
 | `04-editors/zed/README.md:30` | the replacement model tag |
 | `02-desktop/hyprland/lua-migration.md:36` | converter output quality |
 | `02-desktop/hyprland/lua-migration.md:69` | whether hyprctl eval can address a named rule handle |
@@ -149,7 +148,7 @@ Left open (low or owner-scope), none blocks the handoff:
 
 ## Owner decisions still open
 
-The Hyprland Lua config port; the Zed default-model replacement (`deepseek-v4-flash:cloud` was retired 2026-09-25); restoring the Starship Nerd Font glyphs (cause unproven); the `claude-brain` hooks (private tool, cannot be verified from public sources); whether to switch MariaDB to the LTS series by dump and re-initialize; the Logseq and Mullvad package variants; whether `paru --skipreview` is acceptable for the unattended run; lifting the `CLAUDE.md` rules against `sudo` and `git fetch` for that session.
+The Hyprland Lua config port; the Zed default-model replacement (`deepseek-v4-flash:cloud` was retired 2026-09-25); the `claude-brain` hooks (private tool, cannot be verified from public sources); whether to switch MariaDB to the LTS series by dump and re-initialize; the Logseq and Mullvad package variants; whether `paru --skipreview` is acceptable for the unattended run; lifting the `CLAUDE.md` rules against `sudo` and `git fetch` for that session.
 
 ## Risks
 

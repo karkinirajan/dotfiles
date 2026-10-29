@@ -52,9 +52,9 @@ style    = "bold fg:#fb4934"
 format   = "[$symbol]($style) "
 
 [os.symbols]
-Arch    = " "
-CachyOS = " "
-Unknown = " "
+Arch    = " "
+CachyOS = " "
+Unknown = " "
 
 # ── User ──────────────────────────────────────────────────────────────────────
 [username]
@@ -78,7 +78,7 @@ format            = "[$path]($style)[$read_only](fg:#fb4934) "
 
 # ── Git ───────────────────────────────────────────────────────────────────────
 [git_branch]
-symbol = " "
+symbol = " "
 style  = "bold fg:#d3869b"
 format = "[$symbol$branch]($style) "
 
@@ -97,28 +97,28 @@ format    = "([$all_status$ahead_behind]($style) )"
 
 # ── Languages ─────────────────────────────────────────────────────────────────
 [python]
-symbol = " "
+symbol = " "
 style  = "fg:#fabd2f"
 format = "[$symbol($version )($virtualenv )]($style)"
 
 [nodejs]
-symbol = " "
+symbol = " "
 style  = "fg:#b8bb26"
 format = "[$symbol($version )]($style)"
 
 [rust]
-symbol = " "
+symbol = "󱘗 "
 style  = "fg:#fe8019"
 format = "[$symbol($version )]($style)"
 
 [golang]
-symbol = " "
+symbol = " "
 style  = "fg:#83a598"
 format = "[$symbol($version )]($style)"
 
 # ── DevOps ────────────────────────────────────────────────────────────────────
 [docker_context]
-symbol = " "
+symbol = " "
 style  = "fg:#83a598"
 format = "[$symbol$context]($style) "
 
@@ -168,12 +168,12 @@ format           = "([+$added]($added_style) )([-$deleted]($deleted_style) )"
 
 # ── Extra languages ───────────────────────────────────────────────────────────
 [java]
-symbol   = " "
+symbol   = " "
 style    = "fg:#fb4934"
 format   = "[$symbol($version )]($style)"
 
 [bun]
-symbol   = " "
+symbol   = " "
 style    = "fg:#fabd2f"
 format   = "[$symbol($version )]($style)"
 
@@ -183,14 +183,14 @@ style    = "fg:#83a598"
 format   = "[$symbol($version )]($style)"
 
 [conda]
-symbol   = " "
+symbol   = " "
 style    = "fg:#b8bb26"
 ignore_base = true
 format   = "[$symbol$environment ]($style)"
 
 # ── Cloud / IaC ───────────────────────────────────────────────────────────────
 [aws]
-symbol   = " "
+symbol   = " "
 style    = "fg:#fe8019"
 format   = '[$symbol($profile )(\($region\) )]($style)'
 disabled = false
@@ -203,7 +203,7 @@ disabled = false
 
 # ── Shell state ───────────────────────────────────────────────────────────────
 [jobs]
-symbol            = " "
+symbol            = "✦ "
 style             = "fg:#83a598"
 number_threshold  = 1
 format            = "[$symbol$number]($style) "
@@ -211,9 +211,9 @@ format            = "[$symbol$number]($style) "
 [status]
 disabled          = false
 symbol            = "✖ "
-not_executable_symbol = " "
+not_executable_symbol = "🚫 "
 not_found_symbol  = "󰍉 "
-sigint_symbol     = " "
+sigint_symbol     = "🧱 "
 signal_symbol     = "⚡"
 style             = "fg:#fb4934"
 map_symbol        = true
