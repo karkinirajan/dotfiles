@@ -23,7 +23,6 @@ claude-code/
 │   ├── qa-engineer.md
 │   └── release-engineer.md
 └── skills/            → ~/.claude/skills/       one folder per skill, each with SKILL.md
-    ├── claude-brain/          second-brain vault integration
     ├── discover/              map an unfamiliar project before changing it
     ├── shipcheck/             run real build/lint/test gates before "done"
     ├── visual-qa/             check rendered UI, not just the source
@@ -112,10 +111,6 @@ harness:
 
 Check the file with `claude plugin validate agents` and
 `claude plugin validate skills` after editing either.
-
-## The claude-brain hooks
-
-`settings.json` runs `claude-brain` hooks (session start, prompt, session end, pre-tool) and `CLAUDE.md` documents its CLI and MCP tools. The only public package of that name is the npm `claude-brain` 0.31.1 (a different project), whose source has none of these subcommands, so the owner's tool is private and none of this could be verified from public sources. Every hook ends in `|| true`, so the settings stay inert on a machine without the tool. Checked on this machine on 2026-10-29: `claude-brain` is not installed (not on `PATH`, not a pacman, uv, npm or cargo package, no MCP server), so all four hooks currently do nothing and the CLAUDE.md block describes tools that are absent. Install the owner's tool, or remove the hooks and the `claude-brain:begin` block.
 
 ## Maintaining it
 
