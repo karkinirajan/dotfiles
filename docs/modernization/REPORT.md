@@ -142,9 +142,9 @@ Applied: MariaDB and Mullvad conflict guards in the runbook; the chained loopbac
 
 Left open (low or owner-scope), none blocks the handoff:
 
-- `install.sh status` exits 0 even with drift or missing entries; `pull` removes the repo copy before copying; running it through `sudo` links into root's home.
+- Fixed after the run: `install.sh status` now exits 1 on link drift, missing entries or errors (seed drift stays 0); `pull` copies before replacing the repo file; the script refuses to run as root.
 - `focus off` writes plain-DNS `/etc/resolv.conf`, bypassing the encrypted DNS of chapter 19 even with focus off; `focus-page` dies if nginx holds port 80; the focus scripts hardcode `/home/kneeraazon`; `gnome-keyring` (needed by Proton VPN) is in no package list.
-- The chapter 06 and chapter 08 Elasticsearch containers both publish port 9200; `redis/redisinsight:latest` is unpinned.
+- Fixed after the run: the chapter 08 compose Elasticsearch publishes 9201, beside the chapter 06 node on 9200. Still open: `redis/redisinsight:latest` is unpinned.
 - `fresh-setup.md` stops the running display manager from inside its own session.
 
 ## Owner decisions still open

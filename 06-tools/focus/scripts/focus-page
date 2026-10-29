@@ -84,7 +84,9 @@ if __name__ == '__main__':
     try:
         servers = bind_all(preferred_port)
         bound_port = preferred_port
-    except PermissionError:
+    except OSError as e:
+        # PermissionError without CAP_NET_BIND_SERVICE, EADDRINUSE when nginx holds :80
+        print(f'[focus-page] port {preferred_port} unavailable ({e}); using 8080', flush=True)
         servers = bind_all(8080)
         bound_port = 8080
     for extra in servers[1:]:

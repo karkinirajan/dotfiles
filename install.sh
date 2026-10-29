@@ -9,7 +9,8 @@
 #  Usage:
 #    ./install.sh              link everything in manifest.conf
 #    ./install.sh --dry-run    show what would happen, change nothing
-#    ./install.sh status       report ok / drift / missing per entry
+#    ./install.sh status       report ok / drift / missing per entry; exits 1 on
+#                              link drift, missing or error (seed drift is normal)
 #    ./install.sh pull         copy seeded files back live -> repo (see below)
 #    ./install.sh restore      push seeded files repo -> live, overwriting
 #    ./install.sh --force      replace a live symlink pointing somewhere else
@@ -60,8 +61,13 @@ done
 
 [ -f "$MANIFEST" ] || { echo "missing manifest: $MANIFEST" >&2; exit 1; }
 
+# Every target is under $HOME: run through sudo it would link into root's home.
+if [ "$(id -u)" -eq 0 ]; then
+  echo "install.sh must run as your user, not root (no sudo)" >&2; exit 1
+fi
+
 # Counters
-n_ok=0; n_linked=0; n_seeded=0; n_backed=0; n_skip=0; n_drift=0; n_missing=0; n_err=0; n_pulled=0; n_restored=0
+n_ok=0; n_linked=0; n_seeded=0; n_backed=0; n_skip=0; n_drift=0; n_missing=0; n_err=0; n_pulled=0; n_restored=0; n_seed_drift=0
 
 c_ok=$'\033[32m'; c_warn=$'\033[33m'; c_err=$'\033[31m'; c_dim=$'\033[2m'; c_off=$'\033[0m'
 [ -t 1 ] || { c_ok=""; c_warn=""; c_err=""; c_dim=""; c_off=""; }
@@ -149,7 +155,10 @@ do_seed() {
       if [ "$DRY_RUN" -eq 1 ]; then
         say PLAN "$c_dim" "$dst" "would pull live -> ${src#$REPO_DIR/}"; n_pulled=$((n_pulled+1)); return
       fi
-      rm -rf "$src"; cp -a "$dst" "$src"
+      # Copy beside the repo file first, so a failed copy never loses it.
+      rm -rf "$src.pull-$TS"
+      cp -a "$dst" "$src.pull-$TS" || { say ERROR "$c_err" "$dst" "copy failed, repo untouched"; rm -rf "$src.pull-$TS"; n_err=$((n_err+1)); return; }
+      rm -rf "$src"; mv "$src.pull-$TS" "$src"
       say PULL "$c_ok" "$dst" "-> ${src#$REPO_DIR/} (review with git diff)"
       n_pulled=$((n_pulled+1)); return
     fi
@@ -167,7 +176,7 @@ do_seed() {
 
     # install/status: never clobber the live file the program owns.
     say DRIFT "$c_warn" "$dst" "live differs from repo copy (./install.sh pull)"
-    n_drift=$((n_drift+1)); return
+    n_seed_drift=$((n_seed_drift+1)); return
   fi
 
   if [ "$MODE" = pull ]; then
@@ -218,9 +227,16 @@ elif [ "$MODE" = restore ]; then
     "$n_restored" "$n_ok" "$n_linked" "$n_backed" "$n_err"
   [ "$n_restored" -gt 0 ] && echo "restart the owning program so it reloads from disk"
 elif [ "$MODE" = status ]; then
-  printf 'ok %d   drift %d   missing %d   error %d\n' "$n_ok" "$n_drift" "$n_missing" "$n_err"
-  [ $((n_drift + n_missing + n_err)) -eq 0 ] && echo "everything is linked and in sync." \
-                                             || echo "run ./install.sh to reconcile."
+  printf 'ok %d   drift %d   seed-drift %d   missing %d   error %d\n' \
+    "$n_ok" "$n_drift" "$n_seed_drift" "$n_missing" "$n_err"
+  if [ $((n_drift + n_missing + n_err)) -eq 0 ]; then
+    [ "$n_seed_drift" -eq 0 ] && echo "everything is linked and in sync." \
+                              || echo "links in sync; seeded files moved ahead (./install.sh pull to capture)."
+  else
+    echo "run ./install.sh to reconcile."
+  fi
+  # Seed drift is the owning program writing its own file, not a fault.
+  exit $(( n_drift + n_missing + n_err > 0 ? 1 : 0 ))
 else
   printf 'linked %d   seeded %d   already-ok %d   backed-up %d   skipped %d   error %d\n' \
     "$n_linked" "$n_seeded" "$n_ok" "$n_backed" "$n_skip" "$n_err"

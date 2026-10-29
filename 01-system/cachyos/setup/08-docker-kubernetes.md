@@ -77,7 +77,7 @@ services:
       discovery.type: single-node
       xpack.security.enabled: "false"       # dev only; the image enables security by default
       ES_JAVA_OPTS: "-Xms512m -Xmx512m"
-    ports: ["127.0.0.1:9200:9200"]
+    ports: ["127.0.0.1:9201:9200"]   # 9200 is the chapter 06 standalone node
 
   web:
     build: .
