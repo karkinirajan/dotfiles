@@ -15,7 +15,7 @@ deterministic, and matches the vendor-tested binary.
 Neither choice is current: the vendor bundle carries an old Electron (an AUR
 comment reports `Electron/18.3.15` for 5.8.0.33; the runtime in 5.8.0.41 was
 not read) and the AUR build runs an end-of-life Electron 36. This recipe also
-leaves Upwork's self-update enabled. <!-- UNVERIFIED: bundled Electron version of 5.8.0.41; check on the host with `ar x upwork_5.8.0.41_amd64.deb; bsdtar -xf data.tar.xz; strings opt/Upwork/upwork | grep -m1 Electron/` -->
+leaves Upwork's self-update enabled. 5.8.0.41 bundles Electron 36.3.2 (`strings /opt/Upwork/upwork | grep -m1 -o 'Electron/[0-9.]*'` on the installed package, 2026-10-29).
 
 ## Build and install
 

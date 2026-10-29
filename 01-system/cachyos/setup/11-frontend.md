@@ -32,7 +32,7 @@ nvm alias default 'lts/*'               # default to the newest LTS
 node -v && npm -v
 ```
 
-Label: `machine-only` (nvm resolution inferred from the nvm README and nodejs.org's release index; nvm itself was not run). <!-- UNVERIFIED: the contents of Arch's init-nvm.sh -->
+Label: `machine-only` (nvm resolution inferred from the nvm README and nodejs.org's release index; nvm itself was not run). Arch's `/usr/share/nvm/init-nvm.sh` (read on the host) sets `NVM_DIR` to `$XDG_CONFIG_HOME/nvm` or `~/.nvm`, links `nvm.sh` and `nvm-exec` into it, then sources `nvm.sh` and the bash completion.
 
 ## 11.2 Package managers
 

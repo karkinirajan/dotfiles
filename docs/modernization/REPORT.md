@@ -74,56 +74,49 @@ The GitHub API and `github.com` advisory and release pages, the Arch wiki and `g
 
 ## Unverified items
 
-46 inline tags in the docs and 66 ledger rows with status `unverified`. The inline tags:
+39 inline tags in the docs and 66 ledger rows with status `unverified`. The inline tags:
 
 | Where | What is unverified |
 |---|---|
-| `01-system/topgrade/README.md:15` | the Antigravity probe and `agy update` behaviour are recorded from this host only, not reproducible without the packages |
-| `01-system/cachyos/setup/20-maintenance-monitoring.md:48` | whether BOOT_ORDER hides unlisted entries |
-| `01-system/cachyos/setup/20-maintenance-monitoring.md:52` | Limine 12.9.5 changed `default_entry:` numbering (a number now starts at 1) and 12.9.6 requires global options |
-| `01-system/cachyos/setup/20-maintenance-monitoring.md:80` | the Arch unit reads /etc/conf.d/prometheus (Arch package files were only readable through old snippets) |
-| `01-system/cachyos/setup/12-editors-ides.md:50` | per-ID publish status of the remaining extensions |
+| `01-system/cachyos/aur/upwork/README.md:39` | Upwork support position on non-Ubuntu Xorg sessions |
+| `01-system/cachyos/setup/02-amd-gpu-rocm.md:42` | both are hypotheses |
+| `01-system/cachyos/setup/02-amd-gpu-rocm.md:71` | native gfx1031 on Ollama 0.40.11 and kernel 7.3 |
+| `01-system/cachyos/setup/04-ai-llm-stack.md:74` | TensorFlow on gfx1031 |
+| `01-system/cachyos/setup/04-ai-llm-stack.md:137` | (claim on this line) |
+| `01-system/cachyos/setup/04-ai-llm-stack.md:148` | (claim on this line) |
+| `01-system/cachyos/setup/04-ai-llm-stack.md:162` | runtime on gfx1031 |
+| `01-system/cachyos/setup/04-ai-llm-stack.md:185` | (claim on this line) |
+| `01-system/cachyos/setup/04-ai-llm-stack.md:197` | Milvus Lite index types |
+| `01-system/cachyos/setup/06-databases.md:49` | Arch upgrade procedure and the pgvector caveat; not run |
+| `01-system/cachyos/setup/06-databases.md:86` | exact steps, only the overview page was readable |
+| `01-system/cachyos/setup/06-databases.md:99` | the permission problem and this fix are recorded from this host only |
+| `01-system/cachyos/setup/06-databases.md:163` | (claim on this line) |
+| `01-system/cachyos/setup/08-docker-kubernetes.md:49` | (claim on this line) |
+| `01-system/cachyos/setup/08-docker-kubernetes.md:111` | both image tags |
+| `01-system/cachyos/setup/08-docker-kubernetes.md:112` | the exact map count Elasticsearch needs for one node |
 | `01-system/cachyos/setup/09-iac-ci-cd.md:67` | act with rootless Docker and node24-based actions |
+| `01-system/cachyos/setup/10-data-engineering.md:45` | Redpanda command syntax and the "~512MB RAM, no JVM" claim |
+| `01-system/cachyos/setup/12-editors-ides.md:50` | per-ID publish status of the remaining extensions |
 | `01-system/cachyos/setup/15-browsers.md:43` | Chrome Web Store availability and manifest version of each extension on Brave; check each listing before relying on it |
-| `01-system/cachyos/setup/11-frontend.md:35` | the contents of Arch's init-nvm.sh |
+| `01-system/cachyos/setup/16-knowledge-productivity.md:38` | whether Bases fully replaces Dataview and Calendar for this vault |
+| `01-system/cachyos/setup/16-knowledge-productivity.md:44` | upstream Todoist Linux version |
 | `01-system/cachyos/setup/17-freelance-project-management.md:31` | country limits rest on 2020 to 2021 search snippets; Wave's help article returned 403 |
 | `01-system/cachyos/setup/17-freelance-project-management.md:36` | Upwork support position on non-Ubuntu Xorg sessions |
 | `01-system/cachyos/setup/17-freelance-project-management.md:55` | usability of the alternatives on Hyprland |
-| `01-system/cachyos/setup/06-databases.md:49` | Arch upgrade procedure and the pgvector caveat; not run |
-| `01-system/cachyos/setup/06-databases.md:86` | AUR service and config names (AUR pages were unreachable) |
-| `01-system/cachyos/setup/06-databases.md:99` | the permission problem and this fix are recorded from this host only |
-| `01-system/cachyos/setup/06-databases.md:163` | container-to-host-loopback Valkey access under rootless Docker |
-| `01-system/cachyos/setup/08-docker-kubernetes.md:49` | an overlay kernel-module tweak seen in an earlier version of the chapter |
-| `01-system/cachyos/setup/08-docker-kubernetes.md:111` | both image tags |
-| `01-system/cachyos/setup/08-docker-kubernetes.md:112` | the exact map count Elasticsearch needs for one node |
-| `01-system/cachyos/setup/10-data-engineering.md:45` | Redpanda command syntax and the "~512MB RAM, no JVM" claim |
-| `01-system/cachyos/setup/16-knowledge-productivity.md:38` | whether Bases fully replaces Dataview and Calendar for this vault |
-| `01-system/cachyos/setup/16-knowledge-productivity.md:44` | upstream Todoist Linux version |
-| `01-system/cachyos/setup/04-ai-llm-stack.md:74` | TensorFlow on gfx1031 |
-| `01-system/cachyos/setup/04-ai-llm-stack.md:137` | Without Docker: `uvx --python 3.12 open-webui@latest serve` (the PyPI package requires Python 3.11 or 3.12). I |
-| `01-system/cachyos/setup/04-ai-llm-stack.md:148` | Whether Arch's `ggml-hip` is built for gfx1031 is not established.  Source build for HIP (current flags: `GPU_ |
-| `01-system/cachyos/setup/04-ai-llm-stack.md:162` | runtime on gfx1031 |
-| `01-system/cachyos/setup/04-ai-llm-stack.md:185` | `SentenceTransformer("all-MiniLM-L6-v2")` runs on the GPU only if the torch in the environment is the ROCm bui |
-| `01-system/cachyos/setup/04-ai-llm-stack.md:197` | Milvus Lite index types |
 | `01-system/cachyos/setup/18-communication.md:41` | screen sharing in Slack and Zoom on Hyprland |
-| `01-system/cachyos/setup/18-communication.md:57` | KDE Connect autostart under Hyprland |
-| `01-system/cachyos/setup/07-devops-cloud-tools.md:63` | the stock nginx.conf text, because the Arch package source host was not reachable |
-| `01-system/cachyos/setup/19-security-privacy.md:175` | the Mullvad and focus `/etc/resolv.conf` interaction is inferred, not reproduced |
-| `01-system/cachyos/setup/02-amd-gpu-rocm.md:42` | both are hypotheses |
-| `01-system/cachyos/setup/02-amd-gpu-rocm.md:71` | native gfx1031 on Ollama 0.40.11 and kernel 7.3 |
-| `01-system/cachyos/aur/upwork/README.md:18` | bundled Electron version of 5.8.0.41; check on the host with `ar x upwork_5.8.0.41_amd64.deb; bsdtar -xf data.tar.xz; strings opt/Upwork/upwork / grep |
-| `01-system/cachyos/aur/upwork/README.md:39` | Upwork support position on non-Ubuntu Xorg sessions |
+| `01-system/cachyos/setup/19-security-privacy.md:175` | the interaction is inferred, not reproduced |
+| `01-system/cachyos/setup/20-maintenance-monitoring.md:48` | whether BOOT_ORDER hides unlisted entries |
+| `01-system/cachyos/setup/20-maintenance-monitoring.md:52` | (claim on this line) |
+| `01-system/topgrade/README.md:15` | the Antigravity probe and `agy update` behaviour are recorded from this host only, not reproducible without the packages |
+| `02-desktop/hyprland/README.md:270` | the claim that every hyprexpo fork is broken |
+| `02-desktop/hyprland/README.md:312` | bug status on 5.4.0 |
+| `02-desktop/hyprland/README.md:357` | the Chromium SIGSEGV under a systemd service scope (needs coredumpctl on the machine) |
+| `04-editors/zed/README.md:30` | the replacement model tag |
 | `05-ai/claude-code/skills/mongodb-schema-design/SKILL.md:12` | growth mechanism |
 | `05-ai/claude-code/skills/mongodb-schema-design/SKILL.md:20` | 100MB stage limit on current releases |
-| `05-ai/claude-code/README.md:118` | claude-brain hook subcommands and CLI surface |
 | `05-ai/ollama/README.md:111` | native gfx1031 on Ollama 0.40.11 and kernel 7.3 |
-| `fresh-setup.md:118` | exact installer menu label; the wording comes from the release blog |
-| `system-summary.md:53` | whether `BOOT_ORDER` acts as a filter (see chapter 20.1) |
-| `04-editors/zed/README.md:30` | the replacement model tag |
-| `02-desktop/hyprland/README.md:263` | plugin compile results on 0.57.0 (no compositor headers in the research sandbox) |
-| `02-desktop/hyprland/README.md:269` | the claim that every hyprexpo fork is broken |
-| `02-desktop/hyprland/README.md:311` | bug status on 5.4.0 |
-| `02-desktop/hyprland/README.md:356` | the Chromium SIGSEGV under a systemd service scope (needs coredumpctl on the machine) |
+| `fresh-setup.md:117` | exact installer menu label; the wording comes from the release blog |
+| `system-summary.md:53` | (claim on this line) |
 
 The ledger rows without an inline tag are information-only (for example vendor version numbers that moved) or live in [`LEDGER.csv`](LEDGER.csv) with `status=unverified`.
 

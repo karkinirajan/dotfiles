@@ -77,7 +77,7 @@ sudo pacman -S --needed btop nvtop mission-center ncdu
 | `dust` | Proportional disk usage (in the CLI package list) |
 | `amdgpu_top` | TUI with per-process GPU usage |
 
-`prometheus` is in `packages/developer.txt` but is not enabled. Its default listen address is `0.0.0.0:9090`, so bind it to loopback before enabling it: in `/etc/conf.d/prometheus` set `PROMETHEUS_ARGS="--web.listen-address=127.0.0.1:9090"`. <!-- UNVERIFIED: the Arch unit reads /etc/conf.d/prometheus (Arch package files were only readable through old snippets) -->
+`prometheus` is in `packages/developer.txt` but is not enabled. Its default listen address is `0.0.0.0:9090`, so bind it to loopback before enabling it: in `/etc/conf.d/prometheus` set `PROMETHEUS_ARGS="--web.listen-address=127.0.0.1:9090"`. Checked on the host (prometheus 3.15.1): the unit has `EnvironmentFile=-/etc/conf.d/prometheus` and passes `$PROMETHEUS_ARGS` to `ExecStart`.
 
 ## 20.3 Package cache cleanup
 
