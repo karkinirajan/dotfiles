@@ -207,7 +207,7 @@ sudo nft -f /etc/nftables.d/focus-filter.nft
 sudo nft list chain inet focus output | rg -c 'reject'
 ```
 
-Expected: loading twice succeeds and the count of `reject` rules is `6` (not 12). Do not enable the focus services; focus mode is the owner's switch.
+Expected: loading twice succeeds and the count of `reject` rules is `2` (not 4: one IPv4 and one IPv6 rule). Do not enable the focus services; focus mode is the owner's switch.
 
 ### S11. Verify, read only
 
