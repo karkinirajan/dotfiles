@@ -13,4 +13,3 @@
 - OBS-11 (MUST): Client resilience: capture `unhandledrejection` and `error` events, show an offline indicator, retry idempotent requests with exponential backoff and jitter, do not retry 4xx responses, and always give the user a way forward.
 
 ---
-

@@ -86,4 +86,3 @@ export async function renameProject(
   return { ok: true, data: { id: data.id } };
 }
 ```
-

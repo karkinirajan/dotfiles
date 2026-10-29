@@ -4,7 +4,7 @@ After=default.target
 
 [Service]
 # Clear any stale ControlMaster socket matching the sheesh-vps host before connecting.
-ExecStartPre=/bin/sh -c 'rm -f "$(ssh -G sheesh-vps 2>/dev/null | awk "/^controlpath / {print \$2}")"'
+ExecStartPre=/bin/sh -c 'rm -f "$(ssh -G sheesh-vps 2>/dev/null | awk "/^controlpath / {print $$2}")"'
 ExecStart=/usr/bin/ssh -N -o ControlMaster=yes -o ControlPersist=no -o ExitOnForwardFailure=yes -o ServerAliveInterval=60 -o ServerAliveCountMax=3 sheesh-vps
 Restart=always
 RestartSec=30

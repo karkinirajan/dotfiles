@@ -1,0 +1,11 @@
+# Lints the repo's own Python: tools/, the Ollama harness and the focus page server.
+line-length = 130
+target-version = "py311"
+extend-include = ["06-tools/focus/scripts/focus-page"]
+extend-exclude = ["05-ai/ollama/claude-code-bench/fixtures"]
+
+[lint]
+select = ["E", "F", "I", "UP", "B", "SIM"]
+
+[lint.per-file-ignores]
+"tools/gen_index.py" = ["E501"]

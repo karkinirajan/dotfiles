@@ -36,10 +36,10 @@
     "babel-plugin-react-compiler": "1.0.0",
     "geist": "1.7.2",
     "ioredis": "6.0.0",
-    "next": "16.4.0",
+    "next": "16.4.3",
     "next-themes": "0.4.6",
-    "react": "19.3.0",
-    "react-dom": "19.3.0",
+    "react": "19.3.1",
+    "react-dom": "19.3.1",
     "server-only": "0.0.1",
     "tw-animate-css": "1.4.0",
     "zod": "4.6.7"
@@ -48,7 +48,7 @@
     "@axe-core/playwright": "4.13.0",
     "@commitlint/cli": "21.2.3",
     "@commitlint/config-conventional": "21.2.3",
-    "@next/playwright": "16.4.0",
+    "@next/playwright": "16.4.3",
     "@playwright/test": "1.64.0",
     "@tailwindcss/turbopack": "4.3.3",
     "@testing-library/jest-dom": "7.0.1",
@@ -58,7 +58,7 @@
     "@types/react-dom": "19.3.0",
     "dependency-cruiser": "18.6.0",
     "eslint": "10.12.0",
-    "eslint-config-next": "16.4.0",
+    "eslint-config-next": "16.4.3",
     "eslint-plugin-jsx-a11y": "6.10.2",
     "jsdom": "30.1.2",
     "knip": "6.41.0",
@@ -176,4 +176,3 @@ down:
     supabase stop
     docker stop {{redis}}
 ```
-

@@ -13,4 +13,3 @@
 - SEO-02 (SHOULD): Crawlable links (`<a href>` via `<Link>`), meaningful alt text, fast Core Web Vitals, no content that appears only after client JavaScript.
 
 ---
-

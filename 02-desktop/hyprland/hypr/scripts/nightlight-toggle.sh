@@ -3,14 +3,14 @@
 #
 # Noctalia 5.0.0_beta.10 has a confirmed, reproducible bug: once night light
 # is forced on (bar icon, Control Center, or `noctalia msg
-# nightlight-force-toggle`), nothing turns it back off again — force-toggle,
+# nightlight-force-toggle`), nothing turns it back off again: force-toggle,
 # nightlight-disable, and even a direct settings.toml edit + config-reload
 # all silently no-op. User-confirmed live on this machine.
 #
 # Fix: don't use Noctalia's gamma engine at all. Use `hyprsunset`, Hyprland's
 # own dedicated blue-light tool (hyprland-ctm-control-v1 protocol, separate
 # from the zwlr_gamma_control path Noctalia and other clients fight over).
-# State is just "is the hyprsunset process running" — nothing to get stuck.
+# State is just "is the hyprsunset process running": nothing to get stuck.
 #
 # The bar icon's glyph is rewritten directly (moon-off / moon-stars) and the
 # bar hot-reloaded, since Noctalia's own icon-state tracking only reflects

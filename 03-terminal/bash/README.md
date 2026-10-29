@@ -3,7 +3,7 @@
 Fallback `.bashrc` configuration kept for reference or interactive `bash`
 subshells.
 
-```
+```text
 03-terminal/bash/
 ├── README.md
 └── .bashrc    # reference config (not linked by manifest.conf)

@@ -1,16 +1,16 @@
 #!/usr/bin/env bash
-# root-steps-backend-switch.sh — installs the /usr/local/sbin/ollama-backend
+# root-steps-backend-switch.sh: installs the /usr/local/sbin/ollama-backend
 # helper (exactly as this task's spec describes) and uses it once, now, to
 # switch to ROCm for testing.
 #
 # WHY THIS IS NEEDED NOW, out of the spec's original order: Stage 0
 # calibration on Vulkan (the preferred backend from root-steps.sh) hit a
-# real, reproduced crash — `ggml_vulkan: device lost on Vulkan0` — at the
+# real, reproduced crash: `ggml_vulkan: device lost on Vulkan0`, at the
 # large prompt sizes Claude Code's real requests actually use (~25-33k
 # tokens). Two identical reproductions, not a one-off. See STATE.md for the
 # full journalctl evidence. The spec's "defer ROCm until Stage 1 has Vulkan
 # numbers" was premised on Vulkan being usable at realistic sizes; it is
-# not, as measured. This is not skipping ahead carelessly — it's the
+# not, as measured. This is not skipping ahead carelessly: it's the
 # earliest point a real crash could have been discovered, and the helper
 # below is exactly the mechanism the spec describes for this situation.
 #
@@ -34,7 +34,7 @@ log "1/3: installing $HELPER"
 mkdir -p /usr/local/sbin
 cat > "$HELPER" <<'HELPEREOF'
 #!/usr/bin/env bash
-# ollama-backend {vulkan|rocm} — swaps the GPU-backend drop-in and restarts
+# ollama-backend {vulkan|rocm}: swaps the GPU-backend drop-in and restarts
 # ollama. Managed by ~/ollama-setup; part of the Claude-Code-over-Ollama
 # benchmark setup. Must be run as root.
 set -euo pipefail
@@ -65,7 +65,7 @@ systemctl daemon-reload
 systemctl restart ollama
 sleep 2
 systemctl is-active --quiet ollama && echo "ollama.service active, backend=$BACKEND" || {
-    echo "ollama.service failed to start after switching to $BACKEND — check: journalctl -u ollama -n 50" >&2
+    echo "ollama.service failed to start after switching to $BACKEND - check: journalctl -u ollama -n 50" >&2
     exit 1
 }
 HELPEREOF

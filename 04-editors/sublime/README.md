@@ -2,7 +2,7 @@
 
 Reference configuration for Sublime Text 4 (`sublime-text-4`).
 
-```
+```text
 04-editors/sublime/
 ├── README.md
 ├── sublime-settings.json    # Preferences.sublime-settings

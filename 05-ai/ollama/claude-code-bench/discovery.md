@@ -1,7 +1,11 @@
-# Discovery v2 — 2026-09-23T13:46:26+05:45
+# Discovery v2: 2026-09-23T13:46:26+05:45
+
+<!-- snapshot: 2026-09-23 -->
+> **Dated record (2026-09-23).** Measured with kernel 7.2.6-1-cachyos, Ollama 0.34.3, Mesa 26.2.3, ROCm 7.2.4 and Claude Code 2.1.280. The primary host now runs kernel 7.3.0-4, Ollama 0.40.11, Mesa 26.2.5 and Claude Code 2.1.311. Package tables, token rates, defaults and "not documented" statements here describe that day; re-measure before relying on them. Known corrections: `CLAUDE_CODE_AUTO_COMPACT_WINDOW` is now documented (valid range 100000 to 1000000, so 65536 is below its minimum), and `OLLAMA_VULKAN` is on by default when the Vulkan backend is installed.
 
 ## Versions
-```
+
+```text
 7.2.6-1-cachyos
 SHELL=/bin/zsh
 zsh 5.9.2 (x86_64-pc-linux-gnu)
@@ -10,11 +14,13 @@ ollama version is 0.34.3
 ```
 
 ## ollama version gate (needs >= 0.30.5 for gemma4:12b per brief)
+
 detected: 0.34.3
 OK, >= 0.30.5
 
 ## Packages
-```
+
+```text
 hip-runtime-amd 7.2.4-1.1
 hipblas 7.2.4-1.1
 hipblas-common 7.2.4-1
@@ -41,13 +47,15 @@ vulkan-tools 1.4.357.0-1.1
 ```
 
 ## ROCm / HIP version specifically
-```
+
+```text
 rocm-core 7.2.4-1.1
 hip-runtime-amd 7.2.4-1.1
 ```
 
 ## systemctl status ollama
-```
+
+```text
 ● ollama.service - Ollama Service
      Loaded: loaded (/usr/lib/systemd/system/ollama.service; enabled; preset: disabled)
     Drop-In: /etc/systemd/system/ollama.service.d
@@ -74,7 +82,8 @@ Sep 23 13:46:26 cachyos ollama[67704]: [GIN] 2026/09/23 - 13:46:26 | 200 |      
 ```
 
 ## systemctl cat ollama (all existing drop-ins)
-```
+
+```text
 # /usr/lib/systemd/system/ollama.service
 [Unit]
 Description=Ollama Service
@@ -113,7 +122,7 @@ WantedBy=multi-user.target
 # 128K is allocatable but never worth it: it costs throughput even when it
 # fits, and without flash attention it forces a real partial offload.
 # Prompt processing (~62 tok/s) is the practical long-context ceiling here,
-# not VRAM — a full 64K prompt is ~17 min before the first output token.
+# not VRAM: a full 64K prompt is ~17 min before the first output token.
 [Service]
 Environment="OLLAMA_CONTEXT_LENGTH=65536"
 Environment="OLLAMA_FLASH_ATTENTION=1"
@@ -121,7 +130,7 @@ Environment="OLLAMA_KV_CACHE_TYPE=q8_0"
 
 # /etc/systemd/system/ollama.service.d/override.conf
 # The RX 6700 XT is gfx1031, which ROCm does not officially support. Claiming
-# gfx1030 (its supported sibling) makes the whole stack work — Ollama then
+# gfx1030 (its supported sibling) makes the whole stack work: Ollama then
 # reports `library=ROCm compute=gfx1030` and puts models on the card instead of
 # silently falling back to CPU.
 #
@@ -139,7 +148,8 @@ Environment="OLLAMA_KEEP_ALIVE=30m"
 ```
 
 ## journalctl GPU-relevant lines (this boot)
-```
+
+```text
 Sep 23 12:44:04 cachyos ollama[1016]: time=2026-09-23T12:44:04.058+05:45 level=INFO source=routes.go:1940 msg="server config" env="map[CUDA_VISIBLE_DEVICES: GGML_VK_VISIBLE_DEVICES: GPU_DEVICE_ORDINAL: HIP_VISIBLE_DEVICES: HSA_OVERRIDE_GFX_VERSION:10.3.0 HTTPS_PROXY: HTTP_PROXY: LLAMA_ARG_FIT: LLAMA_ARG_FIT_TARGET: NO_PROXY: OLLAMA_CONTEXT_LENGTH:65536 OLLAMA_CREATE_REMOTE:false OLLAMA_DEBUG:INFO OLLAMA_DEBUG_LOG_REQUESTS:false OLLAMA_EDITOR: OLLAMA_FLASH_ATTENTION:true OLLAMA_GO_TEMPLATE:true OLLAMA_GPU_OVERHEAD:0 OLLAMA_HOST:http://127.0.0.1:11434 OLLAMA_IGPU_ENABLE: OLLAMA_KEEP_ALIVE:5m0s OLLAMA_KV_CACHE_TYPE:q8_0 OLLAMA_LLM_LIBRARY: OLLAMA_LOAD_TIMEOUT:5m0s OLLAMA_MAX_LOADED_MODELS:0 OLLAMA_MAX_QUEUE:512 OLLAMA_MAX_TRANSFER_STREAMS:4 OLLAMA_MODELS:/var/lib/ollama OLLAMA_NOHISTORY:false OLLAMA_NOPRUNE:false OLLAMA_NO_CLOUD:false OLLAMA_NUM_PARALLEL:1 OLLAMA_ORIGINS:[http://localhost https://localhost http://localhost:* https://localhost:* http://127.0.0.1 https://127.0.0.1 http://127.0.0.1:* https://127.0.0.1:* http://0.0.0.0 https://0.0.0.0 http://0.0.0.0:* https://0.0.0.0:* app://* file://* tauri://* vscode-webview://* vscode-file://*] OLLAMA_REMOTES:[ollama.com] OLLAMA_SCHED_SPREAD:false OLLAMA_VULKAN:true ROCR_VISIBLE_DEVICES: http_proxy: https_proxy: no_proxy:]"
 Sep 23 12:44:04 cachyos ollama[1016]: time=2026-09-23T12:44:04.060+05:45 level=WARN source=runner.go:722 msg="user overrode visible devices" HSA_OVERRIDE_GFX_VERSION=10.3.0
 Sep 23 12:44:04 cachyos ollama[1016]: time=2026-09-23T12:44:04.537+05:45 level=INFO source=types.go:32 msg="inference compute" id=0 filter_id=0 library=ROCm compute=gfx1030 name=ROCm0 description="AMD Radeon RX 6700 XT" libdirs=ollama,rocm_v7_2 driver=0.0 pci_id=0000:07:00.0 type=discrete total="12.0 GiB" available="11.9 GiB"
@@ -162,13 +172,15 @@ Sep 23 13:21:04 cachyos ollama[67704]: time=2026-09-23T13:21:04.992+05:45 level=
 ```
 
 ## VRAM (idle, desktop baseline)
-```
+
+```text
 /sys/class/drm/card1/device/mem_info_vram_total: 12868124672
 /sys/class/drm/card1/device/mem_info_vram_used: 1091891200
 ```
 
-## GPU power sensor (corrected — nested under hwmon2)
-```
+## GPU power sensor (corrected: nested under hwmon2)
+
+```text
 path: /sys/class/drm/card1/device/hwmon/hwmon2/power1_average
 label: PPT
 reading: 28000000 microwatts (idle)
@@ -176,7 +188,8 @@ cap: 211000000 microwatts
 ```
 
 ## free -g / df -h models dir
-```
+
+```text
                total        used        free      shared  buff/cache   available
 Mem:              31           9          11           0          12          21
 Swap:             31           0          30
@@ -185,45 +198,50 @@ Filesystem      Size  Used Avail Use% Mounted on
 ```
 
 ## ollama list / ollama ps
-```
+
+```text
 NAME               ID              SIZE     MODIFIED      
 qwen3-coder:30b    06c1097efce0    18 GB    5 minutes ago    
 NAME    ID    SIZE    PROCESSOR    CONTEXT    UNTIL 
 ```
 
 ## vulkaninfo --summary
-```
+
+```text
 Devices:
 ========
 GPU0:
-	apiVersion         = 1.4.354
-	driverVersion      = 26.2.3
-	vendorID           = 0x1002
-	deviceID           = 0x73df
-	deviceType         = PHYSICAL_DEVICE_TYPE_DISCRETE_GPU
-	deviceName         = AMD Radeon RX 6700 XT (RADV NAVI22)
-	driverID           = DRIVER_ID_MESA_RADV
-	driverName         = radv
-	driverInfo         = Mesa 26.2.3-arch3.1
-	conformanceVersion = 1.4.5.3
-	deviceUUID         = 00000000-0700-0000-0000-000000000000
-	driverUUID         = 414d442d-4d45-5341-2d44-525600000000
+ apiVersion         = 1.4.354
+ driverVersion      = 26.2.3
+ vendorID           = 0x1002
+ deviceID           = 0x73df
+ deviceType         = PHYSICAL_DEVICE_TYPE_DISCRETE_GPU
+ deviceName         = AMD Radeon RX 6700 XT (RADV NAVI22)
+ driverID           = DRIVER_ID_MESA_RADV
+ driverName         = radv
+ driverInfo         = Mesa 26.2.3-arch3.1
+ conformanceVersion = 1.4.5.3
+ deviceUUID         = 00000000-0700-0000-0000-000000000000
+ driverUUID         = 414d442d-4d45-5341-2d44-525600000000
 ```
 
 ## rocminfo gfx
-```
+
+```text
   Name:                    gfx1030                            
       Name:                    amdgcn-amd-amdhsa--gfx1030         
       Name:                    amdgcn-amd-amdhsa--gfx10-3-generic 
 ```
 
 ## ollama user groups + getcap
-```
+
+```text
 ollama : ollama render video
 ```
 
 ## Existing ANTHROPIC_*/ollama lines in shell rc + settings.json
-```
+
+```text
 ~/.zshrc real target: /home/kneeraazon/dotfiles/terminal/zsh/.zshrc
 /home/kneeraazon/.zshrc:22:export HSA_OVERRIDE_GFX_VERSION=10.3.0
 /home/kneeraazon/.zshrc:25:export OLLAMA_HOST="0.0.0.0:11434"
@@ -234,7 +252,8 @@ settings.json env block: {} (empty)
 ```
 
 ## Compositor in use
-```
+
+```text
 XDG_CURRENT_DESKTOP=Hyprland
 XDG_SESSION_TYPE=wayland
 XDG_SESSION_DESKTOP=Hyprland
@@ -244,7 +263,8 @@ kwin_wayland process: not found
 ```
 
 ## ollama launch --help / ollama launch claude --help
-```
+
+```text
 Launch the Ollama interactive menu, or directly launch a specific integration.
 
 Without arguments, this is equivalent to running 'ollama' directly.
@@ -345,7 +365,8 @@ Flags:
 ```
 
 ## ollama launch claude --config probe (safe: settings.json/claude.json backed up first, diffed after)
-```
+
+```text
 Invoking 'ollama launch claude --model qwen3-coder:30b --config -y' errored before doing
 anything persistent (needed a prompt via stdin, since --config still launches claude itself
 rather than writing a config file). Confirmed via diff:
@@ -355,8 +376,9 @@ rather than writing a config file). Confirmed via diff:
 So this version's --config flag is not a safe read-only inspection path.
 ```
 
-## Auto-compact / context-window control — two DIFFERENT pieces of evidence, not to be conflated
-```
+## Auto-compact / context-window control: two DIFFERENT pieces of evidence, not to be conflated
+
+```text
 1) Directly observed from the RUNNING claude 2.1.280 CLI (ground truth for this install),
    from the earlier smoke test warning text verbatim:
      "... until then auto-compact keeps this session within 200k tokens (the context window
@@ -368,10 +390,10 @@ So this version's --config flag is not a safe read-only inspection path.
       CLAUDE_CODE_DISABLE_UNKNOWN_MODEL_WINDOW_ENFORCEMENT. Confirmed working.
 
 2) 'strings /usr/bin/ollama' contains the literal token CLAUDE_CODE_AUTO_COMPACT_WINDOW,
-   embedded near 'ollama launch %s --model %s' — i.e. this is something OLLAMA itself may
+   embedded near 'ollama launch %s --model %s', i.e. this is something OLLAMA itself may
    set when wiring up its own claude integration, NOT something confirmed read by this
    Claude Code build (code.claude.com/docs/en/settings does not mention it, and it did not
-   appear in the CLI's own warning text). Unverified for this version — do not rely on it
+   appear in the CLI's own warning text). Unverified for this version, do not rely on it
    without a real behavioral test.
 
 Decision: use CLAUDE_CODE_MAX_CONTEXT_TOKENS=65536 in Phase 7's ccl(), since it is the
@@ -379,7 +401,8 @@ empirically-confirmed lever, matching the exact number in each model's Modelfile
 ```
 
 ## claude --help: -p, --model, --allowedTools, --output-format, --permission-mode
-```
+
+```text
   --allowedTools, --allowed-tools <tools...>
       Comma or space-separated list of tool names to allow (e.g. "Bash(git *)
       Edit")
@@ -420,9 +443,10 @@ empirically-confirmed lever, matching the exact number in each model's Modelfile
 ```
 
 ## max-turns flag: DOES NOT EXIST in this version
-```
+
+```text
 0
-0 matches confirmed (checked earlier smoke test too) — the wall-clock 'timeout N' wrapper
+0 matches confirmed (checked earlier smoke test too), the wall-clock 'timeout N' wrapper
 around the whole 'claude -p ...' invocation is the only runaway-loop guard available.
 ```
 
@@ -430,15 +454,15 @@ around the whole 'claude -p ...' invocation is the only runaway-loop guard avail
 
 **Compositor: Hyprland**, confirmed three ways (XDG_CURRENT_DESKTOP=Hyprland,
 XDG_SESSION_DESKTOP=Hyprland, `Hyprland` process running; no plasmashell/
-kwin_wayland process). The notes disagreeing with Plasma are stale — this
+kwin_wayland process). The notes disagreeing with Plasma are stale, this
 machine's KDE/Plasma stack was fully removed in an earlier session.
 
 **Current backend: ROCm, gfx1031 (native, unspoofed)**, same situation found
-in the v1 Phase 1 pass earlier today — unchanged since then. From
+in the v1 Phase 1 pass earlier today, unchanged since then. From
 `journalctl -u ollama -b`, the service restarted mid-boot with a DIFFERENT
 effective environment than it started with: the pre-existing
 `override.conf` drop-in (from an unrelated earlier session, dated 2026-09-08
-per its own header) has lost its `HSA_OVERRIDE_GFX_VERSION=10.3.0` line — the
+per its own header) has lost its `HSA_OVERRIDE_GFX_VERSION=10.3.0` line, the
 comment above it still describes that variable, but the `[Service]` block
 underneath was at some point overwritten with a duplicate of `context.conf`'s
 five lines. The live service has been running since 13:21 today with no gfx
@@ -449,8 +473,8 @@ tokens with no issue).
 **CRITICAL, must-fix violation of this spec's hard rules**: both existing
 drop-ins ALSO set `OLLAMA_CONTEXT_LENGTH=65536` globally. This spec
 explicitly forbids that ("would force a 64k KV cache onto every model,
-including Continue.dev's"). This was not something done in this session —
-it predates both v1 and v2 of this task — but it is live right now and must
+including Continue.dev's"). This was not something done in this session  -
+it predates both v1 and v2 of this task, but it is live right now and must
 be removed in Phase 3's root-steps.sh, replaced by per-Modelfile `num_ctx`.
 Continue.dev, if it has made any request against this server today, has
 been getting a 64k KV cache it never asked for. Flagging this plainly rather
@@ -460,29 +484,29 @@ than silently living with it.
 `ollama-vulkan` (0.34.3-1.1, alongside plain `ollama`). Mesa/RADV Vulkan is
 confirmed working (`vulkaninfo` enumerates the 6700 XT via RADV NAVI22, Mesa
 26.2.3) and the server-config log shows `OLLAMA_VULKAN:true` already active
-by default in 0.34.3 — Vulkan is present and ready, no package install
+by default in 0.34.3, Vulkan is present and ready, no package install
 needed for Phase 2 Step 1. `getcap /usr/bin/ollama` is currently empty (no
-capabilities set) — the `setcap cap_perfmon+ep` step is genuinely pending.
-`ollama` user is already in `render`+`video` — no group fix needed.
+capabilities set), the `setcap cap_perfmon+ep` step is genuinely pending.
+`ollama` user is already in `render`+`video`, no group fix needed.
 
-**No ANTHROPIC_* violations found** — clean starting state, no permission
+**No ANTHROPIC_* violations found**, clean starting state, no permission
 needed to proceed on that front. **One landmine unrelated to this task but
 worth reporting**: `.zshrc` globally exports `HSA_OVERRIDE_GFX_VERSION=10.3.0`
 and `OLLAMA_HOST=0.0.0.0:11434`. The HSA export causes `rocminfo` run from a
 terminal to report a different GPU identity (gfx1030) than the systemd
-service currently uses (gfx1031) — a real split-brain between two code
+service currently uses (gfx1031), a real split-brain between two code
 paths, unrelated to Claude Code but worth the user's attention. Not touched
 here; out of scope for this task's root-steps.sh (no hard rule covers it,
 and this spec's rules are scoped to Ollama/Claude Code wiring).
 
-**`claude` CLI (2.1.280) has no `--max-turns` flag at all** — verified via
+**`claude` CLI (2.1.280) has no `--max-turns` flag at all**, verified via
 `--help` and empirically (an earlier real invocation with it caused no crash
 because it simply wasn't attempted; the flag list has no turn-count option).
 The wall-clock `timeout` wrapper in Phase 5C's command is therefore the ONLY
 runaway-loop guard that actually exists for this version.
 
 **`--allowedTools` takes space-separated tokens** (`<tools...>`, variadic),
-not one comma-joined string — confirmed empirically earlier today: passing
+not one comma-joined string, confirmed empirically earlier today: passing
 `Read Edit Glob Grep "Bash(python -m pytest:*)"` as separate arguments
 reached the model layer with no argument-parsing error.
 
@@ -491,29 +515,30 @@ them**: the CLI's own live warning text names `CLAUDE_CODE_MAX_CONTEXT_TOKENS`
 and `CLAUDE_CODE_DISABLE_UNKNOWN_MODEL_WINDOW_ENFORCEMENT` as real, working
 levers for THIS version. `strings` on the Ollama binary separately contains
 `CLAUDE_CODE_AUTO_COMPACT_WINDOW`, which appears to be something Ollama's own
-`launch claude` integration sets — not confirmed as something this Claude
+`launch claude` integration sets, not confirmed as something this Claude
 Code build reads, and not found in the current docs page. Using the
 CLI-confirmed name (`CLAUDE_CODE_MAX_CONTEXT_TOKENS`) going forward.
 
 **`ollama launch claude --config` is not a safe non-destructive inspection
-path** in this version — it still tries to launch `claude` itself (erroring
+path** in this version, it still tries to launch `claude` itself (erroring
 here only because it needed stdin/a prompt), rather than writing a config
 file for inspection. Probed safely anyway (backed up `settings.json` and
 `.claude.json` first, diffed after): no persistent change resulted, aside
 from `.claude.json`'s own internal usage telemetry.
 
-**Ollama version 0.34.3 — passes the gemma4:12b >= 0.30.5 gate.**
+**Ollama version 0.34.3, passes the gemma4:12b >= 0.30.5 gate.**
 
 ## Open items carried into Phase 2
+
 1. Vulkan is untested beyond the v1 smoke test's single short decode run
-   (32.40 tok/s on gemma4:12b, no crash) — needs the real staged Stage-1
+   (32.40 tok/s on gemma4:12b, no crash), needs the real staged Stage-1
    procedure (cold load, cold prefill w/ nonce, warm turn) per this spec.
 2. `HSA_OVERRIDE_GFX_VERSION` removal/decision for ROCm, if ROCm survives as
-   a challenger in Phase 5 — native (gfx1031, currently live and stable so
+   a challenger in Phase 5, native (gfx1031, currently live and stable so
    far) vs spoofed (gfx1030, the older config) still needs a real decision
    with actual measurement, not just "it hasn't crashed yet."
-3. `setcap cap_perfmon+ep` + the pacman hook to re-apply it on upgrade — not
+3. `setcap cap_perfmon+ep` + the pacman hook to re-apply it on upgrade, not
    yet applied. Per this spec's Phase 2 caveat (ollama#15321), must verify
    GPU discovery still works WITH the cap before keeping it.
-4. `OLLAMA_CONTEXT_LENGTH=65536` removal from the live systemd config — real,
+4. `OLLAMA_CONTEXT_LENGTH=65536` removal from the live systemd config, real,
    pre-existing rule violation, fix goes into Phase 3's root-steps.sh.

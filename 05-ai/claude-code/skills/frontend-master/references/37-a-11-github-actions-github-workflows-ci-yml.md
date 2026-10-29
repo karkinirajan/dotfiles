@@ -135,4 +135,3 @@ jobs:
           pip install semgrep==1.181.0
           python3 audit/audit.py run --profile ci
 ```
-

@@ -1,7 +1,7 @@
 #!/bin/bash
 # Screenshot capture + annotate, bound to Print/Ctrl+Print/Alt+Print.
 #
-# Capture: grim + slurp. hyprshot was tried first but removed — it showed a
+# Capture: grim + slurp. hyprshot was tried first but removed: it showed a
 # flaky first-launch failure on this machine (silent exit, no window, no
 # error) that was never fully root-caused, so grim/slurp (older, more
 # battle-tested) is used directly instead of as a fallback.
@@ -38,7 +38,7 @@ case "$MODE" in
     ;;
 esac
 
-# Bail out quietly if the capture was cancelled or failed — grim leaves an
+# Bail out quietly if the capture was cancelled or failed: grim leaves an
 # empty or missing file in that case.
 if [ ! -s "$FILE" ]; then
   rm -f "$FILE"
