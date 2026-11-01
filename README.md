@@ -54,6 +54,7 @@ own README. Start at Part 00 and go in order, or jump to the part you need.
 | Chapter | Path |
 |---------|------|
 | CachyOS setup, dev stack, packages, and local AUR recipes | [`01-system/cachyos/`](01-system/cachyos/README.md), [`setup/`](01-system/cachyos/setup/README.md) (25 chapters), [`dev-stack.md`](01-system/cachyos/dev-stack.md), [`packages/`](01-system/cachyos/packages/) |
+| Dual boot with Secure Boot (Windows 11 installer from Linux, firmware keys, Limine as the single bootloader) | [`dual-secure-boot.md`](01-system/cachyos/dual-secure-boot.md) |
 | Snapshot options (Timeshift alternative; current host uses Snapper) | [`01-system/timeshift/`](01-system/timeshift/README.md) |
 | topgrade, update everything | [`01-system/topgrade/`](01-system/topgrade/README.md) |
 

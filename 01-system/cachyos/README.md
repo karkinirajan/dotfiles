@@ -10,6 +10,7 @@ reproducible local PKGBUILDs for this CachyOS (Arch) workstation.
 ├── setup.md                  # redirect stub for old links into setup/
 ├── host-snapshot/            # point-in-time package inventories (pacman -Qe, -Qm)
 ├── dev-stack.md              # reproducible developer & database stack runbook
+├── dual-secure-boot.md       # Windows 11 + CachyOS dual boot, Secure Boot, Limine as the single bootloader
 ├── mariadb-local.cnf         # /etc/my.cnf.d/90-local-dev.cnf (loopback 127.0.0.1 bind)
 ├── aur/
 │   └── upwork/
@@ -35,5 +36,8 @@ because package installation and `/etc/` files require root privileges:
   [`README.md`](../../README.md#install).
 - **Developer stack** (`developer.txt`, `mariadb-local.cnf`, `aur/upwork/PKGBUILD`)
   follows [`dev-stack.md`](dev-stack.md).
+- **Dual boot and Secure Boot** (Windows 11 installer, firmware keys, Limine signing) follow
+  [`dual-secure-boot.md`](dual-secure-boot.md); like the rest of this directory it needs root
+  and firmware access, so `manifest.conf` does not link it.
 - **Local AI packages** (`ai.txt`) pair with [`05-ai/ollama/README.md`](../../05-ai/ollama/README.md).
 - **Point-in-time host snapshot** is recorded in [`system-summary.md`](../../system-summary.md).
