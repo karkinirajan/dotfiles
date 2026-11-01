@@ -6,7 +6,8 @@
 # Stability design:
 # 1. Single-instance lock (flock) prevents overlapping slurp overlays if Print
 #    is pressed repeatedly.
-# 2. Region mode feeds visible window geometries on the active workspace(s) into
+# 2. Region mode feeds the geometries of visible windows (active or special
+#    workspace per monitor; just the fullscreen window if there is one) into
 #    slurp stdin: drag to select any custom rectangle, or single-click a window
 #    to snap to its exact bounds.
 # 3. Window mode clamps active-window geometry to output bounds so partially
@@ -34,13 +35,22 @@ ACCENT="$(sed -n 's/^\$mauve[[:space:]]*=[[:space:]]*rgba(\([0-9A-Fa-f]\{6\}\).*
   "$HOME/.config/hypr/config/colors.conf" 2>/dev/null | head -n1)"
 ACCENT="${ACCENT:-bd93f9}"
 
+# Boxes for what is actually visible: per monitor, the open special workspace
+# (drawn over the regular one) if any, else the active workspace; and on a
+# workspace with a fullscreen window, only that window (it hides its siblings).
 active_window_boxes() {
-  local ws_ids
-  ws_ids="$(hyprctl monitors -j 2>/dev/null | jq -r '[.[].activeWorkspace.id] | @json' 2>/dev/null || echo '[]')"
-  hyprctl clients -j 2>/dev/null | jq -r --argjson ws "$ws_ids" '
-    .[]
-    | select(.mapped == true and .hidden == false and (.workspace.id as $id | $ws | index($id)))
-    | select(.size[0] > 0 and .size[1] > 0)
+  local mons clients
+  mons="$(hyprctl monitors -j 2>/dev/null)" || return 0
+  clients="$(hyprctl clients -j 2>/dev/null)" || return 0
+  jq -nr --argjson mons "$mons" --argjson clients "$clients" '
+    [$mons[] | if (.specialWorkspace.id // 0) != 0
+               then .specialWorkspace.id else .activeWorkspace.id end] as $ws
+    | [$clients[]
+       | select(.mapped == true and .hidden == false and .size[0] > 0 and .size[1] > 0)] as $vis
+    | $ws[] as $id
+    | [$vis[] | select(.workspace.id == $id)] as $c
+    | ([$c[] | select(.fullscreen > 0)] | if length > 0 then . else $c end)
+    | .[]
     | "\(.at[0]),\(.at[1]) \(.size[0])x\(.size[1])"
   ' 2>/dev/null || true
 }
