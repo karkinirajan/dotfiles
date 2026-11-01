@@ -19,6 +19,14 @@ flock -n 9 || exit 0
 # hyprlock exits 0 only after a successful unlock. While the output is being
 # re-added a relaunch can fail instantly, so retry once a second for ~30s before
 # giving up (a broken hyprlock config would otherwise loop forever).
+#
+# Hyprland exposes no session-lock state, so a non-zero exit after a long run is
+# ambiguous: hyprlock may have died while locked (relaunch it) or crashed in its
+# teardown right after a successful unlock (relaunching re-locks the user out).
+# Cap the relaunches that follow a long run, and never reset that cap, so the
+# second case re-locks a bounded number of times instead of after every unlock.
+max_slow_relaunches=5
+slow_relaunches=0
 fast_failures=0
 while :; do
     started=$SECONDS
@@ -30,6 +38,10 @@ while :; do
         ((++fast_failures >= 30)) && exit 1
     else
         fast_failures=0
+        if ((++slow_relaunches > max_slow_relaunches)); then
+            echo "$(date +%T) giving up after $max_slow_relaunches relaunches" >>"$log"
+            exit 1
+        fi
     fi
     sleep 1
 done
