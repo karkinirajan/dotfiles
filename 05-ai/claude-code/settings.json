@@ -67,7 +67,7 @@
   "effortLevel": "medium",
   "modelSettings": {
     "claude-sonnet-5-5": {
-      "effortLevel": "medium"
+      "effortLevel": "xhigh"
     }
   },
   "dialogExpiry": "5m",
