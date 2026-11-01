@@ -70,6 +70,9 @@ hl.config({
         swallow_regex         = "^(nautilus|nemo|thunar|btrfs-assistant.)$",
         focus_on_activate     = true,
         vrr                   = 2,
+        -- A crashed hyprlock otherwise leaves the permanent "lockscreen crashed"
+        -- screen; scripts/lock.sh relaunches it and this lets the new one take over.
+        allow_session_lock_restore = true,
     },
 
     -- cm_auto_hdr = 0: with the default (1) every fullscreen client that signals
@@ -77,8 +80,8 @@ hl.config({
     -- the screen while the DisplayPort link retrains.
     render = { direct_scanout = true, cm_auto_hdr = 0 },
 
-    dwindle = { special_scale_factor = 0.8, preserve_split = true },
-    master  = { new_status = "master", special_scale_factor = 0.8 },
+    dwindle = { preserve_split = true },
+    master  = { new_status = "master" },
 
     decoration = {
         active_opacity   = 1,

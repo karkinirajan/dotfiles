@@ -49,12 +49,12 @@ Note-taking, task, screenshot, time-tracking and clipboard tools, with the insta
 ## 16.3 Screenshots and screen recording
 
 ```bash
-sudo pacman -S --needed grim slurp obs-studio
+sudo pacman -S --needed grim slurp satty obs-studio
 sudo pacman -S --needed swash   # CachyOS repo only (1.5.1); on plain Arch use the AUR package
 ```
 
-- `grim` + `slurp` capture a region, window or screen and are wired to the Print key through `~/.config/hypr/scripts/screenshot.sh`.
-- `swash` is the only screenshot annotator on this machine; it is in the `cachyos` repo and the AUR, not in Arch extra.
+- `grim` + `slurp` capture a region (with one-click window snapping), active window or screen and are wired to `Print`, `SUPER+Print` and `SUPER+Shift+S` through `~/.config/hypr/scripts/screenshot.sh`.
+- `satty` (`~/.config/satty/config.toml`) is the primary GTK4/OpenGL screenshot annotator; `swash` remains installed as a fallback.
 - `obs-studio` (33.0.0) records and streams on Wayland through PipeWire. OBS 33 overhauled plugin loading, so out-of-tree plugins may need rebuilding.
 
 ## 16.4 Time tracking

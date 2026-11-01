@@ -62,6 +62,10 @@ hyprland/
 │                                  # Session environment: BROWSER=brave, cursor
 │                                  #   theme (Bibata-Modern-Ice), Qt/Electron
 │                                  #   Wayland hints, PATH, and NVM initialization.
+├── satty/
+│   └── config.toml                → ~/.config/satty/config.toml (linked via manifest.conf)
+│                                  # Satty GTK4/OpenGL screenshot annotator config
+│                                  #   paired with grim + slurp in scripts/screenshot.sh.
 ├── hypr/                          → ~/.config/hypr/
 │   ├── hyprland.conf              # entry point, sources everything below
 │   ├── hyprlock.conf, hypridle.conf

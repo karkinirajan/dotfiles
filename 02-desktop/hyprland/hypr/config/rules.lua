@@ -23,6 +23,7 @@ for _, m in ipairs({
     { class = "^(polkit-gnome-authentication-agent-1|hyprpolkitagent|org.kde.polkit-kde-authentication-agent-1)(.*)$" },
     { class = "^(CachyOSHello)$" },
     { class = "^(zenity)$" },
+    { class = "^(org\\.satty\\.satty|com\\.gabm\\.satty|satty)$" },
     { class = "^()$", title = "^(Steam - Self Updater)$" },
 }) do
     rule(m, { float = true })
@@ -61,3 +62,5 @@ for _, ns in ipairs({ "noctalia-bar-kneeraazon", "noctalia-bar-default" }) do
     table.insert(noctalia_bar_rules, hl.layer_rule({ name = "blur-" .. ns, match = { namespace = ns }, blur = true, xray = true }))
 end
 hl.layer_rule({ match = { namespace = "noctalia-attached-panel" }, blur = true, xray = true })
+-- slurp's selection overlay: disable fade animation so grim never captures its border
+hl.layer_rule({ match = { namespace = "^(selection)$" }, no_anim = true })
