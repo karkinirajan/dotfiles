@@ -15,7 +15,7 @@
 #   hyprsunset                                   scripts/nightlight-toggle.sh
 #   hyprpm                                       plugin reload in autostart.conf
 #   cliphist wl-clipboard                        autostart.conf + keybinds
-#   grim slurp swash                             scripts/screenshot.sh
+#   grim slurp satty swash                       scripts/screenshot.sh
 #   hyprpicker                                   keybinds.conf color picker bind
 #   alacritty                                    defaults.conf $terminal/$filemanager
 #   ai-usagebar-bin  (AUR)                       Noctalia felipeartur/ai-usagebar widget
@@ -86,6 +86,7 @@ pipewire
 pipewire-pulse
 playerctl
 qt6ct
+satty
 signal-desktop
 sddm
 slurp

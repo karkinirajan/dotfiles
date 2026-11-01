@@ -46,12 +46,14 @@ Optional plugins documented in `plugins.conf` (not installed in the baseline):
 
 | Shortcut | Action |
 |---|---|
-| `Print` | Screenshot a selected area |
-| `Ctrl + Print` | Screenshot the active window |
-| `Alt + Print` | Screenshot the whole screen |
+| `Print` / `SUPER + Print` / `SUPER + Shift + S` | Screenshot a selected area (drag for custom region, or click a window to snap) |
+| `Ctrl + Print` | Screenshot the active window (clamped to monitor bounds) |
+| `Alt + Print` | Screenshot the focused display |
 
 Every capture is saved to `~/Pictures/Screenshots/`, copied to the clipboard,
-and opened in Swash for annotation.
+and opened in Satty (`~/.config/satty/config.toml`) for annotation (`Enter` or
+`Ctrl+C` saves annotated changes to both file and clipboard; `Esc` exits leaving
+the raw capture intact).
 
 ## Window State
 

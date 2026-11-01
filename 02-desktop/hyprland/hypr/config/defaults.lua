@@ -14,7 +14,7 @@ return {
     applauncher = scripts .. "launcher-open.sh",
     scripts     = scripts,
 
-    -- grim + slurp capture, swash annotation (see scripts/screenshot.sh)
+    -- grim + slurp capture, satty annotation (see scripts/screenshot.sh)
     shot_region = scripts .. "screenshot.sh region",
     shot_window = scripts .. "screenshot.sh window",
     shot_screen = scripts .. "screenshot.sh screen",

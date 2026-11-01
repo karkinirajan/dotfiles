@@ -33,6 +33,8 @@ bind(M .. " + D", dsp.window.pseudo({ action = "toggle" }), "Toggles pseudo-tili
 bind(M .. " + W", exec("noctalia msg panel-toggle wallpaper"), "Opens Noctalia's wallpaper picker panel")
 bind(M .. " + SHIFT + W", exec("noctalia msg wallpaper-random"), "Switches to a random wallpaper via Noctalia")
 bind("Print", exec(d.shot_region), "Creates a screenshot of an area")
+bind(M .. " + Print", exec(d.shot_region), "Creates a screenshot of an area")
+bind(M .. " + SHIFT + S", exec(d.shot_region), "Creates a screenshot of an area")
 bind("CTRL + Print", exec(d.shot_window), "Creates a screenshot of the active window")
 bind("ALT + Print", exec(d.shot_screen), "Creates a screenshot of the active display")
 
@@ -68,7 +70,7 @@ bind("XF86AudioPrev", exec("playerctl previous"), "Previous track")
 hl.bind("XF86MonBrightnessUp", exec("brightnessctl s +5%"), held)
 hl.bind("XF86MonBrightnessDown", exec("brightnessctl s 5%-"), held)
 
-bind(M .. " + L", exec("hyprlock"), "Lock the screen")
+bind(M .. " + L", exec(d.scripts .. "lock.sh"), "Lock the screen")
 bind(M .. " + O", exec("pkill -x noctalia"), "Reload/restarts Noctalia (respawned by noctalia-watchdog.sh)")
 bind(M .. " + B", exec(d.scripts .. "toggle-bar.sh"), "Toggle the top bar (Noctalia) visibility")
 bind(M .. " + C", exec("noctalia msg panel-toggle clipboard"), "Opens clipboard history")
