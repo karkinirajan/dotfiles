@@ -11,10 +11,10 @@ order = [ "kneeraazon", "default" ]
     enabled = false
 
     [bar.kneeraazon]
-    border = "#bd93f9aa"
+    border = "#ffb454aa"
     border_width = 1.5
     capsule = true
-    capsule_border = "#bd93f999"
+    capsule_border = "#ffb45499"
     capsule_fill = "on_primary"
     capsule_radius = 2
     capsule_thickness = 0.71999998763203621
@@ -259,7 +259,7 @@ settings_window_translucent = true
     mru = true
 
 [theme]
-builtin = "Dracula"
+builtin = "Ayu"
 community_palette = "Aura"
 custom_palette = "CatppuccinMocha"
 mode = "dark"
