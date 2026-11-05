@@ -26,7 +26,7 @@
 24. Lockfile committed, dependencies pinned, install scripts reviewed, provenance checked. (SEC-22)
 25. Every feature ships with tests at the lowest level that proves it, plus one Playwright path for money or auth flows. (TEST-01)
 26. Structured logging, error boundaries at route level, tracing from browser to database. (OBS-01)
-27. Conventional Commits, small PRs, author identity `kneeraazon404`. (GIT-01)
+27. Conventional Commits, small PRs, author identity `karkinirajan`. (GIT-01)
 28. Decisions that cost more than a day to reverse get an ADR. (GOV-01)
 29. No tutorial-grade code in client work: typed, validated, error-handled, accessible, tested. (GOV-02)
 30. When docs and this file disagree, upstream docs win and this file gets fixed within a week. (GOV-03)
