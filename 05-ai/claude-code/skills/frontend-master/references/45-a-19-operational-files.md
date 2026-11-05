@@ -372,14 +372,14 @@ Route Handlers.
 
 ```text
 # Changes here need review from the owner (CI-02).
-/supabase/migrations/ @kneeraazon404
-/src/lib/auth/ @kneeraazon404
-/src/lib/supabase/ @kneeraazon404
-/src/lib/security/ @kneeraazon404
-/src/proxy.ts @kneeraazon404
-/next.config.ts @kneeraazon404
-/.github/workflows/ @kneeraazon404
-/.github/CODEOWNERS @kneeraazon404
+/supabase/migrations/ @karkinirajan
+/src/lib/auth/ @karkinirajan
+/src/lib/supabase/ @karkinirajan
+/src/lib/security/ @karkinirajan
+/src/proxy.ts @karkinirajan
+/next.config.ts @karkinirajan
+/.github/workflows/ @karkinirajan
+/.github/CODEOWNERS @karkinirajan
 ```
 
 `.github/pull_request_template.md`
@@ -425,7 +425,7 @@ commit-msg:
 pre-push:
   commands:
     author:
-      run: test "$(git config user.name)" = "kneeraazon404"
+      run: test "$(git config user.name)" = "karkinirajan"
 ```
 
 `commitlint.config.mjs`

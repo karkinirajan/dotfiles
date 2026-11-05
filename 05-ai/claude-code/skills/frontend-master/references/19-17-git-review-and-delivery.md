@@ -1,6 +1,6 @@
 ## 17. Git, review, and delivery
 
-- GIT-01 (MUST): Conventional Commits (`feat:`, `fix:`, `perf:`, `refactor:`, `test:`, `docs:`, `chore:`, `ci:`), enforced by commitlint. Commit identity is `kneeraazon404` (set `user.name` and the GitHub-provided noreply `user.email` per repo and verify in a pre-push check).
+- GIT-01 (MUST): Conventional Commits (`feat:`, `fix:`, `perf:`, `refactor:`, `test:`, `docs:`, `chore:`, `ci:`), enforced by commitlint. Commit identity is `karkinirajan` (set `user.name` and the GitHub-provided noreply `user.email` per repo and verify in a pre-push check).
 - GIT-02 (MUST): PRs change at most about 400 lines and one concern. The template asks: what and why, how it was tested, screenshots (mobile and desktop, light and dark), risk and rollback, rule IDs touched, ADR link if architectural.
 - GIT-03 (SHOULD): Branches named `feat/`, `fix/`, `chore/`. Squash merge with a Conventional Commit title.
 - GIT-04 (MUST): Review order: security and data access first, then correctness, then accessibility, then performance, then style. Style is automated and never debated in review.
