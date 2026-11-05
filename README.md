@@ -244,4 +244,4 @@ MIT License, see [LICENSE](LICENSE).
 
 ---
 
-[Portfolio](https://kneeraazon.com)  |  [GitHub](https://github.com/kneeraazon404)  |  [LinkedIn](https://linkedin.com/in/kneeraazon)  |  [Email](mailto:kneeraazon@gmail.com)
+[Portfolio](https://kneeraazon.com)  |  [GitHub](https://github.com/karkinirajan)  |  [LinkedIn](https://linkedin.com/in/kneeraazon)  |  [Email](mailto:kneeraazon@gmail.com)

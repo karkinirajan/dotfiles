@@ -94,8 +94,8 @@ def make_checkout(model: str, run_index: int) -> Path:
     else:
         shutil.copytree(FIXTURE_TEMPLATE, dest)
         subprocess.run(["git", "init", "-q"], cwd=dest, check=True)
-        subprocess.run(["git", "config", "user.name", "kneeraazon404"], cwd=dest, check=True)
-        subprocess.run(["git", "config", "user.email", "kneeraazon404@localhost"], cwd=dest, check=True)
+        subprocess.run(["git", "config", "user.name", "karkinirajan"], cwd=dest, check=True)
+        subprocess.run(["git", "config", "user.email", "karkinirajan@localhost"], cwd=dest, check=True)
         subprocess.run(["git", "add", "-A"], cwd=dest, check=True)
         subprocess.run(["git", "commit", "-q", "-m", "initial fixture baseline"], cwd=dest, check=True)
     return dest
