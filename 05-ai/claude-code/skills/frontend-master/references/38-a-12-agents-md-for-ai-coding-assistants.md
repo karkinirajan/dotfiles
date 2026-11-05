@@ -40,7 +40,7 @@ Ask one specific question, or present two or three options with trade-offs. Do n
 
 ## Git
 
-Author `kneeraazon404`. Conventional Commits. One concern per PR.
+Author `karkinirajan`. Conventional Commits. One concern per PR.
 
 <!-- BEGIN:nextjs-agent-rules -->
 
