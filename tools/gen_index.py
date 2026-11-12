@@ -42,7 +42,7 @@ def collect(root: Path) -> list[tuple[Path, dict]]:
 
 def row(rel: Path, meta: dict, base: Path) -> str:
     link = Path("/".join([".."] * len(base.parts)) if base.parts else ".") / rel
-    shown = link.as_posix().removeprefix("./")
+    shown = link.as_posix()
     return f"| [{meta['title']}]({shown}) | `{rel.as_posix()}` | {meta.get('last_verified', '')} | {meta.get('status', '')} |"
 
 

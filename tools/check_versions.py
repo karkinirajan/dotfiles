@@ -82,7 +82,11 @@ def check_offline(root: Path, data: dict[str, Any]) -> list[str]:
             if entry is None:
                 errors.append(f"constraint {rid}: unknown key '{req['key']}'")
                 continue
-            have = vtuple(str(entry[req.get("field", "target")]), req.get("width"))
+            field = req.get("field", "target")
+            if field not in entry:
+                errors.append(f"constraint {rid}: '{req['key']}' has no field '{field}'")
+                continue
+            have = vtuple(str(entry[field]), req.get("width"))
             want = vtuple(str(req["value"]), req.get("width"))
             if req["op"] not in OPS or not OPS[req["op"]](have, want):
                 errors.append(f"constraint {rid} violated: {req['key']} {have} {req['op']} {want} ({rule.get('text', '')})")
