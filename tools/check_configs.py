@@ -27,21 +27,21 @@ JSONC_FILES = {"vscode-settings.json", "vscode-keybindings.json", "settings.json
 
 def strip_jsonc(text: str) -> str:
     """Remove // and /* */ comments and trailing commas outside of strings."""
-    out: list[str] = []
+    out: list[tuple[str, bool]] = []  # (character, outside any string)
     i, n = 0, len(text)
     in_str = False
     while i < n:
         ch = text[i]
         if in_str:
-            out.append(ch)
+            out.append((ch, False))
             if ch == "\\" and i + 1 < n:
-                out.append(text[i + 1])
+                out.append((text[i + 1], False))
                 i += 1
             elif ch == '"':
                 in_str = False
         elif ch == '"':
             in_str = True
-            out.append(ch)
+            out.append((ch, False))
         elif text.startswith("//", i):
             while i < n and text[i] != "\n":
                 i += 1
@@ -50,9 +50,19 @@ def strip_jsonc(text: str) -> str:
             end = text.find("*/", i + 2)
             i = n if end == -1 else end + 1
         else:
-            out.append(ch)
+            out.append((ch, True))
         i += 1
-    return re.sub(r",(\s*[}\]])", r"\1", "".join(out))
+    # A comma is trailing when the next non-blank character, outside a string, closes an object or array.
+    kept: list[str] = []
+    for idx, (ch, outside) in enumerate(out):
+        if ch == "," and outside:
+            nxt = idx + 1
+            while nxt < len(out) and out[nxt][1] and out[nxt][0].isspace():
+                nxt += 1
+            if nxt < len(out) and out[nxt][1] and out[nxt][0] in "}]":
+                continue
+        kept.append(ch)
+    return "".join(kept)
 
 
 def check_toml(path: Path) -> str | None:
@@ -98,6 +108,8 @@ def check_manifest(root: Path) -> list[str]:
     errors: list[str] = []
     seen: dict[str, int] = {}
     manifest = root / "manifest.conf"
+    if not manifest.is_file():
+        return ["manifest.conf: missing"]
     for lineno, raw in enumerate(manifest.read_text(encoding="utf-8").splitlines(), 1):
         line = raw.strip()
         if not line or line.startswith("#"):
