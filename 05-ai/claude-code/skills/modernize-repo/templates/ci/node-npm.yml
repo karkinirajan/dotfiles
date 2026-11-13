@@ -1,0 +1,50 @@
+# Template: CI for a Node project that uses npm. Copy to .github/workflows/ci.yml.
+# Before use: look up the latest major of each action, set the matrix to the maintained LTS lines you verified
+# (node:<n>-slim containers work for that), keep package.json "engines" and .nvmrc consistent, and delete steps the
+# project does not have. For pnpm, add pnpm/action-setup before setup-node and use `cache: pnpm`.
+name: CI
+
+on:
+  push:
+    branches: [main, master]
+  pull_request:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  check:
+    name: Node ${{ matrix.node }}
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        node: [24, 26]
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
+        with:
+          node-version: ${{ matrix.node }}
+          cache: npm
+      - run: npm ci
+      - name: Lint (warnings fail the build)
+        run: npm run lint
+      - name: Type check
+        run: npm run typecheck --if-present
+      - name: Tests with coverage
+        run: npm test
+      - name: Mutation checks (each deliberate bug must make a test fail)
+        if: matrix.node == 26
+        run: node tests/mutation/mutate.mjs tests/mutation/mutants.mjs
+      - name: Build
+        run: npm run build --if-present
+      - name: Dependency audit (high and critical fail the build)
+        if: matrix.node == 26
+        run: npm audit --audit-level=high
+      # If generated files are committed, regenerate them here and fail on any difference:
+      # - run: npm run build:generated
+      # - run: git diff --exit-code -- path/to/generated
