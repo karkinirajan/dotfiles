@@ -633,7 +633,8 @@ update() {
 
   _step "Syncing repositories and upgrading packages"
   _sep
-  _aur -Syu --devel
+  # --noconfirm: owner choice (2026-11-04), `update`/`upgrade` run unattended.
+  _aur -Syu --devel --noconfirm
   rc=$?
   (( rc == 0 )) && _ok "Packages up to date" || _warn "AUR helper exited $rc"
 
@@ -656,7 +657,9 @@ update() {
       -type d -name 'download-*' -empty -delete; then
     _warn "Could not remove empty pacman download directories"
   fi
-  if _aur -Sc; then
+  # --noconfirm answers each cache prompt with its default (Y): pacman cache,
+  # unused repos, AUR clone cache and saved diffs.
+  if _aur -Sc --noconfirm; then
     _ok "Cache cleanup complete"
   else
     _warn "Cache cleanup was skipped or failed"
