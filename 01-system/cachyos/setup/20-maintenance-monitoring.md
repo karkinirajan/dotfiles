@@ -102,7 +102,7 @@ sudo snapper -c root list | tail -3
 paru -Syu          # or topgrade (see 01-system/topgrade), or the cachy-update systray notifier
 ```
 
-CachyOS ships `shelly` as its default GUI package manager and `cachy-update` (systray notifier). `topgrade` with the tracked config wraps `paru`, does not pass `--noconfirm`, and lists `.pacnew` files after the run. Label: `machine-only`.
+CachyOS ships `shelly` as its default GUI package manager and `cachy-update` (systray notifier). `topgrade` with the tracked config wraps `paru`, passes `--noconfirm` (`assume_yes = true`), and lists `.pacnew` files after the run. Label: `machine-only`.
 
 ## Verify
 
