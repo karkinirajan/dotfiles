@@ -32,9 +32,10 @@ jobs:
         run: uv run ruff check .
       - name: Tests
         run: uv run pytest -q
+      # --no-cov: with a coverage gate on, a mutant that only lowers coverage would count as killed for the wrong reason.
       - name: Mutation checks (each deliberate bug must make a test fail)
         if: matrix.python == '3.14'
-        run: python3 tests/mutation/mutate.py tests/mutation/mutants.py -- uv run pytest -x -q
+        run: python3 tests/mutation/mutate.py tests/mutation/mutants.py -- uv run pytest -x -q --no-cov
       - name: Dependency audit
         if: matrix.python == '3.14'
         run: uv audit --preview-features audit-command
