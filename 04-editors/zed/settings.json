@@ -1,4 +1,5 @@
 {
+    "disable_ai": true,
     "show_signature_help_after_edits": true,
     "auto_signature_help": true,
     "multi_cursor_modifier": "cmd_or_ctrl",
