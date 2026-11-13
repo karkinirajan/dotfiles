@@ -22,7 +22,7 @@
     ],
     "defaultMode": "auto"
   },
-  "model": "sonnet",
+  "model": "opus",
   "worktree": {
     "baseRef": "head"
   },

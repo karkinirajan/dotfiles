@@ -9,3 +9,5 @@ select = ["E", "F", "I", "UP", "B", "SIM"]
 
 [lint.per-file-ignores]
 "tools/gen_index.py" = ["E501"]
+# One mutant per line: wrapping would hide which text is replaced by which.
+"tools/mutation/mutants.py" = ["E501"]

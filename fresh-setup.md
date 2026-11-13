@@ -51,7 +51,10 @@ versions written in older notes. Hyprland 0.57 and later read only
    configuring encryption, changing the display manager, enabling remote
    access/firewall rules, initializing a database, or deleting packages/data.
    Give the exact device, path, service, or package list and consequence.
-4. Never use `--noconfirm` for pacman, paru, or AUR builds. Never run a blanket
+4. Never use `--noconfirm` for pacman, paru, or AUR builds in the commands this
+   runbook has you run. (The owner's own `update`/`upgrade` function and
+   `topgrade` config pass it by explicit owner choice; that does not extend to
+   anything else.) Never run a blanket
    orphan removal such as `pacman -Rns $(pacman -Qtdq)`. Never replace a
    `.pacnew` without reviewing the diff and preserving local settings.
 5. Do not copy `/etc/machine-id`, filesystem UUIDs, SSH keys, Secure Boot
@@ -389,9 +392,9 @@ relationship when configuring a new machine.
    install plan. Resolve renamed/unavailable packages through current official
    package metadata; do not silently substitute an AUR build.
 2. Install topgrade (`topgrade-bin` from the AUR) and use the tracked config.
-   `assume_yes = false` is intentional: dependency conflicts must remain
-   visible for owner review. Run a dry run, then update interactively and
-   inspect any `.pacnew` files. Do not update Git working trees automatically
+   `assume_yes = true` is the owner's choice (2026-11-04), so the run is
+   unattended and paru gets `--noconfirm`. Run a dry run first, then inspect any
+   `.pacnew` files afterwards. Do not update Git working trees automatically
    while this Dotfiles checkout has unreviewed changes:
 
    ```sh
@@ -399,8 +402,8 @@ relationship when configuring a new machine.
    topgrade --dry-run
    ```
 
-   Then run `topgrade` interactively and review package removals before
-   accepting them.
+   Then run `topgrade`. It does not stop for confirmation, so read its summary
+   for package removals afterwards.
 3. If pnpm falls back to Node because its native executable was skipped, use
    the official `pnpm self-update` flow; do not globally allow every package's
    install scripts to run.

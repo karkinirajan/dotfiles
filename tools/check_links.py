@@ -19,7 +19,8 @@ from _lib import LOG, markdown_files, repo_root, setup_logging, strip_code
 
 INLINE_RE = re.compile(r"(?<!\!)\[(?:[^\]\\]|\\.)*\]\(\s*<?([^)\s>]+)>?(?:\s+\"[^\"]*\")?\s*\)")
 IMAGE_RE = re.compile(r"\!\[(?:[^\]\\]|\\.)*\]\(\s*<?([^)\s>]+)>?(?:\s+\"[^\"]*\")?\s*\)")
-REFDEF_RE = re.compile(r"^\s{0,3}\[[^\]]+\]:\s*<?(\S+?)>?(?:\s+.*)?$", re.M)
+# [ \t], not \s, before the optional title: \s would match the newline and swallow the next line, hiding a second definition
+REFDEF_RE = re.compile(r"^\s{0,3}\[[^\]]+\]:\s*<?(\S+?)>?(?:[ \t]+.*)?$", re.M)
 HEADING_RE = re.compile(r"^(#{1,6})\s+(.*?)\s*#*\s*$", re.M)
 HTML_ID_RE = re.compile(r"""<a\s+[^>]*?(?:id|name)=["']([^"']+)["']""", re.I)
 AUTOLINK_RE = re.compile(r"<(https?://[^>\s]+)>")
@@ -43,7 +44,7 @@ def anchors_of(path: Path, cache: dict[Path, set[str]]) -> set[str]:
     if path in cache:
         return cache[path]
     text = path.read_text(encoding="utf-8", errors="replace")
-    body = strip_code(text)
+    body = strip_code(text, inline=False)  # a heading such as "## `x`" is anchored on its code text, so keep inline code
     seen: dict[str, int] = {}
     anchors: set[str] = set()
     for _, title in HEADING_RE.findall(body):
