@@ -7,6 +7,7 @@ project's own repo.
 ```text
 claude-code/
 ├── CLAUDE.md          → ~/.claude/CLAUDE.md     always-loaded engineering profile
+├── agent-dev.md       how to build a production-grade agent, step by step
 ├── settings.json      → ~/.claude/settings.json permissions, hooks, plugins, model defaults
 ├── commands/          → ~/.claude/commands/     custom slash commands (/discover, /shipcheck)
 │   ├── discover.md
@@ -21,10 +22,12 @@ claude-code/
 │   ├── frontend-engineer-kit.md
 │   ├── frontend-verifier.md
 │   ├── qa-engineer.md
-│   └── release-engineer.md
+│   ├── release-engineer.md
+│   └── repo-modernizer.md     the whole-repository modernization pass (see below)
 └── skills/            → ~/.claude/skills/       one folder per skill, each with SKILL.md
     ├── discover/              map an unfamiliar project before changing it
     ├── shipcheck/             run real build/lint/test gates before "done"
+    ├── modernize-repo/        the modernization playbook, references and templates
     ├── visual-qa/             check rendered UI, not just the source
     ├── token-efficient-workflow/ keep context focused and inspect usage
     ├── frontend-master/       Next.js/React/TS/Tailwind/Supabase/Prisma rulebook (rev 3)
@@ -96,6 +99,33 @@ conversation data:
 `settings.json`'s `enabledPlugins` still records which plugins are on. Only the
 installed plugin code is left out.
 
+## Repository modernization
+
+`agents/repo-modernizer.md` runs the whole pass on one repository: current verified
+versions, secrets out of the tree, security and correctness defects found and fixed
+with tests, mutation checks, CI, docs, and commits on a local `chore/modernize`
+branch that it never pushes. Its playbook is the `modernize-repo` skill, preloaded
+into the agent. The phases are in `SKILL.md`. The details are in `references/`
+(defect catalogue, stack playbooks, verification recipes, mutation testing, docs and
+hand-off, operating pitfalls, batch mode). Copies of the mutation drivers, CI files
+and doc skeletons are in `templates/`. The content was distilled from the 67
+repositories modernized in October and November 2026.
+
+Run it by naming the agent and giving an absolute path:
+`Use the repo-modernizer agent on ~/<repo>`. A subagent cannot ask questions, so it
+decides with the defaults in the skill and lists them for you. A run that reaches its
+turn limit returns a partial result, and the progress file at
+`~/.cache/<repo>-qa/progress.md` lets it be resumed.
+
+It has `memory: user`, so lessons it adds land in
+`~/.claude/agent-memory/repo-modernizer/`. Fold the good ones into
+`skills/modernize-repo/references/`, which stays the tracked source of truth.
+
+To build another agent to the same standard, follow [`agent-dev.md`](agent-dev.md):
+fifteen ordered steps from the decision to build, through evals, hardening and
+packaging, to a launch checklist. Its last appendix scores `repo-modernizer`
+against that checklist.
+
 ## Enforcing rules
 
 `CLAUDE.md` is advisory: the model follows it most of the time. Anything that
@@ -107,7 +137,8 @@ harness:
   are checked before allow rules, so an allow can't override them.
 - Bash rules match the command text as written. `git push *` does not catch
   `git -C . push`, so the `-C` and `-c` forms are listed separately.
-- `maxTurns: 40` on each agent caps a runaway subagent.
+- `maxTurns: 40` on each focused agent caps a runaway subagent. `repo-modernizer` is
+  the exception (400): a whole-repository pass is hundreds of tool calls.
 
 Check the file with `claude plugin validate agents` and
 `claude plugin validate skills` after editing either.

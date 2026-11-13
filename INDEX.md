@@ -46,6 +46,7 @@ Every chapter in reading order. Regenerate with `python3 tools/gen_index.py`.
 | [Starship prompt](03-terminal/starship/README.md) | `03-terminal/starship/README.md` | 2026-10-29 | current |
 | [Zsh](03-terminal/zsh/README.md) | `03-terminal/zsh/README.md` | 2026-10-29 | current |
 | [Zed](04-editors/zed/README.md) | `04-editors/zed/README.md` | 2026-10-29 | current |
+| [Building a production-grade Claude Code agent](05-ai/claude-code/agent-dev.md) | `05-ai/claude-code/agent-dev.md` | 2026-11-13 | current |
 | [Ollama on the RX 6700 XT](05-ai/ollama/README.md) | `05-ai/ollama/README.md` | 2026-10-29 | current |
 | [Installed apps and utilities](apps-and-utils.md) | `apps-and-utils.md` | 2026-10-29 | current |
 | [Host system summary](system-summary.md) | `system-summary.md` | 2026-10-29 | reference |
