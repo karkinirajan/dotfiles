@@ -26,7 +26,7 @@ These are the owner's standing rules plus the ones that cost the most when forgo
 2. **Never run `git push`, `pull`, `fetch`, `clone`, `ls-remote` or `remote`, or `git config --global`.** Never merge into the default branch, rewrite history, or delete a checkout. Give the exact command to the owner as text.
 3. **Never run `sudo`.** Hand it over as text.
 4. **Python only through `uv`.** Never `pip install` into system Python.
-5. **Never read, stat, grep or print `.env*` files or secret values.** Secret scans are count-only. Create `.env.example` with a heredoc and demo values.
+5. **Never open, read, grep or print `.env*` files or secret values.** Take inventory with `git ls-files` and `git status --short`, not `ls -la`. Secret scans are count-only. Create `.env.example` with a heredoc and demo values.
 6. **Never invent a number, version, date or result.** Look it up and record the source, or write "unverified".
 7. **Never lower a gate silently.** Do not loosen a lint rule, a threshold or a coverage floor, and do not delete a failing test. Fix the cause. A scoped exception needs a written reason.
 8. **Never call a live third-party service or use a real credential.** Use local fakes and demo values, and say "not verified against the live service".

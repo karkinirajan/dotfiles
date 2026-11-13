@@ -67,8 +67,8 @@ Write the plan in the progress file before changing anything:
 ## Phase 3: secrets and hygiene (the first change)
 
 1. Untrack, keeping the files on disk: `git rm -r -q --cached <paths>`. Cover credentials, service-account JSON, databases with real data, virtualenvs, `node_modules`, static and build output, bytecode, media, IDE folders.
-2. Update `.gitignore` and add a `.dockerignore` (use `**/` patterns, they are needed for nested files). Make sure `.gitignore` does not ignore `.github`.
-3. Move credentials to one env-driven settings module. Write `.env.example` with demo values and a comment per variable, using a heredoc. Never read, stat or grep an existing `.env*`.
+2. Update `.gitignore` and add a `.dockerignore` (use `**/` patterns, they are needed for nested files). Make sure `.gitignore` does not ignore `.github` or any directory the project reads by path: compare `git status --ignored` with the paths the code, docs and CI refer to.
+3. Move credentials to one env-driven settings module. Write `.env.example` with demo values and a comment per variable, using a heredoc. Never open, read or grep an existing `.env*`.
 4. Production fails closed: required secrets with a minimum length, no insecure fallback value written in the source, debug off, hosts restricted.
 5. List every credential type found in the tree or history, with counts and commit counts, for the rotation list. Do not rewrite history: that is the owner's call.
 6. If the app is packaged or imaged, list the artifact contents (an asar listing, `docker run --rm <img> ls -a`) to prove nothing sensitive is inside.
