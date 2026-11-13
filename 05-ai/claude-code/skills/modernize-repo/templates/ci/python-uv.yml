@@ -1,0 +1,40 @@
+# Template: CI for a Python project managed with uv. Copy to .github/workflows/ci.yml.
+# Before use: look up the latest major of each action (curl the releases/latest API), set the matrix to the oldest
+# requires-python you tested and the version in .python-version, and delete the steps the project does not have.
+name: CI
+
+on:
+  push:
+    branches: [main, master]
+  pull_request:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  python:
+    name: Python ${{ matrix.python }}
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        # the oldest supported version (requires-python) and the one pinned in .python-version
+        python: ["3.12", "3.14"]
+    steps:
+      - uses: actions/checkout@v7
+      - uses: astral-sh/setup-uv@v10
+      - run: uv sync --locked --python ${{ matrix.python }}
+      - name: Lint
+        run: uv run ruff check .
+      - name: Tests
+        run: uv run pytest -q
+      - name: Mutation checks (each deliberate bug must make a test fail)
+        if: matrix.python == '3.14'
+        run: python3 tests/mutation/mutate.py tests/mutation/mutants.py -- uv run pytest -x -q
+      - name: Dependency audit
+        if: matrix.python == '3.14'
+        run: uv audit --preview-features audit-command

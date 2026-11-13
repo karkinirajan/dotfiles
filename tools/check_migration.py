@@ -32,7 +32,8 @@ def removed_entries(root) -> tuple[set[str], list[str], bool]:
     exact: set[str] = set()
     prefixes: list[str] = []
     for token in re.findall(r"`([^`]+)`", text):
-        if "/" not in token or " " in token:
+        # No "/" requirement: a removed file at the repository root has none. A token only ever matches a real base path.
+        if " " in token:
             continue
         if token.endswith("/"):
             prefixes.append(token)
@@ -53,7 +54,11 @@ def main(argv: list[str] | None = None) -> int:
     except subprocess.CalledProcessError as exc:
         LOG.error("cannot read %s: %s", args.base, exc.stderr.strip())
         return 2
-    exact, prefixes, bytecode_listed = removed_entries(root)
+    try:
+        exact, prefixes, bytecode_listed = removed_entries(root)
+    except FileNotFoundError:
+        LOG.error("cannot read docs/modernization/REMOVALS.md: every removed path must be listed there")
+        return 2
     lost: list[str] = []
     for path in paths:
         if (root / path).exists() or path in exact:

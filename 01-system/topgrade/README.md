@@ -18,8 +18,11 @@ Helm repository is configured, so a fresh Helm install does not fail every
 upgrade with “no repositories found.”
 Topgrade's built-in self-updater is disabled because Topgrade itself is
 installed as an AUR package and is updated by `paru` in the system step.
-Confirmation prompts remain enabled
-(`assume_yes = false`), and failed steps do not retry automatically.
+Confirmation prompts are off (`assume_yes = true`, an owner choice made
+2026-11-04): the Arch step runs `paru -Syu --noconfirm`, so every prompt takes
+its default answer. Failed steps do not retry automatically. The Zsh
+`update`/`upgrade` function matches this: it passes `--noconfirm` to both the
+upgrade and the cache cleanup.
 
 ## Install
 

@@ -68,15 +68,15 @@ def split_frontmatter(text: str) -> tuple[dict[str, Any], str]:
         return {}, text
     try:
         meta = yaml.safe_load(match.group(1)) or {}
-    except yaml.YAMLError as exc:
+    except (yaml.YAMLError, ValueError) as exc:  # PyYAML raises ValueError for an impossible date such as 2026-13-45
         raise ValueError(f"invalid frontmatter: {exc}") from exc
     if not isinstance(meta, dict):
         raise ValueError("frontmatter is not a mapping")
     return meta, text[match.end():]
 
 
-def strip_code(text: str) -> str:
-    """Blank out fenced code blocks and inline code so regexes skip them."""
+def strip_code(text: str, inline: bool = True) -> str:
+    """Blank out fenced code blocks and, unless ``inline`` is false, inline code so regexes skip them."""
     out: list[str] = []
     fence: str | None = None
     for line in text.splitlines(keepends=True):
@@ -90,5 +90,5 @@ def strip_code(text: str) -> str:
                 fence = None
             out.append("\n")
             continue
-        out.append(re.sub(r"`[^`\n]*`", lambda m: " " * len(m.group(0)), line))
+        out.append(re.sub(r"`[^`\n]*`", lambda m: " " * len(m.group(0)), line) if inline else line)
     return "".join(out)
