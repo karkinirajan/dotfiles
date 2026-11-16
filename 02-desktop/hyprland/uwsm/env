@@ -1,4 +1,4 @@
-export BROWSER=brave
+export BROWSER=google-chrome-stable
 export QT_QPA_PLATFORM="wayland;xcb"
 export QT_QPA_PLATFORMTHEME="qt6ct"
 export ELECTRON_OZONE_PLATFORM_HINT=auto

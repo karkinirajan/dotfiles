@@ -1,4 +1,4 @@
-config_version = 16
+config_version = 20
 
 [audio]
 enable_overdrive = true
@@ -11,10 +11,10 @@ order = [ "kneeraazon", "default" ]
     enabled = false
 
     [bar.kneeraazon]
-    border = "#ffb454aa"
+    border = "#cba6f7aa"
     border_width = 1.5
     capsule = true
-    capsule_border = "#ffb45499"
+    capsule_border = "#cba6f799"
     capsule_fill = "on_primary"
     capsule_radius = 2
     capsule_thickness = 0.71999998763203621
@@ -22,19 +22,19 @@ order = [ "kneeraazon", "default" ]
     concave_edge_corners = false
     contact_shadow = true
     end = [
-        "tray",
-        "ai_usage_claude",
         "audio_visualizer",
+        "clock",
+        "ai_usage_claude",
+        "tray",
         "notifications",
         "clipboard",
-        "notes",
         "volume",
+        "notes",
         "network",
         "nightlight",
         "brightness",
         "status",
         "bar_6",
-        "clock",
         "weather",
         "summary",
         "session"
@@ -67,6 +67,7 @@ enabled = true
 width = 930
 
     [control_center.calendar]
+    show_events_card = false
     show_week_numbers = true
 
 [desktop_widgets]
@@ -157,11 +158,13 @@ vault_name = "kneeraazon"
 vault_path = "/home/kneeraazon/Documents/kneeraazon"
 
 [plugin_settings."davinci13/containers"]
+hide_missing_runtimes = false
 panel_open_near_click = true
 show_stopped = true
+view_mode = "cards"
 
 [plugin_settings."felipeartur/ai-usagebar"]
-usage_display = "remaining"
+show_priorities = true
 
 [plugin_settings."giodamelio/beeminder"]
 goals_open_near_click = false
@@ -259,11 +262,12 @@ settings_window_translucent = true
     mru = true
 
 [theme]
-builtin = "Ayu"
-community_palette = "Aura"
+builtin = "Catppuccin"
+community_palette = "Breeze"
 custom_palette = "CatppuccinMocha"
 mode = "dark"
-source = "builtin"
+shell_mode = "dark"
+source = "custom"
 sync_color_scheme = false
 wallpaper_scheme = "m3-content"
 
@@ -293,16 +297,16 @@ wallpaper_scheme = "m3-content"
 
 [wallpaper]
 edge_smoothness = 0.0
-fill_mode = "span"
+fill_mode = "fit"
 
     [wallpaper.default]
-    path = "/home/kneeraazon/Pictures/wallhaven-n6od8x.jpg"
+    path = "/home/kneeraazon/Pictures/wallhaven-x8gkpo.jpg"
 
     [wallpaper.last]
-    path = "/home/kneeraazon/Pictures/wallhaven-n6od8x.jpg"
+    path = "/home/kneeraazon/Pictures/wallhaven-x8gkpo.jpg"
 
     [wallpaper.monitors.DP-2]
-    path = "/home/kneeraazon/Pictures/wallhaven-n6od8x.jpg"
+    path = "/home/kneeraazon/Pictures/wallhaven-x8gkpo.jpg"
 
     [[wallpaper.favorite]]
     builtin_palette = "Catppuccin"
@@ -415,6 +419,7 @@ type = "davinci13/containers:bar"
 enabled = false
 
 [widget.brightness]
+enabled = false
 show_glyph = true
 show_label = true
 show_when_unavailable = true
@@ -473,6 +478,7 @@ type = "custom_button"
     scroll_up = "exec /home/kneeraazon/.config/hypr/scripts/nightlight-temperature.sh warmer"
 
 [widget.notes]
+enabled = false
 type = "noctalia/notes:notes"
 
 [widget.notifications]
@@ -488,7 +494,7 @@ capsule_padding = 10
 icon_color = "secondary"
 
 [widget.status]
-capsule = true
+enabled = false
 type = "davemhammer/obsidian:status"
 
 [widget.summary]
@@ -531,6 +537,7 @@ icon_color = "#FFFFFF"
 show_label = false
 
 [widget.weather]
+enabled = false
 icon_color = "primary"
 max_length = 222
 show_temperature = true
@@ -547,8 +554,8 @@ font_scale = 1.1200000000000001
 font_weight = 500
 hide_when_empty = true
 inactive_pill_size = 1.2
+monitors = [ "*" ]
 occupied_color = "#00F1FF"
 scale = 1.2000000000000002
 scroll_repeat = "steps"
-show_all_outputs = true
 urgent_color = "#731508"

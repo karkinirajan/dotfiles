@@ -14,7 +14,7 @@ export XDG_STATE_HOME="${XDG_STATE_HOME:-$HOME/.local/state}"
 export ZSH="$HOME/.oh-my-zsh"
 export EDITOR="nvim"
 export VISUAL="nvim"
-export BROWSER="brave"
+export BROWSER="google-chrome-stable"
 export PAGER="less"
 export LESS="-R --use-color -Dd+r -Du+b"
 export MANPAGER="nvim +Man!"
@@ -878,3 +878,11 @@ fi
 
 # OpenClaw Completion
 [ -f "$HOME/.openclaw/completions/openclaw.zsh" ] && source "$HOME/.openclaw/completions/openclaw.zsh"
+
+# pnpm
+export PNPM_HOME='/home/kneeraazon/.local/share/pnpm'
+case ":$PATH:" in
+  ":$PNPM_HOME/bin:"*) ;;
+  *) export PATH="$PNPM_HOME/bin:$PATH" ;;
+esac
+# pnpm end
