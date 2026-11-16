@@ -36,6 +36,11 @@ references/
 # Claude Desktop's import-memory sync target: regenerated content, not authored
 05-ai/claude-code/skills/synced/
 
+# Skills installed by `npx skills` live in ~/.agents/skills (the tool's own lock
+# file tracks them); the links here are per machine, not dotfiles content.
+05-ai/claude-code/skills/find-skills
+05-ai/claude-code/skills/humanizer
+
 # Python bytecode
 __pycache__/
 *.pyc

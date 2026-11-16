@@ -76,7 +76,9 @@ class TestFrontmatter:
     def test_an_impossible_date_is_reported_as_invalid_frontmatter(self, repo):
         # PyYAML builds the date itself and raises a bare ValueError, which used to escape without the context
         text = GOOD_FM.replace("2026-11-12", "2026-13-45")
-        assert check(repo, "a.md", text) == ["a.md: invalid frontmatter: month must be in 1..12"]
+        # Python 3.14 appends ", not 13" to the datetime message; older versions stop at "1..12"
+        [error] = check(repo, "a.md", text)
+        assert error.startswith("a.md: invalid frontmatter: month must be in 1..12")
 
     def test_a_quoted_impossible_date_is_reported_as_not_iso(self, repo):
         text = GOOD_FM.replace("2026-11-12", "'2026-13-45'")
