@@ -15,6 +15,8 @@ sources:
 
 # 12 Code Editors and IDEs
 
+> **Status, 2026-11-16:** VS Code, PyCharm Community and Micro were removed from the primary workstation in the November 2026 trim (2026-11-11 and 2026-11-12). Neovim, Sublime Text and Zed remain, and Sublime Text opens text and source files by default. The steps stay for reinstalling. See [`workstation-changes.md`](../workstation-changes.md).
+
 ## Purpose
 
 Install notes for the editors in use. Tracked configuration lives in [`04-editors/`](../../../04-editors/README.md); this chapter covers installation and the package-source choices.
@@ -89,7 +91,7 @@ A VS Code fork with built-in AI features (AUR build 3.28.5; the CachyOS repo car
 sudo pacman -S --needed zed
 ```
 
-Zed <!-- v:zed -->1.25.3<!-- /v --> is Rust-based and GPU-accelerated, with a built-in agent panel and multiplayer editing. Python (basedpyright, ruff, ty), TypeScript, ESLint actions and Tailwind support are native; see [`04-editors/zed/README.md`](../../../04-editors/zed/README.md) for the settings and the retired default model.
+Zed <!-- v:zed -->1.28.1<!-- /v --> is Rust-based and GPU-accelerated, with a built-in agent panel and multiplayer editing. Python (basedpyright, ruff, ty), TypeScript, ESLint actions and Tailwind support are native; see [`04-editors/zed/README.md`](../../../04-editors/zed/README.md) for the settings and the retired default model.
 
 ## 12.4 Neovim and LazyVim
 
@@ -131,7 +133,7 @@ zed --version
 nvim --version | head -1
 ```
 
-Expected: VS Code <!-- v:vscode -->1.144.0<!-- /v --> (Microsoft build), Zed <!-- v:zed -->1.25.3<!-- /v -->, Neovim <!-- v:neovim -->0.12.6<!-- /v -->.
+Expected: VS Code <!-- v:vscode -->1.144.0<!-- /v --> (Microsoft build), Zed <!-- v:zed -->1.28.1<!-- /v -->, Neovim <!-- v:neovim -->0.12.6<!-- /v -->.
 
 ## Sources
 

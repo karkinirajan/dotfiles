@@ -14,6 +14,8 @@ sources:
 
 # 15 Browsers
 
+> **Status, 2026-11-16:** Firefox and Chromium were removed from the primary workstation in the November 2026 trim (2026-11-11 and 2026-11-12). Google Chrome has been the default browser since 2026-11-14; Brave and Zen are the other browsers installed. The text below that treats Brave or Firefox as the default predates this. See [`workstation-changes.md`](../workstation-changes.md).
+
 ## Purpose
 
 Which browsers this machine runs, how to install each, and which extensions still work on them after Chromium dropped Manifest V2.

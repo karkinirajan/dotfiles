@@ -15,6 +15,8 @@ sources:
 
 # 09 Infrastructure as Code and CI/CD
 
+> **Status, 2026-11-16:** On the primary workstation OpenTofu remains; Terraform, Pulumi, Ansible, GitLab Runner and act were removed in the November 2026 trim (2026-11-11 and 2026-11-12). Their steps stay for reinstalling. See [`workstation-changes.md`](../workstation-changes.md).
+
 ## Purpose
 
 Provisioning tools, local CI runners and a CI workflow template that does not depend on end-of-life action runtimes.
@@ -35,7 +37,7 @@ sudo pacman -S --needed opentofu
 tofu -v
 ```
 
-OpenTofu <!-- v:opentofu -->1.13.2<!-- /v --> (MPL 2.0; supported to 2027-08-01; 1.13 removed the WinRM provisioner connection).
+OpenTofu <!-- v:opentofu -->1.13.9<!-- /v --> (MPL 2.0; supported to 2027-08-01; 1.13 removed the WinRM provisioner connection).
 
 ## 9.3 Ansible
 

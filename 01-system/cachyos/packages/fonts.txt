@@ -18,6 +18,8 @@
 #   ttf-weather-icons     (AUR) Noctalia weather widget glyphs.
 #
 # Everything else is a desktop/toolkit dependency or a spare face.
+# ttf-meslo-nerd, ttf-fragment-mono, otf-fragment-mono and ttf-bitstream-vera were
+# removed on 2026-11-12: no config referenced them.
 # ─────────────────────────────────────────────────────────────────────────────
 adwaita-fonts
 awesome-terminal-fonts
@@ -28,18 +30,14 @@ noto-fonts-cjk
 noto-fonts-emoji
 opendesktop-fonts
 otf-font-awesome
-otf-fragment-mono  (AUR)
 powerline-fonts
-ttf-bitstream-vera
 ttf-dejavu
 ttf-fantasque-nerd
 ttf-fira-code
 ttf-firacode-nerd
-ttf-fragment-mono  (AUR)
 ttf-jetbrains-mono
 ttf-jetbrains-mono-nerd
 ttf-liberation
-ttf-meslo-nerd
 ttf-opensans
 ttf-roboto
 ttf-weather-icons  (AUR)

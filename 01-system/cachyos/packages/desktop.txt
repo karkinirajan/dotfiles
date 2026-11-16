@@ -9,8 +9,7 @@
 # Referenced directly by config:
 #   hyprland hyprlock hypridle hyprpolkitagent   02-desktop/hyprland/hypr/*.conf
 #   greetd noctalia-greeter uwsm                 active Noctalia greeter + UWSM session
-#   sddm                                          installed, currently inactive fallback
-#   noctalia                                   the bar/launcher/notifications
+#   noctalia                                 the bar/launcher/notifications
 #   cachyos-wallpapers                          Noctalia's selected CachyOS Moon wallpaper
 #   hyprsunset                                   scripts/nightlight-toggle.sh
 #   hyprpm                                       plugin reload in autostart.conf
@@ -28,12 +27,16 @@
 #   xdg-desktop-portal-gtk   hyprland-portals.conf prefers hyprland;gtk (file chooser)
 #   bibata-cursor-theme-bin (AUR) the Bibata-Modern-Ice cursor named in uwsm/env and
 #                       environment.conf; the bare name lets paru pick the Material provider
-#   gnome-keyring       Secret Service for Proton VPN and Electron apps (chapter 19.6)
-#   swash, onlyoffice-bin    CachyOS repo or AUR only; they are not in Arch extra
+#   gnome-keyring       Secret Service for the gh login, Chrome, Brave and Electron apps (chapter 19.6)
+#   swash                    CachyOS repo or AUR only; it is not in Arch extra
 #   mailspring              CachyOS repo has an older build than the AUR; check the version you want
+#   google-chrome (AUR)     the default browser (mimeapps.list, BROWSER in uwsm/env and .zshrc)
+#   zen-browser-bin         CachyOS repo; a Firefox-based second browser
 #
-# waybar is installed for host parity, though Noctalia replaced it as the
-# active bar. Remove it only if intentionally trimming this workstation set.
+# Removed on 2026-11-11 and 2026-11-12, see 01-system/cachyos/workstation-changes.md:
+# waybar (Noctalia is the only bar), sddm (greetd is the login manager, the SDDM
+# presets stay in 02-desktop/hyprland/sddm/ as reference) and the unused desktop
+# applications.
 # OpenRazer runs for the connected Viper Mini; add the user to the `openrazer`
 # group and start a fresh login session before enabling its user service.
 # ─────────────────────────────────────────────────────────────────────────────
@@ -41,27 +44,20 @@ ai-usagebar-bin  (AUR)
 bibata-cursor-theme-bin  (AUR)
 alacritty
 ark
-bitwarden
 bluez
 bluez-utils
 brightnessctl
 ddcutil
 cachyos-wallpapers
 cliphist
-copyq
 deluge-gtk
 discord
 dolphin
-firefox
-gimp
 gnome-keyring
 gparted
 greetd
 grim
-inkscape
 kdeconnect
-korganizer
-keepassxc
 libreoffice-fresh
 libnotify
 hypridle
@@ -77,9 +73,7 @@ mpv
 networkmanager
 noctalia
 noctalia-greeter
-obs-studio
 obsidian
-okular
 openrazer-daemon
 openrazer-driver-dkms
 pipewire
@@ -88,13 +82,8 @@ playerctl
 qt6ct
 satty
 signal-desktop
-sddm
 slurp
-strawberry
 swash
-telegram-desktop
-thunderbird
-waybar
 wireplumber
 vlc
 vlc-plugins-all
@@ -105,4 +94,15 @@ xdg-desktop-portal-hyprland
 uwsm
 spotify  (AUR)
 zapzap  (AUR)
-onlyoffice-bin
+google-chrome  (AUR)
+zen-browser-bin
+pavucontrol
+seahorse
+# DeepCool AIO cooler display (hardware specific).
+deepcool-digital-linux-git  (AUR)
+deepcool-lm-arkui  (AUR)
+# Kept explicitly after the 2026-11 trim so the dependency sweep does not take
+# them (see 01-system/cachyos/workstation-changes.md).
+gst-plugins-base
+gst-plugins-good
+qt6-imageformats

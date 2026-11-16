@@ -13,13 +13,15 @@ sources:
 
 # 24 AI/ML Project Quickstart
 
+> **Status, 2026-11-16:** Ollama and the local LLM stack were removed from the primary workstation in the November 2026 trim (2026-11-11 and 2026-11-12): no model was installed and nothing connected to it. The steps below stay for bringing local inference back. See [`workstation-changes.md`](../workstation-changes.md).
+
 ## Purpose
 
 A new PyTorch ROCm, LangChain and JupyterLab project, end to end. The ROCm wheel configuration is defined once, in [chapter 04, section 4.1](04-ai-llm-stack.md#41-pytorch-with-rocm); this chapter only wires it into a project.
 
 ## Prerequisites
 
-- Chapters 02, 03 and 04 done; uv <!-- v:uv -->0.13.6<!-- /v -->.
+- Chapters 02, 03 and 04 done; uv <!-- v:uv -->0.13.8<!-- /v -->.
 - `uv init` makes a packaged project (`src/<name>/`, `uv_build` backend) since uv 0.12; pass `--no-package` for the old flat layout.
 
 ## Steps

@@ -15,6 +15,8 @@ sources:
 
 # 06 Databases
 
+> **Status, 2026-11-16:** Only PostgreSQL (with pgvector) remains on the primary workstation. MongoDB, MariaDB and Valkey were removed in the November 2026 trim (2026-11-11 and 2026-11-12); their steps stay for reinstalling. See [`workstation-changes.md`](../workstation-changes.md).
+
 ## Purpose
 
 Local development databases. Every service binds to loopback only; none of them needs a public listener. Data directories start empty: no production data or backup lives in this repository.
@@ -26,7 +28,7 @@ Local development databases. Every service binds to loopback only; none of them 
 
 ## 6.1 PostgreSQL
 
-PostgreSQL <!-- v:postgresql -->18.6<!-- /v --> (PG18 GA 2025-09-25, supported until 2030-11-14; PG19 is a release candidate). `initdb` must run before the service starts, and **its default authentication method is `trust`**, so always pass the two auth flags: they give peer authentication on the socket and SCRAM over TCP. In PostgreSQL 18 `--data-checksums` is already the default (use `--no-data-checksums` to opt out); keeping the flag is explicit and avoids a mismatch with an older cluster when you `pg_upgrade`.
+PostgreSQL <!-- v:postgresql -->18.7<!-- /v --> (PG18 GA 2025-09-25, supported until 2030-11-14; PG19 is a release candidate). `initdb` must run before the service starts, and **its default authentication method is `trust`**, so always pass the two auth flags: they give peer authentication on the socket and SCRAM over TCP. In PostgreSQL 18 `--data-checksums` is already the default (use `--no-data-checksums` to opt out); keeping the flag is explicit and avoids a mismatch with an older cluster when you `pg_upgrade`.
 
 Run these as your normal user from the repository root (`cd ~/dotfiles`), not as root: `$USER` becomes the database role. Blank machine only; `initdb` refuses a non-empty data directory, and an existing cluster must not be re-initialized.
 

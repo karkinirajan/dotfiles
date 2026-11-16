@@ -17,7 +17,7 @@ sources:
 
 ## 11.1 Node.js via NVM
 
-Node 26 "Lithium" became LTS on 2026-10-28 (v26.13.0, bundled npm 11.20.0); Node 24 "Krypton" moved to Maintenance on 2026-10-20 (supported to 2028-04-30); Node 22 ends 2027-04-30. Arch `nodejs` is <!-- v:nodejs -->26.12.1<!-- /v --> (without npm) and Arch `npm` is <!-- v:npm -->12.2.1<!-- /v -->, which blocks dependency install scripts by default (`allowScripts`) and sets `allow-git`/`allow-remote` to `none`. `nvm` shadows the system `node` in interactive shells; non-interactive scripts see the pacman Node.
+Node 26 "Lithium" became LTS on 2026-10-28 (v26.13.0, bundled npm 11.20.0); Node 24 "Krypton" moved to Maintenance on 2026-10-20 (supported to 2028-04-30); Node 22 ends 2027-04-30. Arch `nodejs` is <!-- v:nodejs -->26.13.1<!-- /v --> (without npm) and Arch `npm` is <!-- v:npm -->12.2.2<!-- /v -->, which blocks dependency install scripts by default (`allowScripts`) and sets `allow-git`/`allow-remote` to `none`. `nvm` shadows the system `node` in interactive shells; non-interactive scripts see the pacman Node.
 
 ```bash
 sudo pacman -S --needed nvm
@@ -40,7 +40,7 @@ Label: `machine-only` (nvm resolution inferred from the nvm README and nodejs.or
 sudo pacman -S --needed pnpm yarn
 ```
 
-`pnpm` is <!-- v:pnpm -->12.15.0<!-- /v --> from pacman (upstream 12.16.1): a native binary, no Node dependency. In pnpm 12 the global bin directory is `$PNPM_HOME/bin`, and it must be on `PATH` or `pnpm add -g` fails with `ERR_PNPM_GLOBAL_BIN_DIR_NOT_IN_PATH` (the tracked `.zshrc` adds it). Build scripts are blocked until approved (`pnpm approve-builds`, `allowBuilds` in `pnpm-workspace.yaml`), and new releases are held for 1440 minutes (`minimumReleaseAge`). On Arch update with pacman: `pnpm self-update` installs a copy under `$PNPM_HOME/bin` that shadows the pacman one.
+`pnpm` is <!-- v:pnpm -->12.20.0<!-- /v --> from pacman (upstream 12.16.1): a native binary, no Node dependency. In pnpm 12 the global bin directory is `$PNPM_HOME/bin`, and it must be on `PATH` or `pnpm add -g` fails with `ERR_PNPM_GLOBAL_BIN_DIR_NOT_IN_PATH` (the tracked `.zshrc` adds it). Build scripts are blocked until approved (`pnpm approve-builds`, `allowBuilds` in `pnpm-workspace.yaml`), and new releases are held for 1440 minutes (`minimumReleaseAge`). On Arch update with pacman: `pnpm self-update` installs a copy under `$PNPM_HOME/bin` that shadows the pacman one.
 
 The pacman `yarn` package is **Yarn Classic 1.22.22**. For Yarn 4 (Berry) use Corepack, which Node 25+ no longer bundles: `sudo pacman -S corepack`, `corepack enable`, then `yarn set version stable` in the project.
 
@@ -100,7 +100,7 @@ node --version
 pnpm --version
 ```
 
-Expected: Node <!-- v:nodejs -->26.12.1<!-- /v --> (pacman) or 26.13.0 under `nvm install --lts`; pnpm <!-- v:pnpm -->12.15.0<!-- /v -->.
+Expected: Node <!-- v:nodejs -->26.13.1<!-- /v --> (pacman) or 26.13.0 under `nvm install --lts`; pnpm <!-- v:pnpm -->12.20.0<!-- /v -->.
 
 ## Sources
 

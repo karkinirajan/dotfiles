@@ -15,6 +15,8 @@ sources:
 
 # 04 AI/ML and LLM Stack
 
+> **Status, 2026-11-16:** Ollama and the local LLM stack were removed from the primary workstation in the November 2026 trim (2026-11-11 and 2026-11-12): no model was installed and nothing connected to it. The steps below stay for bringing local inference back. See [`workstation-changes.md`](../workstation-changes.md).
+
 ## Purpose
 
 Local inference and the Python ML libraries on the RX 6700 XT (12 GiB VRAM, gfx1031). The binding constraint for model choice is **VRAM**, not system RAM.

@@ -11,6 +11,8 @@ sources: []
 
 # 25 Quick Reference and Services
 
+> **Status, 2026-11-16:** Entries for software removed from the primary workstation in the November 2026 trim (2026-11-11 and 2026-11-12) are kept for reinstalling. See [`workstation-changes.md`](../workstation-changes.md).
+
 ## Quick Reference Card
 
 | Need | Tool | Command |

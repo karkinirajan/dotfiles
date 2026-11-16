@@ -16,7 +16,7 @@ sources:
 
 ## Purpose
 
-A sane global Git setup, signed commits, the GitHub CLI and the commit message convention. Git <!-- v:git -->2.56.0<!-- /v --> and GitHub CLI <!-- v:github-cli -->2.102.1<!-- /v --> are the current Arch builds (gh upstream is at 2.103.3).
+A sane global Git setup, signed commits, the GitHub CLI and the commit message convention. Git <!-- v:git -->2.56.1<!-- /v --> and GitHub CLI <!-- v:github-cli -->2.104.0<!-- /v --> are the current Arch builds (gh upstream is at 2.103.3).
 
 ## 14.1 Git Configuration
 
@@ -143,7 +143,7 @@ gh --version
 git config --global --get push.autoSetupRemote
 ```
 
-Expected: Git <!-- v:git -->2.56.0<!-- /v -->, gh <!-- v:github-cli -->2.102.1<!-- /v -->, `true`.
+Expected: Git <!-- v:git -->2.56.1<!-- /v -->, gh <!-- v:github-cli -->2.104.0<!-- /v -->, `true`.
 
 ## Sources
 

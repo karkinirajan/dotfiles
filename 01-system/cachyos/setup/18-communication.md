@@ -13,6 +13,8 @@ sources:
 
 # 18 Communication and Collaboration
 
+> **Status, 2026-11-16:** Telegram, Thunderbird and KOrganizer were removed from the primary workstation in the November 2026 trim (2026-11-11 and 2026-11-12); Mailspring, Slack, Discord, Signal and Zoom remain. See [`workstation-changes.md`](../workstation-changes.md).
+
 ## Purpose
 
 Chat, email, video calls and phone integration on Hyprland, including the portals Wayland screen sharing needs.

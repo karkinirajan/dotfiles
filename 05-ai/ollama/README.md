@@ -14,6 +14,8 @@ sources:
 
 # 05.2 · Ollama: local LLM inference on an RX 6700 XT
 
+> **Status, 2026-11-16:** Ollama and the ROCm libraries were removed from the primary workstation in the November 2026 trim (2026-11-11 and 2026-11-12): no model was installed and nothing connected to the service. This chapter is the recipe for bringing local inference back; `packages/ai.txt` is the matching package set. Zed's `ollama` edit-prediction and agent provider settings need this service. See [`workstation-changes.md`](../../01-system/cachyos/workstation-changes.md).
+
 Package version: Ollama <!-- v:ollama -->0.40.11<!-- /v --> (Arch and CachyOS; upstream <!-- v:ollama:upstream -->0.40.13<!-- /v -->). The benchmark numbers in this chapter and in `claude-code-bench/` are dated measurements on older versions; each one says what it was measured with.
 
 GPU-accelerated Ollama on hardware AMD does not officially support, tuned by

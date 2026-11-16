@@ -6,9 +6,9 @@ Every chapter in reading order. Regenerate with `python3 tools/gen_index.py`.
 
 | Chapter | Path | Last verified | Status |
 |---|---|---|---|
-| [Developer stack on CachyOS](01-system/cachyos/dev-stack.md) | `01-system/cachyos/dev-stack.md` | 2026-10-29 | current |
+| [Developer stack on CachyOS](01-system/cachyos/dev-stack.md) | `01-system/cachyos/dev-stack.md` | 2026-11-16 | current |
 | [Dual boot with Secure Boot (CachyOS, Windows 11, Limine)](01-system/cachyos/dual-secure-boot.md) | `01-system/cachyos/dual-secure-boot.md` | 2026-11-01 | current |
-| [Host package snapshot](01-system/cachyos/host-snapshot/README.md) | `01-system/cachyos/host-snapshot/README.md` | 2026-10-28 | reference |
+| [Host package snapshot](01-system/cachyos/host-snapshot/README.md) | `01-system/cachyos/host-snapshot/README.md` | 2026-11-16 | reference |
 | [CachyOS setup guide (moved)](01-system/cachyos/setup.md) | `01-system/cachyos/setup.md` | 2026-10-29 | archived |
 | [01 System Foundation and Optimization](01-system/cachyos/setup/01-system-foundation.md) | `01-system/cachyos/setup/01-system-foundation.md` | 2026-10-29 | current |
 | [02 AMD GPU Drivers and ROCm](01-system/cachyos/setup/02-amd-gpu-rocm.md) | `01-system/cachyos/setup/02-amd-gpu-rocm.md` | 2026-10-29 | current |
@@ -35,6 +35,7 @@ Every chapter in reading order. Regenerate with `python3 tools/gen_index.py`.
 | [23 Zsh Configuration](01-system/cachyos/setup/23-zsh-configuration.md) | `01-system/cachyos/setup/23-zsh-configuration.md` | 2026-10-29 | current |
 | [24 AI/ML Project Quickstart](01-system/cachyos/setup/24-ai-ml-quickstart.md) | `01-system/cachyos/setup/24-ai-ml-quickstart.md` | 2026-10-29 | current |
 | [25 Quick Reference and Services](01-system/cachyos/setup/25-quick-reference.md) | `01-system/cachyos/setup/25-quick-reference.md` | 2026-10-29 | current |
+| [Workstation changes, November 2026](01-system/cachyos/workstation-changes.md) | `01-system/cachyos/workstation-changes.md` | 2026-11-16 | current |
 | [Part 02 Desktop](02-desktop/README.md) | `02-desktop/README.md` | 2026-10-29 | current |
 | [Font rendering](02-desktop/fonts/README.md) | `02-desktop/fonts/README.md` | 2026-10-29 | current |
 | [KDE and Plasma removal log](02-desktop/hyprland/KDE-REMOVAL.md) | `02-desktop/hyprland/KDE-REMOVAL.md` | 2026-10-29 | archived |
@@ -48,6 +49,6 @@ Every chapter in reading order. Regenerate with `python3 tools/gen_index.py`.
 | [Zed](04-editors/zed/README.md) | `04-editors/zed/README.md` | 2026-10-29 | current |
 | [Building a production-grade Claude Code agent](05-ai/claude-code/agent-dev.md) | `05-ai/claude-code/agent-dev.md` | 2026-11-13 | current |
 | [Ollama on the RX 6700 XT](05-ai/ollama/README.md) | `05-ai/ollama/README.md` | 2026-10-29 | current |
-| [Installed apps and utilities](apps-and-utils.md) | `apps-and-utils.md` | 2026-10-29 | current |
-| [Host system summary](system-summary.md) | `system-summary.md` | 2026-10-29 | reference |
+| [Installed apps and utilities](apps-and-utils.md) | `apps-and-utils.md` | 2026-11-16 | current |
+| [Host system summary](system-summary.md) | `system-summary.md` | 2026-11-16 | reference |
 | [Repo tooling](tools/README.md) | `tools/README.md` | 2026-11-12 | current |

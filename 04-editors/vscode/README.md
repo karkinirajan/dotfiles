@@ -1,5 +1,7 @@
 # 04.1 · Visual Studio Code
 
+> **Status, 2026-11-16:** VS Code was uninstalled from the primary workstation in the November 2026 trim (2026-11-11 and 2026-11-12), and its two seed entries left `manifest.conf`. The settings, keybindings and extension list below stay as reference for a reinstall. See [`workstation-changes.md`](../../01-system/cachyos/workstation-changes.md).
+
 User settings, keybindings, and extension manifest for `visual-studio-code-bin`.
 
 ```text

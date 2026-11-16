@@ -13,6 +13,8 @@ sources:
 
 # 21 Media, Office and Personal
 
+> **Status, 2026-11-16:** Strawberry, OBS Studio, GIMP, Inkscape, Blender, Okular and OnlyOffice were removed from the primary workstation in the November 2026 trim (2026-11-11 and 2026-11-12); LibreOffice, VLC and mpv remain. See [`workstation-changes.md`](../workstation-changes.md).
+
 ## Purpose
 
 Media players, graphics, office and file-handling tools, with the package source that works on CachyOS today.

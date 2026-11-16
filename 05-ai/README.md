@@ -1,13 +1,14 @@
 # 05 · AI
 
 Local and hosted language models as used on this workstation: the Claude Code
-harness that drives agent work, the Ollama stack that runs models on the
-AMD GPU, and the reading that informs both.
+harness that drives agent work, the Ollama recipe for running models on the
+AMD GPU (not installed on the machine since 2026-11-12), and the reading that
+informs both.
 
 | Chapter | Path | Purpose |
 |---------|------|---------|
 | Claude Code | [`claude-code/`](claude-code/README.md) | Global instructions, subagents, skills, and settings for every project |
-| Ollama | [`ollama/`](ollama/README.md) | ROCm and Vulkan backends, systemd drop-ins, and the benchmark harness |
+| Ollama (recipe; not installed) | [`ollama/`](ollama/README.md) | ROCm and Vulkan backends, systemd drop-ins, and the benchmark harness |
 | Resources | [`RESOURCES.md`](RESOURCES.md) | Primary docs and reference projects, with what each is for |
 
 ## How the chapters connect
@@ -15,7 +16,9 @@ AMD GPU, and the reading that informs both.
 - `claude-code/` is what runs. Its `CLAUDE.md`, `settings.json`, `agents/`,
   `commands/`, and `skills/` are linked into `~/.claude/`; skills load on demand.
   Token-efficient usage and optional helper packages are documented in that chapter.
-- `ollama/` is what serves local models. The `claude-code-bench/` area wires a
+- `ollama/` is what served local models until the stack was removed on
+  2026-11-12 (no model was installed and nothing connected to it); it stays as
+  the recipe for bringing local inference back. The `claude-code-bench/` area wires a
   local model into Claude Code as a second endpoint, and is kept for reference
   rather than linked.
 - `RESOURCES.md` is the reading behind both. Check it before adding a new

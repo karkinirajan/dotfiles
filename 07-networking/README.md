@@ -5,7 +5,7 @@ distraction blocker in [`06-tools/focus/`](../06-tools/focus/README.md).
 
 | Chapter | Path | What it is |
 |---------|------|------------|
-| **07.1** | [`nginx/`](nginx/README.md) | Reverse-proxy MIME hash table tuning (`/etc/nginx/conf.d/00-types-hash.conf`) |
+| **07.1** | [`nginx/`](nginx/README.md) | Reverse-proxy MIME hash table tuning (`/etc/nginx/conf.d/00-types-hash.conf`); applies to any host that runs nginx, which this workstation no longer does (package removed 2026-11-12) |
 | **07.2** | [`ssh/`](ssh/README.md) | Persistent SSH ControlMaster user unit (`erke-vps-ssh.service`) |
 
 Neither chapter is auto-linked by [`manifest.conf`](../manifest.conf): `nginx/`

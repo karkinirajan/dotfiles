@@ -1,11 +1,10 @@
 # Snapshot, security, and power-management packages explicitly installed on
 # this CachyOS profile. Several optional security daemons remain disabled.
 # Timeshift is an alternative and conflicts with cachyos-snapper-support.
+# fail2ban and dnscrypt-proxy were removed on 2026-11-12: neither was enabled.
 
 apparmor.d
 cachyos-snapper-support
-dnscrypt-proxy
-fail2ban
 power-profiles-daemon
 snap-pac
 snapper

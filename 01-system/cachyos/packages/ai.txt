@@ -1,5 +1,10 @@
 # Local LLM inference (Ollama + ROCm + Vulkan)
 #
+# NOT INSTALLED on the primary workstation since 2026-11-12: no models were
+# installed and nothing connected to the service, so the whole stack was
+# removed. This file is the recipe for adding local inference back; reinstall
+# it only on purpose. See 01-system/cachyos/workstation-changes.md.
+#
 # This is an optional, hardware-specific package set; it is not part of the
 # desktop baseline. ollama-rocm provides the AMD ROCm backend, while
 # ollama-vulkan + vulkan-radeon provide an alternate backend. See

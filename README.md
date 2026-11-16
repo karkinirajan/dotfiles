@@ -1,8 +1,8 @@
 # Dotfiles
 
 Personal configuration for a CachyOS (Arch) Wayland workstation: Hyprland +
-Noctalia desktop, kitty/zsh terminal, editors, local LLM inference, and the
-tooling around them. Every version the docs state comes from [`versions.yaml`](versions.yaml) and was last verified on 2026-10-29.
+Noctalia desktop, kitty/zsh terminal, editors, an optional local-LLM recipe, and the
+tooling around them. Every version the docs state comes from [`versions.yaml`](versions.yaml). Entries for packages installed on the machine were re-verified on 2026-11-16; the rest keep their 2026-10-29 verification. What changed on the machine since the first snapshot, and why, is in [`01-system/cachyos/workstation-changes.md`](01-system/cachyos/workstation-changes.md).
 
 Read it like a book. Each numbered **part** is a folder, each part's
 `README.md` is its introduction, and each **chapter** is a subfolder with its
@@ -14,14 +14,15 @@ own README. Start at Part 00 and go in order, or jump to the part you need.
 
 | Layer | Stack |
 |-------|-------|
-| OS and hardware | CachyOS (Arch), kernel <!-- v:cachyos-kernel -->7.3.0<!-- /v -->, Ryzen 5 5600, RX 6700 XT (Mesa <!-- v:mesa -->26.2.5<!-- /v -->, ROCm <!-- v:rocm -->7.2.4<!-- /v -->) |
-| Desktop | Hyprland <!-- v:hyprland -->0.57.0<!-- /v --> (Lua config, see [`lua-migration.md`](02-desktop/hyprland/lua-migration.md)), Noctalia <!-- v:noctalia -->5.4.0<!-- /v -->, UWSM, greetd |
-| Terminal | zsh <!-- v:zsh -->5.9.2<!-- /v -->, kitty <!-- v:kitty -->0.49.2<!-- /v -->, Starship <!-- v:starship -->1.27.0<!-- /v --> |
-| Editors | Neovim <!-- v:neovim -->0.12.6<!-- /v -->, Zed <!-- v:zed -->1.25.3<!-- /v -->, VS Code <!-- v:vscode -->1.144.0<!-- /v --> |
-| Languages | Python <!-- v:python -->3.14.8<!-- /v --> with uv <!-- v:uv -->0.13.6<!-- /v -->, Node <!-- v:nodejs -->26.12.1<!-- /v -->, Next.js <!-- v:fe-next -->16.4.3<!-- /v --> |
-| Data | PostgreSQL <!-- v:postgresql -->18.6<!-- /v -->, MariaDB <!-- v:mariadb-lts -->12.3.3<!-- /v --> LTS, Valkey <!-- v:valkey -->9.1.2<!-- /v --> |
-| Containers | Rootless Docker <!-- v:docker -->29.9.2<!-- /v -->, Kubernetes tooling |
-| AI | Ollama <!-- v:ollama -->0.40.11<!-- /v --> (ROCm and Vulkan), Claude Code <!-- v:claude-code -->2.1.311<!-- /v --> |
+| OS and hardware | CachyOS (Arch), kernel <!-- v:cachyos-kernel -->7.3.4<!-- /v -->, Ryzen 5 5600, RX 6700 XT (Mesa <!-- v:mesa -->26.2.6<!-- /v -->) |
+| Desktop | Hyprland <!-- v:hyprland -->0.57.2<!-- /v --> (Lua config, see [`lua-migration.md`](02-desktop/hyprland/lua-migration.md)), Noctalia <!-- v:noctalia -->5.5.0<!-- /v -->, UWSM, greetd |
+| Terminal | zsh <!-- v:zsh -->5.9.2<!-- /v -->, kitty <!-- v:kitty -->0.50.0<!-- /v -->, Starship <!-- v:starship -->1.27.0<!-- /v --> |
+| Editors | Neovim <!-- v:neovim -->0.12.6<!-- /v --> (`$EDITOR`), Sublime Text (opens text and source files), Zed <!-- v:zed -->1.28.1<!-- /v --> |
+| Browsers | Google Chrome (default), Brave, Zen |
+| Languages | Python <!-- v:python -->3.14.10<!-- /v --> with uv <!-- v:uv -->0.13.8<!-- /v -->, Node <!-- v:nodejs -->26.13.1<!-- /v -->, Next.js <!-- v:fe-next -->16.4.3<!-- /v --> |
+| Data | PostgreSQL <!-- v:postgresql -->18.7<!-- /v --> with pgvector (demo database in [`06-tools/pgvector-demo/`](06-tools/pgvector-demo/README.md)) |
+| Containers | Rootless Docker <!-- v:docker -->29.9.3<!-- /v -->, Kubernetes tooling |
+| AI | Claude Code <!-- v:claude-code -->2.1.325<!-- /v -->; the Ollama and ROCm stack is documented but not installed |
 
 ---
 
@@ -33,8 +34,8 @@ own README. Start at Part 00 and go in order, or jump to the part you need.
 | **01** | [`01-system/`](01-system/README.md) | the OS: packages, backups, update automation |
 | **02** | [`02-desktop/`](02-desktop/README.md) | the graphical session: Hyprland, Noctalia, fonts |
 | **03** | [`03-terminal/`](03-terminal/README.md) | shells, terminal emulators, prompts |
-| **04** | [`04-editors/`](04-editors/README.md) | VS Code, Zed, Sublime |
-| **05** | [`05-ai/`](05-ai/README.md) | Claude Code, local LLMs (Ollama), and AI resources |
+| **04** | [`04-editors/`](04-editors/README.md) | Zed, Sublime, and the VS Code reference config |
+| **05** | [`05-ai/`](05-ai/README.md) | Claude Code, the Ollama recipe (not installed), and AI resources |
 | **06** | [`06-tools/`](06-tools/README.md) | standalone utilities: the focus site-blocker |
 | **07** | [`07-networking/`](07-networking/README.md) | SSH helpers and Nginx configuration |
 | **99** | [Appendix](#99--appendix) | reference material and the links behind it |
@@ -80,7 +81,7 @@ own README. Start at Part 00 and go in order, or jump to the part you need.
 
 | Chapter | Path |
 |---------|------|
-| VS Code | [`04-editors/vscode/`](04-editors/vscode/README.md) |
+| VS Code (reference config; not installed) | [`04-editors/vscode/`](04-editors/vscode/README.md) |
 | Zed | [`04-editors/zed/`](04-editors/zed/README.md) |
 | Sublime Text | [`04-editors/sublime/`](04-editors/sublime/README.md) |
 
@@ -89,7 +90,7 @@ own README. Start at Part 00 and go in order, or jump to the part you need.
 | Chapter | Path |
 |---------|------|
 | Claude Code: global instructions, subagents, skills, settings | [`05-ai/claude-code/`](05-ai/claude-code/README.md) |
-| Ollama: ROCm and Vulkan backends, systemd drop-ins, benchmarks | [`05-ai/ollama/`](05-ai/ollama/README.md) |
+| Ollama (recipe only; removed from the machine 2026-11-12): ROCm and Vulkan backends, systemd drop-ins, benchmarks | [`05-ai/ollama/`](05-ai/ollama/README.md) |
 | Reading list and reference projects | [`05-ai/RESOURCES.md`](05-ai/RESOURCES.md) |
 
 ### 06 · Tools: [`06-tools/`](06-tools/README.md)

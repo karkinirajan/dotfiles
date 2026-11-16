@@ -1,6 +1,7 @@
 # Interactive shell and developer CLI baseline.
 # All packages are from CachyOS/Arch repositories except topgrade-bin (AUR).
-# paru is the configured AUR updater; yay remains an available fallback.
+# paru is the configured AUR updater; yay stays installed as the second helper
+# (both are in the CachyOS repo, so neither needs bootstrapping from the AUR).
 # AUR entries are marked with the repository's existing `(AUR)` convention.
 
 atuin
@@ -31,7 +32,21 @@ topgrade-bin (AUR)
 unzip
 uv
 wget
-yazi
 zoxide
 zsh
 7zip
+yay
+fastfetch
+# Small general-purpose tools kept explicitly after the 2026-11 trim so the
+# dependency sweep does not take them (see 01-system/cachyos/workstation-changes.md).
+bc
+dos2unix
+lsof
+perf
+time
+whois
+wireguard-tools
+xorg-xauth
+xorg-xrandr
+zenity
+systemd-resolvconf

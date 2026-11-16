@@ -7,67 +7,47 @@
 #
 # Notes:
 #   lact           enable its daemon for the GUI to apply settings: systemctl enable --now lactd
-#   mullvad-vpn    Arch extra; the AUR mullvad-vpn-bin is no longer needed. Its install may
-#                  enable mullvad-daemon and the early-boot blocker: disable both while Proton VPN is in use
 #   docker-machine was removed: archived upstream in 2025-07
-#   mariadb-lts    the long-term series (12.3, supported to 2029-06); Arch's `mariadb` is the rolling 13.0
-#                  series with Community support ending in Q4 2026. The two packages conflict.
-act
+#   graft          Claude Code context tool (CachyOS repo); claude-code and claude-desktop are listed below
+#
+# Removed on 2026-11-11 and 2026-11-12 (databases, cloud CLIs, infrastructure tools, IDEs and
+# local AI): see 01-system/cachyos/workstation-changes.md for the list and the reasons.
+# PostgreSQL with pgvector stays; 06-tools/pgvector-demo/ builds a demo database on it.
 amdgpu_top
-ansible
-aws-cli-v2
-azure-cli
 brave-bin
 # claude-code and claude-desktop come from the CachyOS repo; on plain Arch they are AUR-only.
 claude-code
 claude-desktop
 cpu-x
-dbeaver
 docker
 docker-buildx
 docker-compose
-gitlab-runner
 glances
+graft
 helm
 inxi
 k9s
-kdiskmark
 kubectl
 lact
 lm_sensors
-mariadb-lts
-meld
-micro
-mission-center
 minikube
-mullvad-vpn
 ncdu
-nginx
 node-gyp
 nodejs
 npm
 nvm
 nvtop
-openai-codex
 opentofu
 pgvector
 pnpm
 postgresql
-prometheus
-proton-vpn-gtk-app
-pulumi
-pycharm-community-edition
 python
 radeontop
-rocm-smi-lib
 rootlesskit
 rustup
 slirp4netns
 sqlite
-stress-ng
 syncthing
-terraform
-valkey
 vim
 yarn
 zed
@@ -75,16 +55,23 @@ zed
 # AUR packages
 #   stremio-linux-shell: upstream distributes Stremio as a Flatpak (flatpak install com.stremio.Stremio);
 #   the AUR package is a thin community build with one vote.
-#   logseq-og-bin: the file-graph (Markdown) app after the 2026-04 split; logseq-desktop-bin is out of date.
 #   notion-app-enhanced was dropped: it repackages a 2022 Electron 18 build and there is no Linux app; use Notion in the browser.
-anytype-bin  (AUR)
+#   upwork is installed from the local PKGBUILD in ../aur/upwork/, not downloaded from the AUR.
+#   antigravity, antigravity-cli (agy) and antigravity-ide are three separate Google products.
+#   voice-agent-git and the claude-* packages are Claude Code companions; gh-dash is a GitHub TUI.
+antigravity  (AUR)
+antigravity-cli  (AUR)
+antigravity-ide  (AUR)
+claude-code-cleaner  (AUR)
+claude-cowork-service  (AUR)
+claude-mem  (AUR)
+claude-science  (AUR)
+claude-vault  (AUR)
+claudectx-bin  (AUR)
 docker-rootless-extras  (AUR)
-logseq-og-bin  (AUR)
-mongodb-bin  (AUR)
-mongodb-compass-bin  (AUR)
+gh-dash  (AUR)
 slack-desktop  (AUR)
 stremio-linux-shell  (AUR)
 sublime-text-4  (AUR)
-todoist-appimage  (AUR)
-visual-studio-code-bin  (AUR)
+voice-agent-git  (AUR)
 zoom  (AUR)

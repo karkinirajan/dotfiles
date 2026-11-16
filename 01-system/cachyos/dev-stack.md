@@ -4,7 +4,7 @@ part: "01"
 chapter: dev-stack
 topic: dev-stack
 versions: [python, uv, nodejs, postgresql, mariadb-lts, mongodb, docker, lact]
-last_verified: 2026-10-29
+last_verified: 2026-11-16
 status: current
 sources:
   - https://www.postgresql.org/docs/18/app-initdb.html
@@ -16,17 +16,16 @@ sources:
 
 The optional full development profile and the local service choices used on the primary machine. Each step points to the setup chapter that explains and sources it; this page is the ordered runbook. Package lists: [`packages/developer.txt`](packages/developer.txt) (this profile), [`packages/desktop.txt`](packages/desktop.txt) (desktop and greeter), [`packages/system.txt`](packages/system.txt) (security and power). `(AUR)` entries need `paru` or `yay`.
 
+The primary machine's profile was trimmed on 2026-11-11 and 2026-11-12: MongoDB, MariaDB, Valkey, Nginx, the cloud and infrastructure CLIs, the extra IDEs and the local AI stack were removed because nothing used them. The sections below keep their steps for the day any of them is needed again; what is installed now is in [`system-summary.md`](../../system-summary.md) and the reasons are in [`workstation-changes.md`](workstation-changes.md).
+
 This workstation has Arch's `multilib` repository enabled in `/etc/pacman.conf` for its 32-bit runtime libraries. Keep it enabled so pacman recognises the installed `lib32-*` packages as repository packages.
 
 ## 1. Install the package profile
 
-Run everything here as your normal user, from the repository root (`cd ~/dotfiles`), not as root: `$USER` is used as the database role name. Review the list, then install repository and AUR packages separately. Names whose conflicting counterpart is already installed are skipped; never answer `y` to a "`mariadb-lts` and `mariadb` are in conflict, remove?" prompt on a host that already has a MariaDB data directory.
+Run everything here as your normal user, from the repository root (`cd ~/dotfiles`), not as root: `$USER` is used as the database role name. Review the list, then install repository and AUR packages separately. If a package in the list conflicts with one already installed, add its name to `skip` before running the block, and never answer `y` to a "remove the conflicting package?" prompt on a host that holds data for it.
 
 ```sh
 skip=()
-pacman -Q mariadb >/dev/null 2>&1 && skip+=(mariadb-lts)
-pacman -Q mullvad-vpn-bin >/dev/null 2>&1 && skip+=(mullvad-vpn)
-pacman -Q logseq-desktop-bin >/dev/null 2>&1 && skip+=(logseq-og-bin)
 filter() { awk -v s="${skip[*]}" 'BEGIN{n=split(s,a," "); for(i=1;i<=n;i++) k[a[i]]=1} NF && $1 !~ /^#/ && !($1 in k)'; }
 mapfile -t repo_packages < <(filter < 01-system/cachyos/packages/developer.txt | awk '$2 != "(AUR)" {print $1}')
 mapfile -t aur_packages < <(filter < 01-system/cachyos/packages/developer.txt | awk '$2 == "(AUR)" {print $1}')
@@ -37,12 +36,6 @@ if ((${#aur_packages[@]})); then
 fi
 ```
 
-`mullvad-vpn` now comes from Arch `extra`; its package hook may enable `mullvad-daemon.service` and `mullvad-early-boot-blocking.service`. This machine keeps both disabled while Proton VPN is in use (see [chapter 19](setup/19-security-privacy.md)). Run this only if the units exist and are enabled:
-
-```sh
-systemctl list-unit-files 'mullvad-*' --no-legend | rg -q . && sudo systemctl disable --now mullvad-daemon.service mullvad-early-boot-blocking.service
-```
-
 Install Upwork from its bundled-runtime recipe ([`aur/upwork/`](aur/upwork/README.md)). This is an owner step and is skipped in unattended runs: the vendor CDN refuses scripted downloads, so the `.deb` must be downloaded in a browser first. The command refuses to run without it:
 
 ```sh
@@ -51,16 +44,16 @@ Install Upwork from its bundled-runtime recipe ([`aur/upwork/`](aur/upwork/READM
 
 ## 2. Language toolchains
 
-- **Python:** system Python <!-- v:python -->3.14.8<!-- /v --> stays under pacman (PEP 668 blocks global `pip`). `uv` <!-- v:uv -->0.13.6<!-- /v --> provides other interpreters (`uv python install 3.12 3.13`) and isolated tools; start projects with `uv init --python 3.14` (or 3.12) and `uv add`. See [chapter 03](setup/03-python-uv.md).
+- **Python:** system Python <!-- v:python -->3.14.10<!-- /v --> stays under pacman (PEP 668 blocks global `pip`). `uv` <!-- v:uv -->0.13.8<!-- /v --> provides other interpreters (`uv python install 3.12 3.13`) and isolated tools; start projects with `uv init --python 3.14` (or 3.12) and `uv add`. See [chapter 03](setup/03-python-uv.md).
 - **Rust:** `rustup` (extra, 1.29.2) from `packages/developer.txt`, then `rustup default stable` and `rustup component add rustfmt clippy rust-src rust-analyzer`. No setup chapter covers Rust beyond this line.
 - **JavaScript/TypeScript:** Node is managed by NVM from pacman; `nvm install --lts` resolves to Node 26 (LTS since 2026-10-28), and Node 24 stays available for projects that pin it. pnpm and Yarn are available. Install TypeScript 6.x for tooling: `typescript@latest` is 7.0.2 (native compiler) and `typescript-eslint` rejects it. Details in [chapter 11](setup/11-frontend.md).
 - **Backend frameworks:** per-project environments, for example `uv init --python 3.14 api && cd api && uv add fastapi 'uvicorn[standard]'`. A Django project that also uses `django-celery-beat` resolves to Django 6.0.9 today; pin `django>=5.2,<5.3` for the LTS.
 
 ## 3. Local databases and services
 
-PostgreSQL, MongoDB, MariaDB and Valkey run as system services bound to loopback. The full steps, with the reasoning, are in [chapter 06](setup/06-databases.md); the order here is the one to run on a new machine.
+On the primary machine only PostgreSQL runs now, as a system service bound to loopback; MongoDB, MariaDB and Valkey ran the same way until they were removed (2026-11-11 and 2026-11-12) and their steps below are for when one is needed again. The full steps, with the reasoning, are in [chapter 06](setup/06-databases.md); the order here is the one to run on a new machine.
 
-**PostgreSQL <!-- v:postgresql -->18.6<!-- /v -->:** `initdb` must run before the service starts and its default authentication is `trust`, so the two auth flags are mandatory:
+**PostgreSQL <!-- v:postgresql -->18.7<!-- /v -->:** `initdb` must run before the service starts and its default authentication is `trust`, so the two auth flags are mandatory:
 
 ```sh
 sudo pacman -S --needed postgresql pgvector
@@ -74,7 +67,9 @@ sudo -u postgres createdb -O "$USER" dev
 sudo -u postgres psql -d dev -c 'CREATE EXTENSION vector'
 ```
 
-**MariaDB:** Arch `mariadb` is 13.0, a rolling release; use the long-term series <!-- v:mariadb-lts -->12.3.3<!-- /v --> (the two packages conflict). The tracked [`mariadb-local.cnf`](mariadb-local.cnf) pins `bind-address = 127.0.0.1`; install it before the first start, because MariaDB's own default is every interface:
+A demo database for pgvector (an embeddings table, an HNSW index and two nearest-neighbour queries) is in [`06-tools/pgvector-demo/`](../../06-tools/pgvector-demo/README.md).
+
+**MariaDB (optional, not installed):** Arch `mariadb` is 13.0, a rolling release; use the long-term series <!-- v:mariadb-lts -->12.3.3<!-- /v --> (the two packages conflict). The tracked [`mariadb-local.cnf`](mariadb-local.cnf) pins `bind-address = 127.0.0.1`; install it before the first start, because MariaDB's own default is every interface:
 
 Blank machine only (skip if `/var/lib/mysql` already holds data):
 
@@ -86,19 +81,18 @@ sudo systemctl enable --now mariadb &&
 sudo mariadb -e "CREATE DATABASE dev; CREATE USER '$USER'@'localhost' IDENTIFIED VIA unix_socket; GRANT ALL ON dev.* TO '$USER'@'localhost';"
 ```
 
-**MongoDB:** AUR-only (`mongodb-bin` <!-- v:mongodb -->8.3.9<!-- /v -->). Versions 8.3.0 to 8.3.12 are inside advisory SERVER-131805 (fixed in 8.3.13); the exposure is low on this single-node loopback instance with no replica set, but move to 8.3.13 or 9.x once an AUR binary exists. The AUR package uses `mongodb.service` and `/etc/mongodb.conf` (`bindIp: 127.0.0.1`), authentication is off, and it needs the ownership drop-in described in chapter 06.
+**MongoDB (optional, not installed):** AUR-only (`mongodb-bin` <!-- v:mongodb -->8.3.9<!-- /v -->). Versions 8.3.0 to 8.3.12 are inside advisory SERVER-131805 (fixed in 8.3.13); the exposure is low on this single-node loopback instance with no replica set, but move to 8.3.13 or 9.x once an AUR binary exists. The AUR package uses `mongodb.service` and `/etc/mongodb.conf` (`bindIp: 127.0.0.1`), authentication is off, and it needs the ownership drop-in described in chapter 06.
 
-**Valkey:** `sudo pacman -S --needed valkey && sudo systemctl enable --now valkey.service`.
+**Valkey (optional, not installed):** `sudo pacman -S --needed valkey && sudo systemctl enable --now valkey.service`.
 
 ```sh
-systemctl is-active postgresql mongodb mariadb valkey
+systemctl is-active postgresql
 psql -d dev -c 'select current_user, current_database()'
-mongosh --quiet --eval 'db.runCommand({ping:1})'
-mariadb --protocol=socket dev -e 'select database()'
-valkey-cli ping
 ```
 
-Nginx is installed and stays disabled until a project needs it.
+For any optional service you add back, check it the same way (`systemctl is-active mariadb`, `mongosh --quiet --eval 'db.runCommand({ping:1})'`, `valkey-cli ping`).
+
+Nginx is not installed (removed 2026-11-12, it was never enabled); install it when a project needs it.
 
 **Firewall:** UFW is active with incoming denied, outgoing allowed and no inbound allow rules on the baseline (optional LAN-scoped examples for KDE Connect and Syncthing are in chapters 18 and 19). Local development services stay loopback-only; if a project needs LAN access, add a narrowly scoped rule and remove it afterwards. To reproduce the baseline on a local workstation (never over remote SSH without the SSH allow rule in place):
 
@@ -109,7 +103,7 @@ sudo ufw enable
 sudo ufw status verbose
 ```
 
-**VPN and DNS:** the Proton VPN daemon runs with no active tunnel, and Mullvad's daemon and early-boot blocker are disabled. Do not enable both clients at once. DNSCrypt Proxy, dnsmasq, Fail2ban, Syncthing and AppArmor profiles are installed but not all enabled; the live inventory is in [`system-summary.md`](../../system-summary.md).
+**VPN and DNS:** no VPN client is installed (Proton VPN and Mullvad were removed). dnsmasq, Syncthing and the AppArmor profiles are installed but not all enabled; DNSCrypt Proxy and Fail2ban were removed because neither was enabled. The live inventory is in [`system-summary.md`](../../system-summary.md).
 
 ## 4. Rootless Docker
 
@@ -136,7 +130,7 @@ Then verify `systemctl --user status openrazer-daemon`.
 
 ## 5. Local AI and hardware
 
-Ollama uses its ROCm backend for the RX 6700 XT (gfx1031) with the tracked systemd drop-ins from [`../../05-ai/ollama/README.md`](../../05-ai/ollama/README.md). On the packaged Ollama the `HSA_OVERRIDE_GFX_VERSION=10.3.0` override is a fallback; it is needed for PyTorch wheels ([chapter 02](setup/02-amd-gpu-rocm.md)). Confirm backend detection with `journalctl -u ollama | rg 'inference compute'`; loading a model is required to confirm GPU layer placement. GPU monitoring: `amdgpu_top`, `nvtop`, `radeontop`, `rocm-smi`, `sensors`. LACT <!-- v:lact -->0.10.1<!-- /v --> needs its daemon, otherwise the GUI cannot apply settings:
+Ollama and the ROCm libraries are not installed on the primary machine (removed 2026-11-12: no model was ever installed and nothing connected to the service). When they are wanted again, Ollama uses its ROCm backend for the RX 6700 XT (gfx1031) with the tracked systemd drop-ins from [`../../05-ai/ollama/README.md`](../../05-ai/ollama/README.md). On the packaged Ollama the `HSA_OVERRIDE_GFX_VERSION=10.3.0` override is a fallback; it is needed for PyTorch wheels ([chapter 02](setup/02-amd-gpu-rocm.md)). Confirm backend detection with `journalctl -u ollama | rg 'inference compute'`; loading a model is required to confirm GPU layer placement. GPU monitoring: `amdgpu_top`, `nvtop`, `radeontop`, `sensors`. LACT <!-- v:lact -->0.10.1<!-- /v --> needs its daemon, otherwise the GUI cannot apply settings:
 
 ```sh
 sudo systemctl enable --now lactd
@@ -146,7 +140,7 @@ CachyOS already provides active zstd zram swap (about 31 GiB). Inspect `zramctl`
 
 ## 6. Desktop defaults and optional applications
 
-Brave is the XDG browser default, Zed opens text and source files, and Swash opens images; the shell config, UWSM environment file and systemd user environment all use `BROWSER=brave`. The optional applications (Upwork, VS Code, Sublime Text, PyCharm, DBeaver, MongoDB Compass, Firefox, Obsidian, Anytype, Logseq OG, Todoist, Slack, Signal, Discord, Telegram, Mailspring, Thunderbird, Zoom, Spotify and the media and office applications) are covered in chapters 12 and 15 to 21 and recorded in the host snapshot.
+Google Chrome is the XDG browser default, Sublime Text opens text and source files from the file manager and browser while Neovim stays `$EDITOR` and `$VISUAL`, and Swash opens images; the shell config, UWSM environment file and systemd user environment all use `BROWSER=google-chrome-stable`. The optional applications on the machine (Upwork, Sublime Text, Zed, Obsidian, Slack, Signal, Discord, Mailspring, Zoom, Spotify, Stremio and the media and office applications) are covered in chapters 12 and 15 to 21 and recorded in the host snapshot. Chapters for software that was since removed (VS Code, PyCharm, DBeaver, MongoDB Compass, Firefox, Anytype, Logseq, Todoist, Telegram and Thunderbird) keep their steps for reinstalling.
 
 Upwork's time tracker and screenshot capture are not supported in Wayland sessions according to [Upwork's Linux guide](https://support.upwork.com/hc/en-us/articles/211064108-How-to-troubleshoot-our-desktop-app-Linux); the app launches under Hyprland but hourly tracking needs a supported Xorg session.
 
@@ -155,9 +149,9 @@ The exact enabled and disabled service state and package versions are in [`syste
 ## Verify
 
 ```sh
-systemctl is-active postgresql mariadb valkey mongodb
+systemctl is-active postgresql
 systemctl --user is-active docker
 docker context show
 ```
 
-Expected: `active` for each service and `rootless`. Label: `machine-only`.
+Expected: `active`, `active` and `rootless`. Label: `machine-only`.

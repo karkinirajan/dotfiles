@@ -14,6 +14,8 @@ sources:
 
 # 07 DevOps and Cloud Tools
 
+> **Status, 2026-11-16:** On the primary workstation only the Kubernetes tools (kubectl, k9s, Helm, minikube) and OpenTofu remain from this chapter. AWS CLI, Azure CLI, Ansible, GitLab Runner, act, Pulumi, Terraform, Prometheus and Nginx were removed in the November 2026 trim (2026-11-11 and 2026-11-12); their steps stay for reinstalling. See [`workstation-changes.md`](../workstation-changes.md).
+
 ## Purpose
 
 Cloud CLIs and the web server used for local reverse-proxy work. Credentials never go into dotfiles; each CLI keeps them in its own store.

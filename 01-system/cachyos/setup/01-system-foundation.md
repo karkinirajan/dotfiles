@@ -111,11 +111,11 @@ pacman-conf --repo-list
 /lib/ld-linux-x86-64.so.2 --help | grep supported
 ```
 
-Expected: `uname -r` starts with <!-- v:cachyos-kernel -->7.3.0<!-- /v --> and ends in `-cachyos`; the repo list is `cachyos-v3`, `cachyos-core-v3`, `cachyos-extra-v3`, `cachyos`, then the Arch repos; the loader line shows `x86-64-v3 (supported, searched)`.
+Expected: `uname -r` starts with <!-- v:cachyos-kernel -->7.3.4<!-- /v --> and ends in `-cachyos`; the repo list is `cachyos-v3`, `cachyos-core-v3`, `cachyos-extra-v3`, `cachyos`, then the Arch repos; the loader line shows `x86-64-v3 (supported, searched)`.
 
 ## Version
 
-Kernel `linux-cachyos` <!-- v:cachyos-kernel -->7.3.0<!-- /v --> (CachyOS v3 repo; the generic `cachyos` repo still carries 7.2.7). Upstream Linux 7.3 was released on 2026-10-18 and is not an LTS line.
+Kernel `linux-cachyos` <!-- v:cachyos-kernel -->7.3.4<!-- /v --> (CachyOS v3 repo; the generic `cachyos` repo still carries 7.2.7). Upstream Linux 7.3 was released on 2026-10-18 and is not an LTS line.
 
 ## Sources
 

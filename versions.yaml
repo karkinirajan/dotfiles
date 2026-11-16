@@ -8,6 +8,11 @@
 # --live` compares targets with Arch, CachyOS, AUR, npm and PyPI each week.
 # Frozen history (snapshots, benchmark records) is marked <!-- snapshot: DATE -->
 # and is exempt.
+#
+# 2026-11-16: entries for packages installed on the primary host (no hold) were
+# re-verified against `pacman -Q`; `verify`/`expect` ran clean for them. Entries
+# commented "removed" or "not installed" describe optional software that is not on
+# the host; all other entries keep their 2026-10-29 verification.
 
 schema: 1
 as_of: '2026-10-29'
@@ -18,11 +23,11 @@ entries:
     name: linux-cachyos kernel
     package: linux-cachyos
     source: cachyos
-    cachyos: 7.3.0-4
+    cachyos: 7.3.4-1
     aur: 7.3.0-3
-    target: 7.3.0
+    target: 7.3.4
     verify: uname -r
-    expect: 7.3.0
+    expect: 7.3.4
     support: Upstream 7.3 released 2026-10-18 (non-LTS); LTS 6.18 to 2028-12-31
   limine:
     name: Limine bootloader
@@ -40,7 +45,7 @@ entries:
     package: snapper
     source: cachyos
     arch: 0.13.2-1
-    cachyos: 0.13.2-1.1
+    cachyos: 0.13.2-2.1
     target: 0.13.2
     verify: snapper --version
     expect: 0.13.2
@@ -59,7 +64,7 @@ entries:
     arch: 0.10.3-2
     cachyos: 0.10.3-2.1
     target: 0.10.3
-    verify: greetd --version
+    verify: pacman -Q greetd
     expect: 0.10.3
   noctalia-greeter:
     name: noctalia-greeter
@@ -75,18 +80,18 @@ entries:
     package: uwsm
     source: arch
     arch: 0.27.1-1
-    target: 0.27.1
+    target: 0.27.2
     verify: uwsm --version
-    expect: 0.27.1
+    expect: 0.27.2
   hyprland:
     name: Hyprland
     package: hyprland
     source: cachyos
     arch: 0.57.0-1
-    cachyos: 0.57.0-1.1
-    target: 0.57.0
+    cachyos: 0.57.2-1.1
+    target: 0.57.2
     verify: hyprctl version
-    expect: 0.57.0
+    expect: 0.57.2
     support: 'Lua config only (hyprland.lua, constraint hyprland-lua); 0.57.0 removed the hyprlang .conf parser'
     upstream: 0.57.0
   hypridle:
@@ -103,10 +108,10 @@ entries:
     package: hyprlock
     source: cachyos
     arch: 0.9.6-3
-    cachyos: 0.9.6-3.1
-    target: 0.9.6
+    cachyos: 0.9.7-2.1
+    target: 0.9.7
     verify: hyprlock --version
-    expect: 0.9.6
+    expect: 0.9.7
   hyprsunset:
     name: hyprsunset
     package: hyprsunset
@@ -121,20 +126,21 @@ entries:
     package: noctalia
     source: cachyos
     arch: 5.4.0-1
-    cachyos: 5.4.0-1.1
-    target: 5.4.0
+    cachyos: 5.5.0-1.1
+    target: 5.5.0
     verify: noctalia --version
-    expect: 5.4.0
+    expect: 5.5.0
   mesa:
     name: Mesa (RADV)
     package: mesa
     source: cachyos
     arch: 26.2.5-1
-    cachyos: 3:26.2.5-1
-    target: 26.2.5
+    cachyos: 3:26.2.6-1
+    target: 26.2.6
     verify: vulkaninfo --summary
-    expect: 26.2.5
+    expect: 26.2.6
     upstream: 26.2.6
+  # removed from the primary host in the 2026-11 trim; kept for the chapter that documents it
   rocm:
     name: ROCm (legacy 7.2 train)
     package: rocm-core
@@ -145,6 +151,7 @@ entries:
     verify: pacman -Q rocm-core
     expect: 7.2.4
     support: Core SDK 10.1.0 is a separate train and does not list gfx1031
+  # removed from the primary host in the 2026-11 trim; kept for the chapter that documents it
   ollama:
     name: Ollama
     package: ollama
@@ -155,6 +162,7 @@ entries:
     verify: ollama --version
     expect: 0.40.11
     upstream: 0.40.13
+  # not installed on the primary host; kept for the optional chapter that documents it
   llama-cpp:
     name: llama.cpp (Arch package)
     package: llama-cpp
@@ -178,10 +186,10 @@ entries:
     package: python
     source: cachyos
     arch: 3.14.8-1
-    cachyos: 3.14.8-1
-    target: 3.14.8
+    cachyos: 3.14.10-2
+    target: 3.14.10
     verify: python --version
-    expect: 3.14.8
+    expect: 3.14.10
     support: '3.14: bugfix until 2027-10, security until 2030-10 (PEP 745); free-threaded build comes from uv, not the Arch package'
     upstream: 3.14.10
   uv:
@@ -189,28 +197,28 @@ entries:
     package: uv
     source: cachyos
     arch: 0.13.6-1
-    cachyos: 0.13.6-1.1
-    target: 0.13.6
+    cachyos: 0.13.8-1.1
+    target: 0.13.8
     verify: uv --version
-    expect: 0.13.6
+    expect: 0.13.8
     upstream: 0.13.6
   rustup:
     name: rustup
     package: rustup
     source: arch
     arch: 1.29.2-1
-    target: 1.29.2
+    target: 1.29.3
     verify: rustup --version
-    expect: 1.29.2
+    expect: 1.29.3
   nodejs:
     name: Node.js (Arch current)
     package: nodejs
     source: cachyos
     arch: 26.12.1-2
-    cachyos: 26.12.1-2
-    target: 26.12.1
+    cachyos: 26.13.1-2
+    target: 26.13.1
     verify: node --version
-    expect: 26.12.1
+    expect: 26.13.1
     support: v26 is LTS from 2026-10-28; v24 is in maintenance
     upstream: 26.13.0
   nvm:
@@ -226,19 +234,19 @@ entries:
     package: pnpm
     source: cachyos
     arch: 12.15.0-1
-    cachyos: 12.15.0-1.1
-    target: 12.15.0
+    cachyos: 12.20.0-1.1
+    target: 12.20.0
     verify: pnpm --version
-    expect: 12.15.0
+    expect: 12.20.0
     upstream: 12.16.1
   npm:
     name: npm (Arch package)
     package: npm
     source: arch
     arch: 12.2.1-1
-    target: 12.2.1
+    target: 12.2.2
     verify: npm --version
-    expect: 12.2.1
+    expect: 12.2.2
   yarn:
     name: Yarn Classic
     package: yarn
@@ -261,55 +269,55 @@ entries:
     package: git
     source: cachyos
     arch: 2.56.0-1
-    cachyos: 2.56.0-1.1
-    target: 2.56.0
+    cachyos: 2.56.1-1.1
+    target: 2.56.1
     verify: git --version
-    expect: 2.56.0
+    expect: 2.56.1
   github-cli:
     name: GitHub CLI
     package: github-cli
     source: cachyos
     arch: 2.102.1-1
-    cachyos: 2.102.1-1.1
-    target: 2.102.1
+    cachyos: 2.104.0-1
+    target: 2.104.0
     verify: gh --version
-    expect: 2.102.1
+    expect: 2.104.0
   lazygit:
     name: lazygit
     package: lazygit
     source: cachyos
     arch: 0.66.2-1
-    cachyos: 0.66.2-1.1
-    target: 0.66.2
+    cachyos: 0.66.3-1.1
+    target: 0.66.3
     verify: lazygit --version
-    expect: 0.66.2
+    expect: 0.66.3
   docker:
     name: Docker Engine
     package: docker
     source: cachyos
     arch: 29.9.2-1
-    cachyos: 1:29.9.2-1.1
-    target: 29.9.2
+    cachyos: 1:29.9.3-1.1
+    target: 29.9.3
     verify: docker --version
-    expect: 29.9.2
+    expect: 29.9.3
   docker-compose:
     name: Docker Compose
     package: docker-compose
     source: cachyos
     arch: 5.6.1-1
-    cachyos: 5.6.1-1.1
-    target: 5.6.1
+    cachyos: 5.7.1-1.1
+    target: 5.7.1
     verify: docker compose version
-    expect: 5.6.1
+    expect: 5.7.1
   docker-buildx:
     name: Docker Buildx
     package: docker-buildx
     source: cachyos
     arch: 0.38.1-1
-    cachyos: 0.38.1-1.1
-    target: 0.38.1
+    cachyos: 0.39.0-1.1
+    target: 0.39.0
     verify: docker buildx version
-    expect: 0.38.1
+    expect: 0.39.0
   docker-rootless-extras:
     name: docker-rootless-extras (AUR only)
     package: docker-rootless-extras
@@ -323,9 +331,9 @@ entries:
     package: kubectl
     source: arch
     arch: 1.37.1-1
-    target: 1.37.1
+    target: 1.37.2
     verify: kubectl version --client
-    expect: 1.37.1
+    expect: 1.37.2
   minikube:
     name: minikube
     package: minikube
@@ -353,6 +361,7 @@ entries:
     target: 0.51.0
     verify: k9s version --short
     expect: 0.51.0
+  # removed from the primary host in the 2026-11 trim; kept for the chapter that documents it
   terraform:
     name: Terraform
     package: terraform
@@ -368,10 +377,11 @@ entries:
     package: opentofu
     source: cachyos
     arch: 1.13.2-1
-    cachyos: 1.13.2-1.1
-    target: 1.13.2
+    cachyos: 1.13.9-1.1
+    target: 1.13.9
     verify: tofu version
-    expect: 1.13.2
+    expect: 1.13.9
+  # removed from the primary host in the 2026-11 trim; kept for the chapter that documents it
   ansible:
     name: Ansible
     package: ansible
@@ -380,6 +390,7 @@ entries:
     target: 14.5.0
     verify: ansible --version
     expect: 14.5.0
+  # removed from the primary host in the 2026-11 trim; kept for the chapter that documents it
   pulumi:
     name: Pulumi
     package: pulumi
@@ -389,6 +400,7 @@ entries:
     target: 3.272.0
     verify: pulumi version
     expect: 3.272.0
+  # removed from the primary host in the 2026-11 trim; kept for the chapter that documents it
   act:
     name: act
     package: act
@@ -398,6 +410,7 @@ entries:
     target: 0.2.89
     verify: act --version
     expect: 0.2.89
+  # removed from the primary host in the 2026-11 trim; kept for the chapter that documents it
   gitlab-runner:
     name: GitLab Runner
     package: gitlab-runner
@@ -407,6 +420,7 @@ entries:
     target: 19.5.1
     verify: gitlab-runner --version
     expect: 19.5.1
+  # removed from the primary host in the 2026-11 trim; kept for the chapter that documents it
   aws-cli:
     name: AWS CLI v2
     package: aws-cli-v2
@@ -415,6 +429,7 @@ entries:
     target: 2.37.9
     verify: aws --version
     expect: 2.37.9
+  # removed from the primary host in the 2026-11 trim; kept for the chapter that documents it
   azure-cli:
     name: Azure CLI
     package: azure-cli
@@ -423,6 +438,7 @@ entries:
     target: 2.90.0
     verify: az version
     expect: 2.90.0
+  # removed from the primary host in the 2026-11 trim; kept for the chapter that documents it
   nginx:
     name: nginx (stable)
     package: nginx
@@ -438,10 +454,11 @@ entries:
     package: postgresql
     source: cachyos
     arch: 18.6-4
-    cachyos: 18.6-4.1
-    target: '18.6'
+    cachyos: 18.7-1.1
+    target: '18.7'
     verify: psql --version
-    expect: '18.6'
+    expect: '18.7'
+  # removed from the primary host in the 2026-11 trim; kept for the chapter that documents it
   mariadb-lts:
     name: MariaDB LTS
     package: mariadb-lts
@@ -452,6 +469,7 @@ entries:
     verify: mariadb --version
     expect: 12.3.3
     support: Recommended dev server; mariadb 13.0 is a rolling series
+  # removed from the primary host in the 2026-11 trim; kept for the chapter that documents it
   mongodb:
     name: MongoDB Community (AUR mongodb-bin)
     package: mongodb-bin
@@ -462,6 +480,7 @@ entries:
     expect: 8.3.9
     support: 8.3.0 to 8.3.12 is inside advisory SERVER-131805; fixed in 8.3.13
     upstream: 9.0 (current major); 8.3.13 fixes SERVER-131805
+  # removed from the primary host in the 2026-11 trim; kept for the chapter that documents it
   valkey:
     name: Valkey
     package: valkey
@@ -494,10 +513,10 @@ entries:
     package: kitty
     source: cachyos
     arch: 0.49.2-1
-    cachyos: 0.49.2-1.1
-    target: 0.49.2
+    cachyos: 0.50.0-1.1
+    target: 0.50.0
     verify: kitty --version
-    expect: 0.49.2
+    expect: 0.50.0
   alacritty:
     name: Alacritty
     package: alacritty
@@ -529,10 +548,10 @@ entries:
     package: fzf
     source: cachyos
     arch: 0.74.5-1
-    cachyos: 0.74.5-1.1
-    target: 0.74.5
+    cachyos: 0.75.0-1.1
+    target: 0.75.0
     verify: fzf --version
-    expect: 0.74.5
+    expect: 0.75.0
   tmux:
     name: tmux
     package: tmux
@@ -542,6 +561,7 @@ entries:
     target: '3.8'
     verify: tmux -V
     expect: '3.8'
+  # removed from the primary host in the 2026-11 trim; kept for the chapter that documents it
   vscode:
     name: Visual Studio Code (AUR visual-studio-code-bin)
     package: visual-studio-code-bin
@@ -555,9 +575,10 @@ entries:
     package: zed
     source: arch
     arch: 1.25.3-1
-    target: 1.25.3
-    verify: zed --version
-    expect: 1.25.3
+    target: 1.28.1
+    verify: zeditor --version
+    expect: 1.28.1
+  # removed from the primary host in the 2026-11 trim; kept for the chapter that documents it
   pycharm:
     name: PyCharm Community (Arch pycharm-community-edition)
     package: pycharm-community-edition
@@ -575,6 +596,7 @@ entries:
     target: 0.36.2
     verify: ufw version
     expect: 0.36.2
+  # removed from the primary host in the 2026-11 trim; kept for the chapter that documents it
   fail2ban:
     name: Fail2ban
     package: fail2ban
@@ -588,10 +610,11 @@ entries:
     package: openssh
     source: cachyos
     arch: 10.6p1-2
-    cachyos: 10.6p1-2.1
-    target: 10.6p1
+    cachyos: 10.6p2-1.1
+    target: 10.6p2
     verify: ssh -V
-    expect: 10.6p1
+    expect: 10.6p2
+  # removed from the primary host in the 2026-11 trim; kept for the chapter that documents it
   dnscrypt-proxy:
     name: dnscrypt-proxy
     package: dnscrypt-proxy
@@ -636,6 +659,7 @@ entries:
     target: 17.14.1
     verify: topgrade --version
     expect: 17.14.1
+  # removed from the primary host in the 2026-11 trim; kept for the chapter that documents it
   mullvad-vpn:
     name: Mullvad VPN (Arch extra)
     package: mullvad-vpn
@@ -645,6 +669,7 @@ entries:
     target: '2026.5'
     verify: mullvad --version
     expect: '2026.5'
+  # removed from the primary host in the 2026-11 trim; kept for the chapter that documents it
   proton-vpn:
     name: Proton VPN GTK app
     package: proton-vpn-gtk-app
@@ -657,13 +682,14 @@ entries:
     name: Claude Code (CachyOS repo)
     package: claude-code
     source: cachyos
-    cachyos: 2.1.311-1
+    cachyos: 2.1.325-1
     aur: 2.1.312-1
-    target: 2.1.311
+    target: 2.1.325
     verify: claude --version
-    expect: 2.1.311
+    expect: 2.1.325
     support: AUR and npm already have 2.1.312
     upstream: 2.1.312
+  # removed from the primary host in the 2026-11 trim; kept for the chapter that documents it
   openai-codex:
     name: OpenAI Codex CLI
     package: openai-codex
@@ -677,29 +703,30 @@ entries:
     name: paru
     package: paru
     source: cachyos
-    cachyos: 2.1.0-3
+    cachyos: 2.2.0-2
     aur: 2.1.0-2
-    target: 2.1.0
+    target: 2.2.0
     verify: paru --version
-    expect: 2.1.0
+    expect: 2.2.0
   ruff:
     name: Ruff (Arch package)
     package: ruff
     source: cachyos
     arch: 0.17.3-1
     cachyos: 0.17.3-1.1
-    target: 0.17.3
+    target: 0.17.5
     verify: ruff --version
-    expect: 0.17.3
+    expect: 0.17.5
   fastfetch:
     name: fastfetch
     package: fastfetch
     source: cachyos
     arch: 2.70.0-1
-    cachyos: 2.70.0-1.1
-    target: 2.70.0
+    cachyos: 2.71.0-1.1
+    target: 2.71.0
     verify: fastfetch --version
-    expect: 2.70.0
+    expect: 2.71.0
+  # not installed on the primary host; kept for the optional chapter that documents it
   librewolf:
     name: LibreWolf (Arch extra)
     package: librewolf
@@ -1067,9 +1094,10 @@ entries:
     arch: 0.10.1-1
     cachyos: 0.10.1-1.1
     target: 0.10.1
-    verify: lact --version
+    verify: pacman -Q lact
     expect: 0.10.1
     support: Enable lactd.service for the GUI to apply settings
+  # removed from the primary host in the 2026-11 trim; kept for the chapter that documents it
   mongosh:
     name: mongosh
     package: mongosh-bin
@@ -1078,6 +1106,7 @@ entries:
     target: 2.14.0
     verify: mongosh --version
     expect: 2.14.0
+  # removed from the primary host in the 2026-11 trim; kept for the chapter that documents it
   dbeaver:
     name: DBeaver
     package: dbeaver
@@ -1087,6 +1116,7 @@ entries:
     target: 26.2.2
     verify: dbeaver --version
     expect: 26.2.2
+  # not installed on the primary host; kept for the optional chapter that documents it
   cursor:
     name: Cursor (AUR cursor-bin)
     package: cursor-bin
@@ -1096,6 +1126,7 @@ entries:
     target: 3.28.5
     verify: cursor --version
     expect: 3.28.5
+  # removed from the primary host in the 2026-11 trim; kept for the chapter that documents it
   firefox:
     name: Firefox
     package: firefox
@@ -1110,9 +1141,9 @@ entries:
     package: obsidian
     source: arch
     arch: 1.14.5-1
-    target: 1.14.5
-    verify: obsidian --version
-    expect: 1.14.5
+    target: 1.15.0
+    verify: pacman -Q obsidian
+    expect: 1.15.0
   brave:
     name: Brave
     package: brave-bin

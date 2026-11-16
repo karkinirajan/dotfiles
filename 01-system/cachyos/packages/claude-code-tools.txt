@@ -1,5 +1,10 @@
 # Focused Claude Code support tools (install only the repository package names).
 # ccusage is installed per-user with pnpm; see 05-ai/claude-code/README.md.
+#
+# This is the wanted set, not a record of the machine. At 2026-11-16 none of the
+# first eight (ast-grep through watchexec) is installed as a package. pyright
+# runs from `uv tool install pyright`, and typescript and typescript-language-server
+# from `pnpm add -g`, so the three language-server lines below are met a different way.
 ast-grep
 actionlint
 difftastic

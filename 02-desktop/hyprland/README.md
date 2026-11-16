@@ -24,10 +24,10 @@ The manifest installs `hyprland-shortcuts.md` at `~/hyprland-shortcuts.md`.
 
 | | Version | Config the tracked tree targets |
 |---|---|---|
-| This machine and the CachyOS v3 repo | Hyprland <!-- v:hyprland -->0.57.0<!-- /v --> | Lua `hyprland.lua` plus `config/*.lua` (the `.conf` tree is kept for 0.56.x) |
+| This machine and the CachyOS v3 repo | Hyprland <!-- v:hyprland -->0.57.2<!-- /v --> | Lua `hyprland.lua` plus `config/*.lua` (the `.conf` tree is kept for 0.56.x) |
 | Arch `extra` and upstream | Hyprland <!-- v:hyprland:upstream -->0.57.0<!-- /v --> (2026-10-28) | **Lua only** (`hyprland.lua`); the hyprlang parser was removed |
 
-Hyprland 0.57.0 no longer reads `.conf` files: with only `hyprland.conf` it ignores the whole `hypr/config/` tree and writes a default Lua config. CachyOS now ships 0.57.0 as well (`cachyos-extra-v3`, 2026-10-29). The tracked Lua port, [`hypr/hyprland.lua`](hypr/hyprland.lua) with its `config/*.lua` modules, passed `--verify-config` on 0.56.2 and 0.57.0 and a nested 0.57.0 run; the machine runs <!-- v:hyprland -->0.57.0<!-- /v --> on it since 2026-10-29 (constraint `hyprland-lua` in [`versions.yaml`](../../versions.yaml)); the `IgnorePkg` hold was lifted. Hyprspace does not build on 0.57.0, so `Super+H` does nothing there until it does. The migration steps and the hyprlang-to-Lua mapping are in [`lua-migration.md`](lua-migration.md). `hypridle.conf` and `hyprlock.conf` stay hyprlang on 0.57; only the compositor config moved.
+Hyprland 0.57.0 no longer reads `.conf` files: with only `hyprland.conf` it ignores the whole `hypr/config/` tree and writes a default Lua config. CachyOS now ships 0.57.0 as well (`cachyos-extra-v3`, 2026-10-29). The tracked Lua port, [`hypr/hyprland.lua`](hypr/hyprland.lua) with its `config/*.lua` modules, passed `--verify-config` on 0.56.2 and 0.57.0 and a nested 0.57.0 run; the machine runs <!-- v:hyprland -->0.57.2<!-- /v --> on it since 2026-10-29 (constraint `hyprland-lua` in [`versions.yaml`](../../versions.yaml)); the `IgnorePkg` hold was lifted. Hyprspace does not build on 0.57.0, so `Super+H` does nothing there until it does. The migration steps and the hyprlang-to-Lua mapping are in [`lua-migration.md`](lua-migration.md). `hypridle.conf` and `hyprlock.conf` stay hyprlang on 0.57; only the compositor config moved.
 
 `hyprctl dispatch 'hl.dsp...'` (the Lua dispatcher API, available from 0.55) only works when Hyprland loaded a Lua config. With the tracked `.conf` it answers "Invalid dispatcher". The scripts that dispatch (`minimize.sh`, `restore.sh`, `launcher-open.sh`, `dpms.sh` for hypridle) therefore go through `scripts/hypr-dispatch.sh`, which tries the Lua form and then the legacy form (`movetoworkspacesilent`, `movecursor`, `dpms`; names checked in the v0.56.2 source), so they work before and after the migration.
 
@@ -59,13 +59,26 @@ hyprland/
 │                                  # Limits SDDM to the UWSM-managed Hyprland session.
 ├── uwsm/
 │   └── env                        → ~/.config/uwsm/env (linked via manifest.conf)
-│                                  # Session environment: BROWSER=brave, cursor
+│                                  # Session environment: BROWSER=google-chrome-stable, cursor
 │                                  #   theme (Bibata-Modern-Ice), Qt/Electron
 │                                  #   Wayland hints, PATH, and NVM initialization.
 ├── satty/
 │   └── config.toml                → ~/.config/satty/config.toml (linked via manifest.conf)
 │                                  # Satty GTK4/OpenGL screenshot annotator config
 │                                  #   paired with grim + slurp in scripts/screenshot.sh.
+├── mimeapps.list                  → ~/.config/mimeapps.list (seeded via manifest.conf)
+│                                  # Default applications: Google Chrome for web, PDF and
+│                                  #   XML, Sublime Text for text and source files, Swash
+│                                  #   for images, Mailspring for mail. `./install.sh pull`
+│                                  #   captures a default changed on the machine.
+├── swash/
+│   └── settings.ini               → ~/.config/swash/settings.ini (seeded via manifest.conf)
+│                                  # Swash screenshot editor preferences.
+├── qt6ct/
+│   └── qt6ct.conf                 → ~/.config/qt6ct/qt6ct.conf (seeded via manifest.conf)
+│                                  # Qt theming selected by QT_QPA_PLATFORMTHEME=qt6ct in
+│                                  #   uwsm/env. colors/noctalia.conf beside it is Noctalia
+│                                  #   template output and is not tracked.
 ├── hypr/                          → ~/.config/hypr/
 │   ├── hyprland.conf              # entry point, sources everything below
 │   ├── hyprlock.conf, hypridle.conf
@@ -109,6 +122,9 @@ hyprland/
 │       ├── hypr-dispatch.sh           # Runs one dispatch in the Lua form, then the legacy form.
 │       │                              #   Used by the scripts below; see "Version and config-format hold".
 │       ├── dpms.sh                    # dpms.sh enable|disable, called by hypridle.conf
+│       ├── lock.sh                    # Runs hyprlock and relaunches it if it dies without
+│       │                              #   unlocking; hypridle and Super+L call it. See "Fullscreen
+│       │                              #   blank and the lock-screen crash" in Notes.
 │       ├── minimize.sh, restore.sh, screenshot.sh
 │       ├── volume.sh                  # PipeWire/wpctl volume control with 150% boost ceiling
 │       ├── nightlight-temperature.sh  # Scroll wheel handler (2500–6500 K in 250 K steps)
@@ -298,7 +314,33 @@ Restart Hyprland (or reboot) to fix it.
 
 ## Notes
 
-- Noctalia (`noctalia` package, <!-- v:noctalia -->5.4.0<!-- /v -->; a native C++ Wayland shell configured in TOML, not the older Quickshell v4) replaces Waybar, wofi, and
+- **Fullscreen blank and the lock-screen crash (2026-11).** Two separate faults
+  on the MSI MAG 275QF over DisplayPort, both fixed in `hypr/config/look.lua`
+  and `variables.conf`:
+  - *Screen goes blank entering fullscreen.* `render:cm_auto_hdr` defaults to
+    1, so a fullscreen client that signals HDR or wide gamut (Brave or Chrome
+    playing video) makes Hyprland switch the output to HDR. That is a full
+    DRM modeset (`drm: Modesetting DP-2` in the Hyprland log), and the link
+    retrains for a moment. `cm_auto_hdr = 0` removes the modeset: the same
+    fullscreen toggle logged 0 modesets and 0 auto-HDR switches afterwards. The
+    monitor reports no HDR support, so nothing is lost.
+  - *Waking from a long DPMS-off crashed `hyprlock` and showed the permanent
+    lock-crashed screen.* After a long DPMS-off the monitor drops and
+    re-announces itself, so `DP-2` is removed and added twice about two seconds
+    apart (Qt apps log "There are no outputs"). Hyprland disconnects clients
+    that attach to a surface destroyed in that window; `hyprlock` aborts, and
+    noctalia is killed too (its watchdog restarts it). A 4 second DPMS-off does
+    not trigger it; a 40 second one does, with or without a lock screen.
+    `misc:allow_session_lock_restore = true` lets a new lock client take over
+    the session, and `scripts/lock.sh` relaunches `hyprlock` after an abort
+    (once a second, up to five relaunches after a long run, thirty fast
+    failures) and logs each exit to `$XDG_RUNTIME_DIR/hypr-lock.log`. It cannot
+    stop the monitor re-announcing itself; the only way to avoid that is to drop
+    the DPMS-off step in `hypridle.conf`.
+- `dwindle:special_scale_factor` and `master:special_scale_factor` were removed
+  because Hyprland 0.57 deprecates them; a special-workspace window measured the
+  same size (about 96% of the monitor) with and without them, so nothing changed.
+- Noctalia (`noctalia` package, <!-- v:noctalia -->5.5.0<!-- /v -->; a native C++ Wayland shell configured in TOML, not the older Quickshell v4) replaces Waybar, wofi, and
   mako entirely, see `hypr/config/autostart.conf`
   (`scripts/noctalia-watchdog.sh`, not a systemd service, see that script's
   own comments for why) and `hypr/config/keybinds.conf` (`noctalia msg ...`

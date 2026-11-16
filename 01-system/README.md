@@ -5,12 +5,13 @@ and the update routine.
 
 | Chapter | Path | Purpose |
 |---------|------|---------|
-| CachyOS profile | [`cachyos/`](cachyos/README.md) | Overview of OS configs, `mariadb-local.cnf`, and local PKGBUILDs |
+| CachyOS profile | [`cachyos/`](cachyos/README.md) | Overview of OS configs, the reference `mariadb-local.cnf`, and local PKGBUILDs |
+| Workstation changes | [`cachyos/workstation-changes.md`](cachyos/workstation-changes.md) | What was removed or changed in November 2026, why, and how to undo it |
 | Setup walkthrough | [`cachyos/setup/`](cachyos/setup/README.md) | 25 numbered chapters: foundation, GPU drivers, toolchains, databases, Kubernetes, editors, apps, security. `cachyos/setup.md` is a redirect stub for old links |
 | Packages | [`cachyos/packages/`](cachyos/packages/) | Desktop, system, font, CLI, developer, Claude Code, and local-AI package lists |
 | Full developer profile | [`cachyos/dev-stack.md`](cachyos/dev-stack.md) | Optional toolchains, local databases, rootless Docker, and host-specific setup |
 | Dual boot with Secure Boot | [`cachyos/dual-secure-boot.md`](cachyos/dual-secure-boot.md) | Windows 11 installer built from Linux, Secure Boot keys, and Limine as the single bootloader listing both systems |
-| Host snapshot | [`cachyos/host-snapshot/`](cachyos/host-snapshot/README.md) | Point-in-time `pacman -Qe` and `pacman -Qm` output (2026-10-28) |
+| Host snapshot | [`cachyos/host-snapshot/`](cachyos/host-snapshot/README.md) | Point-in-time `pacman -Qe` and `pacman -Qm` output (2026-11-16) |
 | Snapshots (archived) | [`timeshift/`](timeshift/README.md) | Archived Timeshift alternative; current CachyOS host uses Snapper |
 | Updates | [`topgrade/`](topgrade/README.md) | `topgrade.toml`, which update steps run, which are disabled and why |
 

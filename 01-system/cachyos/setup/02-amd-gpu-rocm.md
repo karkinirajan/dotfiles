@@ -14,18 +14,20 @@ sources:
 
 # 02 AMD GPU Drivers and ROCm
 
+> **Status, 2026-11-16:** The ROCm and HIP libraries were removed from the primary workstation in the November 2026 trim (2026-11-11 and 2026-11-12), together with Ollama; the AMDGPU driver and Mesa/Vulkan stay. The ROCm steps below stay for reinstalling. See [`workstation-changes.md`](../workstation-changes.md).
+
 ## Purpose
 
 Driver and compute stack for the Radeon RX 6700 XT (Navi 22, RDNA2, gfx1031, 12 GiB): Mesa/RADV for graphics and Vulkan, ROCm/HIP for compute.
 
 ## Prerequisites
 
-- CachyOS with the in-tree `amdgpu` kernel driver (no DKMS); kernel <!-- v:cachyos-kernel -->7.3.0<!-- /v -->.
+- CachyOS with the in-tree `amdgpu` kernel driver (no DKMS); kernel <!-- v:cachyos-kernel -->7.3.4<!-- /v -->.
 - Hardware fact: gfx1031 is **not** on AMD's supported list (see 2.3).
 
 ## 2.1 GPU drivers: AMDGPU, Mesa, Vulkan
 
-CachyOS ships Mesa (<!-- v:mesa -->26.2.5<!-- /v -->, which includes VA-API and VDPAU) from its own repo. Install the Vulkan layers, the 32-bit libraries and `vulkan-tools` (it provides `vulkaninfo`):
+CachyOS ships Mesa (<!-- v:mesa -->26.2.6<!-- /v -->, which includes VA-API and VDPAU) from its own repo. Install the Vulkan layers, the 32-bit libraries and `vulkan-tools` (it provides `vulkaninfo`):
 
 ```bash
 sudo pacman -S --needed vulkan-radeon lib32-vulkan-radeon \
@@ -114,7 +116,7 @@ Expected: `library=ROCm` with `total="12.0 GiB"`, and `100% GPU` in `ollama ps` 
 
 ## Version
 
-ROCm <!-- v:rocm -->7.2.4<!-- /v --> (legacy train, Arch and CachyOS), Mesa <!-- v:mesa -->26.2.5<!-- /v -->, Ollama <!-- v:ollama -->0.40.11<!-- /v -->, LACT <!-- v:lact -->0.10.1<!-- /v -->.
+ROCm <!-- v:rocm -->7.2.4<!-- /v --> (legacy train, Arch and CachyOS), Mesa <!-- v:mesa -->26.2.6<!-- /v -->, Ollama <!-- v:ollama -->0.40.11<!-- /v -->, LACT <!-- v:lact -->0.10.1<!-- /v -->.
 
 ## Sources
 

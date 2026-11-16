@@ -21,12 +21,12 @@ Rootless Docker for local development, a Compose template for a typical Django s
 
 ## Prerequisites
 
-- cgroup v2 and kernel 5.11 or newer (rootless `overlay2`); kernel <!-- v:cachyos-kernel -->7.3.0<!-- /v --> qualifies.
+- cgroup v2 and kernel 5.11 or newer (rootless `overlay2`); kernel <!-- v:cachyos-kernel -->7.3.4<!-- /v --> qualifies.
 - At least 65536 subordinate IDs for your user: `grep "^$USER:" /etc/subuid /etc/subgid`; if there is no line, add the range with `sudo usermod --add-subuids 100000-165535 --add-subgids 100000-165535 "$USER"`.
 
 ## 8.1 Docker and Compose, rootless
 
-Docker Engine <!-- v:docker -->29.9.2<!-- /v -->, Compose <!-- v:docker-compose -->5.6.1<!-- /v -->, Buildx <!-- v:docker-buildx -->0.38.1<!-- /v -->. This workstation runs the daemon as a **user** service so the account does not need the root-equivalent `docker` group. `docker-rootless-extras` is an **AUR** package (it is in neither Arch extra nor the CachyOS repos); it depends on `docker` and `rootlesskit`.
+Docker Engine <!-- v:docker -->29.9.3<!-- /v -->, Compose <!-- v:docker-compose -->5.7.1<!-- /v -->, Buildx <!-- v:docker-buildx -->0.39.0<!-- /v -->. This workstation runs the daemon as a **user** service so the account does not need the root-equivalent `docker` group. `docker-rootless-extras` is an **AUR** package (it is in neither Arch extra nor the CachyOS repos); it depends on `docker` and `rootlesskit`.
 
 ```bash
 sudo pacman -S --needed docker docker-compose docker-buildx rootlesskit
@@ -49,7 +49,7 @@ Notes:
 - A kernel-module tweak (`options overlay metacopy=off redirect_dir=off`) appeared in an earlier version of this guide; it could not be sourced, is host-specific and is not recommended. <!-- UNVERIFIED -->
 - `docker-machine` is archived upstream (2025-07-18) and is no longer in the package lists. `lazydocker` is in the repos: `sudo pacman -S lazydocker`. Podman is an alternative (`sudo pacman -S podman`); `act` does not officially support it.
 
-Label: all of 8.1 is `machine-only`. Proof: `docker info` shows `Context: rootless` and Server Version <!-- v:docker -->29.9.2<!-- /v -->, and `hello-world` prints its greeting.
+Label: all of 8.1 is `machine-only`. Proof: `docker info` shows `Context: rootless` and Server Version <!-- v:docker -->29.9.3<!-- /v -->, and `hello-world` prints its greeting.
 
 ## 8.2 Docker Compose: local dev stack
 
@@ -120,7 +120,7 @@ sudo pacman -S --needed kubectl minikube helm k9s
 minikube start --driver=docker --container-runtime=containerd --memory=4096   # add --cpus=2 only after delegating the cpu controller (below)
 ```
 
-- kubectl <!-- v:kubectl -->1.37.1<!-- /v --> (1.37 is supported until 2027-10-28; stay within one minor of the API server). minikube <!-- v:minikube -->1.38.1<!-- /v --> in Arch (upstream 1.39.0, default Kubernetes 1.37 and containerd runtime, a breaking change); Helm <!-- v:helm -->4.3.0<!-- /v --> (server-side apply by default, post-renderers are plugins, `--atomic` is `--rollback-on-failure`, `--force` is `--force-replace`); k9s <!-- v:k9s -->0.51.0<!-- /v -->.
+- kubectl <!-- v:kubectl -->1.37.2<!-- /v --> (1.37 is supported until 2027-10-28; stay within one minor of the API server). minikube <!-- v:minikube -->1.38.1<!-- /v --> in Arch (upstream 1.39.0, default Kubernetes 1.37 and containerd runtime, a breaking change); Helm <!-- v:helm -->4.3.0<!-- /v --> (server-side apply by default, post-renderers are plugins, `--atomic` is `--rollback-on-failure`, `--force` is `--force-replace`); k9s <!-- v:k9s -->0.51.0<!-- /v -->.
 - On rootless Docker, minikube also needs cgroup v2 delegation; `--cpus` only works if the cpu controller is delegated: create `/etc/systemd/system/user@.service.d/delegate.conf` with `[Service]` and `Delegate=cpu cpuset io memory pids`, run `sudo systemctl daemon-reload`, and log out and back in. `kind` (in extra) works the same way with `DOCKER_HOST` exported.
 - **k3s** (`curl -sfL https://get.k3s.io | sh -`; read the script first) is still the documented install, but it listens on 6443, 10250 and 8472/udp and its docs recommend turning UFW off. That conflicts with this machine's deny-incoming policy, so prefer minikube or kind locally; the AUR `k3s` is 1.35 and flagged out of date.
 
@@ -187,7 +187,7 @@ docker run --rm hello-world
 kubectl version --client
 ```
 
-Expected: `rootless`; the hello-world greeting; kubectl <!-- v:kubectl -->1.37.1<!-- /v -->.
+Expected: `rootless`; the hello-world greeting; kubectl <!-- v:kubectl -->1.37.2<!-- /v -->.
 
 ## Sources
 

@@ -16,15 +16,22 @@ The point-in-time hardware, package, service, and runtime inventory is in
   fallback EFI loaders, and Snapper entries should not appear there. No Windows
   firmware entry was present in the observed UEFI boot order.
 - Hyprland + Noctalia, launched through UWSM from greetd with the Noctalia
-  greeter. SDDM is installed but inactive. No Plasma session.
-- Zsh, Kitty, Starship, development tooling, and an AMD ROCm-backed Ollama
-  configuration. See the package lists and chapter guides for the exact scope.
+  greeter. SDDM is removed after the switch (it ships with the CachyOS
+  installer). No Plasma session.
+- Zsh, Kitty, Starship, and development tooling. The AMD ROCm-backed Ollama
+  configuration is an optional recipe that is not installed on the primary
+  machine since 2026-11-12. See the package lists and chapter guides for the
+  exact scope, and [`workstation-changes.md`](01-system/cachyos/workstation-changes.md)
+  for what was removed and why.
+- Google Chrome is the default browser, Sublime Text opens text and source
+  files, and Neovim stays `$EDITOR`; `~/.config/mimeapps.list` is a seed in
+  `manifest.conf`.
 - Configured locale is `en_US.UTF-8` (`LC_TIME=en_US.UTF-8`) and timezone is
   `Asia/Kathmandu`; confirm these with the owner instead of assuming they fit
   a new machine.
 - UFW is active with deny-incoming/allow-outgoing policy and no allow rules.
-  The Proton VPN daemon is active without a tunnel; Mullvad is installed but
-  disabled. Local databases and Ollama listen on loopback.
+  No VPN client is installed (Proton VPN and Mullvad were removed). The local
+  PostgreSQL listens on loopback.
 
 This is a rolling distribution. Reproduce the profile and configuration, then
 install compatible current package versions from the configured CachyOS/Arch
@@ -182,7 +189,7 @@ versions written in older notes. Hyprland 0.57 and later read only
 3. Set up an AUR helper. The June 2026 installer no longer ships `paru`
    (it recommends Shelly), so a fresh install has none:
    `sudo pacman -S paru` installs the CachyOS build
-   (<!-- v:paru -->2.1.0<!-- /v -->). `yay` is the fallback.
+   (<!-- v:paru -->2.2.0<!-- /v -->). `yay` is the fallback.
    AUR packages are community build recipes: inspect the selected package and
    build prompts, and review every PKGBUILD and install-script change. Arch
    news of 2026-06-12 reports an incident with malicious AUR packages. Keep Hyprland and its runtime libraries on compatible stable
@@ -225,10 +232,10 @@ versions written in older notes. Hyprland 0.57 and later read only
    environments, initialize databases before use, and run Docker rootless.
    The Upwork package is built from the tracked bundled-runtime PKGBUILD; its
    screenshot time tracking requires a supported Xorg session rather than
-   Wayland. To
-   match the local AI part of this profile, include
-   `01-system/cachyos/packages/ai.txt` for the Ollama/ROCm stack; it is
-   GPU- and disk-intensive. Ask before downloading large models. The guide's
+   Wayland. The local AI stack is not part of this profile any more:
+   `01-system/cachyos/packages/ai.txt` is the optional Ollama/ROCm recipe, GPU-
+   and disk-intensive, to include only on request. Ask before downloading
+   large models. The guide's
    package catalog includes optional applications and services. Use the
    package manifests for the baseline; choose optional packages individually
    and initialize each selected database/service as its own step.
@@ -298,7 +305,9 @@ versions written in older notes. Hyprland 0.57 and later read only
    readlink -f /etc/systemd/system/display-manager.service   # expect .../greetd.service
    ```
 
-2. SDDM is installed as an **inactive fallback**. The tracked SDDM preset under
+2. Once greetd works, the primary machine removes SDDM (`sudo pacman -Rns sddm`,
+   done there on 2026-11-12) because it was never enabled again. If you keep it
+   as an **inactive fallback** instead, the tracked SDDM preset under
    `02-desktop/hyprland/sddm/` can be staged into `/etc/sddm.conf.d/` and
    `/usr/local/share/wayland-sessions/`, but do **not** enable `sddm.service`
    over `greetd.service` unless the owner explicitly asks to switch display
@@ -354,11 +363,13 @@ versions written in older notes. Hyprland 0.57 and later read only
 
 Install only after their package and firewall/service plans are reviewed:
 
-- **Ollama/ROCm:** follow [`05-ai/ollama/README.md`](05-ai/ollama/README.md).
+- **Ollama/ROCm (optional; not installed on the primary machine since
+  2026-11-12):** follow [`05-ai/ollama/README.md`](05-ai/ollama/README.md).
   This host's backend override is specific to its RX 6700 XT. Validate GPU
   inference with a small model before downloading large models. Never restore
   model cache files unless requested.
-- **Nginx:** install
+- **Nginx (optional; the package was removed from the primary machine on
+  2026-11-12 because it was never enabled):** install
   [`07-networking/nginx/conf.d/00-types-hash.conf`](07-networking/nginx/conf.d/00-types-hash.conf)
   into `/etc/nginx/conf.d/`, ensure `/etc/nginx/nginx.conf` includes
   `include conf.d/*.conf;` inside `http { ... }`, run `sudo nginx -t`, then
@@ -427,9 +438,9 @@ the setup finished:
 - `sudo limine-list` shows exactly one primary CachyOS kernel entry. The
   generated config points to existing kernel/initramfs files; there are no
   Windows, secondary-kernel, fallback-loader, or snapshot entries.
-- AMD driver and Vulkan are recognized. For an AMD AI setup, `rocminfo` sees
-  the GPU and Ollama actually places layers on the GPU before any large-model
-  download.
+- AMD driver and Vulkan are recognized. If you add the optional AMD AI setup,
+  `rocminfo` sees the GPU and Ollama actually places layers on the GPU before
+  any large-model download.
 - Btrfs/Snapper snapshots work and the storage device reports healthy SMART
   status. Use a read-only Btrfs scrub for an integrity check; do not reset
   historical counters or run repair commands to make a report look clean.

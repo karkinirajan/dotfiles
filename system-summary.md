@@ -1,31 +1,31 @@
 ---
 title: Host system summary
 topic: system-summary
-last_verified: 2026-10-29
+last_verified: 2026-11-16
 status: reference
 ---
 
 # Current System Summary
 
-<!-- snapshot: 2026-10-28 -->
-**Snapshot:** 2026-10-28, Asia/Kathmandu (full repository audit and host reconciliation)  
+<!-- snapshot: 2026-11-16 -->
+**Snapshot:** 2026-11-16, Asia/Kathmandu (re-snapshot after the November workstation trim; the previous full audit was 2026-10-28)  
 **Host:** CachyOS x86-64, user `kneeraazon`  
 **Purpose:** inventory of the primary workstation as it was on the snapshot date. The ordered procedure to reproduce it lives in [`fresh-setup.md`](fresh-setup.md), [`01-system/cachyos/dev-stack.md`](01-system/cachyos/dev-stack.md) and [`docs/modernization/HANDOFF.md`](docs/modernization/HANDOFF.md).
 
-This file records the machine as it was, including enabled services, package versions, and local defaults. It intentionally omits passwords, network addresses, disk UUIDs, serial numbers, and other machine-specific identifiers. Every version below is a dated observation, not a target: the targets are in [`versions.yaml`](versions.yaml), and a fresh setup installs current CachyOS/Arch and AUR packages. Statements about behavior (why a service is off, which package a unit comes from) were re-checked on 2026-10-29 and corrected where wrong.
+This file records the machine as it was, including enabled services, package versions, and local defaults. It intentionally omits passwords, network addresses, disk UUIDs, serial numbers, and other machine-specific identifiers. Every version below is a dated observation, not a target: the targets are in [`versions.yaml`](versions.yaml), and a fresh setup installs current CachyOS/Arch and AUR packages. Hardware, boot and the dated logs at the end are unchanged from 2026-10-28; the software, defaults, databases, services and package counts were re-checked on 2026-11-16. What was removed or changed since the first snapshot, and why, is in [`01-system/cachyos/workstation-changes.md`](01-system/cachyos/workstation-changes.md).
 
 ## At a glance
 
-- **OS/kernel:** CachyOS rolling release, kernel `7.3.0-4-cachyos`.
+- **OS/kernel:** CachyOS rolling release, kernel `7.3.4-1-cachyos`.
 - **CPU/memory:** AMD Ryzen 5 5600, 6 cores / 12 threads; 32 GiB DDR4 in four 8 GiB DIMMs, configured at 3600 MT/s.
 - **GPU:** XFX Radeon RX 6700 XT, Navi 22 / RDNA2, 12 GiB VRAM, `amdgpu`.
-- **Storage:** one 512 GB Western Digital NVMe; 4 GiB EFI `/boot`; Btrfs root. About 418 GiB was free at this snapshot.
-- **Desktop:** Hyprland + Noctalia on Wayland, started through UWSM and greetd's Noctalia greeter. SDDM is installed but inactive.
+- **Storage:** one 512 GB Western Digital NVMe; 4 GiB EFI `/boot`; Btrfs root. About 263 GiB was free at the 2026-11-16 snapshot (55 GiB used of 323 GiB).
+- **Desktop:** Hyprland + Noctalia on Wayland, started through UWSM and greetd's Noctalia greeter. SDDM was removed on 2026-11-12.
 - **Shell:** Zsh is the account's login shell; Oh My Zsh, Starship, Kitty, and the tracked Zsh/FZF configuration are installed.
-- **Development:** Python 3.14 system runtime plus uv-managed 3.12/3.13; rustup stable; Node LTS via NVM; pnpm, Yarn, TypeScript, frontend language tools, backend and cloud tools, and local databases.
-- **Containers/AI:** rootless Docker works; Ollama detects the RX 6700 XT via ROCm. No model is installed, so model inference and GPU layer placement have not yet been checked.
-- **Network protection:** UFW is active with deny-incoming/allow-outgoing policy and no inbound allow rules. The Proton VPN daemon is running without a tunnel. Mullvad is installed but disabled.
-- **Updates:** no pending official-repository or AUR updates were reported by `pacman -Qu` and `yay -Qua` at snapshot time. AUR metadata still marks `logseq-desktop-bin` and `ttf-jetbrains-maple-mono-nf-xx-xx` out of date; this is maintainer status, not a pending update from the installed package manager.
+- **Development:** Python 3.14 system runtime plus uv-managed interpreters that projects pin; rustup stable; Node 26 default through NVM with 24 installed beside it; pnpm, Yarn, TypeScript, frontend language tools, PostgreSQL with pgvector, and Kubernetes tools.
+- **Containers/AI:** rootless Docker works. The local LLM stack (Ollama and the ROCm libraries) was removed on 2026-11-12: no model was ever installed and nothing connected to it.
+- **Network protection:** UFW is active (policy as recorded on 2026-10-28: deny incoming, allow outgoing; not re-read on 2026-11-16 because it needs root). Proton VPN and Mullvad were removed.
+- **Updates:** the package set was brought up to date by the owner's updates through 2026-11-16 (kernel 7.3.4, Hyprland 0.57.2, Noctalia 5.5.0). Pending updates were not re-checked because `pacman -Qu` needs a fresh sync.
 
 ## Hardware, boot, and filesystems
 
@@ -44,28 +44,28 @@ This file records the machine as it was, including enabled services, package ver
 | EFI | 4 GiB FAT `/boot` partition |
 | Root/data | One Btrfs partition; `/`, `/home`, `/var/log`, and `/var/cache` use subvolumes |
 | Compression/mount | Btrfs `compress=zstd:1`, `noatime`, SSD discard enabled |
-| Bootloader | Limine 12.9.4; active firmware entry is Limine |
+| Bootloader | Limine 12.10.0; active firmware entry is Limine |
 | Limine menu | Exactly `CachyOS → linux-cachyos`; default entry is set to that kernel, with last-entry memory disabled |
 | Firmware boot entries | Limine and generic `UEFI OS` fallback entries; no Windows entry was present in the UEFI boot order |
-| Kernels | `linux-cachyos` 7.3.0-4 is the only installed CachyOS kernel package; LTS and RT kernels were removed to prevent menu regeneration |
+| Kernels | `linux-cachyos` 7.3.4-1 is the only installed CachyOS kernel package; LTS and RT kernels were removed to prevent menu regeneration |
 | Snapshots | Snapper root snapshots remain enabled; `limine-snapper-sync.service` is disabled/inactive and snapshots are hidden from Limine |
 | Other menu entries | Windows Boot Manager and the Limine EFI fallback entry were removed from `/boot/limine.conf`; EFI fallback files and firmware entries were preserved |
 | Limine policy | `/etc/default/limine`: `BOOT_ORDER="linux-cachyos"` (ordering only; it is not documented as hiding entries), `FIND_BOOTLOADERS="no"` (stops discovery of other loaders); `/boot/limine.conf`: default `CachyOS/linux-cachyos`, `remember_last_entry: no`. The single-entry menu comes from removing the other kernel packages and disabling `limine-snapper-sync`. Whether manual `default_entry` edits survive `limine-update` is undocumented upstream: re-run `sudo limine-list` after each kernel update. <!-- UNVERIFIED --> |
 
-Only the primary `linux-cachyos` kernel package remains installed. The running kernel is `7.3.0-4-cachyos`.
+Only the primary `linux-cachyos` kernel package remains installed. The running kernel is `7.3.4-1-cachyos`.
 
 ### Memory, thermals, and GPU tools
 
 - Active swap is `/dev/zram0`: 31.3 GiB, zstd, priority 100. Usage was only a few MiB while idle. Leave the CachyOS zram setup as-is unless a workload measurement supports changing it.
-- `lm_sensors`, `inxi`, `cpu-x`, `glances`, `mission-center`, `amdgpu_top`, `nvtop`, `radeontop`, `rocm-smi-lib`, and LACT are installed.
+- `lm_sensors`, `inxi`, `cpu-x`, `glances`, `btop`, `amdgpu_top`, `nvtop`, `radeontop`, and LACT are installed. `mission-center` and `rocm-smi-lib` were removed on 2026-11-12.
 - Temperature readings are transient; use `sensors`, `inxi -Fxxxz`, or the GPU monitor tools when diagnosing a live problem.
 - CPU power profile was `performance` at inspection.
 
 ## Operating system and desktop
 
 - `/etc/os-release`: CachyOS Linux, rolling release.
-- Active session: Hyprland `0.57.0` (Lua config), Wayland; Noctalia Shell `5.4.0`.
-- Active login manager: `greetd` with `/usr/bin/noctalia-greeter-session`. SDDM remains installed but disabled and inactive.
+- Active session: Hyprland `0.57.2` (Lua config), Wayland; Noctalia Shell `5.5.0`.
+- Active login manager: `greetd` with `/usr/bin/noctalia-greeter-session`. SDDM was removed; its presets stay in `02-desktop/hyprland/sddm/` as reference.
 - Limine exposes only `CachyOS → linux-cachyos`; Snapper snapshots remain available for rollback but are hidden from the boot menu.
 - Locale configuration: `en_US.UTF-8`, including `LC_TIME=en_US.UTF-8`. Timezone: `Asia/Kathmandu`; system clock sync is enabled.
 - Audio session: PipeWire, PipeWire Pulse, and WirePlumber.
@@ -75,17 +75,19 @@ Only the primary `linux-cachyos` kernel package remains installed. The running k
 
 | Use | Default |
 |---|---|
-| Web browser / HTTP links | Brave (`brave-browser.desktop`) |
-| Plain text/source files | Zed (`dev.zed.Zed.desktop`) |
-| PNG/JPEG images | Swash (`dev.lemmy.swash.desktop`) |
-| PDF files | Brave |
+| Web browser / HTTP links | Google Chrome (`google-chrome.desktop`), set 2026-11-14 |
+| PDF, XML and RSS files | Google Chrome |
+| Plain text/source files (opened from the file manager or a browser) | Sublime Text (`sublime_text.desktop`), set 2026-11-16 |
+| `$EDITOR` and `$VISUAL` in the shell | Neovim |
+| PNG/JPEG/WebP/GIF images | Swash (`dev.lemmy.swash.desktop`) |
+| Mail links | Mailspring |
 | Login shell | `/usr/bin/zsh` |
 
-Firefox is installed as an alternate browser. Vim and Neovim are installed. Other installed editors include VS Code, Sublime Text, PyCharm Community, and Zed. Desktop applications also include DBeaver, MongoDB Compass, Obsidian, Notion, Anytype, Logseq, Todoist, Slack, Discord, Signal, Telegram, Zoom, Mailspring, Thunderbird, Spotify, VLC, mpv, OBS Studio, GIMP, Inkscape, LibreOffice, OnlyOffice, Okular, and Strawberry.
+These defaults live in `~/.config/mimeapps.list`, which is tracked as a seed in [`manifest.conf`](manifest.conf). Brave and Zen are installed as additional browsers. Vim and Neovim are installed. The editors are Neovim, Vim, Sublime Text, Zed, GNOME Text Editor (a hard dependency of `cachyos-hypr-noctalia`) and the Antigravity IDE. The desktop applications are Obsidian, Slack, Discord, Signal, Zoom, Mailspring, Spotify, Stremio, VLC, mpv, LibreOffice, Deluge, Upwork, Claude Desktop, Antigravity and ZapZap. Everything removed from the first snapshot is listed in [`workstation-changes.md`](01-system/cachyos/workstation-changes.md).
 
 ### Current session environment refresh
 
-The tracked Zsh config, tracked UWSM environment, XDG defaults, running Hyprland session (`BROWSER=brave`), and systemd user-manager environment all select Brave.
+The tracked Zsh config, tracked UWSM environment, XDG defaults and systemd user-manager environment all select Google Chrome (`BROWSER=google-chrome-stable`). The running Hyprland session picks up the UWSM change at the next login.
 
 The account is in the `openrazer` supplementary group (`id` includes `953(openrazer)`) and the user unit `openrazer-daemon.service` is active for the connected Razer Viper Mini.
 
@@ -96,30 +98,30 @@ The account is in the `openrazer` supplementary group (`id` includes `953(openra
 - `/usr/bin/zsh` is the login shell; Oh My Zsh and Starship are configured.
 - `~/.zshrc` is syntax-checked and integrates NVM from `/usr/share/nvm`.
 - Kitty, FZF, zoxide, Atuin, eza, bat, ripgrep, fd, lazygit, tmux, and other command-line tools are in the package lists.
-- `./install.sh status` reports all 32 managed entries in sync. `git diff --check` and `zsh -n ~/.zshrc` pass.
+- `./install.sh status` reports all 39 managed entries in sync, and `zsh -n ~/.zshrc` passes. `~/.zshrc` is a symlink into the repo again: some tool had replaced it with a plain copy whose only difference was an appended `# pnpm` PATH block, which is now in the repo copy.
 
 ### Python
 
-- System Python: 3.14.8, managed by pacman.
-- uv: 0.13.6; uv-managed CPython 3.12.15 and 3.13.17.
-- User tools: Ruff, Pyright, mypy, pre-commit, IPython, HTTPie, and JupyterLab.
+- System Python: 3.14.10, managed by pacman.
+- uv: 0.13.8; uv-managed CPython versions are fetched as projects pin them. 3.13 must stay: all seven `uv tool` installs run on it.
+- User tools (uv tools): Ruff 0.17.5, Pyright, mypy, pre-commit, IPython, HTTPie, and JupyterLab.
 - Add frameworks and database drivers to each project with `uv add`; no project framework is installed into the system Python.
 
 ### JavaScript and TypeScript
 
-- System Node: 26.12.1; NVM's default LTS in the interactive user shell at the snapshot: Node 24.22.1 and npm 11.19.1. Node 26 became LTS on 2026-10-28 and moved Node 24 to Maintenance on 2026-10-20, so `nvm install --lts` now resolves to 26.x.
-- pnpm 12.15.0; Yarn 1.22.22.
-- Global user tools: TypeScript 7, TypeScript language server, ESLint, Prettier, and Tailwind CSS language server. Caveat found on 2026-10-29: TypeScript 7.0.2 ships no JS API and no `tsserver.js`, so `typescript-language-server` fails to start unless `typescript@6` (Arch `typescript`) is installed beside it, and `typescript-eslint` rejects TypeScript 7.
+- System Node: 26.13.1. NVM's default is 26 (26.13.1) with 24.22.1 installed beside it, so `.nvmrc` files naming 26 or 24 both resolve. Node 26 became LTS on 2026-10-28 and moved Node 24 to Maintenance on 2026-10-20.
+- pnpm 12.20.0; Yarn 1.22.22.
+- Global user tools: TypeScript 7, TypeScript language server, ESLint, Prettier, and Tailwind CSS language server. Caveat found on 2026-10-29 and still true on 2026-11-16: TypeScript 7.0.2 ships no JS API and no `tsserver.js` (none exists under the pnpm global store), so `typescript-language-server` fails to start unless `typescript@6` (Arch `typescript`) is installed beside it, and `typescript-eslint` rejects TypeScript 7.
 - Create frontend projects with `pnpm create vite`; keep framework versions and project dependencies in the project manifest.
 
 ### Rust
 
-- rustup stable is the default: rustc/cargo 1.99.1.
-- Installed components: rustfmt, clippy, rust-src, rust-analyzer, rust-docs, and the x86-64 standard library.
+- rustup stable is the default: rustc 1.100.0.
+- Installed components: cargo, rustfmt, clippy, rust-src, rust-analyzer, and the x86-64 standard library. The `rust-docs` component (917 MB) was removed on 2026-11-12; no Rust project lives on this machine.
 
 ### Development, cloud, and data tools
 
-Installed tools include PostgreSQL 18 with pgvector, MariaDB 13, MongoDB 8.3, Valkey 9.1, SQLite, Docker/Compose/Buildx, Kubernetes (`kubectl`, minikube, Helm, k9s), AWS CLI, Azure CLI, Terraform, OpenTofu, Pulumi, Ansible, GitLab Runner, and `act`. Stremio's native Linux client is installed from the official Stremio Linux shell project. Google Cloud CLI was removed on 2026-10-27. Nginx is installed but disabled. Cloud accounts and credentials are not configured in the dotfiles.
+Installed tools include PostgreSQL 18 with pgvector, SQLite, Docker/Compose/Buildx, Kubernetes (`kubectl`, minikube, Helm, k9s) and OpenTofu. Stremio's native Linux client is installed from the official Stremio Linux shell project. Removed since the first snapshot: Google Cloud CLI (2026-10-27), then MariaDB, MongoDB, Valkey, AWS CLI, Azure CLI, Terraform, Pulumi, Ansible, GitLab Runner, `act` and Nginx (2026-11-11 and 2026-11-12). Cloud accounts and credentials are not configured in the dotfiles.
 
 ## Databases and local service endpoints
 
@@ -127,21 +129,15 @@ The database directories were initialized from empty state. No production data o
 
 | Service | State and local configuration |
 |---|---|
-| PostgreSQL | Enabled/active, v18.6, listens on localhost:5432. Peer-authenticated `kneeraazon` role with `CREATEDB`; local `dev` database; `vector` extension enabled. Host authentication uses SCRAM. |
-| MongoDB | Enabled/active, v8.3.9, `/etc/mongodb.conf` binds `127.0.0.1:27017`. No authentication configured; remains loopback-only and behind UFW. |
-| MariaDB | Enabled/active, v13.0.2, bound to `127.0.0.1:3306` by `/etc/my.cnf.d/90-local-dev.cnf`. Local `dev` database; Unix socket authentication for `kneeraazon`. |
-| Valkey | Enabled/active, v9.1.2, binds `127.0.0.1` and `::1` on port 6379; protected mode is on. |
-| Ollama | Enabled/active, v0.40.11, listens on `127.0.0.1:11434`; no model is installed. |
-| Rootless Docker | User service active/enabled; selected CLI context is `rootless`; `hello-world` completed successfully. |
+| PostgreSQL | Enabled/active, v18.7, listens on localhost:5432. Peer-authenticated `kneeraazon` role with `CREATEDB`; databases `dev`, `pgvector_demo` and `postgres`; the `vector` extension is enabled in `dev` and `pgvector_demo`. Host authentication uses SCRAM. The demo is described in [`06-tools/pgvector-demo/`](06-tools/pgvector-demo/README.md). |
+| Rootless Docker | User service active/enabled; selected CLI context is `rootless`. The root Docker daemon (`docker.service`, `docker.socket`, `containerd.service`) is disabled. |
 
-`nginx` is installed but not enabled. The database and Ollama listeners were checked on loopback; they are not exposed for LAN use.
+MongoDB, MariaDB, Valkey and Ollama were removed on 2026-11-11 and 2026-11-12 (no clients, about 450 MB of RAM held by the first two). MariaDB's data directory `/var/lib/mysql` still exists and holds one database named `dev`; it is the only leftover. The PostgreSQL listener was checked on loopback and is not exposed for LAN use.
 
 ## Local AI and graphics stack
 
-- AMDGPU kernel driver, Mesa/RADV Vulkan, ROCm/HIP runtime 7.2, rocBLAS, rocSOLVER, HIPBLAS, `rocminfo`, `rocm-smi`, and Ollama ROCm/Vulkan packages are installed.
-- Ollama service drop-ins are tracked under `05-ai/ollama/systemd/` and installed under `/etc/systemd/system/ollama.service.d/`. The active backend sets `HSA_OVERRIDE_GFX_VERSION=10.3.0`; `cap_perfmon=ep` is set and reapplied by a pacman hook.
-- Ollama startup detected `AMD Radeon RX 6700 XT`, ROCm compute `gfx1030`, and 12.0 GiB VRAM. This confirms device discovery only. Since no model is installed, inference speed and actual GPU layer placement remain untested.
-- Do not download a large model as part of a fresh setup. For a GPU smoke test, choose a small model, run a short prompt, then confirm GPU residency with `ollama ps` and the Ollama journal before choosing larger models.
+- AMDGPU kernel driver and Mesa/RADV Vulkan are installed, with LACT for GPU settings.
+- The Ollama, ROCm/HIP, rocBLAS, rocSOLVER and HIPBLAS packages were removed on 2026-11-12. During their life Ollama detected `AMD Radeon RX 6700 XT` (ROCm `gfx1030`, 12.0 GiB VRAM) but no model was ever installed, so inference was never measured. The recipe stays in `05-ai/ollama/` and `01-system/cachyos/packages/ai.txt` for when local inference is wanted again.
 - ZRAM was already active and suitable; no zram change was made.
 
 ## Security, VPN, and service state
@@ -150,16 +146,13 @@ UFW is enabled and active: default incoming deny, outgoing allow, routed traffic
 
 | Component | Current state |
 |---|---|
-| Proton VPN | Package installed; `proton.VPN.service` active; no VPN tunnel/interface in the active network connections. |
-| Mullvad | Package installed; daemon and early-boot blocker disabled/inactive. Its package hook had enabled them during installation; they were explicitly disabled afterward. |
+| VPN | Proton VPN and Mullvad were removed on 2026-11-11 and 2026-11-12; no VPN client is installed. |
 | OpenRazer | Razer Viper Mini connected. User is in `openrazer` group; user unit `openrazer-daemon.service` is enabled and active. |
 | AppArmor | `apparmor.d` profiles installed. `linux-cachyos` is built with AppArmor (`CONFIG_SECURITY_APPARMOR=y`) but its default `CONFIG_LSM` is `landlock,lockdown,yama,integrity,bpf`, so `aa-status` reports the module loaded and the filesystem not mounted until the boot command line carries `lsm=landlock,lockdown,yama,integrity,apparmor,bpf`. Not enforcing. See [chapter 19](01-system/cachyos/setup/19-security-privacy.md) for the enablement steps; apparmor.d does not list greetd or Hyprland among supported desktops. |
-| Fail2ban | Installed, service not enabled. |
-| DNSCrypt/dnsmasq | Installed, services not enabled. DNS/network-manager configuration was left intact. |
+| Fail2ban, DNSCrypt, Nginx, SDDM | Removed on 2026-11-12 (none was enabled; greetd is the greeter). |
+| dnsmasq | Installed, service not enabled. DNS/network-manager configuration was left intact. |
 | Syncthing | Installed, service not enabled. |
-| Nginx | Installed, service not enabled. |
-| SDDM | Installed, service disabled/inactive; greetd is the active greeter. |
-| Rootful Docker daemon | Not used. Docker operates as the rootless user service; the user is not in the `docker` group. |
+| Rootful Docker daemon | Disabled on 2026-11-12. Docker operates as the rootless user service; the user is not in the `docker` group. |
 
 Other notable active services include NetworkManager, systemd-resolved, systemd-timesyncd, power-profiles-daemon (performance profile), Avahi, Ananicy-C++, bpftune, and dmemcg-booster (`limine-snapper-sync.service` is intentionally disabled so Snapper snapshots stay out of the single-entry Limine boot menu).
 
@@ -167,9 +160,9 @@ Other notable active services include NetworkManager, systemd-resolved, systemd-
 
 - Checkout: `~/dotfiles`, remote `https://github.com/karkinirajan/dotfiles.git`.
 - Root README install instructions cover the desktop, system, font, CLI, and focus manifests. `01-system/cachyos/dev-stack.md` documents the optional developer profile; `05-ai/ollama/README.md` documents the AMD-specific Ollama configuration.
-- The desktop manifest reflects the active greetd/Noctalia greeter and the installed desktop applications. The system manifest records UFW, power management, snapshot packages, and installed-but-disabled optional security services.
-- The tracked MariaDB loopback configuration is `01-system/cachyos/mariadb-local.cnf`; the reproducible bundled-runtime Upwork package is `01-system/cachyos/aur/upwork/PKGBUILD`.
-- At snapshot time, pacman listed 1,730 installed packages: 324 explicitly installed and 30 foreign packages not found in enabled sync repositories. The complete explicit and foreign package/version snapshots are below.
+- The desktop manifest reflects the active greetd/Noctalia greeter and the installed desktop applications. The system manifest records UFW, power management and snapshot packages.
+- The MariaDB loopback configuration `01-system/cachyos/mariadb-local.cnf` is kept as reference only (MariaDB is removed); the reproducible bundled-runtime Upwork package is `01-system/cachyos/aur/upwork/PKGBUILD`.
+- At the 2026-11-16 snapshot, pacman listed 1,383 installed packages: 280 explicitly installed and 27 foreign packages not found in enabled sync repositories (1,730, 324 and 30 on 2026-10-28). The complete explicit and foreign package/version snapshots are below.
 
 ## Fresh setup order
 
@@ -183,7 +176,7 @@ The ordered, unattended procedure for rebuilding this workstation lives in [`doc
 | 4. Apply the dotfiles (`./install.sh`) and refresh the session environment | root [`README.md`](README.md#install) |
 | 5. Initialize local databases (PostgreSQL 18 needs the `initdb` auth flags) | [`dev-stack.md`](01-system/cachyos/dev-stack.md) section 3, [chapter 06](01-system/cachyos/setup/06-databases.md) |
 | 6. Enable rootless Docker | [`dev-stack.md`](01-system/cachyos/dev-stack.md) section 4, [chapter 08](01-system/cachyos/setup/08-docker-kubernetes.md) |
-| 7. Enable the AMD Ollama backend (ROCm, Vulkan, LACT) | [`dev-stack.md`](01-system/cachyos/dev-stack.md) section 5, [`05-ai/ollama/README.md`](05-ai/ollama/README.md), [chapter 02](01-system/cachyos/setup/02-amd-gpu-rocm.md) |
+| 7. Optional, skipped on this machine since 2026-11-12: enable the AMD Ollama backend (ROCm, Vulkan, LACT) | [`dev-stack.md`](01-system/cachyos/dev-stack.md) section 5, [`05-ai/ollama/README.md`](05-ai/ollama/README.md), [chapter 02](01-system/cachyos/setup/02-amd-gpu-rocm.md) |
 | 8. Restore firewall and Razer behavior, verify the host | [`dev-stack.md`](01-system/cachyos/dev-stack.md) sections 3 to 4 and Verify |
 
 ## Beyond the base setup
@@ -193,14 +186,14 @@ The ordered, unattended procedure for rebuilding this workstation lives in [`doc
 - Create Rust projects with `cargo new`; retain dependencies in `Cargo.toml`.
 - Start minikube only when a local Kubernetes cluster is needed; it is installed but not running in the current profile.
 - Install Nginx, Syncthing, DNS filtering, Fail2ban, or AppArmor enforcement only after reviewing the target network, kernel support, and service rules.
-- Download an Ollama model only after selecting its size and workload; confirm VRAM placement with `ollama ps` during inference.
-- Keep personal application sign-ins, credentials, SSH keys, project files, databases, and Ollama model data outside this repository and restore them from their own backups.
+- If local inference is wanted again, install the optional `ai.txt` set, download a model only after selecting its size and workload, and confirm VRAM placement with `ollama ps` during inference.
+- Keep personal application sign-ins, credentials, SSH keys, project files, databases, and any model data outside this repository and restore them from their own backups.
 
 ## Complete explicit package snapshot
 
-The files below are the sorted live `pacman -Qe` output captured on 2026-10-28 (explicitly installed names and versions; dependencies omitted) and the `pacman -Qm` output (packages not present in enabled sync repositories).
+The files below are the sorted live `pacman -Qe` output captured on 2026-11-16 (explicitly installed names and versions; dependencies omitted) and the `pacman -Qm` output (packages not present in enabled sync repositories).
 
-Package snapshots (captured 2026-10-28):
+Package snapshots (captured 2026-11-16):
 
 - [`01-system/cachyos/host-snapshot/pacman-explicit.txt`](01-system/cachyos/host-snapshot/pacman-explicit.txt): `pacman -Qe`, name and version, sorted.
 - [`01-system/cachyos/host-snapshot/pacman-foreign.txt`](01-system/cachyos/host-snapshot/pacman-foreign.txt): `pacman -Qm`, packages not in an enabled sync repository.

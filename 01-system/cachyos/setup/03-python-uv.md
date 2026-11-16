@@ -21,7 +21,7 @@ Python on Arch/CachyOS without touching the system interpreter: uv for interpret
 
 ## Prerequisites
 
-- System Python <!-- v:python -->3.14.8<!-- /v --> from pacman (3.14 is supported until 2030-10; free-threaded builds come from uv, not the Arch package). Arch marks the interpreter externally managed (PEP 668), so a global `pip install` fails with `externally-managed-environment`.
+- System Python <!-- v:python -->3.14.10<!-- /v --> from pacman (3.14 is supported until 2030-10; free-threaded builds come from uv, not the Arch package). Arch marks the interpreter externally managed (PEP 668), so a global `pip install` fails with `externally-managed-environment`.
 
 ## 3.1 Why uv
 
@@ -86,11 +86,11 @@ uv tool list
 uv tool upgrade --all
 ```
 
-Run once without installing: `uvx ruff check .`. Arch also packages ruff (<!-- v:ruff -->0.17.3<!-- /v -->), pyright and mypy if you prefer pacman for editor-facing tools.
+Run once without installing: `uvx ruff check .`. Arch also packages ruff (<!-- v:ruff -->0.17.5<!-- /v -->), pyright and mypy if you prefer pacman for editor-facing tools.
 
 ## 3.5 Ruff
 
-Ruff <!-- v:ruff -->0.17.3<!-- /v --> replaces black, flake8, isort and pyflakes. Breaking changes since the old text: 0.15 introduced the 2026 formatter style; 0.16 raised the default rule set from 59 to 413 rules and turned on formatting of Markdown code blocks; 0.17 defaults `target-version` to py311, dropped the DTZ rules from the defaults and removed `ruff-lsp`. `select` **replaces** the default set (use `extend-select` to add to it), and `target-version` can be dropped when `requires-python` is set.
+Ruff <!-- v:ruff -->0.17.5<!-- /v --> replaces black, flake8, isort and pyflakes. Breaking changes since the old text: 0.15 introduced the 2026 formatter style; 0.16 raised the default rule set from 59 to 413 rules and turned on formatting of Markdown code blocks; 0.17 defaults `target-version` to py311, dropped the DTZ rules from the defaults and removed `ruff-lsp`. `select` **replaces** the default set (use `extend-select` to add to it), and `target-version` can be dropped when `requires-python` is set.
 
 ```bash
 uv tool install ruff
@@ -167,7 +167,7 @@ python --version
 uv python list
 ```
 
-Expected: uv <!-- v:uv -->0.13.6<!-- /v -->, system Python <!-- v:python -->3.14.8<!-- /v -->, and the managed versions you installed.
+Expected: uv <!-- v:uv -->0.13.8<!-- /v -->, system Python <!-- v:python -->3.14.10<!-- /v -->, and the managed versions you installed.
 
 ## Sources
 

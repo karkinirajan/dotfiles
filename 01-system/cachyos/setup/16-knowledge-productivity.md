@@ -14,6 +14,8 @@ sources:
 
 # 16 Knowledge Management and Productivity
 
+> **Status, 2026-11-16:** Anytype, Logseq and Todoist were removed from the primary workstation in the November 2026 trim (2026-11-11 and 2026-11-12); Obsidian is the note app in use. Their steps stay for reinstalling. See [`workstation-changes.md`](../workstation-changes.md).
+
 ## Purpose
 
 Note-taking, task, screenshot, time-tracking and clipboard tools, with the install path that works today on this machine.
@@ -22,7 +24,7 @@ Note-taking, task, screenshot, time-tracking and clipboard tools, with the insta
 
 | Tool | Install | Best for |
 |---|---|---|
-| **Obsidian** | `sudo pacman -S obsidian` (<!-- v:obsidian -->1.14.5<!-- /v -->) | Personal knowledge base, local Markdown, Git-friendly, offline |
+| **Obsidian** | `sudo pacman -S obsidian` (<!-- v:obsidian -->1.15.0<!-- /v -->) | Personal knowledge base, local Markdown, Git-friendly, offline |
 | **Notion** | Use the web app (Brave app mode or install as a PWA) | Client wikis, team databases, shared project docs |
 | **Logseq OG** | `paru -S logseq-og-bin` (1.0.0, file-graph Markdown) | Outliner-style journaling on a Markdown folder |
 | **Anytype** | `paru -S anytype-bin` (0.57.4, repackaged AppImage) | Open-source local-first Notion alternative |
@@ -79,7 +81,7 @@ CopyQ monitors the clipboard natively on Hyprland; global shortcuts need the por
 obsidian --version 2>/dev/null; pacman -Q obsidian grim slurp
 ```
 
-Expected: obsidian <!-- v:obsidian -->1.14.5<!-- /v -->. Label: `machine-only`.
+Expected: obsidian <!-- v:obsidian -->1.15.0<!-- /v -->. Label: `machine-only`.
 
 ## Sources
 

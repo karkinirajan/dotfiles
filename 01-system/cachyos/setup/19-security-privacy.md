@@ -16,6 +16,8 @@ sources:
 
 # 19 Security and Privacy
 
+> **Status, 2026-11-16:** Proton VPN, Mullvad, KeePassXC, Bitwarden, Fail2ban and DNSCrypt Proxy were removed from the primary workstation in the November 2026 trim (2026-11-11 and 2026-11-12). UFW, the AppArmor profiles, dnsmasq and gnome-keyring (the Secret Service) remain. The steps stay for reinstalling. See [`workstation-changes.md`](../workstation-changes.md).
+
 ## Purpose
 
 The security baseline of the workstation and the optional hardening layers. Which of them are active on the primary host is recorded in [`system-summary.md`](../../../system-summary.md): UFW is active, everything else here is installed but off or optional.
@@ -80,7 +82,7 @@ Label: `machine-only`.
 
 ## 19.3 SSH hardening
 
-OpenSSH <!-- v:openssh -->10.6p1<!-- /v -->. Since 10.0 DSA is removed and sshd turns the modp DH groups off by default; 10.1 moved agent sockets under `~/.ssh/agent`. Use drop-ins rather than editing the vendor file, and test before restarting.
+OpenSSH <!-- v:openssh -->10.6p2<!-- /v -->. Since 10.0 DSA is removed and sshd turns the modp DH groups off by default; 10.1 moved agent sockets under `~/.ssh/agent`. Use drop-ins rather than editing the vendor file, and test before restarting.
 
 ```bash
 ssh-keygen -t ed25519 -a 100 -C "you@email.com"

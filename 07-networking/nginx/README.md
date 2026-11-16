@@ -1,5 +1,7 @@
 # 07.1 · Nginx
 
+> **Status, 2026-11-16:** The `nginx` package was removed from the primary workstation in the November 2026 trim (2026-11-11 and 2026-11-12) because it was never enabled. The configuration below applies to any host that runs nginx. See [`workstation-changes.md`](../../01-system/cachyos/workstation-changes.md).
+
 Local reverse-proxy tuning for CachyOS/Arch Linux (`nginx`).
 
 ```text
